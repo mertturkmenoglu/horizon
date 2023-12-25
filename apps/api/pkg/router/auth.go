@@ -144,7 +144,11 @@ func SendMfaCode(c echo.Context) error {
 }
 
 func CompleteOnboarding(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+
+	db.Client.Model(&models.Auth{}).Where("email = ?", auth.Email).Update("onboarding_completed", true)
+
+	return c.NoContent(http.StatusNoContent)
 }
 
 func GetPasswordStrength(c echo.Context) error {

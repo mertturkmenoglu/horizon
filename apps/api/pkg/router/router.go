@@ -20,5 +20,5 @@ func Bootstrap(e *echo.Echo) {
 	auth.POST("/password/strength", GetPasswordStrength, middlewares.ParseBody[dto.PasswordStrengthRequest])
 	auth.POST("/email/verify/send", SendVerifyEmail)
 	auth.POST("/mfa/send", SendMfaCode)
-	auth.POST("/onboard/complete", CompleteOnboarding)
+	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
 }
