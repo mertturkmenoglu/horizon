@@ -1,3 +1,4 @@
+name: horizon
 services:
   redis:
     image: redis:alpine
