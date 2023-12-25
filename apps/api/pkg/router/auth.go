@@ -146,7 +146,10 @@ func SendMfaCode(c echo.Context) error {
 func CompleteOnboarding(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 
-	db.Client.Model(&models.Auth{}).Where("email = ?", auth.Email).Update("onboarding_completed", true)
+	db.Client.
+		Model(&models.Auth{}).
+		Where("email = ?", auth.Email).
+		Update("onboarding_completed", true)
 
 	return c.NoContent(http.StatusNoContent)
 }
