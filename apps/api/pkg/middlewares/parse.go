@@ -15,7 +15,7 @@ func ParseBody[T any](next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if err := c.Validate(&body); err != nil {
-			return err
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 		}
 
 		c.Set("body", body)
