@@ -124,7 +124,50 @@ func Register(c echo.Context) error {
 }
 
 func ChangePassword(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	body := c.Get("body").(dto.ChangePasswordRequest)
+
+	dbAuth, err := query.GetAuthByEmail(auth.Email)
+	var hashed = ""
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	if dbAuth != nil {
+		hashed = dbAuth.Password
+	}
+
+	// Always calculate the password hash before any early return
+	// to prevent timing based attacks.
+	matched, hashErr := hash.Verify(body.CurrentPassword, hashed)
+
+	if hashErr != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, hashErr.Error())
+	}
+
+	if !matched {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Current password doesn't match")
+	}
+
+	isStrongPassword := password.IsStrong(body.NewPassword)
+
+	if !isStrongPassword {
+		return echo.NewHTTPError(http.StatusBadRequest, "Password is too weak.")
+	}
+
+	newHash, hashErr := hash.Hash(body.NewPassword)
+
+	if hashErr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Cannot hash password")
+	}
+
+	db.Client.
+		Model(&models.Auth{}).
+		Where("email = ?", auth.Email).
+		Update("password", newHash)
+
+	return c.NoContent(http.StatusOK)
 }
 
 func SendPasswordResetEmail(c echo.Context) error {
@@ -139,10 +182,6 @@ func SendVerifyEmail(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
 }
 
-func SendMfaCode(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
-}
-
 func CompleteOnboarding(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 
@@ -151,7 +190,7 @@ func CompleteOnboarding(c echo.Context) error {
 		Where("email = ?", auth.Email).
 		Update("onboarding_completed", true)
 
-	return c.NoContent(http.StatusNoContent)
+	return c.NoContent(http.StatusOK)
 }
 
 func GetPasswordStrength(c echo.Context) error {

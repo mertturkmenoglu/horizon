@@ -13,3 +13,8 @@ type RegisterRequest struct {
 type PasswordStrengthRequest struct {
 	Password string `json:"password" validate:"required"`
 }
+
+type ChangePasswordRequest struct {
+	CurrentPassword string `json:"currentPassword" validate:"required"`
+	NewPassword     string `json:"newPassword" validate:"required"`
+}

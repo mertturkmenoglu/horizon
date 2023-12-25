@@ -14,11 +14,10 @@ func Bootstrap(e *echo.Echo) {
 
 	auth.POST("/login", Login, middlewares.ParseBody[dto.LoginRequest])
 	auth.POST("/register", Register, middlewares.ParseBody[dto.RegisterRequest])
-	auth.PUT("/password/change", ChangePassword)
+	auth.PUT("/password/change", ChangePassword, middlewares.IsAuth, middlewares.ParseBody[dto.ChangePasswordRequest])
 	auth.POST("/password/reset/send/:email", SendPasswordResetEmail)
 	auth.PUT("/password/reset", ResetPassword)
 	auth.POST("/password/strength", GetPasswordStrength, middlewares.ParseBody[dto.PasswordStrengthRequest])
 	auth.POST("/email/verify/send", SendVerifyEmail)
-	auth.POST("/mfa/send", SendMfaCode)
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
 }
