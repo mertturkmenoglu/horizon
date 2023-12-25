@@ -95,7 +95,7 @@ function LandingHero({ className }: LandingHeroProps): React.ReactElement {
   return (
     <div
       className={cn(
-        'text-8xl antialiased text-sky-600 absolute w-full max-w-5xl',
+        'text-8xl antialiased text-black absolute w-full max-w-5xl',
         className
       )}
       id="container"
