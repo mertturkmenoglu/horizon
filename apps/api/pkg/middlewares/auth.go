@@ -1,11 +1,9 @@
 package middlewares
 
 import (
-	"fmt"
 	"horizon/pkg/db/query"
 	"horizon/pkg/jsonwebtoken"
 	"net/http"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -39,13 +37,18 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
 		}
 
-		fullName := strings.TrimSpace(fmt.Sprintf("%s %s", auth.FirstName, auth.LastName))
+		user, err := query.GetUserByEmail(claims.Email)
+
+		if err != nil || user == nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
+		}
 
 		payload := jsonwebtoken.Payload{
 			AuthId:   auth.Id.String(),
-			UserId:   "",
-			FullName: fullName,
-			Email:    auth.Email,
+			UserId:   user.Id.String(),
+			Name:     user.Name,
+			Email:    user.Email,
+			Username: user.Username,
 		}
 
 		c.Set("auth", payload)
