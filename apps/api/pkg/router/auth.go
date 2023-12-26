@@ -194,7 +194,7 @@ func ChangePassword(c echo.Context) error {
 
 	db.Client.
 		Model(&models.Auth{}).
-		Where("email = ?", auth.Email).
+		Where("id = ?", dbAuth.Id).
 		Update("password", newHash)
 
 	return c.NoContent(http.StatusOK)
