@@ -5,9 +5,20 @@ import (
 	"horizon/pkg/db/models"
 )
 
-func DoesUserExist(email string) (bool, error) {
+func DoesAuthExist(email string) (bool, error) {
 	var auth models.Auth
-	res := db.Client.First(&auth, "email = ?", email)
+	var user models.User
+
+	res := db.Client.First(&user, "email = ?", email)
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return false, nil
+		}
+		return false, res.Error
+	}
+
+	res = db.Client.First(&auth, "id = ?", user.AuthId)
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
@@ -21,7 +32,15 @@ func DoesUserExist(email string) (bool, error) {
 
 func GetAuthByEmail(email string) (*models.Auth, error) {
 	var auth models.Auth
-	res := db.Client.First(&auth, "email = ?", email)
+	var user models.User
+
+	res := db.Client.First(&user, "email = ?", email)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	res = db.Client.First(&auth, "id = ?", user.AuthId)
 
 	if res.Error != nil {
 		return nil, res.Error

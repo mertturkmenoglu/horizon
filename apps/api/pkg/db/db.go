@@ -29,5 +29,6 @@ func Init() {
 func AutoMigrate() error {
 	return Client.AutoMigrate(
 		&models.Auth{},
+		&models.User{},
 	)
 }
