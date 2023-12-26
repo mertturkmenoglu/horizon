@@ -14,12 +14,13 @@ var (
 type Payload struct {
 	AuthId   string
 	UserId   string
-	FullName string
+	Name     string
 	Email    string
+	Username string
 }
 
 type Claims struct {
-	FullName string `json:"fullName"`
-	Email    string `json:"email"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 	jwt.RegisteredClaims
 }

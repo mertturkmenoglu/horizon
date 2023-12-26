@@ -11,7 +11,7 @@ func Encode(payload Payload, expiresAt time.Time) (string, error) {
 	secretKey := os.Getenv("JWT_SECRET")
 
 	claims := Claims{
-		payload.FullName,
+		payload.Name,
 		payload.Email,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expiresAt),
