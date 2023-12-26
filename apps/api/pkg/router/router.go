@@ -20,4 +20,8 @@ func Bootstrap(e *echo.Echo) {
 	auth.POST("/password/strength", GetPasswordStrength, middlewares.ParseBody[dto.PasswordStrengthRequest])
 	auth.POST("/email/verify/send", SendVerifyEmail)
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
+
+	user := api.Group("/user")
+
+	user.GET("/me", GetMe, middlewares.IsAuth)
 }
