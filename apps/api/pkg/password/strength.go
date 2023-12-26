@@ -2,9 +2,9 @@ package password
 
 import "github.com/nbutton23/zxcvbn-go"
 
-// According to Dropbox documentation, score of 4 is very unguessable
+// According to Dropbox documentation, score of 3 is safely unguessable
 // We choose this score as minimum
-const MIN_PASSWORD_SECURITY_SCORE = 4
+const MIN_PASSWORD_SECURITY_SCORE = 3
 
 func GetStrength(s string) int {
 	entropyMatch := zxcvbn.PasswordStrength(s, []string{})
