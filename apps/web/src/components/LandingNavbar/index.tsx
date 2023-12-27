@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 interface LandingNavbarProps {
   className?: string;
@@ -6,28 +7,26 @@ interface LandingNavbarProps {
 
 function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
   return (
-    <>
-      <nav
-        className={cn(
-          'flex justify-between mx-auto w-full max-w-5xl items-center  rounded-full py-2 px-8',
-          className
-        )}
+    <nav
+      className={cn(
+        'flex justify-between mx-auto w-full max-w-7xl items-center py-1 border-b border-b-midnight',
+        className
+      )}
+    >
+      <a
+        href="/"
+        className="text-4xl inline-flex text-midnight"
       >
-        <a
-          href="/"
-          className="text-4xl inline-flex text-black"
-        >
-          Horizon
-        </a>
-        <a
-          href="/login"
-          className="flex rounded-full bg-sky-600 text-white px-4 py-2 font-semibold text-sm"
-        >
-          Get started
-        </a>
-      </nav>
-      <hr className="h-[2px] w-full bg-black max-w-5xl" />
-    </>
+        Horizon
+      </a>
+      <a
+        href="/login"
+        className="flex rounded-md bg-midnight text-white px-4 py-2 font-semibold text-sm items-center space-x-2"
+      >
+        <span>Get started</span>
+        <ArrowRightIcon className="size-4 animate-pulse" />
+      </a>
+    </nav>
   );
 }
 
