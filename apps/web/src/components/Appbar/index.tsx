@@ -47,10 +47,10 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button
-            className="rounded-full size-8 inline-flex items-center justify-center text-sky-600 bg-white outline-none"
+            className="rounded-full size-8 inline-flex items-center justify-center text-sky-500 bg-white outline-none"
             aria-label="Navigation options"
           >
-            <UserCircleIcon className="size-8 text-sky-600" />
+            <UserCircleIcon className="size-8 text-sky-500" />
           </button>
         </DropdownMenu.Trigger>
 
@@ -104,7 +104,7 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
               </a>
             </DropdownItem>
 
-            <DropdownMenu.Separator className="h-[1px] bg-sky-600 m-[5px]" />
+            <DropdownMenu.Separator className="h-[1px] bg-sky-500 my-2" />
 
             <DropdownItem>
               <ArrowLeftStartOnRectangleIcon className="size-6" />
