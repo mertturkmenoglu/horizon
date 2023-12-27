@@ -1,4 +1,3 @@
-import Appbar from '@/components/Appbar';
 import {
   Carousel,
   CarouselContent,
@@ -7,12 +6,11 @@ import {
   CarouselPrevious,
 } from '@/components/Carousel';
 import ServiceSearch from '@/components/ServiceSearch';
+import MainLayout from '@/layouts/MainLayout';
 
 function HomePage(): React.ReactElement {
   return (
-    <div className="max-w-7xl mx-auto">
-      <Appbar className="mt-4" />
-
+    <MainLayout>
       <ServiceSearch className="mt-16" />
 
       <Carousel className="w-full max-w-xs mx-auto">
@@ -35,7 +33,7 @@ function HomePage(): React.ReactElement {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-    </div>
+    </MainLayout>
   );
 }
 
