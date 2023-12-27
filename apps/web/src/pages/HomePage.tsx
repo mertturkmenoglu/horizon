@@ -1,4 +1,11 @@
 import Appbar from '@/components/Appbar';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/Carousel';
 import { cn } from '@/lib/cn';
 
 function HomePage(): React.ReactElement {
@@ -30,6 +37,24 @@ function HomePage(): React.ReactElement {
           />
         </div>
       </div>
+
+      <Carousel className="w-full max-w-xs mx-auto">
+        <CarouselContent>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <CarouselItem key={index}>
+              <div className="p-1">
+                <div>
+                  <div className="flex aspect-square items-center justify-center p-6">
+                    <span className="text-4xl font-semibold">{index + 1}</span>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 }
