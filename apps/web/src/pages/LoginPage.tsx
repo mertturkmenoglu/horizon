@@ -51,7 +51,7 @@ function LoginPage(): React.ReactElement {
               <div>If you are new / </div>
               <a
                 href="/register"
-                className="hover:underline hover:decoration-sky-500 hover:decoration-2 ml-2"
+                className="hover:underline hover:decoration-sky-500 hover:decoration-2 ml-2 focus:ring focus:ring-sky-500 focus:outline-none rounded"
               >
                 Create Account
               </a>
@@ -61,13 +61,13 @@ function LoginPage(): React.ReactElement {
               <div>Forgot password? / </div>
               <a
                 href="/reset-password"
-                className="hover:underline hover:decoration-sky-500 hover:decoration-2 ml-2"
+                className="hover:underline hover:decoration-sky-500 hover:decoration-2 ml-2 focus:ring focus:ring-sky-500 focus:outline-none rounded"
               >
                 Reset
               </a>
             </div>
 
-            <button className="bg-red-700 rounded text-white font-bold py-2 mt-8">
+            <button className="bg-red-700 rounded text-white font-bold py-2 mt-8 focus:ring focus:ring-red-700 focus:outline-none focus:ring-offset-2">
               Login
             </button>
           </form>
