@@ -1,23 +1,52 @@
 import { cn } from '@/lib/cn';
 import Redirect from './Redirect';
+import { z } from 'zod';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Input from '../Input';
 
 interface LoginFormProps {
   className?: string;
 }
 
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+type LoginFormInput = z.infer<typeof schema>;
+
 function LoginForm({ className }: LoginFormProps): React.ReactElement {
+  const { register, formState, handleSubmit } = useForm<LoginFormInput>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<LoginFormInput> = (values: LoginFormInput) => {
+    console.log({ values });
+  };
+
   return (
-    <form className={cn('flex flex-col', className)}>
-      <input
+    <form
+      className={cn('flex flex-col', className)}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <Input
+        label="Email"
         type="email"
-        className="bg-gray-900/10 py-2 rounded px-2 focus:ring focus:ring-sky-500 focus:outline-none"
         placeholder="Email"
+        autoComplete="username"
+        error={formState.errors.email}
+        {...register('email')}
       />
 
-      <input
+      <Input
+        className="mt-4"
+        label="Password"
         type="password"
-        className="bg-gray-900/10 py-2 rounded px-2 focus:ring focus:ring-sky-500 focus:outline-none mt-4"
         placeholder="Password"
+        autoComplete="current-password"
+        error={formState.errors.password}
+        {...register('password')}
       />
 
       <Redirect
@@ -34,7 +63,13 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
         targetText="Reset"
       />
 
-      <button className="bg-red-700 rounded text-white font-bold py-2 mt-8 focus:ring focus:ring-red-700 focus:outline-none focus:ring-offset-2">
+      <button
+        className={cn(
+          'bg-red-700 rounded text-white',
+          'font-bold py-2 mt-8',
+          'focus:ring focus:ring-red-700 focus:outline-none focus:ring-offset-2'
+        )}
+      >
         Login
       </button>
     </form>
