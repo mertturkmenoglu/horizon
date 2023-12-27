@@ -17,8 +17,11 @@ function HomePage(): React.ReactElement {
 
       <Carousel className="w-full max-w-xs mx-auto">
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
+          {Array.from({ length: 10 }).map((_, index) => (
+            <CarouselItem
+              key={index}
+              className="basis-1/5"
+            >
               <div className="p-1">
                 <div>
                   <div className="flex aspect-square items-center justify-center p-6">
