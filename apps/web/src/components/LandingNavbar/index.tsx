@@ -20,7 +20,7 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
           Horizon
         </a>
         <a
-          href="/signin"
+          href="/login"
           className="flex rounded-full bg-sky-600 text-white px-4 py-2 font-semibold text-sm"
         >
           Get started
