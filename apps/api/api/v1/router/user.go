@@ -1,10 +1,10 @@
 package router
 
 import (
-	"horizon/pkg/db"
-	"horizon/pkg/db/models"
-	"horizon/pkg/h"
-	"horizon/pkg/jsonwebtoken"
+	"horizon/internal/db"
+	"horizon/internal/db/models"
+	"horizon/internal/h"
+	"horizon/internal/jsonwebtoken"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

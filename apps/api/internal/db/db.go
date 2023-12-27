@@ -1,7 +1,7 @@
 package db
 
 import (
-	"horizon/pkg/db/models"
+	"horizon/internal/db/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"horizon/pkg/db"
-	"horizon/pkg/router"
-	"horizon/pkg/validation"
+	"horizon/api/v1/router"
+	"horizon/internal/db"
+	"horizon/internal/validation"
 	"log"
 	"os"
 
