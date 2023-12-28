@@ -10,7 +10,7 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
   return (
     <div
       className={cn(
-        ' border-b-2 border-midnight flex justify-between items-center py-2 px-4',
+        ' border-b-2 border-midnight flex justify-between items-center pb-1',
         className
       )}
     >
