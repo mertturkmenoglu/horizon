@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import PasswordResetRequestPage from './pages/PasswordResetRequestPage';
 
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
@@ -25,5 +26,9 @@ export const router = createBrowserRouter([
   {
     path: '/home',
     element: <HomePage />,
+  },
+  {
+    path: '/reset-password',
+    element: <PasswordResetRequestPage />,
   },
 ]);
