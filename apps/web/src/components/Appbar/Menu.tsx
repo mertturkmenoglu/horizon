@@ -1,3 +1,4 @@
+import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import {
   ArrowLeftStartOnRectangleIcon,
@@ -154,7 +155,16 @@ function Menu(): React.ReactElement {
 
           <DropdownItem
             as="button"
-            onClick={() => {}}
+            onClick={async () => {
+              try {
+                await api('/auth/logout', {
+                  method: 'POST',
+                });
+                window.location.href = '/';
+              } catch (err) {
+                console.error(err);
+              }
+            }}
             icon={ArrowLeftStartOnRectangleIcon}
             text="Logout"
           />
