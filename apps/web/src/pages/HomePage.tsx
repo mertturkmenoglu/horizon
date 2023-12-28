@@ -33,6 +33,16 @@ function HomePage(): React.ReactElement {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+
+      <div>Overview</div>
+
+      <div>My Services</div>
+
+      <div>Saved Services</div>
+
+      <div>Personalized Suggestions</div>
+
+      <div></div>
     </MainLayout>
   );
 }
