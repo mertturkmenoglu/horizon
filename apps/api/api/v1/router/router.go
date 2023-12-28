@@ -21,7 +21,7 @@ func Bootstrap(e *echo.Echo) {
 	auth.POST("/email/verify/send", SendVerifyEmail)
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
 
-	user := api.Group("/user")
+	user := api.Group("/users")
 
 	user.GET("/me", GetMe, middlewares.IsAuth)
 }
