@@ -30,5 +30,7 @@ func AutoMigrate() error {
 	return Client.AutoMigrate(
 		&models.Auth{},
 		&models.User{},
+		&models.ContactInformation{},
+		&models.Location{},
 	)
 }

@@ -14,7 +14,9 @@ func GetMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 
 	var user *models.User
-	res := db.Client.Find(&user, "id = ?", auth.UserId)
+	res := db.Client.Find(&user, "id = ?", auth.UserId).
+		Preload("ContactInformation").
+		Preload("Location")
 
 	if res.Error != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, res.Error)
