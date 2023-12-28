@@ -10,4 +10,6 @@
 - Clone the repository.
 - Go to `apps/web` directory.
 - Install the dependencies via: `pnpm install`
+- Create `.env` file and copy the content of `.env.example` into `.env`.
+- Fill the values.
 - Run the dev server via: `pnpm dev`
