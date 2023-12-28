@@ -12,6 +12,7 @@ import (
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -65,23 +66,25 @@ func Login(c echo.Context) error {
 
 	_ = cache.Set(tokenCacheKey, refreshToken, refreshTokenDuration)
 
+	isDev := os.Getenv("ENV") == "dev"
+
 	c.SetCookie(&http.Cookie{
 		Name:     "accessToken",
 		Value:    accessToken,
-		Path:     "/",
 		Expires:  expiresAt,
-		Secure:   true,
+		Secure:   !isDev,
 		HttpOnly: true,
+		Path:     "/",
 		SameSite: http.SameSiteLaxMode,
 	})
 
 	c.SetCookie(&http.Cookie{
 		Name:     "refreshToken",
 		Value:    refreshToken,
-		Path:     "/",
 		Expires:  refreshTokenExpires,
-		Secure:   true,
+		Secure:   !isDev,
 		HttpOnly: true,
+		Path:     "/",
 		SameSite: http.SameSiteLaxMode,
 	})
 
