@@ -15,8 +15,8 @@ const schema = z.object({
   name: z.string().min(1).max(64),
   email: z.string().email(),
   username: z.string().min(1).max(32),
-  password: z.string().min(1),
-  confirmPassword: z.string().min(1),
+  password: z.string().min(8).max(64),
+  confirmPassword: z.string().min(8).max(64),
 });
 
 type RegisterFormInput = z.infer<typeof schema>;
