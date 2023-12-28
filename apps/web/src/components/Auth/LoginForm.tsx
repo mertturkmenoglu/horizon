@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../Input';
+import { api } from '@/lib/api';
 
 interface LoginFormProps {
   className?: string;
@@ -21,8 +22,18 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormInput> = (values: LoginFormInput) => {
-    console.log({ values });
+  const onSubmit: SubmitHandler<LoginFormInput> = async (
+    values: LoginFormInput
+  ) => {
+    try {
+      await api('/auth/login', {
+        method: 'POST',
+        body: values,
+      });
+      window.location.href = '/home';
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
