@@ -158,6 +158,26 @@ func Register(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
+func Logout(c echo.Context) error {
+	c.SetCookie(&http.Cookie{
+		Name:     "accessToken",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	c.SetCookie(&http.Cookie{
+		Name:     "refreshToken",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	return c.NoContent(http.StatusOK)
+}
+
 func ChangePassword(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.ChangePasswordRequest)

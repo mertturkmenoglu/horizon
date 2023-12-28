@@ -14,6 +14,7 @@ func Bootstrap(e *echo.Echo) {
 
 	auth.POST("/login", Login, middlewares.ParseBody[dto.LoginRequest])
 	auth.POST("/register", Register, middlewares.ParseBody[dto.RegisterRequest])
+	auth.POST("/logout", Logout)
 	auth.PUT("/password/change", ChangePassword, middlewares.IsAuth, middlewares.ParseBody[dto.ChangePasswordRequest])
 	auth.POST("/password/reset/send/:email", SendPasswordResetEmail)
 	auth.PUT("/password/reset", ResetPassword)
