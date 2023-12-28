@@ -13,16 +13,24 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		cookies := c.Request().Cookies()
 
 		var accessTokenCookie *http.Cookie = nil
+		var refreshTokenCookie *http.Cookie = nil
 
 		for _, cookie := range cookies {
 			if cookie.Name == "accessToken" {
 				accessTokenCookie = cookie
-				break
+			}
+
+			if cookie.Name == "refreshToken" {
+				refreshTokenCookie = cookie
 			}
 		}
 
 		if accessTokenCookie == nil {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Missing access token")
+		}
+
+		if refreshTokenCookie == nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Missing refresh token")
 		}
 
 		claims, err := jsonwebtoken.Decode(accessTokenCookie.Value)
