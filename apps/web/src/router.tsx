@@ -1,34 +1,58 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import PasswordResetRequestPage from './pages/PasswordResetRequestPage';
+import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
+import GuestRoute from './components/AuthGuard/GuestRoute';
 
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
+const PasswordResetRequestPage = React.lazy(
+  () => import('./pages/PasswordResetRequestPage')
+);
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />,
+    element: (
+      <GuestRoute>
+        <LandingPage />
+      </GuestRoute>
+    ),
     errorElement: <NotFoundPage />,
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <GuestRoute>
+        <LoginPage />
+      </GuestRoute>
+    ),
   },
   {
     path: '/register',
-    element: <RegisterPage />,
+    element: (
+      <GuestRoute>
+        <RegisterPage />
+      </GuestRoute>
+    ),
   },
   {
     path: '/home',
-    element: <HomePage />,
+    element: (
+      <ProtectedRoute>
+        <HomePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/reset-password',
-    element: <PasswordResetRequestPage />,
+    element: (
+      <GuestRoute>
+        <PasswordResetRequestPage />
+      </GuestRoute>
+    ),
   },
 ]);
