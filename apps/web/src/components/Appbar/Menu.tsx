@@ -162,7 +162,7 @@ function Menu(): React.ReactElement {
                 });
                 window.location.href = '/';
               } catch (err) {
-                console.error(err);
+                /* empty */
               }
             }}
             icon={ArrowLeftStartOnRectangleIcon}
