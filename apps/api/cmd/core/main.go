@@ -27,8 +27,20 @@ func main() {
 	}
 
 	e.Use(middleware.Recover())
-	e.Use(middleware.Logger())
-	e.Use(middleware.CORS())
+
+	if os.Getenv("ENV") == "dev" {
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: "time=${time_rfc3339}, method=${method}, uri=${uri}, status=${status}, error=${error}, latency=${latency_human}\n",
+		}))
+
+		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins:                             middleware.DefaultCORSConfig.AllowOrigins,
+			AllowMethods:                             middleware.DefaultCORSConfig.AllowMethods,
+			AllowHeaders:                             middleware.DefaultCORSConfig.AllowHeaders,
+			AllowCredentials:                         true,
+			UnsafeWildcardOriginWithAllowCredentials: true,
+		}))
+	}
 
 	// Call once to initialize the database connection
 	// Panics if the connection fails
