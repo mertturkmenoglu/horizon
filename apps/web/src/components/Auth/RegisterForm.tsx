@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../Input';
+import { api, isApiError } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface RegisterFormProps {
   className?: string;
@@ -24,10 +26,38 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<RegisterFormInput> = (
+  const onSubmit: SubmitHandler<RegisterFormInput> = async (
     values: RegisterFormInput
   ) => {
-    console.log({ values });
+    if (values.password !== values.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    try {
+      await api('/auth/register', {
+        method: 'POST',
+        body: {
+          email: values.email,
+          username: values.username,
+          name: values.name,
+          password: values.password,
+        },
+      });
+
+      toast.success(
+        'Your account is created! You will be redirected to the login page.'
+      );
+
+      setTimeout(() => {
+        window.location.href = '/login';
+        return;
+      }, 2000);
+    } catch (err) {
+      if (isApiError(err)) {
+        toast.error(err.data.message);
+      }
+    }
   };
 
   return (
