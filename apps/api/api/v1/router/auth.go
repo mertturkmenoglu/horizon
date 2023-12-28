@@ -60,8 +60,10 @@ func Login(c echo.Context) error {
 
 	refreshToken := uuid.New().String()
 	tokenCacheKey := fmt.Sprintf("refreshToken:%s", auth.Id)
+	refreshTokenDuration := time.Hour * 24 * 14
+	refreshTokenExpires := time.Now().Add(refreshTokenDuration)
 
-	_ = cache.Set(tokenCacheKey, refreshToken, time.Hour*24*14)
+	_ = cache.Set(tokenCacheKey, refreshToken, refreshTokenDuration)
 
 	c.SetCookie(&http.Cookie{
 		Name:     "accessToken",
@@ -77,7 +79,7 @@ func Login(c echo.Context) error {
 		Name:     "refreshToken",
 		Value:    refreshToken,
 		Path:     "/",
-		Expires:  time.Now().Add(time.Hour * 24 * 14),
+		Expires:  refreshTokenExpires,
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
