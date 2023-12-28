@@ -1,4 +1,4 @@
-# Horizon
+# Horizon - API
 
 ## Requirements
 
