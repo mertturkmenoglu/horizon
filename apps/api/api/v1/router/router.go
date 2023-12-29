@@ -25,6 +25,7 @@ func Bootstrap(e *echo.Echo) {
 	user := api.Group("/users")
 
 	user.GET("/me", GetMe, middlewares.IsAuth)
+	user.GET("/:username", GetUserByUsername, middlewares.IsAuth)
 
 	services := api.Group("/services")
 
