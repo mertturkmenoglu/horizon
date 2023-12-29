@@ -89,6 +89,18 @@ func Login(c echo.Context) error {
 		SameSite: http.SameSiteLaxMode,
 	})
 
+	t, err := tasks.NewLoginAlertEmailTask(body.Email)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
 	return c.NoContent(http.StatusOK)
 }
 
