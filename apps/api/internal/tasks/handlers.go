@@ -27,3 +27,22 @@ func HandleEmailForgotPasswordTask(_ context.Context, t *asynq.Task) error {
 
 	return err
 }
+
+func HandleWelcomeEmailTask(_ context.Context, t *asynq.Task) error {
+	var p WelcomeEmailPayload
+
+	if err := json.Unmarshal(t.Payload(), &p); err != nil {
+		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	}
+
+	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.WelcomePayload]{
+		To:           p.Email,
+		TemplatePath: "templates/welcome.html",
+		Subject:      "Welcome to Horizon",
+		Data: email.WelcomePayload{
+			Name: p.Name,
+		},
+	})
+
+	return err
+}
