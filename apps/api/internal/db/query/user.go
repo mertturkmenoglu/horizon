@@ -27,3 +27,14 @@ func UsernameExists(username string) bool {
 
 	return true
 }
+
+func GetUserByUsername(username string) (*models.User, error) {
+	var user models.User
+	res := db.Client.First(&user, "username = ?", username)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return &user, nil
+}
