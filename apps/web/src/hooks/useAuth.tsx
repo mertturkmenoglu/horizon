@@ -20,5 +20,6 @@ export function useAuth() {
   return {
     isAuthenticated: user !== null,
     loading: !checked,
+    user,
   };
 }
