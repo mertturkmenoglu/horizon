@@ -2,11 +2,11 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import {
   ArrowLeftStartOnRectangleIcon,
-  BuildingStorefrontIcon,
   CalendarDaysIcon,
   ChartBarIcon,
   Cog6ToothIcon,
   LockClosedIcon,
+  MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
   ScaleIcon,
   UserCircleIcon,
@@ -109,9 +109,9 @@ function Menu(): React.ReactElement {
 
           <DropdownItem
             as="link"
-            href="/explore"
-            icon={BuildingStorefrontIcon}
-            text="Explore"
+            href="/services/categories"
+            icon={MagnifyingGlassIcon}
+            text="Explore Services"
           />
 
           <DropdownItem
