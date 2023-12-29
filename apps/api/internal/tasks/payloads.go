@@ -9,3 +9,7 @@ type WelcomeEmailPayload struct {
 	Email string
 	Name  string
 }
+
+type NewLoginAlertEmailPayload struct {
+	Email string
+}

@@ -31,3 +31,15 @@ func NewWelcomeEmailTask(email string, name string) (*asynq.Task, error) {
 
 	return asynq.NewTask(TypeWelcomeEmail, payload), nil
 }
+
+func NewLoginAlertEmailTask(email string) (*asynq.Task, error) {
+	payload, err := json.Marshal(NewLoginAlertEmailPayload{
+		Email: email,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return asynq.NewTask(TypeNewLoginAlertEmail, payload), nil
+}
