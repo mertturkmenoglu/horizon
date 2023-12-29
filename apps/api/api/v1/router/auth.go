@@ -11,6 +11,7 @@ import (
 	"horizon/internal/hash"
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"
+	"horizon/internal/tasks"
 	"net/http"
 	"os"
 	"time"
@@ -153,6 +154,18 @@ func Register(c echo.Context) error {
 
 	if err != nil {
 		return err
+	}
+
+	t, err := tasks.NewWelcomeEmailTask(body.Email, body.Name)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.NoContent(http.StatusCreated)
