@@ -42,7 +42,7 @@ function HomePage(): React.ReactElement {
 
       <div>Personalized Suggestions</div>
 
-      <div></div>
+      <a href="/services/categories">Explore all categories</a>
     </MainLayout>
   );
 }
