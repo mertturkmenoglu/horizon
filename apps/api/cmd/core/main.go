@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"horizon/api/v1/router"
 	"horizon/internal/db"
+	"horizon/internal/tasks"
 	"horizon/internal/validation"
 	"log"
 	"os"
@@ -51,6 +52,12 @@ func main() {
 	if err := db.AutoMigrate(); err != nil {
 		panic(err.Error())
 	}
+
+	// Call only once to initialize the tasks service
+	// Needs to run in a different goroutine
+	// Serves as a background worker
+	go tasks.Init()
+	defer tasks.Close()
 
 	router.Bootstrap(e)
 
