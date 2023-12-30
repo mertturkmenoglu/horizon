@@ -2,8 +2,6 @@ package tasks
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"horizon/internal/email"
 	"time"
 
@@ -11,13 +9,13 @@ import (
 )
 
 func HandleEmailForgotPasswordTask(_ context.Context, t *asynq.Task) error {
-	var p ForgotPasswordEmailPayload
+	p, err := parse[ForgotPasswordEmailPayload](t.Payload())
 
-	if err := json.Unmarshal(t.Payload(), &p); err != nil {
-		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	if err != nil {
+		return err
 	}
 
-	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.ForgotPasswordPayload]{
+	return email.SendEmailWithTemplate(email.WithTemplateConfig[email.ForgotPasswordPayload]{
 		To:           p.Email,
 		TemplatePath: "templates/forgot-password.html",
 		Subject:      "Reset your password",
@@ -25,18 +23,16 @@ func HandleEmailForgotPasswordTask(_ context.Context, t *asynq.Task) error {
 			Code: p.Code,
 		},
 	})
-
-	return err
 }
 
 func HandleWelcomeEmailTask(_ context.Context, t *asynq.Task) error {
-	var p WelcomeEmailPayload
+	p, err := parse[WelcomeEmailPayload](t.Payload())
 
-	if err := json.Unmarshal(t.Payload(), &p); err != nil {
-		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	if err != nil {
+		return err
 	}
 
-	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.WelcomePayload]{
+	return email.SendEmailWithTemplate(email.WithTemplateConfig[email.WelcomePayload]{
 		To:           p.Email,
 		TemplatePath: "templates/welcome.html",
 		Subject:      "Welcome to Horizon",
@@ -44,18 +40,16 @@ func HandleWelcomeEmailTask(_ context.Context, t *asynq.Task) error {
 			Name: p.Name,
 		},
 	})
-
-	return err
 }
 
 func HandleNewLoginAlertEmailTask(_ context.Context, t *asynq.Task) error {
-	var p NewLoginAlertEmailPayload
+	p, err := parse[NewLoginAlertEmailPayload](t.Payload())
 
-	if err := json.Unmarshal(t.Payload(), &p); err != nil {
-		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	if err != nil {
+		return err
 	}
 
-	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.NewLoginAlertPayload]{
+	return email.SendEmailWithTemplate(email.WithTemplateConfig[email.NewLoginAlertPayload]{
 		To:           p.Email,
 		TemplatePath: "templates/new-login-alert.html",
 		Subject:      "New Login to Your Horizon Account",
@@ -63,18 +57,16 @@ func HandleNewLoginAlertEmailTask(_ context.Context, t *asynq.Task) error {
 			Date: time.Now().Format("2006-01-02T15:04"),
 		},
 	})
-
-	return err
 }
 
 func HandlePasswordResetEmailTask(_ context.Context, t *asynq.Task) error {
-	var p PasswordResetEmailPayload
+	p, err := parse[PasswordResetEmailPayload](t.Payload())
 
-	if err := json.Unmarshal(t.Payload(), &p); err != nil {
-		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	if err != nil {
+		return err
 	}
 
-	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.PasswordResetPayload]{
+	return email.SendEmailWithTemplate(email.WithTemplateConfig[email.PasswordResetPayload]{
 		To:           p.Email,
 		TemplatePath: "templates/password-reset.html",
 		Subject:      "Reset Your Horizon Password",
@@ -82,6 +74,4 @@ func HandlePasswordResetEmailTask(_ context.Context, t *asynq.Task) error {
 			Url: p.Url,
 		},
 	})
-
-	return err
 }
