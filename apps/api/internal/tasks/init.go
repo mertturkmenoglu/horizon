@@ -26,6 +26,7 @@ func Init() {
 	mux.HandleFunc(TypeForgotPasswordEmail, HandleEmailForgotPasswordTask)
 	mux.HandleFunc(TypeNewLoginAlertEmail, HandleNewLoginAlertEmailTask)
 	mux.HandleFunc(TypeWelcomeEmail, HandleWelcomeEmailTask)
+	mux.HandleFunc(TypePasswordResetEmail, HandlePasswordResetEmailTask)
 
 	if err := srv.Run(mux); err != nil {
 		log.Fatalf("could not run asynq server: %v", err)

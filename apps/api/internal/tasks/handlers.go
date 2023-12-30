@@ -66,3 +66,22 @@ func HandleNewLoginAlertEmailTask(_ context.Context, t *asynq.Task) error {
 
 	return err
 }
+
+func HandlePasswordResetEmailTask(_ context.Context, t *asynq.Task) error {
+	var p PasswordResetEmailPayload
+
+	if err := json.Unmarshal(t.Payload(), &p); err != nil {
+		return fmt.Errorf("json.Unmarshal failed: %v: %w", err, asynq.SkipRetry)
+	}
+
+	err := email.SendEmailWithTemplate(email.WithTemplateConfig[email.PasswordResetPayload]{
+		To:           p.Email,
+		TemplatePath: "templates/password-reset.html",
+		Subject:      "Reset Your Horizon Password",
+		Data: email.PasswordResetPayload{
+			Url: p.Url,
+		},
+	})
+
+	return err
+}

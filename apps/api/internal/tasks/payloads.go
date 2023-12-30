@@ -13,3 +13,8 @@ type WelcomeEmailPayload struct {
 type NewLoginAlertEmailPayload struct {
 	Email string
 }
+
+type PasswordResetEmailPayload struct {
+	Email string
+	Url   string
+}
