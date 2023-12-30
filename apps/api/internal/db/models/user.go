@@ -10,6 +10,7 @@ type User struct {
 	Email               string             `json:"email"`
 	Username            string             `json:"username"`
 	OnboardingCompleted bool               `json:"onboardingCompleted"`
+	EmailVerified       bool               `json:"emailVerified"`
 	ContactInformation  ContactInformation `json:"contactInformation"`
 	Location            Location           `json:"location"`
 }

@@ -136,8 +136,7 @@ func Register(c echo.Context) error {
 
 	err = db.Client.Transaction(func(tx *gorm.DB) error {
 		auth := models.Auth{
-			EmailVerified: false,
-			Password:      hashed,
+			Password: hashed,
 		}
 
 		res := tx.Create(&auth)
