@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../Input';
+import { api, isApiError } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface PasswordResetRequestFormProps {
   className?: string;
@@ -23,8 +25,22 @@ function PasswordResetRequestForm({
       resolver: zodResolver(schema),
     });
 
-  const onSubmit: SubmitHandler<PasswordResetRequestFormInput> = (values) => {
-    console.log({ values });
+  const onSubmit: SubmitHandler<PasswordResetRequestFormInput> = async (
+    values
+  ) => {
+    try {
+      await api('/auth/password/reset/send', {
+        method: 'POST',
+        body: values,
+      });
+      toast.success(
+        'If you have an account with this email address, we will send you an email with instructions to reset your password.'
+      );
+    } catch (err) {
+      if (isApiError(err)) {
+        toast.error(err.data.message, { className: 'error' });
+      }
+    }
   };
 
   return (
