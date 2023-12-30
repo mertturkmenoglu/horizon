@@ -1,7 +1,7 @@
 package email
 
 type Payload interface {
-	WelcomePayload | ForgotPasswordPayload | NewLoginAlertPayload
+	WelcomePayload | ForgotPasswordPayload | NewLoginAlertPayload | PasswordResetPayload
 }
 
 type (
@@ -15,5 +15,9 @@ type (
 
 	NewLoginAlertPayload struct {
 		Date string
+	}
+
+	PasswordResetPayload struct {
+		Url string
 	}
 )
