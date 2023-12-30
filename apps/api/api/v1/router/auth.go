@@ -89,7 +89,9 @@ func Login(c echo.Context) error {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	t, err := tasks.NewLoginAlertEmailTask(body.Email)
+	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
+		Email: body.Email,
+	})
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -167,7 +169,10 @@ func Register(c echo.Context) error {
 		return err
 	}
 
-	t, err := tasks.NewWelcomeEmailTask(body.Email, body.Name)
+	t, err := tasks.NewTask[tasks.WelcomeEmailPayload](tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
+		Email: body.Email,
+		Name:  body.Name,
+	})
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -262,7 +267,10 @@ func SendPasswordResetEmail(c echo.Context) error {
 	// TODO: Update link according to environment
 	url := fmt.Sprintf("http://localhost:5173/password/reset/%s", randUuid)
 
-	t, err := tasks.PasswordResetEmailTask(body.Email, url)
+	t, err := tasks.NewTask[tasks.PasswordResetEmailPayload](tasks.TypePasswordResetEmail, tasks.PasswordResetEmailPayload{
+		Email: body.Email,
+		Url:   url,
+	})
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
