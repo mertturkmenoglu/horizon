@@ -20,3 +20,7 @@ type ChangePasswordRequest struct {
 	CurrentPassword string `json:"currentPassword" validate:"required"`
 	NewPassword     string `json:"newPassword" validate:"required"`
 }
+
+type PasswordResetRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}

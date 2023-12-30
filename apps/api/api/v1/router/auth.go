@@ -250,7 +250,31 @@ func ChangePassword(c echo.Context) error {
 }
 
 func SendPasswordResetEmail(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
+	body := c.Get("body").(dto.PasswordResetRequest)
+
+	randUuid := uuid.New().String()
+
+	cacheKey := fmt.Sprintf("password-reset:%s", randUuid)
+	cacheTTL := time.Minute * 15
+
+	_ = cache.Set(cacheKey, body.Email, cacheTTL)
+
+	// TODO: Update link according to environment
+	url := fmt.Sprintf("http://localhost:5173/password/reset/%s", randUuid)
+
+	t, err := tasks.PasswordResetEmailTask(body.Email, url)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func ResetPassword(c echo.Context) error {
