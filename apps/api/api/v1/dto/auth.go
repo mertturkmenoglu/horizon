@@ -33,3 +33,7 @@ type PasswordResetRequest struct {
 	Code        string `json:"code" validate:"required"`
 	NewPassword string `json:"newPassword" validate:"required"`
 }
+
+type VerifyEmailRequest struct {
+	Code string `json:"code" validate:"required"`
+}

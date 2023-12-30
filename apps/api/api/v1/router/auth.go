@@ -352,6 +352,31 @@ func SendVerifyEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+func VerifyEmail(c echo.Context) error {
+	body := c.Get("body").(dto.VerifyEmailRequest)
+
+	cacheKey := fmt.Sprintf("verify-email:%s", body.Code)
+	email, err := cache.Get(cacheKey)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
+	}
+
+	// Check if user exists
+	user, err := query.GetUserByEmail(email)
+
+	if err != nil || user == nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	db.Client.
+		Model(&models.User{}).
+		Where("email = ?", email).
+		Update("email_verified", true)
+
+	return c.NoContent(http.StatusOK)
+}
+
 func CompleteOnboarding(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 
