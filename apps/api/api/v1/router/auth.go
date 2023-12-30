@@ -290,7 +290,34 @@ func ResetPassword(c echo.Context) error {
 }
 
 func SendVerifyEmail(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
+	body := c.Get("body").(dto.PasswordResetRequest)
+
+	randUuid := uuid.New().String()
+
+	cacheKey := fmt.Sprintf("verify-email:%s", randUuid)
+	cacheTTL := time.Minute * 15
+
+	_ = cache.Set(cacheKey, body.Email, cacheTTL)
+
+	// TODO: Update link according to environment
+	url := fmt.Sprintf("http://localhost:5173/verify-email/%s", randUuid)
+
+	t, err := tasks.NewTask[tasks.VerifyEmailEmailPayload](tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
+		Email: body.Email,
+		Url:   url,
+	})
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func CompleteOnboarding(c echo.Context) error {
