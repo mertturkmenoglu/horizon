@@ -255,7 +255,7 @@ func ChangePassword(c echo.Context) error {
 }
 
 func SendPasswordResetEmail(c echo.Context) error {
-	body := c.Get("body").(dto.PasswordResetRequest)
+	body := c.Get("body").(dto.PasswordResetEmailRequest)
 
 	randUuid := uuid.New().String()
 
@@ -286,11 +286,43 @@ func SendPasswordResetEmail(c echo.Context) error {
 }
 
 func ResetPassword(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "Not implemented")
+	body := c.Get("body").(dto.PasswordResetRequest)
+
+	cacheKey := fmt.Sprintf("password-reset:%s", body.Code)
+	email, err := cache.Get(cacheKey)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
+	}
+
+	// Check if user exists
+	user, err := query.GetUserByEmail(email)
+
+	if err != nil || user == nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	hashed, err := hash.Hash(body.NewPassword)
+	isStrongPassword := password.IsStrong(body.NewPassword)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	if !isStrongPassword {
+		return echo.NewHTTPError(http.StatusBadRequest, "Password is too weak.")
+	}
+
+	db.Client.
+		Model(&models.Auth{}).
+		Where("id = ?", user.AuthId).
+		Update("password", hashed)
+
+	return c.NoContent(http.StatusOK)
 }
 
 func SendVerifyEmail(c echo.Context) error {
-	body := c.Get("body").(dto.PasswordResetRequest)
+	body := c.Get("body").(dto.PasswordResetEmailRequest)
 
 	randUuid := uuid.New().String()
 

@@ -21,10 +21,15 @@ type ChangePasswordRequest struct {
 	NewPassword     string `json:"newPassword" validate:"required"`
 }
 
-type PasswordResetRequest struct {
+type PasswordResetEmailRequest struct {
 	Email string `json:"email" validate:"required,email"`
 }
 
-type EmailVerifyRequest struct {
+type VerifyEmailEmailRequest struct {
 	Email string `json:"email" validate:"required,email"`
+}
+
+type PasswordResetRequest struct {
+	Code        string `json:"code" validate:"required"`
+	NewPassword string `json:"newPassword" validate:"required"`
 }
