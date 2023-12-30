@@ -37,6 +37,7 @@ func bootstrap(mux *asynq.ServeMux) {
 	mux.HandleFunc(TypeNewLoginAlertEmail, HandleNewLoginAlertEmailTask)
 	mux.HandleFunc(TypeWelcomeEmail, HandleWelcomeEmailTask)
 	mux.HandleFunc(TypePasswordResetEmail, HandlePasswordResetEmailTask)
+	mux.HandleFunc(TypeVerifyEmailEmail, HandleVerifyEmailEmailTask)
 }
 
 func Close() {

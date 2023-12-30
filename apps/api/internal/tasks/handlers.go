@@ -75,3 +75,20 @@ func HandlePasswordResetEmailTask(_ context.Context, t *asynq.Task) error {
 		},
 	})
 }
+
+func HandleVerifyEmailEmailTask(_ context.Context, t *asynq.Task) error {
+	p, err := parse[VerifyEmailEmailPayload](t.Payload())
+
+	if err != nil {
+		return err
+	}
+
+	return email.SendEmailWithTemplate(email.WithTemplateConfig[email.VerifyEmailPayload]{
+		To:           p.Email,
+		TemplatePath: "templates/verify-email.html",
+		Subject:      "Verify Your Email",
+		Data: email.VerifyEmailPayload{
+			Url: p.Url,
+		},
+	})
+}

@@ -5,10 +5,11 @@ const (
 	TypeWelcomeEmail        = "email:welcome"
 	TypeNewLoginAlertEmail  = "email:new-login-alert"
 	TypePasswordResetEmail  = "email:password-reset"
+	TypeVerifyEmailEmail    = "email:verify-email"
 )
 
 type TaskPayload interface {
-	ForgotPasswordEmailPayload | WelcomeEmailPayload | NewLoginAlertEmailPayload | PasswordResetEmailPayload
+	ForgotPasswordEmailPayload | WelcomeEmailPayload | NewLoginAlertEmailPayload | PasswordResetEmailPayload | VerifyEmailEmailPayload
 }
 
 type (
@@ -27,6 +28,11 @@ type (
 	}
 
 	PasswordResetEmailPayload struct {
+		Email string
+		Url   string
+	}
+
+	VerifyEmailEmailPayload struct {
 		Email string
 		Url   string
 	}
