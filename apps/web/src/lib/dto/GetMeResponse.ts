@@ -4,4 +4,5 @@ export interface GetMeResponse {
   email: string;
   username: string;
   onboardingCompleted: boolean;
+  emailVerified: boolean;
 }
