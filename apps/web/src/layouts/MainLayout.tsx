@@ -4,6 +4,7 @@ import CookieConsent from '@/components/CookieConsent';
 import { useAuth } from '@/hooks/useAuth';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,11 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
 
   if (!isAuthenticated || loading || !user) {
     return <></>;
+  }
+
+  if (user && !user.emailVerified) {
+    console.log({ user });
+    return <Navigate to="/verify-email" />;
   }
 
   return (
