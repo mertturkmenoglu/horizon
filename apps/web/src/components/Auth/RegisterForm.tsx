@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../Input';
 import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
+import Button from '../Button';
 
 interface RegisterFormProps {
   className?: string;
@@ -127,15 +128,12 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
         targetText="Reset"
       />
 
-      <button
-        className={cn(
-          'bg-red-700 rounded text-white',
-          'font-bold py-2 mt-8',
-          'focus:ring focus:ring-red-700 focus:outline-none focus:ring-offset-2'
-        )}
+      <Button
+        appearance="red"
+        className="mt-8"
       >
         Register
-      </button>
+      </Button>
     </form>
   );
 }
