@@ -1,16 +1,15 @@
 package db
 
 import (
-	"os"
-
+	"github.com/spf13/viper"
 	"gorm.io/gorm/logger"
 )
 
 func getLogLevelFromEnv() logger.LogLevel {
 	lvl := logger.Silent
-	debug := os.Getenv("DEBUG")
+	debug := viper.GetBool("debug")
 
-	if debug == "true" {
+	if debug {
 		lvl = logger.Info
 	}
 

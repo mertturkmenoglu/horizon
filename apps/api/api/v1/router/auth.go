@@ -13,11 +13,11 @@ import (
 	"horizon/internal/password"
 	"horizon/internal/tasks"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -67,7 +67,7 @@ func Login(c echo.Context) error {
 
 	_ = cache.Set(tokenCacheKey, refreshToken, refreshTokenDuration)
 
-	isDev := os.Getenv("ENV") == "dev"
+	isDev := viper.GetString("env") == "dev"
 
 	c.SetCookie(&http.Cookie{
 		Name:     "accessToken",

@@ -3,24 +3,19 @@ package main
 import (
 	"fmt"
 	"horizon/api/v1/router"
+	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/tasks"
 	"horizon/internal/validation"
-	"log"
-	"os"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/spf13/viper"
 )
 
 func main() {
-	err := godotenv.Load()
-
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	config.Bootstrap()
 
 	e := echo.New()
 	e.Validator = &validation.CustomValidator{
@@ -29,9 +24,9 @@ func main() {
 
 	e.Use(middleware.Recover())
 
-	if os.Getenv("ENV") == "dev" {
+	if viper.GetString("env") == "dev" {
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: "time=${time_rfc3339}, method=${method}, uri=${uri}, status=${status}, error=${error}, latency=${latency_human}\n",
+			Format: viper.GetString("api.logger.format"),
 		}))
 
 		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -61,8 +56,8 @@ func main() {
 
 	router.Bootstrap(e)
 
-	port := os.Getenv("PORT")
-	port = fmt.Sprintf(":%s", port)
+	iPort := viper.GetInt("port")
+	port := fmt.Sprintf(":%d", iPort)
 
 	e.Logger.Fatal(e.Start(port))
 }

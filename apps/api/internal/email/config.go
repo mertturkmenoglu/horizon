@@ -1,6 +1,8 @@
 package email
 
-import "os"
+import (
+	"github.com/spf13/viper"
+)
 
 type (
 	Config struct {
@@ -19,19 +21,10 @@ type (
 )
 
 func getEmailConfig() Config {
-	fromName, fromNameOk := os.LookupEnv("EMAIL_FROM_NAME")
-	fromEmail, fromEmailOk := os.LookupEnv("EMAIL_FROM_EMAIL")
-	smtpEmail, smtpEmailOk := os.LookupEnv("SMTP_EMAIL")
-	smtpPassword, smtpPasswordOk := os.LookupEnv("SMTP_PASSWORD")
-
-	if !fromNameOk || !fromEmailOk || !smtpEmailOk || !smtpPasswordOk {
-		panic("Email environment variables are not set")
-	}
-
 	return Config{
-		FromName:     fromName,
-		FromEmail:    fromEmail,
-		SmtpEmail:    smtpEmail,
-		SmtpPassword: smtpPassword,
+		FromName:     viper.GetString("email.name"),
+		FromEmail:    viper.GetString("email.from"),
+		SmtpEmail:    viper.GetString("smtp.email"),
+		SmtpPassword: viper.GetString("smtp.password"),
 	}
 }

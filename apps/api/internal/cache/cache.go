@@ -2,17 +2,17 @@ package cache
 
 import (
 	"context"
-	"os"
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/spf13/viper"
 )
 
 var client *redis.Client
 var redisContext = context.Background()
 
 func newClient() *redis.Client {
-	url := os.Getenv("REDIS_URL")
+	url := viper.GetString("redis.url")
 	options, err := redis.ParseURL(url)
 
 	if err != nil {

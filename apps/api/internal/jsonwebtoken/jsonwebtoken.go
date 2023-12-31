@@ -1,14 +1,14 @@
 package jsonwebtoken
 
 import (
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/spf13/viper"
 )
 
 func Encode(payload Payload, expiresAt time.Time) (string, error) {
-	secretKey := os.Getenv("JWT_SECRET")
+	secretKey := viper.GetString("jwt.secret")
 
 	claims := Claims{
 		payload.Name,
@@ -17,7 +17,7 @@ func Encode(payload Payload, expiresAt time.Time) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(expiresAt),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "horizon-auth",
+			Issuer:    viper.GetString("jwt.issuer"),
 			Subject:   payload.Email,
 		},
 	}
@@ -33,7 +33,7 @@ func Encode(payload Payload, expiresAt time.Time) (string, error) {
 }
 
 func Decode(tokenString string) (*Claims, error) {
-	secretKey := os.Getenv("JWT_SECRET")
+	secretKey := viper.GetString("jwt.secret")
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secretKey), nil

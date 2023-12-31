@@ -3,21 +3,21 @@ package tasks
 import (
 	"encoding/json"
 	"log"
-	"os"
 
 	"github.com/hibiken/asynq"
+	"github.com/spf13/viper"
 )
 
 var Client *asynq.Client
 
 func Init() {
-	redisAddr := os.Getenv("REDIS_ADDR")
+	addr := viper.GetString("redis.addr")
 	Client = asynq.NewClient(asynq.RedisClientOpt{
-		Addr: redisAddr,
+		Addr: addr,
 	})
 
 	srv := asynq.NewServer(
-		asynq.RedisClientOpt{Addr: redisAddr},
+		asynq.RedisClientOpt{Addr: addr},
 		asynq.Config{
 			Concurrency: 10,
 		},

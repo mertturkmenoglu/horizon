@@ -2,31 +2,33 @@ package db
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/spf13/viper"
 )
 
 func createDsnFromEnvVars() string {
 	vars := map[string]string{
-		"DB_HOST":     "",
-		"DB_USER":     "",
-		"DB_PASSWORD": "",
-		"DB_NAME":     "",
-		"DB_PORT":     "",
-		"DB_TIMEZONE": "",
+		"db.host":     "",
+		"db.user":     "",
+		"db.password": "",
+		"db.name":     "",
+		"db.port":     "",
+		"db.timezone": "",
 	}
 
 	for key := range vars {
-		vars[key] = os.Getenv(key)
+		vars[key] = viper.GetString(key)
+
 	}
 
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
-		vars["DB_HOST"],
-		vars["DB_USER"],
-		vars["DB_PASSWORD"],
-		vars["DB_NAME"],
-		vars["DB_PORT"],
-		vars["DB_TIMEZONE"],
+		vars["db.host"],
+		vars["db.user"],
+		vars["db.password"],
+		vars["db.name"],
+		vars["db.port"],
+		vars["db.timezone"],
 	)
 
 	return dsn
