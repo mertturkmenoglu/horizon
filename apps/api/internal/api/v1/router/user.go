@@ -2,9 +2,9 @@ package router
 
 import (
 	"fmt"
+	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
-	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -14,19 +14,9 @@ import (
 
 func GetMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
-
-	var user *models.User
-	res := db.Client.Find(&user, "id = ?", auth.UserId).
-		Preload("ContactInformation").
-		Preload("Location")
-
-	if res.Error != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, res.Error)
-	}
-
-	return c.JSON(http.StatusOK, h.Response{
-		"data": user,
-	})
+	c.SetParamNames("username")
+	c.SetParamValues(auth.Username)
+	return GetUserByUsername(c)
 }
 
 func GetUserByUsername(c echo.Context) error {
@@ -36,17 +26,43 @@ func GetUserByUsername(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "username is required")
 	}
 
-	user, err := query.GetUserByUsername(username)
+	var user *models.User
 
-	if err != nil {
-		if db.IsNotFoundError(err) {
+	res := db.Client.Find(&user, "username = ?", username).
+		Preload("ContactInformation").
+		Preload("Location")
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
 			return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("cannot found user with username: %s", username))
 		}
 
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
 	}
 
-	return c.JSON(http.StatusOK, h.Response{
-		"data": user,
+	return c.JSON(http.StatusOK, h.Response[dto.GetUserByUsernameResponse]{
+		"data": dto.GetUserByUsernameResponse{
+			Id:       user.Id.String(),
+			Name:     user.Name,
+			Email:    user.Email,
+			Username: user.Username,
+			Gender:   user.Gender,
+			ContactInformation: dto.UserContactInformationDto{
+				Email:   user.ContactInformation.Email,
+				Phone:   user.ContactInformation.Phone,
+				Address: user.ContactInformation.Address,
+				Other:   user.ContactInformation.Other,
+			},
+			Location: dto.UserLocationDto{
+				City:    user.Location.City,
+				Country: user.Location.Country,
+				Lat:     user.Location.Lat,
+				Long:    user.Location.Long,
+			},
+		},
 	})
+}
+
+func UpdateMe(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
 }
