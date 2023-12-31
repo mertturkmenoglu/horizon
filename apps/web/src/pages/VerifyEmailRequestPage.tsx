@@ -1,9 +1,11 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import { useAuth } from '@/hooks/useAuth';
 import { api, isApiError } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -14,6 +16,7 @@ const schema = z.object({
 type VerifyEmailFormInput = z.infer<typeof schema>;
 
 function VerifyEmailPage(): React.ReactElement {
+  const { user } = useAuth();
   const { register, formState, handleSubmit } = useForm<VerifyEmailFormInput>({
     resolver: zodResolver(schema),
   });
@@ -31,6 +34,10 @@ function VerifyEmailPage(): React.ReactElement {
       }
     }
   };
+
+  if (user && user.emailVerified) {
+    return <Navigate to="/home" />;
+  }
 
   return (
     <div className="flex flex-col h-screen w-full justify-center items-center">
