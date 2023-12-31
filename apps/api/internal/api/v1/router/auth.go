@@ -45,29 +45,15 @@ func Login(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
-	accessTokenExpiresAt := time.Now().Add(15 * time.Minute)
+	access, accExp, accErr := createNewAccessToken(auth, user)
+	refresh, refExp, refErr := createNewRefreshToken(body.Email)
 
-	accessToken, err := jsonwebtoken.Encode(jsonwebtoken.Payload{
-		AuthId: auth.Id.String(),
-		UserId: user.Id.String(),
-		Name:   user.Name,
-		Email:  user.Email,
-	}, accessTokenExpiresAt)
-
-	if err != nil {
-		slog.Error("Token creation failed", "err", err.Error())
+	if accErr != nil || refErr != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Cannot create token")
 	}
 
-	refreshToken := uuid.New().String()
-	key := fmt.Sprintf("refreshToken:%s", auth.Id.String())
-	dur := time.Hour * 24 * 14
-	expires := time.Now().Add(dur)
-
-	_ = cache.Set(key, refreshToken, dur)
-
-	c.SetCookie(createCookie("accessToken", accessToken, accessTokenExpiresAt))
-	c.SetCookie(createCookie("refreshToken", refreshToken, expires))
+	c.SetCookie(createCookie("accessToken", access, accExp))
+	c.SetCookie(createCookie("refreshToken", refresh, refExp))
 
 	if viper.GetBool("api.auth.send-login-alert-email") {
 		slog.Info("Sending login alert email", "email", body.Email)
@@ -150,6 +136,8 @@ func Register(c echo.Context) error {
 }
 
 func Logout(c echo.Context) error {
+	cookie := h.GetCookieFromReq(c, "refreshToken")
+	_ = removeRefreshToken(cookie.Value)
 	c.SetCookie(removeCookie("accessToken"))
 	c.SetCookie(removeCookie("refreshToken"))
 	return c.NoContent(http.StatusOK)
@@ -341,6 +329,66 @@ func GetPasswordStrength(c echo.Context) error {
 	return c.JSON(http.StatusOK, h.Response[int]{
 		"data": strength,
 	})
+}
+
+func GetNewTokens(c echo.Context) error {
+	refreshTokenCookie := h.GetCookieFromReq(c, "refreshToken")
+
+	if refreshTokenCookie == nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Missing refresh token")
+	}
+
+	key := fmt.Sprintf("refreshToken:%s", refreshTokenCookie.Value)
+	email, err := cache.Get(key)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Token expired")
+	}
+
+	auth, authErr := query.GetAuthByEmail(email)
+	user, userErr := query.GetUserByEmail(email)
+
+	if authErr != nil || userErr != nil {
+		return echo.NewHTTPError(http.StatusBadRequest)
+	}
+
+	accessToken, accessExp, accessErr := createNewAccessToken(auth, user)
+	refreshToken, refreshExp, refreshErr := createNewRefreshToken(user.Email)
+
+	if accessErr != nil || refreshErr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Cannot create token")
+	}
+
+	c.SetCookie(createCookie("accessToken", accessToken, accessExp))
+	c.SetCookie(createCookie("refreshToken", refreshToken, refreshExp))
+
+	return c.NoContent(http.StatusOK)
+}
+
+func createNewAccessToken(auth *models.Auth, user *models.User) (string, time.Time, error) {
+	ttl := time.Duration(viper.GetInt64("api.auth.token.access-ttl")) * time.Minute
+	exp := time.Now().Add(ttl)
+	token, err := jsonwebtoken.Encode(jsonwebtoken.Payload{
+		AuthId: auth.Id.String(),
+		UserId: user.Id.String(),
+		Name:   user.Name,
+		Email:  user.Email,
+	}, exp)
+	return token, exp, err
+}
+
+func createNewRefreshToken(email string) (string, time.Time, error) {
+	token := uuid.New().String()
+	key := fmt.Sprintf("refreshToken:%s", token)
+	ttl := time.Hour * time.Duration(viper.GetInt64("api.auth.token.refresh-ttl"))
+	exp := time.Now().Add(ttl)
+	err := cache.Set(key, email, ttl)
+	return token, exp, err
+}
+
+func removeRefreshToken(token string) error {
+	key := fmt.Sprintf("refreshToken:%s", token)
+	return cache.Del(key)
 }
 
 func createCookie(name string, value string, expires time.Time) *http.Cookie {

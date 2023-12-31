@@ -14,7 +14,7 @@ func Bootstrap(e *echo.Echo) {
 
 	auth.POST("/login", Login, middlewares.ParseBody[dto.LoginRequest])
 	auth.POST("/register", Register, middlewares.ParseBody[dto.RegisterRequest])
-	auth.POST("/logout", Logout)
+	auth.POST("/logout", Logout, middlewares.IsAuth)
 	auth.PUT("/password/change", ChangePassword, middlewares.IsAuth, middlewares.ParseBody[dto.ChangePasswordRequest])
 	auth.POST("/password/reset/send", SendPasswordResetEmail, middlewares.ParseBody[dto.PasswordResetEmailRequest])
 	auth.PUT("/password/reset", ResetPassword, middlewares.ParseBody[dto.PasswordResetRequest])
@@ -22,6 +22,7 @@ func Bootstrap(e *echo.Echo) {
 	auth.POST("/email/verify/send", SendVerifyEmail, middlewares.ParseBody[dto.VerifyEmailEmailRequest])
 	auth.POST("/email/verify", VerifyEmail, middlewares.ParseBody[dto.VerifyEmailRequest])
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
+	auth.POST("/token/refresh", GetNewTokens)
 
 	users := api.Group("/users")
 
