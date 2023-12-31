@@ -24,7 +24,7 @@ api:
   auth:
     password:
       min-security: 2
-      reset-url: "http://localhost:5173/password/reset/%s"
+      reset-url: "http://localhost:5173/password/reset/%s?email=%s"
     email:
-      verify-url: "http://localhost:5173/verify-email/%s"
+      verify-url: "http://localhost:5173/verify-email/%s?email=%s"
     send-login-alert-email: true
