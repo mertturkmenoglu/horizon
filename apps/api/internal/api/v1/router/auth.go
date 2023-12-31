@@ -25,54 +25,48 @@ func Login(c echo.Context) error {
 	body := c.Get("body").(dto.LoginRequest)
 
 	auth, authErr := query.GetAuthByEmail(body.Email)
+	user, userErr := query.GetUserByEmail(body.Email)
+
 	var hashed = ""
 
 	if auth != nil {
 		hashed = auth.Password
 	}
 
-	user, userErr := query.GetUserByEmail(body.Email)
-
 	// Always calculate the password hash before any early return
 	// to prevent timing based attacks.
 	matched, hashErr := hash.Verify(body.Password, hashed)
 
-	if authErr != nil || userErr != nil {
+	if authErr != nil || userErr != nil || hashErr != nil || !matched {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
-	if hashErr != nil || !matched {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
-	}
+	accessTokenExpiresAt := time.Now().Add(15 * time.Minute)
 
-	payload := jsonwebtoken.Payload{
+	accessToken, err := jsonwebtoken.Encode(jsonwebtoken.Payload{
 		AuthId: auth.Id.String(),
 		UserId: user.Id.String(),
 		Name:   user.Name,
 		Email:  user.Email,
-	}
-
-	expiresAt := time.Now().Add(15 * time.Minute)
-
-	accessToken, err := jsonwebtoken.Encode(payload, expiresAt)
+	}, accessTokenExpiresAt)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Cannot create token")
 	}
 
 	refreshToken := uuid.New().String()
-	tokenCacheKey := fmt.Sprintf("refreshToken:%s", auth.Id)
-	refreshTokenDuration := time.Hour * 24 * 14
-	refreshTokenExpires := time.Now().Add(refreshTokenDuration)
+	key := fmt.Sprintf("refreshToken:%s", auth.Id.String())
+	dur := time.Hour * 24 * 14
+	expires := time.Now().Add(dur)
 
-	_ = cache.Set(tokenCacheKey, refreshToken, refreshTokenDuration)
+	_ = cache.Set(key, refreshToken, dur)
 
 	isDev := viper.GetString("env") == "dev"
 
 	c.SetCookie(&http.Cookie{
 		Name:     "accessToken",
 		Value:    accessToken,
-		Expires:  expiresAt,
+		Expires:  accessTokenExpiresAt,
 		Secure:   !isDev,
 		HttpOnly: true,
 		Path:     "/",
@@ -82,7 +76,7 @@ func Login(c echo.Context) error {
 	c.SetCookie(&http.Cookie{
 		Name:     "refreshToken",
 		Value:    refreshToken,
-		Expires:  refreshTokenExpires,
+		Expires:  expires,
 		Secure:   !isDev,
 		HttpOnly: true,
 		Path:     "/",
@@ -115,7 +109,6 @@ func Register(c echo.Context) error {
 	hashed, err := hash.Hash(body.Password)
 	isStrongPassword := password.IsStrong(body.Password)
 
-	// Check if user exists
 	exists, err := query.DoesAuthExist(body.Email)
 
 	if err != nil {
@@ -212,11 +205,12 @@ func ChangePassword(c echo.Context) error {
 	body := c.Get("body").(dto.ChangePasswordRequest)
 
 	dbAuth, err := query.GetAuthByEmail(auth.Email)
-	var hashed = ""
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
+
+	var hashed = ""
 
 	if dbAuth != nil {
 		hashed = dbAuth.Password
@@ -256,16 +250,11 @@ func ChangePassword(c echo.Context) error {
 
 func SendPasswordResetEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
-
 	randUuid := uuid.New().String()
-
-	cacheKey := fmt.Sprintf("password-reset:%s", randUuid)
-	cacheTTL := time.Minute * 15
-
-	_ = cache.Set(cacheKey, body.Email, cacheTTL)
-
-	// TODO: Update link according to environment
-	url := fmt.Sprintf("http://localhost:5173/password/reset/%s", randUuid)
+	key := fmt.Sprintf("passwordReset:%s", randUuid)
+	ttl := time.Minute * 15
+	url := fmt.Sprintf(viper.GetString("api.auth.password.reset-url"), randUuid)
+	_ = cache.Set(key, body.Email, ttl)
 
 	t, err := tasks.NewTask[tasks.PasswordResetEmailPayload](tasks.TypePasswordResetEmail, tasks.PasswordResetEmailPayload{
 		Email: body.Email,
@@ -287,15 +276,13 @@ func SendPasswordResetEmail(c echo.Context) error {
 
 func ResetPassword(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetRequest)
-
-	cacheKey := fmt.Sprintf("password-reset:%s", body.Code)
-	email, err := cache.Get(cacheKey)
+	key := fmt.Sprintf("passwordReset:%s", body.Code)
+	email, err := cache.Get(key)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
 	}
 
-	// Check if user exists
 	user, err := query.GetUserByEmail(email)
 
 	if err != nil || user == nil {
@@ -323,16 +310,11 @@ func ResetPassword(c echo.Context) error {
 
 func SendVerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
-
 	randUuid := uuid.New().String()
-
-	cacheKey := fmt.Sprintf("verify-email:%s", randUuid)
-	cacheTTL := time.Minute * 15
-
-	_ = cache.Set(cacheKey, body.Email, cacheTTL)
-
-	// TODO: Update link according to environment
-	url := fmt.Sprintf("http://localhost:5173/verify-email/%s", randUuid)
+	key := fmt.Sprintf("verifyEmail:%s", randUuid)
+	ttl := time.Minute * 15
+	url := fmt.Sprintf(viper.GetString("api.auth.email.verify-url"), randUuid)
+	_ = cache.Set(key, body.Email, ttl)
 
 	t, err := tasks.NewTask[tasks.VerifyEmailEmailPayload](tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
 		Email: body.Email,
@@ -354,15 +336,13 @@ func SendVerifyEmail(c echo.Context) error {
 
 func VerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailRequest)
-
-	cacheKey := fmt.Sprintf("verify-email:%s", body.Code)
-	email, err := cache.Get(cacheKey)
+	key := fmt.Sprintf("verifyEmail:%s", body.Code)
+	email, err := cache.Get(key)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
 	}
 
-	// Check if user exists
 	user, err := query.GetUserByEmail(email)
 
 	if err != nil || user == nil {
@@ -382,7 +362,7 @@ func CompleteOnboarding(c echo.Context) error {
 
 	db.Client.
 		Model(&models.Auth{}).
-		Where("email = ?", auth.Email).
+		Where("id = ?", auth.AuthId).
 		Update("onboarding_completed", true)
 
 	return c.NoContent(http.StatusOK)
