@@ -27,3 +27,4 @@ api:
       reset-url: "http://localhost:5173/password/reset/%s"
     email:
       verify-url: "http://localhost:5173/verify-email/%s"
+    send-login-alert-email: true

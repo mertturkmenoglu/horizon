@@ -1,6 +1,7 @@
 package router
 
 import (
+	"errors"
 	"fmt"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/cache"
@@ -19,6 +20,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func Login(c echo.Context) error {
@@ -29,15 +31,15 @@ func Login(c echo.Context) error {
 
 	var hashed = ""
 
-	if auth != nil {
+	if authErr == nil {
 		hashed = auth.Password
 	}
 
-	// Always calculate the password hash before any early return
-	// to prevent timing based attacks.
 	matched, hashErr := hash.Verify(body.Password, hashed)
 
-	if authErr != nil || userErr != nil || hashErr != nil || !matched {
+	err := errors.Join(authErr, userErr, hashErr)
+
+	if err != nil || !matched {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
@@ -61,40 +63,15 @@ func Login(c echo.Context) error {
 
 	_ = cache.Set(key, refreshToken, dur)
 
-	isDev := viper.GetString("env") == "dev"
+	c.SetCookie(createCookie("accessToken", accessToken, accessTokenExpiresAt))
+	c.SetCookie(createCookie("refreshToken", refreshToken, expires))
 
-	c.SetCookie(&http.Cookie{
-		Name:     "accessToken",
-		Value:    accessToken,
-		Expires:  accessTokenExpiresAt,
-		Secure:   !isDev,
-		HttpOnly: true,
-		Path:     "/",
-		SameSite: http.SameSiteLaxMode,
-	})
+	if viper.GetBool("api.auth.send-login-alert-email") {
+		err := sendLoginAlertEmail(body.Email)
 
-	c.SetCookie(&http.Cookie{
-		Name:     "refreshToken",
-		Value:    refreshToken,
-		Expires:  expires,
-		Secure:   !isDev,
-		HttpOnly: true,
-		Path:     "/",
-		SameSite: http.SameSiteLaxMode,
-	})
-
-	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
-		Email: body.Email,
-	})
-
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	_, err = tasks.Client.Enqueue(t)
-
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
 	}
 
 	return c.NoContent(http.StatusOK)
@@ -102,14 +79,10 @@ func Login(c echo.Context) error {
 
 func Register(c echo.Context) error {
 	body := c.Get("body").(dto.RegisterRequest)
-
-	// Always calculate the password hash and the entropy (strength)
-	// before any early return to prevent timing based attacks.
-	// For more info, refer to OWASP.
-	hashed, err := hash.Hash(body.Password)
+	hashed, hashErr := hash.Hash(body.Password)
 	isStrongPassword := password.IsStrong(body.Password)
-
-	exists, err := query.DoesAuthExist(body.Email)
+	exists, queryErr := query.DoesAuthExist(body.Email)
+	err := errors.Join(hashErr, queryErr)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -146,9 +119,10 @@ func Register(c echo.Context) error {
 			Email:               body.Email,
 			Username:            body.Username,
 			OnboardingCompleted: false,
+			EmailVerified:       false,
 		}
 
-		res = tx.Create(&user)
+		res = tx.Omit(clause.Associations).Create(&user)
 
 		if res.Error != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
@@ -162,16 +136,7 @@ func Register(c echo.Context) error {
 		return err
 	}
 
-	t, err := tasks.NewTask[tasks.WelcomeEmailPayload](tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
-		Email: body.Email,
-		Name:  body.Name,
-	})
-
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	_, err = tasks.Client.Enqueue(t)
+	err = sendWelcomeEmail(body.Email, body.Name)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -181,29 +146,14 @@ func Register(c echo.Context) error {
 }
 
 func Logout(c echo.Context) error {
-	c.SetCookie(&http.Cookie{
-		Name:     "accessToken",
-		Value:    "",
-		Path:     "/",
-		MaxAge:   -1,
-		SameSite: http.SameSiteLaxMode,
-	})
-
-	c.SetCookie(&http.Cookie{
-		Name:     "refreshToken",
-		Value:    "",
-		Path:     "/",
-		MaxAge:   -1,
-		SameSite: http.SameSiteLaxMode,
-	})
-
+	c.SetCookie(removeCookie("accessToken"))
+	c.SetCookie(removeCookie("refreshToken"))
 	return c.NoContent(http.StatusOK)
 }
 
 func ChangePassword(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.ChangePasswordRequest)
-
 	dbAuth, err := query.GetAuthByEmail(auth.Email)
 
 	if err != nil {
@@ -219,9 +169,10 @@ func ChangePassword(c echo.Context) error {
 	// Always calculate the password hash before any early return
 	// to prevent timing based attacks.
 	matched, hashErr := hash.Verify(body.CurrentPassword, hashed)
+	err = errors.Join(err, hashErr)
 
-	if hashErr != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, hashErr.Error())
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	if !matched {
@@ -358,11 +309,11 @@ func VerifyEmail(c echo.Context) error {
 }
 
 func CompleteOnboarding(c echo.Context) error {
-	auth := c.Get("auth").(jsonwebtoken.Payload)
+	token := c.Get("auth").(jsonwebtoken.Payload)
 
 	db.Client.
-		Model(&models.Auth{}).
-		Where("id = ?", auth.AuthId).
+		Model(&models.User{}).
+		Where("id = ?", token.UserId).
 		Update("onboarding_completed", true)
 
 	return c.NoContent(http.StatusOK)
@@ -375,4 +326,55 @@ func GetPasswordStrength(c echo.Context) error {
 	return c.JSON(http.StatusOK, h.Response{
 		"data": strength,
 	})
+}
+
+func createCookie(name string, value string, expires time.Time) *http.Cookie {
+	return &http.Cookie{
+		Name:     name,
+		Value:    value,
+		Expires:  expires,
+		Secure:   viper.GetString("env") != "dev",
+		HttpOnly: true,
+		Path:     "/",
+		SameSite: http.SameSiteLaxMode,
+	}
+}
+
+func removeCookie(name string) *http.Cookie {
+	return &http.Cookie{
+		Name:     name,
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		SameSite: http.SameSiteLaxMode,
+	}
+}
+
+func sendLoginAlertEmail(to string) error {
+	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
+		Email: to,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	return err
+}
+
+func sendWelcomeEmail(email string, name string) error {
+	t, err := tasks.NewTask[tasks.WelcomeEmailPayload](tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
+		Email: email,
+		Name:  name,
+	})
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	_, err = tasks.Client.Enqueue(t)
+
+	return err
 }
