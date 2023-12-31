@@ -327,7 +327,7 @@ func GetPasswordStrength(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordStrengthRequest)
 	strength := password.GetStrength(body.Password)
 
-	return c.JSON(http.StatusOK, h.Response{
+	return c.JSON(http.StatusOK, h.Response[int]{
 		"data": strength,
 	})
 }
