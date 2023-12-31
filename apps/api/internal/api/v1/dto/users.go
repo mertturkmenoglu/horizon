@@ -10,6 +10,12 @@ type GetUserByUsernameResponse struct {
 	Location           UserLocationDto           `json:"location"`
 }
 
+type GetMeResponse struct {
+	GetUserByUsernameResponse
+	OnboardingCompleted bool `json:"onboardingCompleted"`
+	EmailVerified       bool `json:"emailVerified"`
+}
+
 type UserContactInformationDto struct {
 	Email   string `json:"email"`
 	Phone   string `json:"phone"`
