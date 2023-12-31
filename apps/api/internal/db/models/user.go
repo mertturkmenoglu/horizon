@@ -13,6 +13,7 @@ type User struct {
 	EmailVerified       bool               `json:"emailVerified"`
 	ContactInformation  ContactInformation `json:"contactInformation"`
 	Location            Location           `json:"location"`
+	Gender              string             `json:"gender"`
 }
 
 type ContactInformation struct {
