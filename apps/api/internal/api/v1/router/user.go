@@ -14,9 +14,46 @@ import (
 
 func GetMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
-	c.SetParamNames("username")
-	c.SetParamValues(auth.Username)
-	return GetUserByUsername(c)
+
+	var user *models.User
+
+	res := db.Client.Find(&user, "username = ?", auth.Username).
+		Preload("ContactInformation").
+		Preload("Location")
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("cannot found user with username: %s", auth.Username))
+		}
+
+		return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
+	}
+
+	return c.JSON(http.StatusOK, h.Response[dto.GetMeResponse]{
+		"data": dto.GetMeResponse{
+			GetUserByUsernameResponse: dto.GetUserByUsernameResponse{
+				Id:       user.Id.String(),
+				Name:     user.Name,
+				Email:    user.Email,
+				Username: user.Username,
+				Gender:   user.Gender,
+				ContactInformation: dto.UserContactInformationDto{
+					Email:   user.ContactInformation.Email,
+					Phone:   user.ContactInformation.Phone,
+					Address: user.ContactInformation.Address,
+					Other:   user.ContactInformation.Other,
+				},
+				Location: dto.UserLocationDto{
+					City:    user.Location.City,
+					Country: user.Location.Country,
+					Lat:     user.Location.Lat,
+					Long:    user.Location.Long,
+				},
+			},
+			OnboardingCompleted: user.OnboardingCompleted,
+			EmailVerified:       user.EmailVerified,
+		},
+	})
 }
 
 func GetUserByUsername(c echo.Context) error {
