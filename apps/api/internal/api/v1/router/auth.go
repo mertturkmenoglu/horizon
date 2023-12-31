@@ -13,6 +13,7 @@ import (
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"
 	"horizon/internal/tasks"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -40,6 +41,7 @@ func Login(c echo.Context) error {
 	err := errors.Join(authErr, userErr, hashErr)
 
 	if err != nil || !matched {
+		slog.Info("Invalid login attempt", "email", body.Email)
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
@@ -53,6 +55,7 @@ func Login(c echo.Context) error {
 	}, accessTokenExpiresAt)
 
 	if err != nil {
+		slog.Error("Token creation failed", "err", err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Cannot create token")
 	}
 
@@ -67,6 +70,7 @@ func Login(c echo.Context) error {
 	c.SetCookie(createCookie("refreshToken", refreshToken, expires))
 
 	if viper.GetBool("api.auth.send-login-alert-email") {
+		slog.Info("Sending login alert email", "email", body.Email)
 		err := sendLoginAlertEmail(body.Email)
 
 		if err != nil {
