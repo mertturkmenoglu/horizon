@@ -20,6 +20,12 @@ const MePage = React.lazy(() => import('./pages/MePage'));
 const NewServicePage = React.lazy(
   () => import('./pages/Services/NewServicePage')
 );
+const VerifyEmailRequestPage = React.lazy(
+  () => import('./pages/VerifyEmailRequestPage')
+);
+const VerifyEmailRedirect = React.lazy(
+  () => import('./pages/VerifyEmailRedirect')
+);
 
 export const router = createBrowserRouter([
   {
@@ -94,5 +100,17 @@ export const router = createBrowserRouter([
         <MePage />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: '/verify-email',
+    element: (
+      <ProtectedRoute>
+        <VerifyEmailRequestPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/verify-email/:code',
+    element: <VerifyEmailRedirect />,
   },
 ]);
