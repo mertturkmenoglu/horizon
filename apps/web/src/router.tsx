@@ -17,6 +17,9 @@ const CategoriesPage = React.lazy(
 );
 const UserPage = React.lazy(() => import('./pages/UserPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
+const NewServicePage = React.lazy(
+  () => import('./pages/Services/NewServicePage')
+);
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +68,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CategoriesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/services/new',
+    element: (
+      <ProtectedRoute>
+        <NewServicePage />
       </ProtectedRoute>
     ),
   },
