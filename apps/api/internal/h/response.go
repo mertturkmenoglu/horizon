@@ -1,3 +1,3 @@
 package h
 
-type Response map[string]any
+type Response[T any] map[string]T
