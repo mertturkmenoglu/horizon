@@ -30,10 +30,12 @@ type VerifyEmailEmailRequest struct {
 }
 
 type PasswordResetRequest struct {
+	Email       string `json:"email" validate:"required,email"`
 	Code        string `json:"code" validate:"required"`
 	NewPassword string `json:"newPassword" validate:"required"`
 }
 
 type VerifyEmailRequest struct {
-	Code string `json:"code" validate:"required"`
+	Code  string `json:"code" validate:"required"`
+	Email string `json:"email" validate:"required,email"`
 }
