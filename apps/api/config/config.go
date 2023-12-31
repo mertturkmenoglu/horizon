@@ -38,7 +38,7 @@ func Bootstrap() {
 	email, ok := os.LookupEnv("EMAIL")
 
 	if !ok {
-		log.Fatal("Set SMTP_PASSWORD variable through environment variables")
+		log.Fatal("Set EMAIL variable through environment variables")
 	}
 
 	viper.Set("email.from", email)
