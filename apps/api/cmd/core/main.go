@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"horizon/api/v1/router"
 	"horizon/config"
+	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
 	"horizon/internal/tasks"
 	"horizon/internal/validation"

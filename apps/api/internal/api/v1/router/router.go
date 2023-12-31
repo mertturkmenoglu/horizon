@@ -1,8 +1,8 @@
 package router
 
 import (
-	"horizon/api/v1/dto"
-	"horizon/api/v1/middlewares"
+	"horizon/internal/api/v1/dto"
+	"horizon/internal/api/v1/middlewares"
 
 	"github.com/labstack/echo/v4"
 )

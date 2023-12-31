@@ -2,7 +2,7 @@ package router
 
 import (
 	"fmt"
-	"horizon/api/v1/dto"
+	"horizon/internal/api/v1/dto"
 	"horizon/internal/cache"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
