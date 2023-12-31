@@ -170,8 +170,6 @@ func ChangePassword(c echo.Context) error {
 		hashed = dbAuth.Password
 	}
 
-	// Always calculate the password hash before any early return
-	// to prevent timing based attacks.
 	matched, hashErr := hash.Verify(body.CurrentPassword, hashed)
 	err = errors.Join(err, hashErr)
 
@@ -205,11 +203,17 @@ func ChangePassword(c echo.Context) error {
 
 func SendPasswordResetEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
+	key := fmt.Sprintf("passwordReset:%s", body.Email)
+	_, err := cache.Get(key)
+
+	if err == nil {
+		return echo.NewHTTPError(http.StatusTooManyRequests, "previous password reset link hasn't expired")
+	}
+
 	randUuid := uuid.New().String()
-	key := fmt.Sprintf("passwordReset:%s", randUuid)
 	ttl := time.Minute * 15
-	url := fmt.Sprintf(viper.GetString("api.auth.password.reset-url"), randUuid)
-	_ = cache.Set(key, body.Email, ttl)
+	url := fmt.Sprintf(viper.GetString("api.auth.password.reset-url"), randUuid, body.Email)
+	_ = cache.Set(key, randUuid, ttl)
 
 	t, err := tasks.NewTask[tasks.PasswordResetEmailPayload](tasks.TypePasswordResetEmail, tasks.PasswordResetEmailPayload{
 		Email: body.Email,
@@ -231,14 +235,14 @@ func SendPasswordResetEmail(c echo.Context) error {
 
 func ResetPassword(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetRequest)
-	key := fmt.Sprintf("passwordReset:%s", body.Code)
-	email, err := cache.Get(key)
+	key := fmt.Sprintf("passwordReset:%s", body.Email)
+	cacheCode, err := cache.Get(key)
 
-	if err != nil {
+	if err != nil || body.Code != cacheCode {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
 	}
 
-	user, err := query.GetUserByEmail(email)
+	user, err := query.GetUserByEmail(body.Email)
 
 	if err != nil || user == nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -264,12 +268,19 @@ func ResetPassword(c echo.Context) error {
 }
 
 func SendVerifyEmail(c echo.Context) error {
-	body := c.Get("body").(dto.PasswordResetEmailRequest)
+	body := c.Get("body").(dto.VerifyEmailEmailRequest)
+	key := fmt.Sprintf("verifyEmail:%s", body.Email)
+
+	_, err := cache.Get(key)
+
+	if err == nil {
+		return echo.NewHTTPError(http.StatusTooManyRequests, "previous verification code hasn't expired")
+	}
+
 	randUuid := uuid.New().String()
-	key := fmt.Sprintf("verifyEmail:%s", randUuid)
 	ttl := time.Minute * 15
-	url := fmt.Sprintf(viper.GetString("api.auth.email.verify-url"), randUuid)
-	_ = cache.Set(key, body.Email, ttl)
+	url := fmt.Sprintf(viper.GetString("api.auth.email.verify-url"), randUuid, body.Email)
+	_ = cache.Set(key, randUuid, ttl)
 
 	t, err := tasks.NewTask[tasks.VerifyEmailEmailPayload](tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
 		Email: body.Email,
@@ -291,14 +302,14 @@ func SendVerifyEmail(c echo.Context) error {
 
 func VerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailRequest)
-	key := fmt.Sprintf("verifyEmail:%s", body.Code)
-	email, err := cache.Get(key)
+	key := fmt.Sprintf("verifyEmail:%s", body.Email)
+	cacheCode, err := cache.Get(key)
 
-	if err != nil {
+	if err != nil || body.Code != cacheCode {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid code")
 	}
 
-	user, err := query.GetUserByEmail(email)
+	user, err := query.GetUserByEmail(body.Email)
 
 	if err != nil || user == nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -306,7 +317,7 @@ func VerifyEmail(c echo.Context) error {
 
 	db.Client.
 		Model(&models.User{}).
-		Where("email = ?", email).
+		Where("email = ?", body.Email).
 		Update("email_verified", true)
 
 	return c.NoContent(http.StatusOK)
