@@ -1,7 +1,10 @@
 package middlewares
 
 import (
+	"fmt"
+	"horizon/internal/cache"
 	"horizon/internal/db/query"
+	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
 
@@ -10,44 +13,30 @@ import (
 
 func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		cookies := c.Request().Cookies()
+		accessCookie := h.GetCookieFromReq(c, "accessToken")
+		refreshCookie := h.GetCookieFromReq(c, "refreshToken")
 
-		var accessTokenCookie *http.Cookie = nil
-		var refreshTokenCookie *http.Cookie = nil
-
-		for _, cookie := range cookies {
-			if cookie.Name == "accessToken" {
-				accessTokenCookie = cookie
-			}
-
-			if cookie.Name == "refreshToken" {
-				refreshTokenCookie = cookie
-			}
+		if accessCookie == nil || refreshCookie == nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Missing token")
 		}
 
-		if accessTokenCookie == nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing access token")
-		}
-
-		if refreshTokenCookie == nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing refresh token")
-		}
-
-		claims, err := jsonwebtoken.Decode(accessTokenCookie.Value)
+		claims, err := jsonwebtoken.Decode(accessCookie.Value)
 
 		if err != nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Malformed access token")
+			return echo.NewHTTPError(http.StatusUnauthorized, "Malformed token")
 		}
 
-		auth, err := query.GetAuthByEmail(claims.Email)
+		auth, authErr := query.GetAuthByEmail(claims.Email)
+		user, userErr := query.GetUserByEmail(claims.Email)
 
-		if err != nil || auth == nil {
+		if authErr != nil || auth == nil || userErr != nil || user == nil {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
 		}
 
-		user, err := query.GetUserByEmail(claims.Email)
+		key := fmt.Sprintf("refreshToken:%s", refreshCookie.Value)
+		cacheValue, err := cache.Get(key)
 
-		if err != nil || user == nil {
+		if err != nil || cacheValue != user.Email {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
 		}
 
