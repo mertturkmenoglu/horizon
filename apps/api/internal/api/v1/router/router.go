@@ -23,12 +23,16 @@ func Bootstrap(e *echo.Echo) {
 	auth.POST("/email/verify", VerifyEmail, middlewares.ParseBody[dto.VerifyEmailRequest])
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
 
-	user := api.Group("/users")
+	users := api.Group("/users")
 
-	user.GET("/me", GetMe, middlewares.IsAuth)
-	user.GET("/:username", GetUserByUsername, middlewares.IsAuth)
+	users.GET("/me", GetMe, middlewares.IsAuth)
+	users.GET("/:username", GetUserByUsername, middlewares.IsAuth)
+	users.PATCH("/profile", UpdateMe, middlewares.IsAuth)
+	// users.PATCH("/profile/location", UpdateLocation, middlewares.IsAuth)
+	// users.PATCH("/profile/contact", UpdateContactInformation, middlewares.IsAuth)
 
 	services := api.Group("/services")
 
+	services.GET("/", GetServices)
 	services.GET("/categories", GetServiceCategories)
 }
