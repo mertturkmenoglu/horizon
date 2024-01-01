@@ -380,7 +380,7 @@ func createNewAccessToken(auth *models.Auth, user *models.User) (string, time.Ti
 func createNewRefreshToken(email string) (string, time.Time, error) {
 	token := uuid.New().String()
 	key := fmt.Sprintf("refreshToken:%s", token)
-	ttl := time.Hour * time.Duration(viper.GetInt64("api.auth.token.refresh-ttl"))
+	ttl := time.Minute * time.Duration(viper.GetInt64("api.auth.token.refresh-ttl"))
 	exp := time.Now().Add(ttl)
 	err := cache.Set(key, email, ttl)
 	return token, exp, err
