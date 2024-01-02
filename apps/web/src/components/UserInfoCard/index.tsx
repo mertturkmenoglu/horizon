@@ -102,6 +102,9 @@ function UserInfoCard({
         <Button
           appearance="sky"
           className="mt-4 py-1 flex space-x-2 justify-center items-center"
+          onClick={() => {
+            window.location.href = '/settings';
+          }}
         >
           <PencilIcon className="size-5 text-white" />
           <span>Edit</span>
