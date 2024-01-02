@@ -10,6 +10,7 @@ import (
 )
 
 func Bootstrap() {
+	// Load .env file first
 	err := godotenv.Load()
 
 	if err != nil {
