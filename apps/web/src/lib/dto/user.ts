@@ -15,6 +15,7 @@ export type GetUserByUsernameResponse = {
   isVerifiedAccount: boolean;
   description: string;
   accountStatus: number;
+  profileImage: string;
 };
 
 export type UserContactInformationDto = {
