@@ -1,3 +1,4 @@
+// Package hash provides utilites to work with Argon2 hashing
 package hash
 
 import (
@@ -23,6 +24,7 @@ var (
 	ErrIncompatibleVersion = errors.New("incompatible version of argon2")
 )
 
+// Produces argon2 hash of the given string s.
 func Hash(s string) (string, error) {
 	salt, err := GenerateRandomBytes(saltLength)
 
@@ -40,6 +42,8 @@ func Hash(s string) (string, error) {
 	return encodedHash, nil
 }
 
+// Given strings plain and hashed, return true if
+// plain's hash is equal to the hashed.
 func Verify(plain string, hashed string) (bool, error) {
 	salt, hash, err := decode(hashed)
 
@@ -56,6 +60,9 @@ func Verify(plain string, hashed string) (bool, error) {
 	return false, nil
 }
 
+// Decode base64 encoded parts of the hash.
+//
+// Returns salt used in hashing, hash value, and the error
 func decode(s string) ([]byte, []byte, error) {
 	parts := strings.Split(s, "$")
 
