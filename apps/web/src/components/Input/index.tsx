@@ -8,13 +8,14 @@ export interface InputProps
     type: string;
     message?: string;
   };
+  hint?: string;
   labelClassName?: string;
   inputClassName?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { label, labelClassName, inputClassName, className, error, ...props },
+    { label, labelClassName, inputClassName, className, hint, error, ...props },
     ref
   ) => {
     const id = useId();
@@ -41,12 +42,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             },
             'focus:ring focus:ring-sky-500 focus:outline-none',
             'placeholder:text-sm placeholder:font-light',
-            'disabled:text-neutral-500',
+            'disabled:text-neutral-500 disabled:bg-neutral-400/60',
             inputClassName
           )}
           {...props}
           ref={ref}
         />
+        {hint !== undefined && (
+          <span className="mt-1 text-xs font-medium text-neutral-500">
+            {hint}
+          </span>
+        )}
         {error?.type && (
           <span className="mt-2 text-sm font-medium text-red-500">
             {error.message}
