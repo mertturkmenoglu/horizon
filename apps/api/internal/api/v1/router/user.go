@@ -17,7 +17,8 @@ func GetMe(c echo.Context) error {
 
 	var user *models.User
 
-	res := db.Client.Find(&user, "username = ?", auth.Username).
+	res := db.Client.
+		Find(&user, "username = ?", auth.Username).
 		Preload("ContactInformation").
 		Preload("Location")
 
@@ -31,27 +32,9 @@ func GetMe(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, h.Response[dto.GetMeResponse]{
 		"data": dto.GetMeResponse{
-			GetUserByUsernameResponse: dto.GetUserByUsernameResponse{
-				Id:       user.Id.String(),
-				Name:     user.Name,
-				Email:    user.Email,
-				Username: user.Username,
-				Gender:   user.Gender,
-				ContactInformation: dto.UserContactInformationDto{
-					Email:   user.ContactInformation.Email,
-					Phone:   user.ContactInformation.Phone,
-					Address: user.ContactInformation.Address,
-					Other:   user.ContactInformation.Other,
-				},
-				Location: dto.UserLocationDto{
-					City:    user.Location.City,
-					Country: user.Location.Country,
-					Lat:     user.Location.Lat,
-					Long:    user.Location.Long,
-				},
-			},
-			OnboardingCompleted: user.OnboardingCompleted,
-			EmailVerified:       user.EmailVerified,
+			GetUserByUsernameResponse: mapModelToGetUserByUsernameResponse(user),
+			OnboardingCompleted:       user.OnboardingCompleted,
+			EmailVerified:             user.EmailVerified,
 		},
 	})
 }
@@ -65,7 +48,8 @@ func GetUserByUsername(c echo.Context) error {
 
 	var user *models.User
 
-	res := db.Client.Find(&user, "username = ?", username).
+	res := db.Client.
+		Find(&user, "username = ?", username).
 		Preload("ContactInformation").
 		Preload("Location")
 
@@ -78,28 +62,36 @@ func GetUserByUsername(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[dto.GetUserByUsernameResponse]{
-		"data": dto.GetUserByUsernameResponse{
-			Id:       user.Id.String(),
-			Name:     user.Name,
-			Email:    user.Email,
-			Username: user.Username,
-			Gender:   user.Gender,
-			ContactInformation: dto.UserContactInformationDto{
-				Email:   user.ContactInformation.Email,
-				Phone:   user.ContactInformation.Phone,
-				Address: user.ContactInformation.Address,
-				Other:   user.ContactInformation.Other,
-			},
-			Location: dto.UserLocationDto{
-				City:    user.Location.City,
-				Country: user.Location.Country,
-				Lat:     user.Location.Lat,
-				Long:    user.Location.Long,
-			},
-		},
+		"data": mapModelToGetUserByUsernameResponse(user),
 	})
 }
 
 func UpdateMe(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusNotImplemented)
+}
+
+func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernameResponse {
+	return dto.GetUserByUsernameResponse{
+		Id:       user.Id.String(),
+		Name:     user.Name,
+		Email:    user.Email,
+		Username: user.Username,
+		Gender:   user.Gender,
+		ContactInformation: dto.UserContactInformationDto{
+			Email:   user.ContactInformation.Email,
+			Phone:   user.ContactInformation.Phone,
+			Address: user.ContactInformation.Address,
+			Other:   user.ContactInformation.Other,
+		},
+		Location: dto.UserLocationDto{
+			City:    user.Location.City,
+			Country: user.Location.Country,
+			Lat:     user.Location.Lat,
+			Long:    user.Location.Long,
+		},
+		IsBusinessAccount: user.IsBusinessAccount,
+		IsVerifiedAccount: user.IsVerifiedAccount,
+		Description:       user.Description,
+		AccountStatus:     user.AccountStatus,
+	}
 }
