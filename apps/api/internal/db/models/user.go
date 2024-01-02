@@ -18,6 +18,7 @@ type User struct {
 	IsVerifiedAccount   bool               `gorm:"default:false" json:"isVerifiedAccount"`
 	Description         string             `json:"description"`
 	AccountStatus       int                `gorm:"default:0" json:"accountStatus"`
+	ProfileImage        string             `json:"profileImage"`
 }
 
 type ContactInformation struct {
