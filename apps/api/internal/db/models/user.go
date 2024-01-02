@@ -14,6 +14,10 @@ type User struct {
 	ContactInformation  ContactInformation `json:"contactInformation"`
 	Location            Location           `json:"location"`
 	Gender              string             `json:"gender"`
+	IsBusinessAccount   bool               `gorm:"defaut:false" json:"isBusinessAccount"`
+	IsVerifiedAccount   bool               `gorm:"default:false" json:"isVerifiedAccount"`
+	Description         string             `json:"description"`
+	AccountStatus       int                `gorm:"default:0" json:"accountStatus"`
 }
 
 type ContactInformation struct {
