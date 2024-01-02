@@ -1,3 +1,3 @@
 export * from './auth';
-export * from './GetMeResponse';
 export * from './GetServiceCategoriesResponse';
+export * from './user';
