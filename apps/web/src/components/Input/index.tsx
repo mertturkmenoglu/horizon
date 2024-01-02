@@ -44,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           id={id}
           className={cn(
-            'bg-gray-900/10 rounded',
+            'bg-gray-500/10 rounded',
             'px-2 py-2',
             { 'border border-midnight': bordered },
             {
@@ -53,7 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             },
             'focus:ring focus:ring-sky-500 focus:outline-none',
             'placeholder:text-sm placeholder:font-light',
-            'disabled:text-neutral-500 disabled:bg-neutral-400/60 disabled:border-none',
+            'disabled:text-neutral-500 disabled:bg-neutral-400/50 disabled:border-none',
             inputClassName
           )}
           {...props}

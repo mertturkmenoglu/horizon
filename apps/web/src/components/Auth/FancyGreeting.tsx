@@ -33,7 +33,7 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
         </div>
       </div>
 
-      <div className="bg-red-700 w-[48rem] h-24 -skew-x-[32deg] -rotate-[24deg] absolute top-[26rem] shadow-2xl shadow-red-700/80"></div>
+      <div className="bg-red-500 w-[48rem] h-24 -skew-x-[32deg] -rotate-[24deg] absolute top-[26rem] shadow-2xl shadow-red-500/80"></div>
       <div className="bg-sky-500 w-[48rem] h-24 -skew-x-[32deg] -rotate-[24deg] absolute top-[38rem] shadow-2xl shadow-sky-500/80"></div>
     </div>
   );
