@@ -14,7 +14,8 @@ type (
 	}
 
 	NewLoginAlertPayload struct {
-		Date string
+		Date     string
+		Location string
 	}
 
 	PasswordResetPayload struct {
