@@ -6,7 +6,7 @@ const buttonVariants = cva(
   [
     'w-full py-2',
     'rounded font-bold',
-    'focus:ring focus:outline-none focus:ring-offset-2',
+    'focus:ring focus:outline-none focus:ring-offset-2 hover:bg-opacity-90',
   ],
   {
     variants: {
