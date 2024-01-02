@@ -7,9 +7,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Produce a JWT from the payload that expires at the given time.
 func Encode(payload Payload, expiresAt time.Time) (string, error) {
 	secretKey := viper.GetString("jwt.secret")
 
+	// Create new claims from custom values and registered claims
 	claims := Claims{
 		payload.Name,
 		payload.Email,
@@ -32,6 +34,7 @@ func Encode(payload Payload, expiresAt time.Time) (string, error) {
 	return signed, nil
 }
 
+// Decodes given JWT formatted tokenString into Claims
 func Decode(tokenString string) (*Claims, error) {
 	secretKey := viper.GetString("jwt.secret")
 

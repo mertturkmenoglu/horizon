@@ -11,6 +11,7 @@ var (
 	ErrorInvalidToken = errors.New("invalid token")
 )
 
+// Payload that will be converted a a JWT string
 type Payload struct {
 	AuthId   string
 	UserId   string
