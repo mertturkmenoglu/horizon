@@ -31,3 +31,5 @@ api:
     email:
       verify-url: "http://localhost:5173/verify-email/%s?email=%s"
     send-login-alert-email: true
+  geo:
+    ip2locationdb: "iplocation.BIN"
