@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Bootstrap(e *echo.Echo) {
+func RegisterRoutes(e *echo.Echo) {
 	api := e.Group("/api/v1")
 
 	auth := api.Group("/auth")
