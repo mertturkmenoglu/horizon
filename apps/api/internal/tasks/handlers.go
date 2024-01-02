@@ -54,8 +54,9 @@ func HandleNewLoginAlertEmailTask(_ context.Context, t *asynq.Task) error {
 		TemplatePath: "templates/new-login-alert.html",
 		Subject:      "New Login to Your Horizon Account",
 		Data: email.NewLoginAlertPayload{
-			Date:     time.Now().Format("2006-01-02T15:04"),
-			Location: p.Location,
+			Date:      time.Now().Format("2006-01-02T15:04"),
+			Location:  p.Location,
+			UserAgent: p.UserAgent,
 		},
 	})
 }

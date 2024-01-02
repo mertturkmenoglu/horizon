@@ -17,6 +17,7 @@ type AuthActivity struct {
 	Auth      Auth      `json:"-"`
 	CreatedAt time.Time `json:"createdAt"`
 	IpAddress string    `json:"ipAddress"`
+	UserAgent string    `json:"userAgent"`
 	Location  string    `json:"location"`
 	Success   bool      `json:"success"`
 }

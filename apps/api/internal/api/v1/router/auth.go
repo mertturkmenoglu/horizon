@@ -29,6 +29,7 @@ func Login(c echo.Context) error {
 
 	auth, authErr := query.GetAuthByEmail(body.Email)
 	user, userErr := query.GetUserByEmail(body.Email)
+	ua := c.Request().UserAgent()
 
 	var hashed = ""
 
@@ -41,7 +42,7 @@ func Login(c echo.Context) error {
 	err := errors.Join(authErr, userErr, hashErr)
 
 	if err != nil || !matched {
-		recordLoginAttempt(false, c.RealIP(), auth)
+		recordLoginAttempt(false, c.RealIP(), ua, auth)
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
@@ -56,8 +57,8 @@ func Login(c echo.Context) error {
 	c.SetCookie(createCookie("refreshToken", refresh, refExp))
 
 	if viper.GetBool("api.auth.send-login-alert-email") {
-		recordLoginAttempt(true, c.RealIP(), auth)
-		err := sendLoginAlertEmail(body.Email, c.RealIP())
+		recordLoginAttempt(true, c.RealIP(), ua, auth)
+		err := sendLoginAlertEmail(body.Email, c.RealIP(), ua)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -413,12 +414,13 @@ func removeCookie(name string) *http.Cookie {
 	}
 }
 
-func sendLoginAlertEmail(to string, ip string) error {
+func sendLoginAlertEmail(to string, ip string, useragent string) error {
 	location, err := geo.GetFormattedLocation(ip)
 
 	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
-		Email:    to,
-		Location: location,
+		Email:     to,
+		Location:  location,
+		UserAgent: useragent,
 	})
 
 	if err != nil {
@@ -445,7 +447,7 @@ func sendWelcomeEmail(email string, name string) error {
 	return err
 }
 
-func recordLoginAttempt(success bool, ip string, auth *models.Auth) {
+func recordLoginAttempt(success bool, ip string, useragent string, auth *models.Auth) {
 	if auth == nil {
 		return
 	}
@@ -458,5 +460,6 @@ func recordLoginAttempt(success bool, ip string, auth *models.Auth) {
 		IpAddress: ip,
 		Success:   success,
 		Location:  location,
+		UserAgent: useragent,
 	})
 }
