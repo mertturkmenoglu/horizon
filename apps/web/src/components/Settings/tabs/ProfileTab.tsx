@@ -56,6 +56,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Your Name"
           bordered
+          placeholder="Your name"
           error={formState.errors.name}
           {...register('name')}
         />
@@ -63,6 +64,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Gender"
           bordered
+          placeholder="Your gender"
           error={formState.errors.gender}
           className="mt-4"
           hint="Some users may prefer to see your gender depending on the provided service. You are free to use your own words or to leave it empty."
@@ -76,6 +78,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Contact Email"
           bordered
+          placeholder="Contact email"
           error={formState.errors.email}
           className="mt-4"
         />
@@ -83,6 +86,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Phone Number"
           bordered
+          placeholder="Phone number"
           error={formState.errors.phone}
           className="mt-4"
         />
@@ -90,6 +94,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Address"
           bordered
+          placeholder="Address"
           error={formState.errors.address}
           className="mt-4"
         />
@@ -97,6 +102,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
         <Input
           label="Other"
           bordered
+          placeholder="Other information"
           error={formState.errors.other}
           className="mt-4"
           hint="You can provide additional information here"
