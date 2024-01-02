@@ -5,6 +5,7 @@ import (
 	"horizon/config"
 	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
+	"horizon/internal/geo"
 	"horizon/internal/tasks"
 	"horizon/internal/validation"
 
@@ -21,6 +22,7 @@ func main() {
 	e.Validator = &validation.CustomValidator{
 		Validator: validator.New(),
 	}
+	e.IPExtractor = echo.ExtractIPDirect()
 
 	e.Use(middleware.Recover())
 
@@ -53,6 +55,9 @@ func main() {
 	// Serves as a background worker
 	go tasks.Init()
 	defer tasks.Close()
+
+	// Init ip2location
+	geo.New()
 
 	router.Bootstrap(e)
 
