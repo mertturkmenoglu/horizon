@@ -8,12 +8,12 @@ import (
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 	"horizon/internal/db/query"
+	"horizon/internal/geo"
 	"horizon/internal/h"
 	"horizon/internal/hash"
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"
 	"horizon/internal/tasks"
-	"log/slog"
 	"net/http"
 	"time"
 
@@ -41,7 +41,7 @@ func Login(c echo.Context) error {
 	err := errors.Join(authErr, userErr, hashErr)
 
 	if err != nil || !matched {
-		slog.Info("Invalid login attempt", "email", body.Email)
+		recordLoginAttempt(false, c.RealIP(), auth)
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid email or password")
 	}
 
@@ -56,8 +56,8 @@ func Login(c echo.Context) error {
 	c.SetCookie(createCookie("refreshToken", refresh, refExp))
 
 	if viper.GetBool("api.auth.send-login-alert-email") {
-		slog.Info("Sending login alert email", "email", body.Email)
-		err := sendLoginAlertEmail(body.Email)
+		recordLoginAttempt(true, c.RealIP(), auth)
+		err := sendLoginAlertEmail(body.Email, c.RealIP())
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -413,9 +413,12 @@ func removeCookie(name string) *http.Cookie {
 	}
 }
 
-func sendLoginAlertEmail(to string) error {
+func sendLoginAlertEmail(to string, ip string) error {
+	location, err := geo.GetFormattedLocation(ip)
+
 	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
-		Email: to,
+		Email:    to,
+		Location: location,
 	})
 
 	if err != nil {
@@ -440,4 +443,20 @@ func sendWelcomeEmail(email string, name string) error {
 	_, err = tasks.Client.Enqueue(t)
 
 	return err
+}
+
+func recordLoginAttempt(success bool, ip string, auth *models.Auth) {
+	if auth == nil {
+		return
+	}
+
+	location, _ := geo.GetFormattedLocation(ip)
+
+	db.Client.Create(&models.AuthActivity{
+		AuthId:    auth.Id,
+		CreatedAt: time.Now(),
+		IpAddress: ip,
+		Success:   success,
+		Location:  location,
+	})
 }
