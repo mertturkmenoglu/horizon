@@ -25,14 +25,14 @@ func Init() {
 
 	mux := asynq.NewServeMux()
 
-	bootstrap(mux)
+	registerHandlers(mux)
 
 	if err := srv.Run(mux); err != nil {
 		log.Fatalf("could not run asynq server: %v", err)
 	}
 }
 
-func bootstrap(mux *asynq.ServeMux) {
+func registerHandlers(mux *asynq.ServeMux) {
 	mux.HandleFunc(TypeForgotPasswordEmail, HandleEmailForgotPasswordTask)
 	mux.HandleFunc(TypeNewLoginAlertEmail, HandleNewLoginAlertEmailTask)
 	mux.HandleFunc(TypeWelcomeEmail, HandleWelcomeEmailTask)
@@ -48,6 +48,11 @@ func Close() {
 	}
 }
 
+// Create a new asynq.Task.
+//
+// taskType determines which handler will handle this task
+//
+// payload will be serialized and passed into handler.
 func NewTask[T TaskPayload](taskType string, payload T) (*asynq.Task, error) {
 	serialized, err := json.Marshal(payload)
 
@@ -58,6 +63,7 @@ func NewTask[T TaskPayload](taskType string, payload T) (*asynq.Task, error) {
 	return asynq.NewTask(taskType, serialized), nil
 }
 
+// Unmarshal task payload into a struct
 func parse[T TaskPayload](serialized []byte) (*T, error) {
 	var p T
 
