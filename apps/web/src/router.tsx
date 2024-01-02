@@ -26,6 +26,7 @@ const VerifyEmailRequestPage = React.lazy(
 const VerifyEmailRedirect = React.lazy(
   () => import('./pages/VerifyEmailRedirect')
 );
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
 
 export const router = createBrowserRouter([
   {
@@ -112,5 +113,13 @@ export const router = createBrowserRouter([
   {
     path: '/verify-email/:code',
     element: <VerifyEmailRedirect />,
+  },
+  {
+    path: '/settings',
+    element: (
+      <ProtectedRoute>
+        <SettingsPage />
+      </ProtectedRoute>
+    ),
   },
 ]);
