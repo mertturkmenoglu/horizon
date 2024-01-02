@@ -103,7 +103,7 @@ function UserInfoCard({
           appearance="sky"
           className="mt-4 py-1 flex space-x-2 justify-center items-center"
           onClick={() => {
-            window.location.href = '/settings';
+            window.location.href = '/settings?tab=profile';
           }}
         >
           <PencilIcon className="size-5 text-white" />
