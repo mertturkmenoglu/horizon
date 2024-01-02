@@ -8,6 +8,10 @@ type GetUserByUsernameResponse struct {
 	Gender             string                    `json:"gender"`
 	ContactInformation UserContactInformationDto `json:"contactInformation"`
 	Location           UserLocationDto           `json:"location"`
+	IsBusinessAccount  bool                      `json:"isBusinessAccount"`
+	IsVerifiedAccount  bool                      `json:"isVerifiedAccount"`
+	Description        string                    `json:"description"`
+	AccountStatus      int                       `json:"accountStatus"`
 }
 
 type GetMeResponse struct {
