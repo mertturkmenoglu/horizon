@@ -12,6 +12,7 @@ type GetUserByUsernameResponse struct {
 	IsVerifiedAccount  bool                      `json:"isVerifiedAccount"`
 	Description        string                    `json:"description"`
 	AccountStatus      int                       `json:"accountStatus"`
+	ProfileImage       string                    `json:"profileImage"`
 }
 
 type GetMeResponse struct {
