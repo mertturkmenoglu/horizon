@@ -93,5 +93,6 @@ func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernam
 		IsVerifiedAccount: user.IsVerifiedAccount,
 		Description:       user.Description,
 		AccountStatus:     user.AccountStatus,
+		ProfileImage:      user.ProfileImage,
 	}
 }
