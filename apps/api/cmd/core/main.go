@@ -19,14 +19,21 @@ func main() {
 	config.Bootstrap()
 
 	e := echo.New()
+
+	// Attach custom validator
 	e.Validator = &validation.CustomValidator{
 		Validator: validator.New(),
 	}
-	e.IPExtractor = echo.ExtractIPDirect()
 
 	e.Use(middleware.Recover())
 
 	if viper.GetString("env") == "dev" {
+		// Extracts the IP address directly from request.
+		// If the application doesn't face the web directly
+		// this extractor shouldn't be used.
+		// TODO: Setup IP extractors for different environments
+		e.IPExtractor = echo.ExtractIPDirect()
+
 		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 			Format: viper.GetString("api.logger.format"),
 		}))
@@ -59,10 +66,14 @@ func main() {
 	// Init ip2location
 	geo.New()
 
-	router.Bootstrap(e)
+	// Attach handlers to paths
+	router.RegisterRoutes(e)
 
+	// Get port from Viper and convert it to string
 	iPort := viper.GetInt("port")
 	port := fmt.Sprintf(":%d", iPort)
 
+	// Start the Echo server
+	// If port binding fails, terminate the server.
 	e.Logger.Fatal(e.Start(port))
 }
