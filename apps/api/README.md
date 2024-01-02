@@ -15,4 +15,7 @@
 - Create a `.env` file inside the root API folder.
 - Copy `.env.example` content into `.env` file.
 - Fill all values.
+- Go to `https://lite.ip2location.com/database-download`, login (or register) and download `IP-COUNTRY-REGION-CITY` database
+  - Select the `IPv4` and `BIN` version.
+- Extract BIN file, rename it as `iplocation.BIN` and move it to `apps/api` (same location as this file) folder.
 - Start the api server via: `air`
