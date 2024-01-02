@@ -8,10 +8,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Ip2GeoDb *ip2location.DB
+var ip2geo *ip2location.DB
 
+// Initialize a singletion ip2location.DB instance
 func New() {
-	if Ip2GeoDb == nil {
+	if ip2geo == nil {
 		path := viper.GetString("api.geo.ip2locationdb")
 		db, err := ip2location.OpenDB(path)
 
@@ -19,17 +20,21 @@ func New() {
 			log.Fatal("Cannot open ip2location db")
 		}
 
-		Ip2GeoDb = db
+		ip2geo = db
 	}
 }
 
+// Get ip2location.DB instance.
+// If instance is nil, initialize it first
 func Client() *ip2location.DB {
-	if Ip2GeoDb == nil {
+	if ip2geo == nil {
 		New()
 	}
-	return Ip2GeoDb
+	return ip2geo
 }
 
+// Returns the formatted location as a string.
+// If there's an error, returns "unknown location" as the default string.
 func GetFormattedLocation(ipaddress string) (string, error) {
 	location, err := Client().Get_all(ipaddress)
 
