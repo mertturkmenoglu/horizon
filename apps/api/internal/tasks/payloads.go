@@ -24,7 +24,8 @@ type (
 	}
 
 	NewLoginAlertEmailPayload struct {
-		Email string
+		Email    string
+		Location string
 	}
 
 	PasswordResetEmailPayload struct {
