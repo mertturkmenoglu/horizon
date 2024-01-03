@@ -1,5 +1,6 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import TextArea from '@/components/TextArea';
 import { useAuth } from '@/hooks/useAuth';
 import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -87,19 +88,19 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
           className="mt-4"
         />
 
-        <Input
+        <TextArea
           label="Address"
           placeholder="Address"
           error={formState.errors.address}
           className="mt-4"
         />
 
-        <Input
+        <TextArea
           label="Other"
-          placeholder="Other information"
-          error={formState.errors.other}
+          placeholder="Other information you may want your client's to know."
+          hint="You can provide any additional information here"
+          error={formState.errors.address}
           className="mt-4"
-          hint="You can provide additional information here"
         />
 
         <Button
