@@ -62,7 +62,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               className={cn(
-                'min-w-64 w-full bg-white rounded-md p-2',
+                'min-w-52 w-full bg-white rounded-md p-2',
                 'border border-midnight/20',
                 'will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade',
                 'data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade'
