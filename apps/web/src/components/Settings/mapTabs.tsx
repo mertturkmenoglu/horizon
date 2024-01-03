@@ -5,6 +5,7 @@ import {
   IdentificationIcon,
   LockClosedIcon,
   QuestionMarkCircleIcon,
+  ShieldCheckIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { TNavItem } from './NavItem';
@@ -15,6 +16,7 @@ import NotificationsTab from './tabs/NotificationsTab';
 import PrivacyTab from './tabs/PrivacyTab';
 import YourDataTab from './tabs/YourDataTab';
 import HelpTab from './tabs/HelpTab';
+import AuthActivities from './tabs/AuthActivities';
 
 export const tabs = [
   {
@@ -52,6 +54,12 @@ export const tabs = [
     name: 'Your Data',
     component: <YourDataTab />,
     icon: CloudIcon,
+  },
+  {
+    id: 'auth-activity',
+    name: 'Auth Activity',
+    component: <AuthActivities />,
+    icon: ShieldCheckIcon,
   },
   {
     id: 'help',
