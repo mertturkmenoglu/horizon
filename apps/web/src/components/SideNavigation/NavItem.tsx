@@ -2,14 +2,17 @@ import { cn } from '@/lib/cn';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export type NavItemProps = React.ComponentPropsWithoutRef<'li'> & {
+export type TNavItem = {
   href: string;
   text: string;
   icon: TwIcon;
+  collapsed?: boolean;
 };
 
+export type NavItemProps = React.ComponentPropsWithoutRef<'li'> & TNavItem;
+
 const NavItem = React.forwardRef<React.ElementRef<'li'>, NavItemProps>(
-  ({ className, href, text, icon: Icon }, ref) => {
+  ({ className, href, text, icon: Icon, collapsed = false }, ref) => {
     return (
       <li
         ref={ref}
@@ -18,18 +21,20 @@ const NavItem = React.forwardRef<React.ElementRef<'li'>, NavItemProps>(
         <NavLink
           className={({ isActive }) =>
             cn(
-              'flex items-center space-x-2 py-2 rounded-md px-2',
+              'flex items-center py-2 rounded-md px-2',
               'focus:outline-none focus:ring focus:ring-sky-500',
               {
                 'bg-sky-100 text-sky-600': isActive,
                 'hover:bg-neutral-400/20': !isActive,
+                'space-x-2': !collapsed,
+                'justify-center': collapsed,
               }
             )
           }
           to={href}
         >
           <Icon className="size-6 min-h-6 min-w-6" />
-          <div>{text}</div>
+          {!collapsed && <div>{text}</div>}
         </NavLink>
       </li>
     );

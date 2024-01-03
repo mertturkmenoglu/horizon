@@ -3,6 +3,7 @@ import Banner from '@/components/Banner';
 import CookieConsent from '@/components/CookieConsent';
 import SideNavigation from '@/components/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/cn';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -13,6 +14,7 @@ interface MainLayoutProps {
 
 function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   const { isAuthenticated, loading, user } = useAuth();
+  const [navCollapsed, setNavCollapsed] = useState(false);
   const [showCookieConsent, setShowCookieConsent] = useState(() => {
     const lsValue = window.localStorage.getItem('showCookieConsent');
     return lsValue === null || lsValue === 'true';
@@ -28,14 +30,20 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   return (
-    <main className="md:grid md:grid-cols-10 md:gap-4">
-      <div className="hidden md:flex md:col-span-2 2xl:col-span-1 w-full">
-        <SideNavigation />
-      </div>
-      <div className="flex md:hidden w-full lg:w-0">
+    <main className="flex flex-col md:flex-row md:space-x-4">
+      <SideNavigation
+        className={cn('hidden md:flex', {
+          'md:w-72': !navCollapsed,
+          'md:w-20': navCollapsed,
+        })}
+        collapsed={navCollapsed}
+        setCollapsed={setNavCollapsed}
+      />
+
+      <div className="flex md:hidden">
         <Appbar className="w-full py-1 px-4" />
       </div>
-      <div className="md:col-span-8 2xl:col-span-9 mx-auto w-full">
+      <div className="mx-auto w-full">
         {!user.emailVerified && (
           <Banner
             appearance="warning"

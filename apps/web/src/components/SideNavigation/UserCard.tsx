@@ -14,14 +14,18 @@ import {
 } from '@heroicons/react/24/outline';
 import { logout } from '@/lib/logout';
 
-export type UserCardProps = React.ComponentPropsWithoutRef<'div'>;
+export type UserCardProps = React.ComponentPropsWithoutRef<'div'> & {
+  collapsed?: boolean;
+};
 
 const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
-  ({ className }, ref) => {
+  ({ className, collapsed = false }, ref) => {
     const { user } = useAuth();
     const image = useMemo(() => {
       if (!user) return '/user.jpg';
-      return user.profileImage === '' ? '/user.jpg' : user.profileImage;
+      return user.profileImage === ''
+        ? 'https://github.com/mertturkmenoglu.png'
+        : user.profileImage;
     }, [user]);
 
     if (!user) {
@@ -40,9 +44,13 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
           <DropdownMenu.Trigger asChild>
             <button
               className={cn(
-                'flex space-x-4 items-center',
-                'hover:bg-neutral-400/20 pr-4 rounded-lg py-1 w-full',
-                'focus:outline-none focus:ring focus:ring-sky-500'
+                'flex items-center',
+                'hover:bg-neutral-400/20 w-full',
+                'focus:outline-none focus:ring focus:ring-sky-500',
+                {
+                  'space-x-4 rounded-lg py-1': !collapsed,
+                  'rounded-full': collapsed,
+                }
               )}
             >
               <img
@@ -50,12 +58,14 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
                 className="size-12 rounded-full"
                 alt=""
               />
-              <div className="flex flex-col items-start text-left overflow-x-hidden">
-                <div className="font-bold line-clamp-1">{user.name}</div>
-                <div className="text-neutral-500 text-sm line-clamp-1">
-                  @{user.username}
+              {!collapsed && (
+                <div className="flex flex-col items-start text-left overflow-x-hidden">
+                  <div className="font-bold line-clamp-1">{user.name}</div>
+                  <div className="text-neutral-500 text-sm line-clamp-1">
+                    @{user.username}
+                  </div>
                 </div>
-              </div>
+              )}
             </button>
           </DropdownMenu.Trigger>
 
