@@ -28,7 +28,7 @@ const NavItem = React.forwardRef<React.ElementRef<'li'>, NavItemProps>(
           }
           to={href}
         >
-          <Icon className="size-6" />
+          <Icon className="size-6 min-h-6 min-w-6" />
           <div>{text}</div>
         </NavLink>
       </li>

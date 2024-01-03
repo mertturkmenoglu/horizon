@@ -20,7 +20,10 @@ const SideNavigation = React.forwardRef<
   return (
     <nav
       ref={ref}
-      className={cn('border-r border-midnight/20 h-screen p-4', className)}
+      className={cn(
+        'border-r border-midnight/20 h-screen p-4 w-full',
+        className
+      )}
     >
       <div className="flex justify-between items-center">
         <a

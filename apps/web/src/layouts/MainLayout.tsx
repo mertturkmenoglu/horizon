@@ -1,3 +1,4 @@
+import Appbar from '@/components/Appbar';
 import Banner from '@/components/Banner';
 import CookieConsent from '@/components/CookieConsent';
 import SideNavigation from '@/components/SideNavigation';
@@ -27,11 +28,14 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   return (
-    <main className="grid grid-cols-8 gap-x-4">
-      <div className="col-span-1">
+    <main className="md:grid md:grid-cols-10 md:gap-4">
+      <div className="hidden md:flex md:col-span-2 2xl:col-span-1 w-full">
         <SideNavigation />
       </div>
-      <div className="col-span-7">
+      <div className="flex md:hidden w-full lg:w-0">
+        <Appbar className="w-full py-1 px-4" />
+      </div>
+      <div className="md:col-span-8 2xl:col-span-9 mx-auto w-full">
         {!user.emailVerified && (
           <Banner
             appearance="warning"
@@ -41,7 +45,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             <div className="ml-2">Please verify your email address</div>
           </Banner>
         )}
-        <div>{children}</div>
+        <div className="w-full mx-auto">{children}</div>
         <CookieConsent
           open={showCookieConsent}
           onAcceptAll={() => {
