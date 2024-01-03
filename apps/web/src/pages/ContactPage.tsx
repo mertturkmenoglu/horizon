@@ -1,4 +1,5 @@
 import Button from '@/components/Button';
+import Footer from '@/components/Footer';
 import Input from '@/components/Input';
 import Logo from '@/components/Logo';
 import TextArea from '@/components/TextArea';
@@ -108,6 +109,8 @@ function ContactPage(): React.ReactElement {
             Send
           </Button>
         </form>
+
+        <Footer className="mt-16" />
       </div>
     </main>
   );
