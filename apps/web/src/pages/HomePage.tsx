@@ -6,6 +6,7 @@ import {
   CarouselPrevious,
 } from '@/components/Carousel';
 import ServiceSearch from '@/components/ServiceSearch';
+import Spinner from '@/components/Spinner';
 import MainLayout from '@/layouts/MainLayout';
 
 function HomePage(): React.ReactElement {
@@ -43,6 +44,8 @@ function HomePage(): React.ReactElement {
       <div>Personalized Suggestions</div>
 
       <a href="/services/categories">Explore all categories</a>
+
+      <Spinner className="size-16 mt-8" />
     </MainLayout>
   );
 }
