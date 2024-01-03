@@ -7,7 +7,7 @@ const bannerVariants = cva(['w-full px-4 py-2', 'text-sm'], {
     appearance: {
       warning: ['bg-yellow-400 text-midnight'],
       error: ['bg-red-400 text-midnight'],
-      announcement: ['bg-slate-400 text-slate-700'],
+      announcement: ['bg-neutral-400/15 text-slate-700'],
     },
   },
   defaultVariants: {
