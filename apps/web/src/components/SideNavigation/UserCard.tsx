@@ -78,7 +78,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
                 'data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade'
               )}
               sideOffset={20}
-              align="center"
+              align={collapsed ? 'start' : 'center'}
             >
               <DropdownItem
                 as="link"
