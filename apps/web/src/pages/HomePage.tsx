@@ -12,7 +12,7 @@ import MainLayout from '@/layouts/MainLayout';
 function HomePage(): React.ReactElement {
   return (
     <MainLayout>
-      <ServiceSearch className="mt-16" />
+      <ServiceSearch className="mt-4" />
 
       <Carousel className="w-full max-w-xs mx-auto">
         <CarouselContent>
