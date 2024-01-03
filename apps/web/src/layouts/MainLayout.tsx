@@ -1,6 +1,6 @@
-import Appbar from '@/components/Appbar';
 import Banner from '@/components/Banner';
 import CookieConsent from '@/components/CookieConsent';
+import SideNavigation from '@/components/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -27,8 +27,11 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   return (
-    <main>
-      <div className="max-w-7xl mx-auto">
+    <main className="grid grid-cols-8 gap-x-4">
+      <div className="col-span-1">
+        <SideNavigation />
+      </div>
+      <div className="col-span-7">
         {!user.emailVerified && (
           <Banner
             appearance="warning"
@@ -38,7 +41,6 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             <div className="ml-2">Please verify your email address</div>
           </Banner>
         )}
-        <Appbar className="mt-4" />
         <div>{children}</div>
         <CookieConsent
           open={showCookieConsent}
