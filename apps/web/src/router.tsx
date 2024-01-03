@@ -28,6 +28,15 @@ const VerifyEmailRedirect = React.lazy(
 );
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const MyServicesPage = React.lazy(() => import('./pages/MyServices'));
+const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
+const HelpPage = React.lazy(() => import('./pages/HelpPage'));
+const MessagesPage = React.lazy(() => import('./pages/MessagesPage'));
+const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
+const OverviewPage = React.lazy(() => import('./pages/OverviewPage'));
+const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
+const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 
 export const router = createBrowserRouter([
   {
@@ -126,5 +135,65 @@ export const router = createBrowserRouter([
   {
     path: '/contact',
     element: <ContactPage />,
+  },
+  {
+    path: '/my-services',
+    element: (
+      <ProtectedRoute>
+        <MyServicesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/explore',
+    element: (
+      <ProtectedRoute>
+        <ExplorePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/help',
+    element: <HelpPage />,
+  },
+  {
+    path: '/messages',
+    element: (
+      <ProtectedRoute>
+        <MessagesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/notifications',
+    element: (
+      <ProtectedRoute>
+        <NotificationsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/overview',
+    element: (
+      <ProtectedRoute>
+        <OverviewPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPage />,
+  },
+  {
+    path: '/schedule',
+    element: (
+      <ProtectedRoute>
+        <SchedulePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/terms',
+    element: <TermsPage />,
   },
 ]);
