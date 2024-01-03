@@ -1,5 +1,9 @@
 package dto
 
+import (
+	"horizon/internal/db/models"
+)
+
 type LoginRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
@@ -39,3 +43,5 @@ type VerifyEmailRequest struct {
 	Code  string `json:"code" validate:"required"`
 	Email string `json:"email" validate:"required,email"`
 }
+
+type GetAuthActivitiesResponse []*models.AuthActivity
