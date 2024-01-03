@@ -27,6 +27,7 @@ const VerifyEmailRedirect = React.lazy(
   () => import('./pages/VerifyEmailRedirect')
 );
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
 export const router = createBrowserRouter([
   {
@@ -121,5 +122,9 @@ export const router = createBrowserRouter([
         <SettingsPage />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: '/contact',
+    element: <ContactPage />,
   },
 ]);
