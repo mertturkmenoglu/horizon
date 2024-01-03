@@ -10,7 +10,7 @@ import { z } from 'zod';
 const schema = z.object({
   name: z.string().min(1).max(48),
   gender: z.string().max(32).optional(),
-  email: z.string().email().or(z.string().optional()),
+  email: z.string().email().or(z.string().max(0)),
   phone: z.string().max(15).optional(),
   address: z.string().max(64).optional(),
   other: z.string().max(64).optional(),
@@ -67,6 +67,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
           error={formState.errors.gender}
           className="mt-4"
           hint="Some users may prefer to see your gender depending on the provided service. You are free to use your own words or to leave it empty."
+          {...register('gender')}
         />
 
         <h3 className="text-base font-semibold mt-8">Contact Information</h3>
@@ -79,6 +80,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
           placeholder="Contact email"
           error={formState.errors.email}
           className="mt-4"
+          {...register('email')}
         />
 
         <Input
@@ -86,6 +88,7 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
           placeholder="Phone number"
           error={formState.errors.phone}
           className="mt-4"
+          {...register('phone')}
         />
 
         <TextArea
@@ -93,14 +96,16 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
           placeholder="Address"
           error={formState.errors.address}
           className="mt-4"
+          {...register('address')}
         />
 
         <TextArea
           label="Other"
           placeholder="Other information you may want your client's to know."
-          hint="You can provide any additional information here"
+          hint="You can provide any additional information here."
           error={formState.errors.address}
           className="mt-4"
+          {...register('other')}
         />
 
         <Button
