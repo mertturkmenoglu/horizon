@@ -4,3 +4,7 @@ declare type TwIcon = React.ForwardRefExoticComponent<
     titleId?: string | undefined;
   } & React.RefAttributes<SVGSVGElement>
 >;
+
+declare type TProps = {
+  className?: string;
+};
