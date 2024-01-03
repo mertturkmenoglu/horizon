@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 
 export interface GuestRouteProps {
@@ -16,7 +16,7 @@ function GuestRoute({ children }: GuestRouteProps) {
     return <Navigate to="/home" />;
   }
 
-  return <>{children}</>;
+  return <Suspense fallback={<></>}>{children}</Suspense>;
 }
 
 export default GuestRoute;

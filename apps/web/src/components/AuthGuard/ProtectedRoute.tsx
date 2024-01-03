@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 
 export interface ProtectedRouteProps {
@@ -16,11 +16,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/" />;
   }
 
-  if (loading) {
-    return <></>;
-  }
-
-  return <>{children}</>;
+  return <Suspense fallback={<></>}>{children}</Suspense>;
 }
 
 export default ProtectedRoute;
