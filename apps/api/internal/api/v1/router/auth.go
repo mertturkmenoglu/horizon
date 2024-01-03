@@ -12,6 +12,7 @@ import (
 	"horizon/internal/h"
 	"horizon/internal/hash"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/pagination"
 	"horizon/internal/password"
 	"horizon/internal/tasks"
 	"net/http"
@@ -364,6 +365,35 @@ func GetNewTokens(c echo.Context) error {
 	c.SetCookie(createCookie("refreshToken", refreshToken, refreshExp))
 
 	return c.NoContent(http.StatusOK)
+}
+
+func GetAuthActivities(c echo.Context) error {
+	token := c.Get("auth").(jsonwebtoken.Payload)
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	var activities []*models.AuthActivity
+	var count int64
+
+	res := db.Client.
+		Where("auth_id = ?", token.AuthId).
+		Order("created_at DESC").
+		Limit(params.PageSize).
+		Offset(params.Offset).
+		Find(&activities).
+		Count(&count)
+
+	if res.Error != nil {
+		return echo.NewHTTPError(http.StatusBadRequest)
+	}
+
+	return c.JSON(http.StatusOK, h.PaginatedResponse[dto.GetAuthActivitiesResponse]{
+		Data:       activities,
+		Pagination: pagination.GetPagination(params, count),
+	})
 }
 
 func createNewAccessToken(auth *models.Auth, user *models.User) (string, time.Time, error) {

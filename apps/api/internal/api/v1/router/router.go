@@ -23,6 +23,7 @@ func RegisterRoutes(e *echo.Echo) {
 	auth.POST("/email/verify", VerifyEmail, middlewares.ParseBody[dto.VerifyEmailRequest])
 	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
 	auth.POST("/token/refresh", GetNewTokens)
+	auth.GET("/activities", GetAuthActivities, middlewares.IsAuth)
 
 	users := api.Group("/users")
 
