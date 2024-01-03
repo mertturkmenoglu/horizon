@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <label
           htmlFor={id}
           className={cn(
-            'block text-sm font-semibold text-black',
+            'block text-sm font-semibold text-midnight',
             labelClassName
           )}
         >
