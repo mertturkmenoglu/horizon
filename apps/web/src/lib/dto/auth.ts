@@ -37,3 +37,14 @@ export type VerifyEmailRequest = {
   code: string;
   email: string;
 };
+
+export type AuthActivity = {
+  id: string;
+  createdAt: string;
+  ipAddress: string;
+  userAgent: string;
+  location: string;
+  success: boolean;
+};
+
+export type GetAuthActivitiesResponse = AuthActivity[];
