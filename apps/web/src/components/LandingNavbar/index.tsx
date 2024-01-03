@@ -29,13 +29,23 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
         <Menu />
       </div>
 
-      <a
-        href="/login"
-        className="flex rounded-md bg-midnight text-white px-4 py-2 font-semibold text-sm items-center space-x-2"
-      >
-        <span>Get started</span>
-        <ArrowRightIcon className="size-4 animate-pulse" />
-      </a>
+      <div className="flex items-center space-x-4">
+        <a
+          href="/demo"
+          className="text-neutral-500 text-sm hover:underline"
+        >
+          Request a demo
+        </a>
+
+        <div className="w-[1px] h-8 bg-midnight/50" />
+        <a
+          href="/login"
+          className="flex rounded-md bg-midnight text-white px-4 py-2 font-semibold text-sm items-center space-x-2"
+        >
+          <span>Get started</span>
+          <ArrowRightIcon className="size-4 animate-pulse" />
+        </a>
+      </div>
     </nav>
   );
 }

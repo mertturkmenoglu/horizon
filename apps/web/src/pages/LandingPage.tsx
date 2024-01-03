@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import LandingHero from '../components/LandingHero';
 import LandingNavbar from '../components/LandingNavbar';
+import LandingBanner from '@/components/LandingBanner';
 
 function LandingPage(): React.ReactElement {
   const { loading } = useAuth();
@@ -11,7 +12,8 @@ function LandingPage(): React.ReactElement {
 
   return (
     <div className="bg-white w-full h-screen flex flex-col items-center">
-      <LandingNavbar className="mt-8" />
+      <LandingBanner />
+      <LandingNavbar className="mt-2" />
       <LandingHero className="mt-64" />
     </div>
   );
