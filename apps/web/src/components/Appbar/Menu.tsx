@@ -13,7 +13,7 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { DropdownItem } from './DropdownItem';
+import { DropdownItem } from '../NavDropdownItem';
 
 function Menu(): React.ReactElement {
   return (
