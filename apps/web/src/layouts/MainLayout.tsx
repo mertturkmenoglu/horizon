@@ -30,7 +30,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   return (
-    <main className="flex flex-col md:flex-row md:space-x-4">
+    <main className="flex flex-col md:flex-row md:space-x-4 md:overflow-hidden md:h-screen">
       <SideNavigation
         className={cn('hidden md:flex', {
           'md:w-72': !navCollapsed,
@@ -43,7 +43,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
       <div className="flex md:hidden">
         <Appbar className="w-full py-1 px-4" />
       </div>
-      <div className="mx-auto w-full">
+      <div className="mx-auto w-full md:overflow-y-scroll">
         {!user.emailVerified && (
           <Banner
             appearance="warning"
