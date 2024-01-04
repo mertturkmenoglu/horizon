@@ -9,11 +9,11 @@ import {
   ChevronDoubleRightIcon,
   HomeIcon,
   MagnifyingGlassIcon,
-  PaperAirplaneIcon,
   SquaresPlusIcon,
 } from '@heroicons/react/24/outline';
 import NavItem, { TNavItem } from './NavItem';
 import UserCard from './UserCard';
+import { Send } from 'lucide-react';
 
 export type SideNavigationProps = React.ComponentPropsWithoutRef<'nav'> & {
   collapsed: boolean;
@@ -27,7 +27,7 @@ const navItems: TNavItem[] = [
   { href: '/schedule', text: 'My Schedule', icon: CalendarDaysIcon },
   { href: '/overview', text: 'Overview', icon: ChartBarIcon },
   { href: '/notifications', text: 'Notifications', icon: BellIcon },
-  { href: '/messages', text: 'Messages', icon: PaperAirplaneIcon },
+  { href: '/messages', text: 'Messages', icon: Send },
 ];
 
 const SideNavigation = React.forwardRef<
@@ -43,7 +43,7 @@ const SideNavigation = React.forwardRef<
       )}
     >
       <div
-        className={cn('flex justify-between items-center', {
+        className={cn('flex justify-between items-center mt-2', {
           'flex-col space-y-4': collapsed,
         })}
       >
