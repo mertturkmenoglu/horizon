@@ -37,4 +37,7 @@ func RegisterRoutes(e *echo.Echo) {
 
 	services.GET("/", GetServices)
 	services.GET("/categories", GetServiceCategories)
+
+	location := api.Group("/location")
+	location.GET("/", SearchLocation)
 }
