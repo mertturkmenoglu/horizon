@@ -14,24 +14,32 @@ import {
 } from '@heroicons/react/24/outline';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { DropdownItem } from '../NavDropdownItem';
+import { useAuth } from '@/hooks/useAuth';
+import { getUserImage } from '@/lib/img';
 
 function Menu(): React.ReactElement {
+  const { user } = useAuth();
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="rounded-full size-6 inline-flex items-center justify-center text-midnight bg-white outline-none"
+          className="rounded-full size-10 inline-flex items-center justify-center text-midnight bg-white outline-none"
           aria-label="Navigation options"
         >
-          <UserCircleIcon className="size-6 text-midnight" />
+          <img
+            src={getUserImage(user?.profileImage)}
+            className="size-10 rounded-full"
+            alt=""
+          />
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className={cn(
-            'min-w-40 bg-white rounded-md p-2',
-            'shadow shadow-sky-500/50',
+            'min-w-56 bg-white rounded-md p-2',
+            'border border-midnight/10',
             'will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade',
             'data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade'
           )}
@@ -73,7 +81,7 @@ function Menu(): React.ReactElement {
             text="Settings"
           />
 
-          <DropdownMenu.Separator className="h-[1px] bg-sky-500 my-2" />
+          <DropdownMenu.Separator className="h-[1px] bg-midnight my-2" />
 
           <DropdownItem
             as="link"
@@ -103,7 +111,7 @@ function Menu(): React.ReactElement {
             text="Contact Us"
           />
 
-          <DropdownMenu.Separator className="h-[1px] bg-sky-500 my-2" />
+          <DropdownMenu.Separator className="h-[1px] bg-midnight my-2" />
 
           <DropdownItem
             as="button"
