@@ -1,3 +1,4 @@
+import QuickActions from '@/components/QuickActions';
 import { useAuth } from '@/hooks/useAuth';
 import MainLayout from '@/layouts/MainLayout';
 
@@ -85,6 +86,8 @@ function HomePage(): React.ReactElement {
     <MainLayout>
       <h2 className="mt-8 text-4xl font-bold">Hey {user?.name},</h2>
       <div className="mt-2 text-lg font-bold">How can we help you?</div>
+
+      <QuickActions className="mt-8" />
       <Section />
       <Section />
       <Section />
