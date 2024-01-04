@@ -1,3 +1,4 @@
+import FeaturesCarousel from '@/components/FeaturesCarousel';
 import QuickActions from '@/components/QuickActions';
 import ReferToFriend from '@/components/ReferToFriend';
 import { useAuth } from '@/hooks/useAuth';
@@ -92,8 +93,9 @@ function HomePage(): React.ReactElement {
 
       <Section />
       <Section />
-      <Section />
-      <Section />
+
+      <FeaturesCarousel />
+
       <div className="my-32"></div>
     </MainLayout>
   );
