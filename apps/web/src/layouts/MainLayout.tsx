@@ -57,7 +57,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             setShowCookieConsent(false);
           }}
         />
-        <CategoryFooter />
+        <CategoryFooter className="mt-32" />
         <Footer />
       </div>
     </main>
