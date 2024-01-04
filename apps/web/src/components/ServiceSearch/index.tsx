@@ -1,38 +1,72 @@
 import { cn } from '@/lib/cn';
+import Input from '../Input';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '../Button';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
-interface ServiceSearchProps {
-  className?: string;
-}
+const schema = z.object({
+  term: z.string().min(1).max(128),
+});
 
-const bgImage =
-  'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+type ServiceSearchInput = z.infer<typeof schema>;
 
-function ServiceSearch({ className }: ServiceSearchProps): React.ReactElement {
+function ServiceSearch({ className }: TProps): React.ReactElement {
+  const { register, handleSubmit } = useForm<ServiceSearchInput>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<ServiceSearchInput> = (values) => {
+    console.log(values);
+  };
+
   return (
-    <div className={cn('relative', className)}>
-      <img
-        src={bgImage}
-        alt=""
-        className="w-full h-[384px] object-cover blur-[2px] brightness-50 rounded-md"
-      />
-      <div className="absolute bottom-16 px-16 w-full">
-        <div className="mt-16 text-white text-4xl font-medium">
-          What service do you need?
-        </div>
-
-        <input
-          type="text"
+    <form
+      className={cn('group rounded', className)}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex items-stretch w-full">
+        <Input
+          label=""
           className={cn(
-            'w-full',
-            'px-4 py-2 mt-4',
-            'rounded-md bg-white/50 text-stone-700',
-            'focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
-            'placeholder:text-white/50'
+            'max-w-2xl w-full group-focus-within:max-w-none group-focus-within:w-full',
+            'transition-all ease-in-out duration-200'
           )}
-          placeholder="e.g: plumbing, baby sitter, etc..."
+          inputClassName="rounded-r-none focus:ring-0 focus:border-none py-3 text-base placeholder:text-base"
+          placeholder="Search for a service e.g: plumbing, baby sitter, tax consulting, ..."
+          {...register('term')}
         />
+        <Button
+          appearance="midnight"
+          className="px-2 w-14 flex items-center justify-center rounded-l-none hover:bg-opacity-90"
+        >
+          <MagnifyingGlassIcon className="size-6 text-white" />
+        </Button>
       </div>
-    </div>
+
+      <div className="hidden group-focus-within:block border border-midnight/20 rounded p-2 space-y-2 mt-2">
+        <div>Your last searches:</div>
+        {[
+          'Web Design',
+          'Baby sitter',
+          'Italian teacher',
+          'Biology tutor',
+          'Music band for a wedding',
+        ].map((i) => (
+          <button
+            key={i}
+            className={cn(
+              'bg-neutral-400/10 hover:bg-neutral-400/20',
+              'px-4 py-1 w-full flex rounded',
+              'focus:outline-none focus:ring focus:ring-sky-500 focus:bg-neutral-400/20'
+            )}
+          >
+            {i}
+          </button>
+        ))}
+      </div>
+    </form>
   );
 }
 
