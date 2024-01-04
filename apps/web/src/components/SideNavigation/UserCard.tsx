@@ -13,6 +13,7 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { logout } from '@/lib/logout';
+import { getUserImage } from '@/lib/img';
 
 export type UserCardProps = React.ComponentPropsWithoutRef<'div'> & {
   collapsed?: boolean;
@@ -22,10 +23,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
   ({ className, collapsed = false }, ref) => {
     const { user } = useAuth();
     const image = useMemo(() => {
-      if (!user) return '/user.jpg';
-      return user.profileImage === ''
-        ? 'https://github.com/mertturkmenoglu.png'
-        : user.profileImage;
+      return getUserImage(user?.profileImage);
     }, [user]);
 
     if (!user) {
