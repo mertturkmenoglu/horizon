@@ -66,6 +66,9 @@ func main() {
 	// Init ip2location
 	geo.New()
 
+	// Read geocoding data
+	geo.LoadGeocodingDataFromFile(viper.GetString("api.geo.geocode"))
+
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
 
