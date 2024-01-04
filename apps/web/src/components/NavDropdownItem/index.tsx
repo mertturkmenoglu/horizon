@@ -27,7 +27,7 @@ const itemStyles = cn(
   'rounded flex items-center px-2 relative mt-2 py-1',
   'select-none outline-none',
   'data-[disabled]:text-neutral-400 data-[disabled]:pointer-events-none',
-  'data-[highlighted]:bg-sky-500 data-[highlighted]:text-sky-100'
+  'data-[highlighted]:bg-midnight data-[highlighted]:text-white'
 );
 
 export function DropdownItem(props: DropdownItemProps): React.ReactElement {
