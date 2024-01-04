@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/Breadcrumb';
 import ServiceCategory from '@/components/ServiceCategory';
 import { useServiceCategories } from '@/hooks/useServiceCategories';
 import MainLayout from '@/layouts/MainLayout';
@@ -11,7 +12,11 @@ function CategoriesPage(): React.ReactElement {
 
   return (
     <MainLayout>
-      <h2 className="my-16 text-3xl">Explore All Services</h2>
+      <Breadcrumb
+        items={[{ href: '/categories', text: 'Categories' }]}
+        className="mt-8"
+      />
+      <h2 className="my-8 text-3xl">Explore All Services</h2>
       {categories.map((c) => (
         <ServiceCategory
           cat={c}
