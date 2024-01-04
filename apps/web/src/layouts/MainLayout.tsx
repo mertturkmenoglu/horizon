@@ -1,6 +1,7 @@
 import Appbar from '@/components/Appbar';
 import Banner from '@/components/Banner';
 import CookieConsent from '@/components/CookieConsent';
+import Footer from '@/components/Footer';
 import { useAuth } from '@/hooks/useAuth';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -55,6 +56,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             setShowCookieConsent(false);
           }}
         />
+        <Footer />
       </div>
     </main>
   );
