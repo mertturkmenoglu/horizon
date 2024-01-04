@@ -1,4 +1,5 @@
 import QuickActions from '@/components/QuickActions';
+import ReferToFriend from '@/components/ReferToFriend';
 import { useAuth } from '@/hooks/useAuth';
 import MainLayout from '@/layouts/MainLayout';
 
@@ -43,7 +44,7 @@ const cards = [
 function Section(): React.ReactElement {
   return (
     <div className="max-w-7xl">
-      <div className="flex mt-16 space-x-4 items-baseline">
+      <div className="flex mt-8 space-x-4 items-baseline">
         <div className="text-midnight text-2xl">New Services</div>
         <a
           href="/"
@@ -88,6 +89,9 @@ function HomePage(): React.ReactElement {
       <div className="mt-2 text-lg font-bold">How can we help you?</div>
 
       <QuickActions className="mt-8" />
+
+      <ReferToFriend className="mt-0" />
+
       <Section />
       <Section />
       <Section />
