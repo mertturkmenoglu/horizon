@@ -4,9 +4,9 @@ import LandingNavbar from '../components/LandingNavbar';
 import LandingBanner from '@/components/LandingBanner';
 
 function LandingPage(): React.ReactElement {
-  const { loading } = useAuth();
+  const { isLoading } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     return <></>;
   }
 

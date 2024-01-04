@@ -2,9 +2,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 
 function MePage(): React.ReactElement {
-  const { loading, user } = useAuth();
+  const { isLoading, user } = useAuth();
 
-  if (loading || !user) {
+  if (isLoading || !user) {
     return <></>;
   }
 
