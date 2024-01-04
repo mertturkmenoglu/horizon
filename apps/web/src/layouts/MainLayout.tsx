@@ -13,14 +13,14 @@ interface MainLayoutProps {
 }
 
 function MainLayout({ children }: MainLayoutProps): React.ReactElement {
-  const { isAuthenticated, loading, user } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [showCookieConsent, setShowCookieConsent] = useState(() => {
     const lsValue = window.localStorage.getItem('showCookieConsent');
     return lsValue === null || lsValue === 'true';
   });
 
-  if (!isAuthenticated || loading || !user) {
+  if (!isAuthenticated || isLoading || !user) {
     return <></>;
   }
 
