@@ -66,11 +66,11 @@ func SearchAll(term string) []SearchResult {
 	}
 
 	slices.SortFunc(similars, func(a, b SearchResult) int {
-		if a.Similarity < b.Similarity {
+		if a.Similarity > b.Similarity {
 			return -1
 		}
 
-		if a.Similarity > b.Similarity {
+		if a.Similarity < b.Similarity {
 			return 1
 		}
 
