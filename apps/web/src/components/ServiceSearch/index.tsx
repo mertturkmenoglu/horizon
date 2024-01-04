@@ -30,8 +30,8 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
         <Input
           label=""
           className={cn(
-            'max-w-2xl w-full group-focus-within:max-w-none group-focus-within:w-full',
-            'transition-all ease-in-out duration-200'
+            'max-w-2xl w-full group-focus-within:max-w-full group-focus-within:w-full',
+            'transition-max-width ease-in-out duration-500'
           )}
           inputClassName="rounded-r-none focus:ring-0 focus:border-none py-3 text-base placeholder:text-base"
           placeholder="Search for a service e.g: plumbing, baby sitter, tax consulting, ..."
