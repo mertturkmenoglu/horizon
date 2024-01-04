@@ -10,9 +10,9 @@ export interface GuestRouteProps {
  * Only unauthenticated users can visit.
  */
 function GuestRoute({ children }: GuestRouteProps) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (!loading && isAuthenticated) {
+  if (!isLoading && isAuthenticated) {
     return <Navigate to="/home" />;
   }
 

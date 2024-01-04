@@ -10,9 +10,9 @@ export interface ProtectedRouteProps {
  * Only authenticated users can visit.
  */
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (!loading && !isAuthenticated) {
+  if (!isLoading && !isAuthenticated) {
     return <Navigate to="/" />;
   }
 
