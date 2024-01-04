@@ -1,9 +1,7 @@
 import Appbar from '@/components/Appbar';
 import Banner from '@/components/Banner';
 import CookieConsent from '@/components/CookieConsent';
-import SideNavigation from '@/components/SideNavigation';
 import { useAuth } from '@/hooks/useAuth';
-import { cn } from '@/lib/cn';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -14,7 +12,6 @@ interface MainLayoutProps {
 
 function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   const { isAuthenticated, isLoading, user } = useAuth();
-  const [navCollapsed, setNavCollapsed] = useState(false);
   const [showCookieConsent, setShowCookieConsent] = useState(() => {
     const lsValue = window.localStorage.getItem('showCookieConsent');
     return lsValue === null || lsValue === 'true';
@@ -30,20 +27,9 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   return (
-    <main className="flex flex-col md:flex-row md:space-x-4 md:overflow-hidden md:h-screen">
-      <SideNavigation
-        className={cn('hidden md:flex', {
-          'md:w-72': !navCollapsed,
-          'md:w-20': navCollapsed,
-        })}
-        collapsed={navCollapsed}
-        setCollapsed={setNavCollapsed}
-      />
-
-      <div className="flex md:hidden">
-        <Appbar className="w-full py-1 px-4" />
-      </div>
-      <div className="mx-auto w-full md:overflow-y-scroll">
+    <main className="flex flex-col max-w-screen-2xl mx-auto">
+      <Appbar />
+      <div className="mx-auto w-full">
         {!user.emailVerified && (
           <Banner
             appearance="warning"
