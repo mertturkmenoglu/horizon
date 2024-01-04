@@ -43,15 +43,14 @@ const cards = [
 
 function Section(): React.ReactElement {
   return (
-    <div className="max-w-7xl">
-      <div className="flex mt-8 space-x-4 items-baseline">
+    <div className="">
+      <div className="flex mt-16 space-x-4 items-baseline">
         <div className="text-midnight text-2xl">New Services</div>
         <a
           href="/"
           className=" font-bold underline text-midnight flex items-center space-x-2"
         >
           <div>See all</div>
-          {/* <ArrowRightIcon className="size-4" /> */}
         </a>
       </div>
 
@@ -85,12 +84,11 @@ function HomePage(): React.ReactElement {
   const { user } = useAuth();
   return (
     <MainLayout>
+      <ReferToFriend className="mt-0" />
       <h2 className="mt-8 text-4xl font-bold">Hey {user?.name},</h2>
       <div className="mt-2 text-lg font-bold">How can we help you?</div>
 
       <QuickActions className="mt-8" />
-
-      <ReferToFriend className="mt-0" />
 
       <Section />
       <Section />
