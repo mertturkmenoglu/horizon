@@ -33,3 +33,4 @@ api:
     send-login-alert-email: true
   geo:
     ip2locationdb: "iplocation.BIN"
+    geocode: "geocode.json"
