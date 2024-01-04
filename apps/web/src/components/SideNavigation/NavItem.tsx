@@ -1,11 +1,12 @@
 import { cn } from '@/lib/cn';
+import type { LucideIcon } from 'lucide-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 export type TNavItem = {
   href: string;
   text: string;
-  icon: TwIcon;
+  icon: TwIcon | LucideIcon;
   collapsed?: boolean;
 };
 
@@ -24,7 +25,7 @@ const NavItem = React.forwardRef<React.ElementRef<'li'>, NavItemProps>(
               'flex items-center py-2 rounded-md px-2',
               'focus:outline-none focus:ring focus:ring-sky-500',
               {
-                'bg-sky-100 text-sky-600': isActive,
+                'bg-midnight text-white': isActive,
                 'hover:bg-neutral-400/20': !isActive,
                 'space-x-2': !collapsed,
                 'justify-center': collapsed,
