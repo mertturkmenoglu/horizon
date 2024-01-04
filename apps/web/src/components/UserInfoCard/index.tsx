@@ -101,7 +101,7 @@ function UserInfoCard({
       {isThisUser && (
         <Button
           appearance="sky"
-          className="mt-4 py-1 flex space-x-2 justify-center items-center"
+          className="mt-4 py-2 flex space-x-2 justify-center items-center w-32"
           onClick={() => {
             window.location.href = '/settings?tab=profile';
           }}
@@ -115,7 +115,7 @@ function UserInfoCard({
         <>
           <Button
             appearance="sky"
-            className="mt-4 py-1 flex space-x-2 justify-center items-center"
+            className="mt-4 py-2 flex space-x-2 justify-center items-center w-32"
           >
             <EnvelopeIcon className="size-5 text-white" />
             <span>Message</span>

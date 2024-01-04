@@ -46,14 +46,14 @@ interface UserPageProps {
 function UserPage({ user }: UserPageProps): React.ReactElement {
   return (
     <MainLayout>
-      <div className="grid grid-cols-12 mt-8">
-        <div className="col-span-12 lg:col-span-3">
+      <div className="mt-8">
+        <div className="mx-auto max-w-3xl">
           <UserInfoCard
             user={user}
             className=""
           />
         </div>
-        <div className="col-span-12 lg:col-span-9 border-l border-l-midnight p-4">
+        <div className="p-4 mt-8">
           <div className="flex flex-col justify-center items-center h-full">
             <SquaresPlusIcon className="size-12 text-sky-600" />
             <div className="mt-2 text-2xl text-midnight/70">
