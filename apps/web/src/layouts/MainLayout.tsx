@@ -1,5 +1,6 @@
 import Appbar from '@/components/Appbar';
 import Banner from '@/components/Banner';
+import CategoryFooter from '@/components/CategoryFooter';
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/hooks/useAuth';
@@ -56,6 +57,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             setShowCookieConsent(false);
           }}
         />
+        <CategoryFooter />
         <Footer />
       </div>
     </main>
