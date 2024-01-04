@@ -45,7 +45,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           id={id}
           className={cn(
             'bg-gray-500/10 rounded',
-            'px-2 py-2',
+            'px-2 py-2 lining-nums',
             { 'border border-midnight': bordered },
             {
               'border-red-500': error?.type,
