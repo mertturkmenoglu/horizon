@@ -80,6 +80,9 @@ export default {
         exitToLeft: 'exitToLeft 250ms ease',
         exitToRight: 'exitToRight 250ms ease',
       },
+      transitionProperty: {
+        'max-width': 'max-width',
+      },
     },
   },
   plugins: [
