@@ -28,7 +28,7 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
       <div className="flex flex-col items-start text-start w-[384px] z-50">
         <div className="text-gray-500 text-sm mt-8">Get Started</div>
         <div className="mt-2 font-bold text-2xl">
-          People use to turn their ideas into reality with{' '}
+          People turn their ideas into reality with{' '}
           <span className="text-sky-500">Horizon</span>.
         </div>
       </div>
