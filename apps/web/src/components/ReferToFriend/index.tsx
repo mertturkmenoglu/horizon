@@ -21,7 +21,7 @@ const ReferToFriend = React.forwardRef<El, Props>(
 
           <a
             href="/referral"
-            className="mt-2 text-lg hover:underline hover:underline-offset-8 hover:decoration-sky-500 hover:decoration-4"
+            className="mt-2 text-lg hover:underline hover:underline-offset-8 hover:decoration-sky-500 hover:decoration-4 rounded-md"
           >
             Refer us to a <span className="text-sky-500">friend</span>.
           </a>
