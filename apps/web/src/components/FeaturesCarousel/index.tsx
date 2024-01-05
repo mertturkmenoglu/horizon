@@ -30,9 +30,9 @@ const items = [
   },
 ];
 
-function FeaturesCarousel(): React.ReactElement {
+function FeaturesCarousel({ className }: TProps): React.ReactElement {
   return (
-    <Carousel className="w-full mt-16 rounded-md">
+    <Carousel className={cn('w-full rounded-md', className)}>
       <CarouselContent>
         {items.map((item) => (
           <CarouselItem key={item.image}>
