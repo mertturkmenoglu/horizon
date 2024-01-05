@@ -56,7 +56,7 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
       </div>
 
       <SearchHeader className="block md:hidden mt-4 px-4 md:mx-0" />
-      <CategoryNavigation className="-ml-2" />
+      <CategoryNavigation className="-ml-2 px-4 sm:px-0" />
     </div>
   );
 }
