@@ -21,13 +21,12 @@ export function NavItem({
       <a
         href={`/settings?tab=${id}`}
         className={cn(
-          'flex space-x-2 items-center text- py-1 px-4 rounded-md mx-2',
+          'flex space-x-2 items-center py-2 px-4 rounded-md mx-2',
           'transition-all ease-out duration-100',
-          'hover:bg-sky-600/90 hover:text-white focus:bg-sky-600/90 focus:text-white',
-          'font-semibold text-sm',
-          'focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 focus:outline-none',
+          'font-semibold',
           {
-            'bg-sky-600 text-white': isCurrentTab,
+            'bg-midnight text-white hover:bg-opacity-80': isCurrentTab,
+            'hover:bg-neutral-400/20': !isCurrentTab,
           }
         )}
       >
