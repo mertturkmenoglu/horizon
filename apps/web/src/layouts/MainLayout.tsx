@@ -52,7 +52,7 @@ function MainLayout({
             <div className="ml-2">Please verify your email address</div>
           </Banner>
         )}
-        <div className="w-full mx-auto px-4 sm:px-0">{children}</div>
+        <div className="w-full mx-auto px-4 2xl:px-0">{children}</div>
         <CookieConsent
           open={showCookieConsent}
           onAcceptAll={() => {
