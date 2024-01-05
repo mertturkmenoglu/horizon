@@ -175,7 +175,8 @@ export const categoryData: TCategoryData = {
     },
     {
       category: 'Automotive',
-      image: 'https://images.unsplash.com/photo-1565043666747-69f6646db940',
+      image:
+        'https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1200',
       subcategories: [
         {
           id: 27,
