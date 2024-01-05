@@ -14,3 +14,8 @@
 
   filter: url(#threshold) blur(0.6px);
 }
+
+a,
+button {
+  @apply focus:outline-none focus:ring focus:ring-sky-500;
+}
