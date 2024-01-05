@@ -1,13 +1,18 @@
 import Input from '@/components/Input';
 import { useAuth } from '@/hooks/useAuth';
+import { GetMeResponse } from '@/lib/dto';
 
-function AccountTab(): React.ReactElement {
+function AccountTabContainer(): React.ReactElement {
   const { user } = useAuth();
 
   if (!user) {
     return <></>;
   }
 
+  return <AccountTab user={user} />;
+}
+
+function AccountTab({ user }: { user: GetMeResponse }): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">Account Settings</h2>
@@ -64,4 +69,4 @@ function AccountTab(): React.ReactElement {
   );
 }
 
-export default AccountTab;
+export default AccountTabContainer;
