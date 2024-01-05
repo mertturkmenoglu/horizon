@@ -7,6 +7,7 @@ import (
 	"horizon/internal/db"
 	"horizon/internal/geo"
 	"horizon/internal/tasks"
+	"horizon/internal/upload"
 	"horizon/internal/validation"
 
 	"github.com/go-playground/validator/v10"
@@ -68,6 +69,9 @@ func main() {
 
 	// Read geocoding data
 	geo.LoadGeocodingDataFromFile(viper.GetString("api.geo.geocode"))
+
+	// Init upload service
+	upload.New()
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
