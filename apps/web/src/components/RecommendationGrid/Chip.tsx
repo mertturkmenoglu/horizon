@@ -9,7 +9,7 @@ function Chip({ className, type, text }: ChipProps): React.ReactElement {
   return (
     <div
       className={cn(
-        'lining-nums px-2 w-fit rounded-md text-sm border',
+        'lining-nums px-2 w-fit rounded-md text-xs py-[1px] border text-center text-nowrap',
         {
           'bg-sky-50 border-sky-500  text-sky-500': type === 'price',
           'bg-indigo-50 border-indigo-500  text-indigo-500': type === 'pro',
