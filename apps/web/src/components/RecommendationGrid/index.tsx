@@ -1,7 +1,6 @@
 import { cn } from '@/lib/cn';
 import React from 'react';
-import Chip from './Chip';
-import Rating from './Rating';
+import Card from './Card';
 
 export type TRecommendation = {
   url: string;
@@ -46,57 +45,11 @@ const RecommendationGrid = React.forwardRef<El, Props>(
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 mt-4 items-center gap-4">
-          {items.map((item, i) => (
-            <a
-              href="/"
-              key={item.image + i}
-              className="rounded-md block group"
-            >
-              <img
-                src={item.image}
-                alt=""
-                className="w-full aspect-video object-cover rounded-t-md"
-              />
-              <div className="pt-2 rounded-b-md pb-4">
-                <div className="text-base uppercase font-semibold text-midnight group-hover:underline">
-                  {item.title}
-                </div>
-                <div className="text-neutral-500 text-sm">@{item.username}</div>
-
-                <div className="flex gap-x-2 flex-wrap mt-2">
-                  <Chip
-                    type="price"
-                    text={`From ${item.price}`}
-                  />
-
-                  {item.isPro && (
-                    <Chip
-                      type="pro"
-                      text="Pro"
-                    />
-                  )}
-
-                  {item.isNew && (
-                    <Chip
-                      text="New"
-                      type="new"
-                    />
-                  )}
-
-                  {item.topRated && (
-                    <Chip
-                      text="Top Rated"
-                      type="topRated"
-                    />
-                  )}
-                </div>
-
-                <Rating
-                  rating={item.rating}
-                  className="mt-2"
-                />
-              </div>
-            </a>
+          {items.map((item) => (
+            <Card
+              item={item}
+              key={item.title}
+            />
           ))}
         </div>
       </div>
