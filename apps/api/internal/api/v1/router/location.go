@@ -14,7 +14,7 @@ func SearchLocation(c echo.Context) error {
 
 	results := geo.SearchAll(term)
 
-	return c.JSON(http.StatusOK, h.Response[dto.SearcLocationResponse]{
+	return c.JSON(http.StatusOK, h.Response[dto.SearchLocationResponse]{
 		"data": results,
 	})
 }
