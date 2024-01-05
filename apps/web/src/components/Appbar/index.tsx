@@ -14,12 +14,14 @@ interface AppbarProps {
 function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
   return (
     <div className={cn('w-full', className)}>
-      <Banner
-        appearance="announcement"
-        className="flex justify-center items-center py-2"
-      >
-        Welcome to Horizon
-      </Banner>
+      {!isFullWidth && (
+        <Banner
+          appearance="announcement"
+          className="flex justify-center items-center py-2"
+        >
+          Welcome to Horizon
+        </Banner>
+      )}
 
       <div className="flex items-start mt-4 w-full justify-between mx-auto px-4 2xl:px-0">
         <div className="flex items-start w-full">
