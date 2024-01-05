@@ -7,9 +7,9 @@ type CardProps = TProps & {
   item: TRecommendation;
 };
 
-function Chips({ item }: CardProps): React.ReactElement {
+function Chips({ item, className }: CardProps): React.ReactElement {
   return (
-    <div className="flex gap-2 flex-wrap justify-end">
+    <div className={cn('flex gap-2 flex-wrap justify-end', className)}>
       <Chip
         type="price"
         text={`From ${item.price}`}
@@ -51,21 +51,34 @@ function Card({ className, item }: CardProps): React.ReactElement {
         className="w-full aspect-video object-cover rounded-t-md"
       />
       <div className="pt-2 rounded-b-md">
-        <div className="flex items-start justify-between h-16">
-          <div className="w-full">
-            <div className="text-base uppercase font-semibold text-midnight group-hover:underline line-clamp-2">
-              {item.title}
+        <div className="flex flex-col">
+          <div className="w-full flex justify-between items-start">
+            <div>
+              <div className="text-sm font-semibold text-midnight group-hover:underline line-clamp-1">
+                {item.title}
+              </div>
+              <div className="text-neutral-500 text-sm">@{item.username}</div>
             </div>
-            <div className="text-neutral-500 text-sm">@{item.username}</div>
-          </div>
 
-          <Chips item={item} />
+            <img
+              src={item.userImage}
+              alt=""
+              className="size-8 min-h-8 min-w-8 rounded-full"
+            />
+          </div>
         </div>
 
-        <Rating
-          rating={item.rating}
-          className="mt-2"
-        />
+        <div className="flex justify-between items-center mt-2 h-12 space-x-4">
+          <Rating
+            rating={item.rating}
+            className=""
+          />
+
+          <Chips
+            item={item}
+            className=""
+          />
+        </div>
       </div>
     </a>
   );
