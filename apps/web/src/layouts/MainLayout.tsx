@@ -41,7 +41,7 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             <div className="ml-2">Please verify your email address</div>
           </Banner>
         )}
-        <div className="w-full mx-auto">{children}</div>
+        <div className="w-full mx-auto px-4 sm:px-0">{children}</div>
         <CookieConsent
           open={showCookieConsent}
           onAcceptAll={() => {
