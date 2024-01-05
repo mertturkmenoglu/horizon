@@ -1,9 +1,10 @@
 import Menu from './Menu';
 import Banner from '../Banner';
 import SearchHeader from '../SearchHeader';
-import { SendIcon, BellIcon } from 'lucide-react';
+import { BellIcon } from 'lucide-react';
 import CategoryNavigation from '../CategoryNavigation';
 import { cn } from '@/lib/cn';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 
 interface AppbarProps {
   className?: string;
@@ -30,12 +31,18 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
           <SearchHeader className="w-full mx-8" />
         </div>
 
-        <div className="flex items-center mt-1.5 space-x-4">
-          <a href="/notifications">
-            <BellIcon className="size-6" />
+        <div className="flex items-center mt-1.5 space-x-2">
+          <a
+            href="/notifications"
+            className="rounded-full hover:bg-neutral-400/20"
+          >
+            <BellIcon className="size-10  p-2" />
           </a>
-          <a href="/messages">
-            <SendIcon className="size-6" />
+          <a
+            href="/messages"
+            className="rounded-full hover:bg-neutral-400/20"
+          >
+            <EnvelopeIcon className="size-10  p-2" />
           </a>
 
           <Menu />
