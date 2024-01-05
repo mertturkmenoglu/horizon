@@ -43,7 +43,7 @@ function RecentSearches({
           className={cn(
             'hover:bg-neutral-400/10 text-neutral-600',
             'px-6 py-2 text-sm flex rounded w-full',
-            'focus:outline-none focus:ring focus:ring-sky-500 focus:bg-neutral-400/20'
+            'focus:outline-none focus:ring focus:ring-sky-500'
           )}
         >
           {search}
