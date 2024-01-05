@@ -1,6 +1,6 @@
+import { categoryData } from '@/lib/categorydata';
 import { cn } from '@/lib/cn';
 import React from 'react';
-import { data } from './data';
 
 type El = React.ElementRef<'nav'>;
 type Props = React.ComponentPropsWithoutRef<'nav'>;
@@ -11,25 +11,25 @@ const CategoryFooter = React.forwardRef<El, Props>(
       <nav
         ref={ref}
         className={cn(
-          'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 bg-neutral-400/10 p-8',
+          'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4',
           className
         )}
         {...props}
       >
-        {data.data.map((category) => (
+        {categoryData.data.map((category) => (
           <div key={category.category}>
             <a
               href={`/categories/${encodeURIComponent(category.category)}`}
-              className="font-bold hover:underline text-xl line-clamp-2 h-14"
+              className="font-semibold hover:underline text-base line-clamp-1"
             >
               {category.category}
             </a>
-            <ul className="mt-2">
+            <ul className="mt-0">
               {category.subcategories.map((subcategory) => (
                 <li key={subcategory.id}>
                   <a
                     href={`/categories/${encodeURIComponent(subcategory.id)}`}
-                    className="hover:underline"
+                    className="hover:underline text-base text-neutral-500"
                   >
                     {subcategory.title}
                   </a>
