@@ -34,7 +34,7 @@ function HomePage(): React.ReactElement {
         items={newServices}
       />
 
-      <FeaturesCarousel className="mt-8" />
+      <FeaturesCarousel className="mt-16 max-w-[80%] md:max-w-[70%] mx-auto" />
 
       <div className="my-32"></div>
     </MainLayout>
