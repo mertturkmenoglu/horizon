@@ -10,7 +10,7 @@ const ReferToFriend = React.forwardRef<El, Props>(
     return (
       <div
         ref={ref}
-        className={cn('flex mx-auto max-w-3xl items-center', className)}
+        className={cn('flex max-w-3xl items-center', className)}
         {...props}
       >
         <Doodle className="size-[256px] text-sky-500" />
