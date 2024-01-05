@@ -45,9 +45,11 @@ function FeaturesCarousel({ className }: TProps): React.ReactElement {
                       'h-full object-cover aspect-[3] rounded-md opacity-70'
                     )}
                   />
-                  <div className="absolute left-16 bottom-8  py-4 px-8 rounded-md">
-                    <div className="text-white font-bold">{item.text}</div>
-                    <div className="text-white font-bold text-3xl">
+                  <div className="absolute left-2 bottom-2 md:left-16 md:bottom-8 py-4 px-8 rounded-md">
+                    <div className="text-white font-bold text-sm md:text-base">
+                      {item.text}
+                    </div>
+                    <div className="text-white font-bold text-xl md:text-3xl">
                       We got you covered.
                     </div>
                   </div>
