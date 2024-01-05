@@ -20,15 +20,15 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
         Welcome to Horizon
       </Banner>
 
-      <div className="flex items-start mt-4 w-full justify-between mx-auto">
+      <div className="flex items-start mt-4 w-full justify-between mx-auto px-4 md:px-0">
         <div className="flex items-start w-full">
           <a
             href="/"
-            className="hidden sm:flex mt-2 text-midnight text-2xl rounded-md"
+            className="mt-2 text-midnight text-2xl rounded-md"
           >
             Horizon
           </a>
-          <SearchHeader className="w-full mx-2 sm:mx-8" />
+          <SearchHeader className="hidden md:block md:mx-8" />
         </div>
 
         <div className="flex items-center mt-1.5 space-x-2">
@@ -54,6 +54,8 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
           <Menu />
         </div>
       </div>
+
+      <SearchHeader className="block md:hidden mt-4 px-4 md:mx-0" />
       <CategoryNavigation className="-ml-2" />
     </div>
   );
