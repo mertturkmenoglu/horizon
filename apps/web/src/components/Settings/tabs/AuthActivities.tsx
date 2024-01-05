@@ -23,7 +23,7 @@ function Line({
   text: string;
 }): React.ReactElement {
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12 gap-8">
       <div className="font-bold col-span-2">{title}:</div>
       <span className="col-span-10">{text === '' ? '-' : text}</span>
     </div>
@@ -32,8 +32,8 @@ function Line({
 
 function Card({ activity }: { activity: AuthActivity }): React.ReactElement {
   return (
-    <div className="border border-midnight rounded px-4 py-2 text-midnight font-sans lining-nums text-sm flex space-x-8">
-      <div className="flex items-center">
+    <div className="border border-midnight rounded px-4 py-2 text-midnight font-sans lining-nums text-sm flex sm:space-x-8">
+      <div className="hidden sm:flex items-center">
         {activity.success && <CheckIcon className="size-8 text-green-500" />}
         {!activity.success && <XMarkIcon className="size-8 text-red-500" />}
       </div>
