@@ -77,5 +77,11 @@ func SearchAll(term string) []SearchResult {
 		return 0
 	})
 
-	return similars[:10]
+	maxLen := 10
+
+	if len(similars) < maxLen {
+		maxLen = len(similars)
+	}
+
+	return similars[:maxLen]
 }
