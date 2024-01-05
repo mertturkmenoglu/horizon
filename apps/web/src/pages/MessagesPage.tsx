@@ -3,8 +3,11 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 function MessagesPage(): React.ReactElement {
   return (
-    <MainLayout>
-      <div className="w-full h-screen flex flex-col justify-center items-center">
+    <MainLayout
+      showFooter={false}
+      isFullWidth={true}
+    >
+      <div className="w-full mt-32 flex flex-col justify-center items-center">
         <ExclamationTriangleIcon className="size-24 text-red-500" />
         <div className="text-2xl">
           We are working on this page. Come back later.
