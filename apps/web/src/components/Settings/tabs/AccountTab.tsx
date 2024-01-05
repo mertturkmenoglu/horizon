@@ -36,6 +36,29 @@ function AccountTab(): React.ReactElement {
           hint="You cannot change your username."
           disabled
         />
+
+        <div className="mt-8 space-y-2">
+          <a
+            href="/apply-business"
+            className="block text-midnight font-semibold group"
+          >
+            Apply for a{' '}
+            <span className="text-sky-500 group-hover:underline">
+              business account
+            </span>
+            .
+          </a>
+          <a
+            href="/apply-verified"
+            className="block text-midnight font-semibold group"
+          >
+            Apply for a{' '}
+            <span className="text-sky-500 group-hover:underline">
+              verified account
+            </span>
+            .
+          </a>
+        </div>
       </div>
     </div>
   );
