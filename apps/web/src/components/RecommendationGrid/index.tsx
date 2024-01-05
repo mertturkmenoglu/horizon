@@ -7,6 +7,7 @@ export type TRecommendation = {
   image: string;
   title: string;
   username: string;
+  userImage: string;
   price: string;
   rating: {
     score: number;
