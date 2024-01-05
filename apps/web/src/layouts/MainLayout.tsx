@@ -4,15 +4,22 @@ import CategoryFooter from '@/components/CategoryFooter';
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/cn';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  showFooter?: boolean;
+  isFullWidth?: boolean;
 }
 
-function MainLayout({ children }: MainLayoutProps): React.ReactElement {
+function MainLayout({
+  children,
+  showFooter = true,
+  isFullWidth = false,
+}: MainLayoutProps): React.ReactElement {
   const { isAuthenticated, isLoading, user } = useAuth();
   const [showCookieConsent, setShowCookieConsent] = useState(() => {
     const lsValue = window.localStorage.getItem('showCookieConsent');
@@ -24,12 +31,16 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
   }
 
   if (user && !user.emailVerified) {
-    console.log({ user });
     return <Navigate to="/verify-email" />;
   }
 
   return (
-    <main className="flex flex-col max-w-screen-2xl mx-auto">
+    <main
+      className={cn('flex flex-col', {
+        'max-w-screen-2xl mx-auto': !isFullWidth,
+        'w-full px-4': isFullWidth,
+      })}
+    >
       <Appbar />
       <div className="mx-auto w-full">
         {!user.emailVerified && (
@@ -57,8 +68,13 @@ function MainLayout({ children }: MainLayoutProps): React.ReactElement {
             setShowCookieConsent(false);
           }}
         />
-        <CategoryFooter className="mt-32" />
-        <Footer />
+
+        {showFooter && (
+          <>
+            <CategoryFooter className="mt-32" />
+            <Footer />
+          </>
+        )}
       </div>
     </main>
   );
