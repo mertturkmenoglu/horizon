@@ -151,18 +151,30 @@ function CategoryNavigation({
       </nav>
 
       {open && category && (
-        <div className={cn('mt-2 border border-midnight/20 rounded-md p-4')}>
-          <a
-            href={`/services/${encodeURIComponent(category.category)}`}
-            className="text-xl font-bold ml-2"
-          >
-            {category.category}
-          </a>
-          <div className="mt-4 grid grid-cols-3 gap-4">
+        <div
+          className={cn(
+            'mt-2 border border-midnight/20 rounded-md p-4 grid grid-cols-2 lg:grid-cols-3 gap-8'
+          )}
+        >
+          <div className="col-span-2 lg:col-span-2 relative">
+            <img
+              src={category.image}
+              className="h-full lg:h-auto lg:aspect-[4] object-cover rounded"
+              alt=""
+            />
+            <a
+              href={`/services/${encodeURIComponent(category.category)}`}
+              className="text-xl font-bold ml-2 absolute left-8 bottom-2 text-neutral-50"
+            >
+              {category.category}
+            </a>
+          </div>
+
+          <div className="mx-auto lg:mx-0 col-span-2 lg:col-span-1 grid grid-cols-3 gap-4">
             {category.subcategories.map((subcategory) => (
               <a
                 href={`/services?category=${subcategory.id}`}
-                className="hover:bg-neutral-400/10 rounded px-2 py-2 text-sm text-neutral-600"
+                className="hover:bg-neutral-400/10 rounded px-2 py-2 text-sm text-neutral-600 flex justify-center items-center text-center"
               >
                 {subcategory.title}
               </a>
