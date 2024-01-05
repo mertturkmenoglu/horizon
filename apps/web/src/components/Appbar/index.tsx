@@ -24,7 +24,7 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
         <div className="flex items-start w-full">
           <a
             href="/"
-            className="hidden sm:flex mt-2 text-midnight text-2xl"
+            className="hidden sm:flex mt-2 text-midnight text-2xl rounded-md"
           >
             Horizon
           </a>
