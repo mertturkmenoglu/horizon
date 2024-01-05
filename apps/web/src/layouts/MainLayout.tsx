@@ -41,7 +41,7 @@ function MainLayout({
         'w-full px-4': isFullWidth,
       })}
     >
-      <Appbar />
+      <Appbar isFullWidth={isFullWidth} />
       <div className="mx-auto w-full">
         {!user.emailVerified && (
           <Banner

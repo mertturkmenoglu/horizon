@@ -8,9 +8,10 @@ import { EnvelopeIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 interface AppbarProps {
   className?: string;
+  isFullWidth?: boolean;
 }
 
-function Appbar({ className }: AppbarProps): React.ReactElement {
+function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
   return (
     <div className={cn('w-full', className)}>
       <Banner
@@ -56,7 +57,7 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
       </div>
 
       <SearchHeader className="block md:hidden mt-4 px-4 md:mx-0" />
-      <CategoryNavigation className="-ml-2 px-4 2xl:px-0" />
+      {!isFullWidth && <CategoryNavigation className="-ml-2 px-4 2xl:px-0" />}
     </div>
   );
 }
