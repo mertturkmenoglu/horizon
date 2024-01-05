@@ -32,7 +32,9 @@ function CategoryNavigation({
     const scrollLeftAmount = Math.ceil(ref.current.scrollLeft);
     const scrollViewWidth = ref.current.scrollWidth - ref.current.clientWidth;
     setLeftScroll(scrollLeftAmount > 0);
-    setRightScroll(scrollLeftAmount < scrollViewWidth);
+    setRightScroll(
+      ref.current.clientWidth < 1500 && scrollLeftAmount < scrollViewWidth
+    );
   }, [ref, setLeftScroll, setRightScroll]);
 
   useEffect(() => {
