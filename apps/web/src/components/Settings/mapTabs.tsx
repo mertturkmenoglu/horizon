@@ -4,6 +4,7 @@ import {
   ComputerDesktopIcon,
   IdentificationIcon,
   LockClosedIcon,
+  MapPinIcon,
   QuestionMarkCircleIcon,
   ShieldCheckIcon,
   UserIcon,
@@ -17,6 +18,7 @@ import PrivacyTab from './tabs/PrivacyTab';
 import YourDataTab from './tabs/YourDataTab';
 import HelpTab from './tabs/HelpTab';
 import AuthActivities from './tabs/AuthActivities';
+import LocationTab from './tabs/LocationTab';
 
 export const tabs = [
   {
@@ -30,6 +32,12 @@ export const tabs = [
     name: 'Profile',
     component: <ProfileTab />,
     icon: IdentificationIcon,
+  },
+  {
+    id: 'location',
+    name: 'Location',
+    component: <LocationTab />,
+    icon: MapPinIcon,
   },
   {
     id: 'preferences',
