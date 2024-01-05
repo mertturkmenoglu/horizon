@@ -4,7 +4,7 @@ import SearchHeader from '../SearchHeader';
 import { BellIcon } from 'lucide-react';
 import CategoryNavigation from '../CategoryNavigation';
 import { cn } from '@/lib/cn';
-import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 interface AppbarProps {
   className?: string;
@@ -24,25 +24,31 @@ function Appbar({ className }: AppbarProps): React.ReactElement {
         <div className="flex items-start w-full">
           <a
             href="/"
-            className="mt-2 text-midnight text-2xl"
+            className="hidden sm:flex mt-2 text-midnight text-2xl"
           >
             Horizon
           </a>
-          <SearchHeader className="w-full mx-8" />
+          <SearchHeader className="w-full mx-2 sm:mx-8" />
         </div>
 
         <div className="flex items-center mt-1.5 space-x-2">
           <a
+            href="/services/new"
+            className="rounded-full hover:bg-neutral-400/20"
+          >
+            <PlusIcon className="size-10 p-2" />
+          </a>
+          <a
             href="/notifications"
             className="rounded-full hover:bg-neutral-400/20"
           >
-            <BellIcon className="size-10  p-2" />
+            <BellIcon className="size-10 p-2" />
           </a>
           <a
             href="/messages"
             className="rounded-full hover:bg-neutral-400/20"
           >
-            <EnvelopeIcon className="size-10  p-2" />
+            <EnvelopeIcon className="size-10 p-2" />
           </a>
 
           <Menu />
