@@ -363,10 +363,19 @@ func GetAuthActivities(c echo.Context) error {
 		Order("created_at DESC").
 		Limit(params.PageSize).
 		Offset(params.Offset).
-		Find(&activities).
+		Find(&activities)
+
+	if res.Error != nil {
+		return api.NewBadRequestError()
+	}
+
+	res = db.Client.
+		Table("auth_activities").
+		Where("auth_id = ?", token.AuthId).
 		Count(&count)
 
 	if res.Error != nil {
+		fmt.Println(res.Error)
 		return api.NewBadRequestError()
 	}
 
