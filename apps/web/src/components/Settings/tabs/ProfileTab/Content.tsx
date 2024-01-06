@@ -4,6 +4,7 @@ import { ProfileFormInput, useProfileForm } from './useProfileForm';
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
+import ProfileImageForm from './ProfileImageForm';
 
 type Props = {
   user: GetMeResponse;
@@ -18,6 +19,11 @@ function Content({ user }: Props): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">Profile Settings</h2>
+      <hr className="w-full h-[2px] bg-black" />
+
+      <ProfileImageForm className="max-w-lg mt-4" />
+
+      <h2 className="text-2xl font-semibold mt-8">About You</h2>
       <hr className="w-full h-[2px] bg-black" />
 
       <form
