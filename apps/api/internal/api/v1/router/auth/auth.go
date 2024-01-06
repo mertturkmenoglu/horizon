@@ -155,6 +155,21 @@ func ChangePassword(c echo.Context) error {
 		Where("id = ?", dbAuth.Id).
 		Update("password", newHash)
 
+	qauth, quser, err := query.GetAuthAndUserByEmail(auth.Email)
+
+	if err != nil {
+
+		return err
+	}
+
+	tokens, err := createNewTokens(qauth, quser)
+
+	if err != nil {
+		return err
+	}
+
+	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
+	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
 	return c.NoContent(http.StatusOK)
 }
 
