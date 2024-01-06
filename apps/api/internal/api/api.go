@@ -16,6 +16,10 @@ func NewUnauthorizedError(message ...interface{}) *echo.HTTPError {
 	return echo.NewHTTPError(http.StatusUnauthorized, message)
 }
 
+func NewContentTooLargeError(message ...interface{}) *echo.HTTPError {
+	return echo.NewHTTPError(http.StatusRequestEntityTooLarge, message)
+}
+
 func NewTooManyRequestsError(message ...interface{}) *echo.HTTPError {
 	return echo.NewHTTPError(http.StatusTooManyRequests, message)
 }
