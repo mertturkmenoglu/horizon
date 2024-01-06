@@ -20,17 +20,23 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/mileusna/useragent"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
+
+func formattedUserAgentString(c echo.Context) string {
+	ua := useragent.Parse(c.Request().UserAgent())
+	return fmt.Sprintf("%s browser %s OS %s device", ua.Name, ua.OS, ua.Device)
+}
 
 func Login(c echo.Context) error {
 	body := c.Get("body").(dto.LoginRequest)
 
 	auth, authErr := query.GetAuthByEmail(body.Email)
 	user, userErr := query.GetUserByEmail(body.Email)
-	ua := c.Request().UserAgent()
+	ua := formattedUserAgentString(c)
 
 	var hashed = ""
 
