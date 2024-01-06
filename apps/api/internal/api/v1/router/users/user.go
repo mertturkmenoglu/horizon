@@ -1,15 +1,20 @@
 package users
 
 import (
+	"context"
 	"fmt"
+	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/upload"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/minio/minio-go/v7"
+	"github.com/spf13/viper"
 )
 
 func GetMe(c echo.Context) error {
@@ -70,29 +75,66 @@ func UpdateMe(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusNotImplemented)
 }
 
-func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernameResponse {
-	return dto.GetUserByUsernameResponse{
-		Id:       user.Id.String(),
-		Name:     user.Name,
-		Email:    user.Email,
-		Username: user.Username,
-		Gender:   user.Gender,
-		ContactInformation: dto.UserContactInformationDto{
-			Email:   user.ContactInformation.Email,
-			Phone:   user.ContactInformation.Phone,
-			Address: user.ContactInformation.Address,
-			Other:   user.ContactInformation.Other,
-		},
-		Location: dto.UserLocationDto{
-			City:    user.Location.City,
-			Country: user.Location.Country,
-			Lat:     user.Location.Lat,
-			Long:    user.Location.Long,
-		},
-		IsBusinessAccount: user.IsBusinessAccount,
-		IsVerifiedAccount: user.IsVerifiedAccount,
-		Description:       user.Description,
-		AccountStatus:     user.AccountStatus,
-		ProfileImage:      user.ProfileImage,
+func UpdateProfileImage(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
 	}
+
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+
+	defer src.Close()
+
+	var maxFileSize int64 = 5e6
+	contentType := file.Header.Get("Content-Type")
+	contentTypeOk := contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "image/png"
+	sizeOk := file.Size <= maxFileSize
+
+	if !contentTypeOk {
+		return api.NewBadRequestError("Unsupported MIME type")
+	}
+
+	if !sizeOk {
+		return api.NewContentTooLargeError("Max size is 5 MBs")
+	}
+
+	ext := getExtensionFromContentType(contentType)
+	objectName := fmt.Sprintf("%s%s", auth.AuthId, ext)
+
+	ctx := context.Background()
+	bucket := viper.GetString("minio.buckets.profile-images")
+
+	info, err := upload.Client().
+		PutObject(ctx, bucket, objectName, src, -1, minio.PutObjectOptions{
+			ContentType: contentType,
+		})
+
+	db.Client.Model(&models.User{}).
+		Where("id = ?", auth.UserId).
+		Update("profile_image", info.Location)
+
+	return c.JSON(http.StatusOK, h.Response[any]{
+		"data": info.Location,
+	})
+}
+
+func getExtensionFromContentType(contentType string) string {
+	if contentType == "image/jpg" {
+		return ".jpg"
+	}
+
+	if contentType == "image/jpeg" {
+		return ".jpeg"
+	}
+
+	if contentType == "image/png" {
+		return ".png"
+	}
+
+	return ""
 }
