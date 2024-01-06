@@ -19,3 +19,10 @@
   - Select the `IPv4` and `BIN` version.
 - Extract BIN file, rename it as `iplocation.BIN` and move it to `apps/api` (same location as this file) folder.
 - Start the api server via: `air`
+
+## Available Endpoints
+
+- Server listens at `localhost:3000`
+- Inbucket Web UI: `localhost:10000`
+- Asynqmon Web UI: `localhost:8080`
+- Minio Web UI: `localhost:9000`
