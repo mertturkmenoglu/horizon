@@ -128,6 +128,8 @@ func UpdateProfileImage(c echo.Context) error {
 		Where("id = ?", auth.UserId).
 		Update("profile_image", info.Location)
 
+	_ = cache.Del(fmt.Sprintf("user:%s", auth.Username))
+
 	return c.JSON(http.StatusOK, h.Response[any]{
 		"data": info.Location,
 	})
