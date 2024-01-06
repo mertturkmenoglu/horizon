@@ -23,6 +23,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         isAuthenticated: !query.isLoading && !!query.data,
         isLoading: query.isLoading,
         user: query.data ?? null,
+        refetch: query.refetch,
       }}
     >
       {children}
