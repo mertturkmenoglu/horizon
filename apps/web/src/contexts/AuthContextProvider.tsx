@@ -14,6 +14,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       const res = await api<{ data: GetMeResponse }>('/users/me');
       return res.data;
     },
+    refetchOnWindowFocus: false,
   });
 
   return (
