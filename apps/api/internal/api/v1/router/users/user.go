@@ -114,7 +114,7 @@ func UpdateProfileImage(c echo.Context) error {
 	}
 
 	ext := getExtensionFromContentType(contentType)
-	objectName := fmt.Sprintf("%s%s", auth.AuthId, ext)
+	objectName := fmt.Sprintf("%s%s", auth.Username, ext)
 
 	ctx := context.Background()
 	bucket := viper.GetString("minio.buckets.profile-images")
