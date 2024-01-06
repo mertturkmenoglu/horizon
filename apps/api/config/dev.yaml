@@ -26,7 +26,9 @@ minio:
   user: ROOTNAME
   password: CHANGEME123
   endpoint: "localhost:9000"
-  bucket: default-bucket
+  buckets:
+    default: default-bucket
+    profile-images: profile-images-bucket
   location: eu-central-1
 api:
   logger:
