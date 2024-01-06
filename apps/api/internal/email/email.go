@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"log"
 	"net/smtp"
 
 	jwEmail "github.com/jordan-wright/email"
@@ -12,36 +11,54 @@ import (
 )
 
 func SendEmail(to string, subject string, text string) error {
-	cfg := getEmailConfig()
-	e := jwEmail.NewEmail()
-	e.From = fmt.Sprintf("%s <%s>", cfg.FromName, cfg.FromEmail)
-	e.To = []string{to}
-	e.Subject = subject
+	e := initEmail(to, subject)
+	addr := viper.GetString("smtp.addr")
+	auth := getAuth()
+
 	e.Text = []byte(text)
 
-	auth := smtp.PlainAuth("", cfg.SmtpEmail, cfg.SmtpPassword, viper.GetString("smtp.host"))
-
-	err := e.Send(viper.GetString("smtp.addr"), auth)
+	err := e.Send(addr, auth)
 
 	if err != nil {
-		log.Println("Error sending email: ", err)
 		return err
 	}
 
 	return nil
 }
 
-func SendEmailWithTemplate[T Payload](templateConfig WithTemplateConfig[T]) error {
-	cfg := getEmailConfig()
+func SendEmailWithTemplate[T Payload](cfg WithTemplateConfig[T]) error {
+	e := initEmail(cfg.To, cfg.Subject)
+	addr := viper.GetString("smtp.addr")
+	auth := getAuth()
 
-	e := jwEmail.NewEmail()
-	e.From = fmt.Sprintf("%s <%s>", cfg.FromName, cfg.FromEmail)
-	e.To = []string{templateConfig.To}
-
-	t, err := template.ParseFiles(templateConfig.TemplatePath)
+	body, err := getHtmlBody(cfg)
 
 	if err != nil {
 		return err
+	}
+
+	e.HTML = body
+
+	err = e.Send(addr, auth)
+
+	return err
+}
+
+func initEmail(to string, subject string) *jwEmail.Email {
+	from := viper.GetString("email.name")
+	fromEmail := viper.GetString("email.from")
+	e := jwEmail.NewEmail()
+	e.From = fmt.Sprintf("%s <%s>", from, fromEmail)
+	e.To = []string{to}
+	e.Subject = subject
+	return e
+}
+
+func getHtmlBody[T Payload](templateConfig WithTemplateConfig[T]) ([]byte, error) {
+	t, err := template.ParseFiles(templateConfig.TemplatePath)
+
+	if err != nil {
+		return nil, err
 	}
 
 	var body bytes.Buffer
@@ -49,15 +66,16 @@ func SendEmailWithTemplate[T Payload](templateConfig WithTemplateConfig[T]) erro
 	err = t.Execute(&body, templateConfig.Data)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	e.Subject = templateConfig.Subject
-	e.HTML = body.Bytes()
+	return body.Bytes(), nil
+}
 
-	auth := smtp.PlainAuth("", cfg.SmtpEmail, cfg.SmtpPassword, viper.GetString("smtp.host"))
-
-	err = e.Send(viper.GetString("smtp.addr"), auth)
-
-	return err
+func getAuth() smtp.Auth {
+	identity := viper.GetString("smtp.identity")
+	username := viper.GetString("smtp.username")
+	password := viper.GetString("smtp.password")
+	host := viper.GetString("smtp.host")
+	return smtp.PlainAuth(identity, username, password, host)
 }
