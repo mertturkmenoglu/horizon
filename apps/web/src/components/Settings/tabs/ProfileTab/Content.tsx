@@ -1,46 +1,16 @@
-import Button from '@/components/Button';
+import { GetMeResponse } from '@/lib/dto';
+import { SubmitHandler } from 'react-hook-form';
+import { ProfileFormInput, useProfileForm } from './useProfileForm';
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
-import { useAuth } from '@/hooks/useAuth';
-import { GetMeResponse } from '@/lib/dto';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import Button from '@/components/Button';
 
-const schema = z.object({
-  name: z.string().min(1).max(48),
-  gender: z.string().max(32).optional(),
-  email: z.string().email().or(z.string().max(0)),
-  phone: z.string().max(15).optional(),
-  address: z.string().max(64).optional(),
-  other: z.string().max(64).optional(),
-});
+type Props = {
+  user: GetMeResponse;
+};
 
-type ProfileFormInput = z.infer<typeof schema>;
-
-function ProfileTabContainer(): React.ReactElement {
-  const { user } = useAuth();
-
-  if (!user) {
-    return <></>;
-  }
-
-  return <ProfileTab user={user} />;
-}
-
-function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
-  const { register, formState, handleSubmit } = useForm<ProfileFormInput>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: user?.name,
-      address: user?.contactInformation.address,
-      email: user?.contactInformation.email,
-      gender: user?.gender,
-      other: user?.contactInformation.other,
-      phone: user?.contactInformation.phone,
-    },
-  });
-
+function Content({ user }: Props): React.ReactElement {
+  const { register, formState, handleSubmit } = useProfileForm(user);
   const onSubmit: SubmitHandler<ProfileFormInput> = (values) => {
     console.log(values);
   };
@@ -120,4 +90,4 @@ function ProfileTab({ user }: { user: GetMeResponse }): React.ReactElement {
   );
 }
 
-export default ProfileTabContainer;
+export default Content;
