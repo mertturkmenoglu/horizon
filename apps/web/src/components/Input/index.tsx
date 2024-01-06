@@ -14,6 +14,12 @@ export interface InputProps
   inputClassName?: string;
 }
 
+const fileClasses = cn(
+  'file:mr-4 file:px-2 file:py-1 file:rounded-md file:border-0 file:text-sm',
+  'file:font-semibold file:bg-sky-50 file:text-sky-700 hover:bg-sky-100',
+  'bg-transparent hover:cursor-pointer hover:file:cursor-pointer'
+);
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -23,6 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       className,
       hint,
       error,
+      type,
       bordered = false,
       ...props
     },
@@ -51,11 +58,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'border-red-500': error?.type,
               'focus:border-sky-500': !error?.type,
             },
+            {
+              [fileClasses]: type === 'file',
+            },
             'focus:ring focus:ring-sky-500 focus:outline-none',
             'placeholder:text-sm placeholder:font-light',
             'disabled:text-neutral-500 disabled:bg-neutral-400/50 disabled:border-none',
             inputClassName
           )}
+          type={type}
           {...props}
           ref={ref}
         />
