@@ -2,42 +2,40 @@ package middlewares
 
 import (
 	"fmt"
+	"horizon/internal/api"
 	"horizon/internal/cache"
 	"horizon/internal/db/query"
-	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		accessCookie := h.GetCookieFromReq(c, "accessToken")
-		refreshCookie := h.GetCookieFromReq(c, "refreshToken")
+		accessCookie := api.GetCookieFromReq(c, "accessToken")
+		refreshCookie := api.GetCookieFromReq(c, "refreshToken")
 
 		if accessCookie == nil || refreshCookie == nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing token")
+			return api.NewUnauthorizedError("Missing token")
 		}
 
 		claims, err := jsonwebtoken.Decode(accessCookie.Value)
 
 		if err != nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Malformed token")
+			return api.NewUnauthorizedError("Malformed token")
 		}
 
-		auth, authErr := query.GetAuthByEmail(claims.Email)
-		user, userErr := query.GetUserByEmail(claims.Email)
+		auth, user, err := query.GetAuthAndUserByEmail(claims.Email)
 
-		if authErr != nil || auth == nil || userErr != nil || user == nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
+		if err != nil || auth == nil || user == nil {
+			return api.NewUnauthorizedError("Invalid credentials")
 		}
 
 		key := fmt.Sprintf("refreshToken:%s", refreshCookie.Value)
 		cacheValue, err := cache.Get(key)
 
 		if err != nil || cacheValue != user.Email {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials")
+			return api.NewUnauthorizedError("Invalid credentials")
 		}
 
 		payload := jsonwebtoken.Payload{
