@@ -16,6 +16,10 @@ func NewUnauthorizedError(message ...interface{}) *echo.HTTPError {
 	return echo.NewHTTPError(http.StatusUnauthorized, message)
 }
 
+func NewNotFoundError(message ...interface{}) *echo.HTTPError {
+	return echo.NewHTTPError(http.StatusNotFound, message)
+}
+
 func NewContentTooLargeError(message ...interface{}) *echo.HTTPError {
 	return echo.NewHTTPError(http.StatusRequestEntityTooLarge, message)
 }
