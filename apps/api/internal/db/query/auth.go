@@ -1,6 +1,7 @@
 package query
 
 import (
+	"errors"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 )
@@ -47,4 +48,10 @@ func GetAuthByEmail(email string) (*models.Auth, error) {
 	}
 
 	return &auth, nil
+}
+
+func GetAuthAndUserByEmail(email string) (*models.Auth, *models.User, error) {
+	auth, authErr := GetAuthByEmail(email)
+	user, userErr := GetUserByEmail(email)
+	return auth, user, errors.Join(authErr, userErr)
 }
