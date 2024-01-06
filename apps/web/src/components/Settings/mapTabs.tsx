@@ -17,7 +17,7 @@ import NotificationsTab from './tabs/NotificationsTab';
 import PrivacyTab from './tabs/PrivacyTab';
 import YourDataTab from './tabs/YourDataTab';
 import HelpTab from './tabs/HelpTab';
-import AuthActivities from './tabs/AuthActivities';
+import AuthActivities from './tabs/AuthActivitiesTab';
 import LocationTab from './tabs/LocationTab';
 
 export const tabs = [
