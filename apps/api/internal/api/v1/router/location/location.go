@@ -1,4 +1,4 @@
-package router
+package location
 
 import (
 	"horizon/internal/api/v1/dto"

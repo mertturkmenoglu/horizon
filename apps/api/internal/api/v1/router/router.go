@@ -4,6 +4,9 @@ import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router/auth"
+	"horizon/internal/api/v1/router/location"
+	"horizon/internal/api/v1/router/services"
+	"horizon/internal/api/v1/router/users"
 
 	"github.com/labstack/echo/v4"
 )
@@ -26,19 +29,19 @@ func RegisterRoutes(e *echo.Echo) {
 	authRoutes.POST("/token/refresh", auth.GetNewTokens)
 	authRoutes.GET("/activities", auth.GetAuthActivities, middlewares.IsAuth)
 
-	users := api.Group("/users")
+	usersRoutes := api.Group("/users")
 
-	users.GET("/me", GetMe, middlewares.IsAuth)
-	users.GET("/:username", GetUserByUsername, middlewares.IsAuth)
-	users.PATCH("/profile", UpdateMe, middlewares.IsAuth)
+	usersRoutes.GET("/me", users.GetMe, middlewares.IsAuth)
+	usersRoutes.GET("/:username", users.GetUserByUsername, middlewares.IsAuth)
+	usersRoutes.PATCH("/profile", users.UpdateMe, middlewares.IsAuth)
 	// users.PATCH("/profile/location", UpdateLocation, middlewares.IsAuth)
 	// users.PATCH("/profile/contact", UpdateContactInformation, middlewares.IsAuth)
 
-	services := api.Group("/services")
+	servicesRoutes := api.Group("/services")
 
-	services.GET("/", GetServices)
-	services.GET("/categories", GetServiceCategories)
+	servicesRoutes.GET("/", services.GetServices)
+	servicesRoutes.GET("/categories", services.GetServiceCategories)
 
-	location := api.Group("/location")
-	location.GET("/", SearchLocation)
+	locationRoutes := api.Group("/location")
+	locationRoutes.GET("/", location.SearchLocation)
 }
