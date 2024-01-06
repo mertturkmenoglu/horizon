@@ -15,9 +15,13 @@ db:
 env: dev
 email:
   name: Horizon
+  from: noreply@gethorizon.com
 smtp:
-  addr: smtp.gmail.com:587
-  host: smtp.gmail.com
+  identity: ""
+  username: ""
+  password: ""
+  addr: "localhost:2500"
+  host: localhost
 minio:
   user: ROOTNAME
   password: CHANGEME123
