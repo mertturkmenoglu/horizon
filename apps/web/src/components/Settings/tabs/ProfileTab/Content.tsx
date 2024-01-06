@@ -5,6 +5,10 @@ import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import ProfileImageForm from './ProfileImageForm';
+import Select from 'react-select';
+import countryCodes from 'country-codes-list';
+import InputMask from 'react-input-mask';
+import { useMemo, useState } from 'react';
 
 type Props = {
   user: GetMeResponse;
@@ -12,9 +16,21 @@ type Props = {
 
 function Content({ user }: Props): React.ReactElement {
   const { register, formState, handleSubmit } = useProfileForm(user);
+  const [callCode, setCallCode] = useState('');
   const onSubmit: SubmitHandler<ProfileFormInput> = (values) => {
-    console.log(values);
+    console.log(values, callCode);
   };
+
+  const options = useMemo(() => {
+    return countryCodes
+      .all()
+      .map(({ countryCallingCode, countryCode, flag }) => {
+        return {
+          value: countryCallingCode,
+          label: flag + ' ' + countryCode + ' +' + countryCallingCode,
+        };
+      });
+  }, []);
 
   return (
     <div>
@@ -59,13 +75,34 @@ function Content({ user }: Props): React.ReactElement {
           {...register('email')}
         />
 
-        <Input
-          label="Phone Number"
-          placeholder="Phone number"
-          error={formState.errors.phone}
-          className="mt-4"
-          {...register('phone')}
-        />
+        <div className="w-full">
+          <label
+            htmlFor="phone"
+            className="mt-4 block text-sm font-semibold text-midnight"
+          >
+            Phone Number
+          </label>
+
+          <div className="flex flex-nowrap space-x-2 mt-1">
+            <Select
+              options={options}
+              className="w-fit"
+              onChange={(newValue) => {
+                setCallCode(newValue?.value ?? '');
+              }}
+            />
+
+            <InputMask
+              mask="(999) 999 9999"
+              {...register('phone')}
+            >
+              <Input
+                label=""
+                className="flex-1"
+              />
+            </InputMask>
+          </div>
+        </div>
 
         <TextArea
           label="Address"
