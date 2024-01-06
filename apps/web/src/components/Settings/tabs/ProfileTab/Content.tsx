@@ -86,7 +86,7 @@ function Content({ user }: Props): React.ReactElement {
           <div className="flex flex-nowrap space-x-2 mt-1">
             <Select
               options={options}
-              className="w-fit"
+              className="w-36 lining-nums"
               onChange={(newValue) => {
                 setCallCode(newValue?.value ?? '');
               }}
