@@ -29,16 +29,18 @@ func New() {
 
 	minioClient = client
 	ctx := context.Background()
-	bucketName := viper.GetString("minio.bucket")
+	buckets := viper.GetStringMapString("minio.buckets")
 	location := viper.GetString("minio.location")
 
-	if exists, _ := minioClient.BucketExists(ctx, bucketName); !exists {
-		err = minioClient.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{
-			Region: location,
-		})
+	for _, v := range buckets {
+		if exists, _ := minioClient.BucketExists(ctx, v); !exists {
+			err = minioClient.MakeBucket(ctx, v, minio.MakeBucketOptions{
+				Region: location,
+			})
 
-		if err != nil {
-			log.Fatal("Cannot create bucket")
+			if err != nil {
+				log.Fatal("Cannot create bucket", v)
+			}
 		}
 	}
 }
