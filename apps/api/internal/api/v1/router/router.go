@@ -3,6 +3,7 @@ package router
 import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/api/v1/middlewares"
+	"horizon/internal/api/v1/router/auth"
 
 	"github.com/labstack/echo/v4"
 )
@@ -10,20 +11,20 @@ import (
 func RegisterRoutes(e *echo.Echo) {
 	api := e.Group("/api/v1")
 
-	auth := api.Group("/auth")
+	authRoutes := api.Group("/auth")
 
-	auth.POST("/login", Login, middlewares.ParseBody[dto.LoginRequest])
-	auth.POST("/register", Register, middlewares.ParseBody[dto.RegisterRequest])
-	auth.POST("/logout", Logout, middlewares.IsAuth)
-	auth.PUT("/password/change", ChangePassword, middlewares.IsAuth, middlewares.ParseBody[dto.ChangePasswordRequest])
-	auth.POST("/password/reset/send", SendPasswordResetEmail, middlewares.ParseBody[dto.PasswordResetEmailRequest])
-	auth.PUT("/password/reset", ResetPassword, middlewares.ParseBody[dto.PasswordResetRequest])
-	auth.POST("/password/strength", GetPasswordStrength, middlewares.ParseBody[dto.PasswordStrengthRequest])
-	auth.POST("/email/verify/send", SendVerifyEmail, middlewares.ParseBody[dto.VerifyEmailEmailRequest])
-	auth.POST("/email/verify", VerifyEmail, middlewares.ParseBody[dto.VerifyEmailRequest])
-	auth.POST("/onboard/complete", CompleteOnboarding, middlewares.IsAuth)
-	auth.POST("/token/refresh", GetNewTokens)
-	auth.GET("/activities", GetAuthActivities, middlewares.IsAuth)
+	authRoutes.POST("/login", auth.Login, middlewares.ParseBody[dto.LoginRequest])
+	authRoutes.POST("/register", auth.Register, middlewares.ParseBody[dto.RegisterRequest])
+	authRoutes.POST("/logout", auth.Logout, middlewares.IsAuth)
+	authRoutes.PUT("/password/change", auth.ChangePassword, middlewares.IsAuth, middlewares.ParseBody[dto.ChangePasswordRequest])
+	authRoutes.POST("/password/reset/send", auth.SendPasswordResetEmail, middlewares.ParseBody[dto.PasswordResetEmailRequest])
+	authRoutes.PUT("/password/reset", auth.ResetPassword, middlewares.ParseBody[dto.PasswordResetRequest])
+	authRoutes.POST("/password/strength", auth.GetPasswordStrength, middlewares.ParseBody[dto.PasswordStrengthRequest])
+	authRoutes.POST("/email/verify/send", auth.SendVerifyEmail, middlewares.ParseBody[dto.VerifyEmailEmailRequest])
+	authRoutes.POST("/email/verify", auth.VerifyEmail, middlewares.ParseBody[dto.VerifyEmailRequest])
+	authRoutes.POST("/onboard/complete", auth.CompleteOnboarding, middlewares.IsAuth)
+	authRoutes.POST("/token/refresh", auth.GetNewTokens)
+	authRoutes.GET("/activities", auth.GetAuthActivities, middlewares.IsAuth)
 
 	users := api.Group("/users")
 
