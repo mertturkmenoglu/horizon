@@ -5,34 +5,53 @@ import (
 	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
+	"horizon/internal/cache"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/upload"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/viper"
 )
 
-func GetMe(c echo.Context) error {
-	auth := c.Get("auth").(jsonwebtoken.Payload)
+func getUser(username string) (*models.User, error) {
+	key := fmt.Sprintf("user:%s", username)
+	cacheRes, err := cache.GetObj[models.User](key)
+
+	if err == nil {
+		return cacheRes, nil
+	}
 
 	var user *models.User
 
 	res := db.Client.
-		Find(&user, "username = ?", auth.Username).
+		Find(&user, "username = ?", username).
 		Preload("ContactInformation").
 		Preload("Location")
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
-			return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("cannot found user with username: %s", auth.Username))
+			return nil, api.NewNotFoundError("Cannot found user with the username: ", username)
 		}
 
-		return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
+		return nil, api.NewInternalServerError(res.Error.Error())
+	}
+
+	_ = cache.SetObj[models.User](key, *user, time.Minute*2)
+	return user, nil
+}
+
+func GetMe(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	user, err := getUser(auth.Username)
+
+	if err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, h.Response[dto.GetMeResponse]{
@@ -51,19 +70,10 @@ func GetUserByUsername(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "username is required")
 	}
 
-	var user *models.User
+	user, err := getUser(username)
 
-	res := db.Client.
-		Find(&user, "username = ?", username).
-		Preload("ContactInformation").
-		Preload("Location")
-
-	if res.Error != nil {
-		if db.IsNotFoundError(res.Error) {
-			return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("cannot found user with username: %s", username))
-		}
-
-		return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
+	if err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, h.Response[dto.GetUserByUsernameResponse]{
