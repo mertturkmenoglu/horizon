@@ -35,7 +35,7 @@ func Client() *ip2location.DB {
 
 // Returns the formatted location as a string.
 // If there's an error, returns "unknown location" as the default string.
-func GetFormattedLocation(ipaddress string) (string, error) {
+func GetFormattedLocationFromIp(ipaddress string) (string, error) {
 	location, err := Client().Get_all(ipaddress)
 
 	if err != nil {
