@@ -33,7 +33,7 @@ func getUser(username string) (*models.User, error) {
 	res := db.Client.
 		Preload("ContactInformation").
 		Preload("Location").
-		Find(&user, "username = ?", username)
+		First(&user, "username = ?", username)
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
