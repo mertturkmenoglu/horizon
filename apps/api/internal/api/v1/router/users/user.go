@@ -89,8 +89,9 @@ func UpdateMe(c echo.Context) error {
 	res := db.Client.Model(&models.User{}).
 		Where("username = ?", auth.Username).
 		Updates(map[string]interface{}{
-			"name":   body.Name,
-			"gender": body.Gender,
+			"name":        body.Name,
+			"description": body.Description,
+			"gender":      body.Gender,
 		})
 
 	if res.Error != nil {
