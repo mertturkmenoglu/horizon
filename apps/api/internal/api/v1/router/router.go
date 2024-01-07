@@ -33,14 +33,20 @@ func RegisterRoutes(e *echo.Echo) {
 
 	usersRoutes.GET("/me", users.GetMe, middlewares.IsAuth)
 	usersRoutes.GET("/:username", users.GetUserByUsername, middlewares.IsAuth)
-	usersRoutes.PATCH("/profile",
+	usersRoutes.PATCH(
+		"/profile",
 		users.UpdateMe,
 		middlewares.ParseBody[dto.UpdateMeRequest],
 		middlewares.IsAuth,
 	)
 	usersRoutes.PUT("/profile/image", users.UpdateProfileImage, middlewares.IsAuth)
 	usersRoutes.PATCH("/profile/location", users.UpdateMyLocation, middlewares.IsAuth)
-	usersRoutes.PATCH("/profile/contact", users.UpdateMyContactInformation, middlewares.IsAuth)
+	usersRoutes.PATCH(
+		"/profile/contact",
+		users.UpdateMyContactInformation,
+		middlewares.ParseBody[dto.UpdateContactInformationRequest],
+		middlewares.IsAuth,
+	)
 
 	servicesRoutes := api.Group("/services")
 
