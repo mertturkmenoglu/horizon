@@ -2,6 +2,7 @@ import { cn } from '@/lib/cn';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import { Slash } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type TBreadcrumbItem = {
   text: string;
@@ -15,6 +16,7 @@ type Props = React.ComponentPropsWithoutRef<'nav'> & {
 
 const Breadcrumb = React.forwardRef<El, Props>(
   ({ className, items, ...props }, ref) => {
+    const { t } = useTranslation('common');
     return (
       <nav
         ref={ref}
@@ -25,6 +27,7 @@ const Breadcrumb = React.forwardRef<El, Props>(
           <li>
             <a href="/home">
               <HomeIcon className="size-6 text-midnight" />
+              <span className="sr-on">{t('home')}</span>
             </a>
           </li>
 
