@@ -34,6 +34,7 @@ type Location struct {
 	BaseModel
 	UserID  uuid.UUID `json:"userId"`
 	City    string    `json:"city"`
+	Admin   string    `json:"admin"`
 	Country string    `json:"country"`
 	Lat     string    `json:"lat"`
 	Long    string    `json:"long"`
