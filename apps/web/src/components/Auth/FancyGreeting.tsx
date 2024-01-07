@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Logo2 from '../Logo2';
 
 interface FancyGreetingProps {
   className?: string;
@@ -23,9 +24,9 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
       <img
         src="https://images.unsplash.com/photo-1508385082359-f38ae991e8f2?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt=""
-        className="w-[384px] rounded z-50 shadow-2xl"
+        className="hidden lg:flex lg:w-[384px] rounded z-50 shadow-2xl"
       />
-      <div className="flex flex-col items-start text-start w-[384px] z-50">
+      <div className="mt-32 lg:mt-0 flex-col items-start text-start w-[384px] z-50">
         <div className="text-gray-500 text-sm mt-8">Get Started</div>
         <div className="mt-2 font-bold text-2xl">
           People turn their ideas into reality with{' '}
@@ -33,8 +34,10 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
         </div>
       </div>
 
-      <div className="bg-red-500 w-[48rem] h-24 -skew-x-[32deg] -rotate-[24deg] absolute top-[26rem] shadow-2xl shadow-red-500/80"></div>
-      <div className="bg-sky-500 w-[48rem] h-24 -skew-x-[32deg] -rotate-[24deg] absolute top-[38rem] shadow-2xl shadow-sky-500/80"></div>
+      <Logo2
+        className="hidden lg:block lg:absolute lg:top-[30rem] lg:h-20"
+        dist={6}
+      />
     </div>
   );
 }
