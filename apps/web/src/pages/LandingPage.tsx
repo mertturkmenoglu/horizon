@@ -2,12 +2,17 @@ import { useAuth } from '@/hooks/useAuth';
 import LandingHero from '../components/LandingHero';
 import LandingNavbar from '../components/LandingNavbar';
 import LandingBanner from '@/components/LandingBanner';
+import Spinner from '@/components/Spinner';
 
 function LandingPage(): React.ReactElement {
   const { isLoading } = useAuth();
 
   if (isLoading) {
-    return <></>;
+    return (
+      <div className="h-screen w-screen flex justify-center items-center">
+        <Spinner className="size-12" />
+      </div>
+    );
   }
 
   return (
