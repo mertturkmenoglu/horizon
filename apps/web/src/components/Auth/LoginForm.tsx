@@ -7,6 +7,7 @@ import Input from '../Input';
 import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import Button from '../Button';
+import { useTranslation } from 'react-i18next';
 
 interface LoginFormProps {
   className?: string;
@@ -20,6 +21,7 @@ const schema = z.object({
 type LoginFormInput = z.infer<typeof schema>;
 
 function LoginForm({ className }: LoginFormProps): React.ReactElement {
+  const { t } = useTranslation('auth');
   const { register, formState, handleSubmit } = useForm<LoginFormInput>({
     resolver: zodResolver(schema),
   });
@@ -46,9 +48,9 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Email"
+        label={t('email')}
         type="email"
-        placeholder="Email"
+        placeholder={t('email')}
         autoComplete="username"
         error={formState.errors.email}
         {...register('email')}
@@ -56,9 +58,9 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
 
       <Input
         className="mt-4"
-        label="Password"
+        label={t('password')}
         type="password"
-        placeholder="Password"
+        placeholder={t('password')}
         autoComplete="current-password"
         error={formState.errors.password}
         {...register('password')}
@@ -67,22 +69,22 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
       <Redirect
         className="mt-8"
         href="/register"
-        text="If you are new"
-        targetText="Create Account"
+        text={t('if-new')}
+        targetText={t('create-account')}
       />
 
       <Redirect
         className="mt-1"
         href="/reset-password"
-        text="Forgot password?"
-        targetText="Reset"
+        text={t('forgot')}
+        targetText={t('reset')}
       />
 
       <Button
         appearance="red"
         className="mt-8"
       >
-        Login
+        {t('login')}
       </Button>
     </form>
   );
