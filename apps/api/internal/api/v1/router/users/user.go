@@ -1,8 +1,6 @@
 package users
 
 import (
-	"context"
-	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/cache"
@@ -10,42 +8,10 @@ import (
 	"horizon/internal/db/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
-	"horizon/internal/upload"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/minio/minio-go/v7"
-	"github.com/spf13/viper"
-	"gorm.io/gorm/clause"
 )
-
-func getUser(username string) (*models.User, error) {
-	key := fmt.Sprintf("user:%s", username)
-	cacheRes, err := cache.GetObj[models.User](key)
-
-	if err == nil {
-		return cacheRes, nil
-	}
-
-	var user *models.User
-
-	res := db.Client.
-		Preload(clause.Associations).
-		First(&user, "username = ?", username)
-
-	if res.Error != nil {
-		if db.IsNotFoundError(res.Error) {
-			return nil, api.NewNotFoundError("Cannot found user with the username: ", username)
-		}
-
-		return nil, api.NewInternalServerError(res.Error.Error())
-	}
-
-	_ = cache.SetObj[models.User](key, *user, time.Minute*2)
-	return user, nil
-}
 
 func GetMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
@@ -86,24 +52,13 @@ func UpdateMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateMeRequest)
 
-	res := db.Client.Model(&models.User{}).
-		Where("username = ?", auth.Username).
-		Updates(map[string]interface{}{
-			"name":        body.Name,
-			"description": body.Description,
-			"gender":      body.Gender,
-		})
+	err := updateProfile(auth.Username, body)
 
-	if res.Error != nil {
-		if db.IsNotFoundError(res.Error) {
-			return api.NewNotFoundError("Cannot found a user with username: ", auth.Username)
-		}
-
-		return api.NewInternalServerError("Cannot update record")
+	if err != nil {
+		return err
 	}
 
-	_ = cache.Del("user:" + auth.Username)
-
+	cacheDelete(auth.Username)
 	return c.NoContent(http.StatusOK)
 }
 
@@ -122,35 +77,21 @@ func UpdateProfileImage(c echo.Context) error {
 
 	defer src.Close()
 
-	var maxFileSize int64 = 5e6
 	contentType := file.Header.Get("Content-Type")
-	contentTypeOk := contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "image/png"
-	sizeOk := file.Size <= maxFileSize
+	err = checkFile(file)
 
-	if !contentTypeOk {
-		return api.NewBadRequestError("Unsupported MIME type")
+	if err != nil {
+		return err
 	}
 
-	if !sizeOk {
-		return api.NewContentTooLargeError("Max size is 5 MBs")
+	info, err := putFile(auth.Username, contentType, src)
+
+	if err != nil {
+		return api.NewInternalServerError(err.Error())
 	}
 
-	ext := getExtensionFromContentType(contentType)
-	objectName := fmt.Sprintf("%s%s", auth.Username, ext)
-
-	ctx := context.Background()
-	bucket := viper.GetString("minio.buckets.profile-images")
-
-	info, err := upload.Client().
-		PutObject(ctx, bucket, objectName, src, -1, minio.PutObjectOptions{
-			ContentType: contentType,
-		})
-
-	db.Client.Model(&models.User{}).
-		Where("id = ?", auth.UserId).
-		Update("profile_image", info.Location)
-
-	_ = cache.Del(fmt.Sprintf("user:%s", auth.Username))
+	err = updateProfileImage(auth.UserId, info.Location)
+	_ = cache.Del("user:" + auth.Username)
 
 	return c.JSON(http.StatusOK, h.Response[any]{
 		"data": info.Location,
@@ -160,82 +101,45 @@ func UpdateProfileImage(c echo.Context) error {
 func UpdateMyLocation(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateLocationRequest)
+	userId := auth.UserId
 
 	var loc *models.Location
-
-	res := db.Client.First(loc, "user_id = ?", auth.UserId)
+	var err error
+	res := db.Client.First(loc, "user_id = ?", userId)
 
 	if res.Error != nil {
-		id := uuid.MustParse(auth.UserId)
-
-		db.Client.Create(&models.Location{
-			UserID:  id,
-			City:    body.City,
-			Admin:   body.Admin,
-			Country: body.Country,
-			Lat:     body.Lat,
-			Long:    body.Long,
-		})
+		err = createLocation(userId, body)
 	} else {
-		db.Client.Model(&models.Location{}).
-			Where("user_id = ?", auth.UserId).
-			Updates(map[string]interface{}{
-				"city":    body.City,
-				"admin":   body.Admin,
-				"country": body.Country,
-				"lat":     body.Lat,
-				"long":    body.Long,
-			})
+		err = updateLocation(userId, body)
 	}
 
+	if err != nil {
+		return api.NewInternalServerError(err.Error())
+	}
+
+	_ = cache.Del("user:" + auth.Username)
 	return c.NoContent(http.StatusOK)
 }
 
 func UpdateMyContactInformation(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateContactInformationRequest)
+	userId := auth.UserId
 
 	var contact *models.ContactInformation
-
-	res := db.Client.First(&contact, "user_id = ?", auth.UserId)
+	var err error
+	res := db.Client.First(&contact, "user_id = ?", userId)
 
 	if res.Error != nil {
-		id := uuid.MustParse(auth.UserId)
-		db.Client.Create(&models.ContactInformation{
-			UserId:  id,
-			Email:   body.Email,
-			Phone:   body.Phone,
-			Address: body.Address,
-			Other:   body.Other,
-		})
+		err = createContact(userId, body)
 	} else {
-		db.Client.Model(&models.ContactInformation{}).
-			Where("user_id = ?", auth.UserId).
-			Updates(map[string]interface{}{
-				"email":   body.Email,
-				"phone":   body.Phone,
-				"address": body.Address,
-				"other":   body.Other,
-			})
+		err = updateContact(userId, body)
+	}
+
+	if err != nil {
+		return api.NewInternalServerError(err.Error())
 	}
 
 	_ = cache.Del("user:" + auth.Username)
-
 	return c.NoContent(http.StatusOK)
-}
-
-func getExtensionFromContentType(contentType string) string {
-	if contentType == "image/jpg" {
-		return ".jpg"
-	}
-
-	if contentType == "image/jpeg" {
-		return ".jpeg"
-	}
-
-	if contentType == "image/png" {
-		return ".png"
-	}
-
-	return ""
 }
