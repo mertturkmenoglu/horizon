@@ -15,5 +15,9 @@
     "privacy": "Gizlilik",
     "contact-us": "Bize Ulaşın",
     "logout": "Çıkış Yap"
+  },
+  "category": {
+    "scroll-left": "Sola kaydır",
+    "scroll-right": "Sağa kaydır"
   }
 }

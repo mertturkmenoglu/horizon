@@ -5,6 +5,7 @@ import NavItem from './NavItem';
 import NavButton from './NavButton';
 import { useCategoryNavigation } from './useCategoryNavigation';
 import { categoryData } from '@/lib/categorydata';
+import { useTranslation } from 'react-i18next';
 
 export type CategoryNavigationProps = React.ComponentPropsWithoutRef<'nav'>;
 
@@ -16,6 +17,7 @@ function CategoryNavigation({
   className,
   ...props
 }: CategoryNavigationProps): React.ReactElement {
+  const { t } = useTranslation('appbar');
   const scrollAmount = 256;
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -110,6 +112,7 @@ function CategoryNavigation({
             ref={left}
             onClick={() => scroll(-scrollAmount)}
             icon={ChevronLeftIcon}
+            aria-description={t('category.scroll-left')}
           />
         )}
 
@@ -146,6 +149,7 @@ function CategoryNavigation({
             ref={right}
             onClick={() => scroll(scrollAmount)}
             icon={ChevronRightIcon}
+            aria-description={t('category.scroll-right')}
           />
         )}
       </nav>
