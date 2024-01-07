@@ -2,12 +2,14 @@ import clsx from 'clsx';
 import { Facebook, Github, Linkedin, Twitter } from 'lucide-react';
 import NavigationItem from './NavigationItem';
 import SocialIcon from './SocialIcon';
+import { useTranslation } from 'react-i18next';
 
 export interface FooterProps {
   className?: string;
 }
 
 function Footer({ className }: FooterProps): JSX.Element {
+  const { t } = useTranslation('common', { keyPrefix: 'footer' });
   return (
     <footer
       className={clsx('container flex flex-col items-center py-8', className)}
@@ -16,26 +18,26 @@ function Footer({ className }: FooterProps): JSX.Element {
         <ul className="flex space-x-8">
           <NavigationItem
             href="/about"
-            text="About"
+            text={t('about')}
           />
 
           <NavigationItem
             href="/blog"
-            text="Blog"
+            text={t('blog')}
           />
 
           <NavigationItem
             href="/faq"
-            text="FAQ"
+            text={t('faq')}
           />
           <NavigationItem
             href="/contact"
-            text="Contact Us"
+            text={t('contact')}
           />
 
           <NavigationItem
             href="/privacy"
-            text="Privacy"
+            text={t('privacy')}
           />
         </ul>
       </nav>
@@ -44,29 +46,33 @@ function Footer({ className }: FooterProps): JSX.Element {
         <ul className="flex space-x-6">
           <SocialIcon
             href="#"
+            alt={t('facebook')}
             icon={Facebook}
           />
 
           <SocialIcon
             href="#"
+            alt={t('twitter')}
             icon={Twitter}
           />
 
           <SocialIcon
             href="#"
+            alt={t('linkedin')}
             icon={Linkedin}
           />
 
           <SocialIcon
             href="#"
+            alt={t('github')}
             icon={Github}
           />
         </ul>
       </div>
 
       <div className="mt-8">
-        <p className="text-xs text-gray-600 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} Horizon. All rights reserved.
+        <p className="text-xs text-gray-400 lining-nums">
+          &copy; {new Date().getFullYear()} Horizon. {t('copy')}
         </p>
       </div>
     </footer>

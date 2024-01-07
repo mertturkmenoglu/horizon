@@ -13,5 +13,17 @@
     "customize": "Customize",
     "reject": "Reject All",
     "accept": "Accept All"
+  },
+  "footer": {
+    "about": "About",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "privacy": "Privacy",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "copy": "All rights reserved."
   }
 }

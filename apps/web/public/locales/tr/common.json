@@ -13,5 +13,17 @@
     "customize": "Özelleştir",
     "reject": "Reddet",
     "accept": "Kabul Et"
+  },
+  "footer": {
+    "about": "Hakkımızda",
+    "blog": "Blog",
+    "faq": "SSS",
+    "contact": "Bize Ulaşın",
+    "privacy": "Gizlilik",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "copy": "Tüm hakları saklıdır."
   }
 }

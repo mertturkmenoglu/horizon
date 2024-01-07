@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 export interface SocialIconProps {
   href: string;
   icon: LucideIcon;
+  alt: string;
 }
 
-function SocialIcon({ href, icon: Icon }: SocialIconProps): JSX.Element {
+function SocialIcon({ href, icon: Icon, alt }: SocialIconProps): JSX.Element {
   return (
     <li>
       <Link to={href}>
@@ -14,6 +15,7 @@ function SocialIcon({ href, icon: Icon }: SocialIconProps): JSX.Element {
           size={16}
           color="#666"
         />
+        <span className="sr-only">{alt}</span>
       </Link>
     </li>
   );
