@@ -40,7 +40,12 @@ func RegisterRoutes(e *echo.Echo) {
 		middlewares.IsAuth,
 	)
 	usersRoutes.PUT("/profile/image", users.UpdateProfileImage, middlewares.IsAuth)
-	usersRoutes.PATCH("/profile/location", users.UpdateMyLocation, middlewares.IsAuth)
+	usersRoutes.PATCH(
+		"/profile/location",
+		users.UpdateMyLocation,
+		middlewares.ParseBody[dto.UpdateLocationRequest],
+		middlewares.IsAuth,
+	)
 	usersRoutes.PATCH(
 		"/profile/contact",
 		users.UpdateMyContactInformation,
