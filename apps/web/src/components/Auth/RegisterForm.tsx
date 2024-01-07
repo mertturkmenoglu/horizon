@@ -7,6 +7,7 @@ import Input from '../Input';
 import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import Button from '../Button';
+import { useTranslation } from 'react-i18next';
 
 interface RegisterFormProps {
   className?: string;
@@ -23,6 +24,7 @@ const schema = z.object({
 type RegisterFormInput = z.infer<typeof schema>;
 
 function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
+  const { t } = useTranslation('auth');
   const { register, formState, handleSubmit } = useForm<RegisterFormInput>({
     resolver: zodResolver(schema),
   });
@@ -31,7 +33,7 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
     values: RegisterFormInput
   ) => {
     if (values.password !== values.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('passwords-dont-match'));
       return;
     }
 
@@ -46,9 +48,7 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
         },
       });
 
-      toast.success(
-        'Your account is created! You will be redirected to the login page.'
-      );
+      toast.success(t('register-success'));
 
       setTimeout(() => {
         window.location.href = '/login';
@@ -67,9 +67,9 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Name"
+        label={t('name')}
         type="text"
-        placeholder="Name"
+        placeholder={t('name')}
         autoComplete="name"
         error={formState.errors.name}
         {...register('name')}
@@ -77,9 +77,9 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
 
       <Input
         className="mt-4"
-        label="Email"
+        label={t('email')}
         type="email"
-        placeholder="Email"
+        placeholder={t('email')}
         autoComplete="username"
         error={formState.errors.email}
         {...register('email')}
@@ -87,18 +87,18 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
 
       <Input
         className="mt-4"
-        label="Username"
+        label={t('username')}
         type="text"
-        placeholder="Username"
+        placeholder={t('username')}
         error={formState.errors.username}
         {...register('username')}
       />
 
       <Input
         className="mt-4"
-        label="Password"
+        label={t('password')}
         type="password"
-        placeholder="Password"
+        placeholder={t('password')}
         autoComplete="current-password"
         error={formState.errors.password}
         {...register('password')}
@@ -106,9 +106,9 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
 
       <Input
         className="mt-4"
-        label="Confirm Password"
+        label={t('confirm-password')}
         type="password"
-        placeholder="Confirm Password"
+        placeholder={t('confirm-password')}
         autoComplete="current-password"
         error={formState.errors.confirmPassword}
         {...register('confirmPassword')}
@@ -117,22 +117,22 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
       <Redirect
         className="mt-8"
         href="/login"
-        text="If you have an account"
-        targetText="Login"
+        text={t('if-account')}
+        targetText={t('if-account-login')}
       />
 
       <Redirect
         className="mt-1"
         href="/reset-password"
-        text="Forgot password?"
-        targetText="Reset"
+        text={t('forgot')}
+        targetText={t('reset')}
       />
 
       <Button
         appearance="red"
         className="mt-8"
       >
-        Register
+        {t('register')}
       </Button>
     </form>
   );
