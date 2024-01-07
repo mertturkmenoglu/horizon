@@ -36,8 +36,8 @@ type UserLocationDto struct {
 }
 
 type UpdateMeRequest struct {
-	Name   string `json:"name"`
-	Gender string `json:"gender"`
+	Name   string `json:"name" validate:"omitempty,min=1,max=64"`
+	Gender string `json:"gender" validate:"omitempty,min=1,max=64"`
 }
 
 type UpdateContactInformationRequest struct {
