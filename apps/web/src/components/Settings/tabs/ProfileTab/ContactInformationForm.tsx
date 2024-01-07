@@ -180,7 +180,7 @@ function ContactInformationForm({
       />
 
       <TextArea
-        label="About You"
+        label="Other"
         placeholder="Other information you may want your client's to know."
         hint="You can provide any additional information here."
         error={formState.errors.address}

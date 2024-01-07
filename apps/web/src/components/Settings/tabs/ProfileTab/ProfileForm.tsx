@@ -1,5 +1,6 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import TextArea from '@/components/TextArea';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { GetMeResponse } from '@/lib/dto';
@@ -10,6 +11,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   name: z.string().min(1).max(48),
+  description: z.string().max(256).optional(),
   gender: z.string().max(32).optional(),
 });
 
@@ -51,6 +53,15 @@ function ProfileForm({ className, user }: Props): React.ReactElement {
         placeholder="Your name"
         error={formState.errors.name}
         {...register('name')}
+      />
+
+      <TextArea
+        label="About You"
+        placeholder="Tell us more about yourself."
+        hint="Write to express your potential customers. Introduce yourself, list your achievements, or write about the services you provide."
+        error={formState.errors.description}
+        className="mt-4"
+        {...register('description')}
       />
 
       <Input
