@@ -1,12 +1,10 @@
 import Appbar from '@/components/Appbar';
-import Banner from '@/components/Banner';
 import CategoryFooter from '@/components/CategoryFooter';
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
 import Spinner from '@/components/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -47,16 +45,8 @@ function MainLayout({
       })}
     >
       <Appbar isFullWidth={isFullWidth} />
+
       <div className="mx-auto w-full">
-        {!user.emailVerified && (
-          <Banner
-            appearance="warning"
-            className="flex items-center"
-          >
-            <ExclamationTriangleIcon className="size-4" />
-            <div className="ml-2">Please verify your email address</div>
-          </Banner>
-        )}
         <div className="w-full mx-auto px-4 2xl:px-0">{children}</div>
         <CookieConsent
           open={showCookieConsent}
