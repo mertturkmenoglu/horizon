@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/viper"
@@ -30,9 +31,9 @@ func getUser(username string) (*models.User, error) {
 	var user *models.User
 
 	res := db.Client.
-		Find(&user, "username = ?", username).
 		Preload("ContactInformation").
-		Preload("Location")
+		Preload("Location").
+		Find(&user, "username = ?", username)
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
@@ -160,7 +161,36 @@ func UpdateMyLocation(c echo.Context) error {
 }
 
 func UpdateMyContactInformation(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	body := c.Get("body").(dto.UpdateContactInformationRequest)
+
+	var contact *models.ContactInformation
+
+	res := db.Client.First(&contact, "user_id = ?", auth.UserId)
+
+	if res.Error != nil {
+		id := uuid.MustParse(auth.UserId)
+		db.Client.Create(&models.ContactInformation{
+			UserId:  id,
+			Email:   body.Email,
+			Phone:   body.Phone,
+			Address: body.Address,
+			Other:   body.Other,
+		})
+	} else {
+		db.Client.Model(&models.ContactInformation{}).
+			Where("user_id = ?", auth.UserId).
+			Updates(map[string]interface{}{
+				"email":   body.Email,
+				"phone":   body.Phone,
+				"address": body.Address,
+				"other":   body.Other,
+			})
+	}
+
+	_ = cache.Del("user:" + auth.Username)
+
+	return c.NoContent(http.StatusOK)
 }
 
 func getExtensionFromContentType(contentType string) string {
