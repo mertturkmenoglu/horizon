@@ -10,6 +10,7 @@ import {
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const search = async (term: string) => {
   const res = await api<{ data: SearchLocationResponse }>('/location/', {
@@ -20,19 +21,41 @@ const search = async (term: string) => {
   return res.data;
 };
 
-function formatLocation({ city, country }: GetMeResponse['location']): string {
-  return city === '' || country === '' ? '' : `${city}, ${country}`;
+function formatLocation({
+  city,
+  country,
+  admin,
+}: GetMeResponse['location']): string {
+  return city === '' || country === '' ? '' : [city, admin, country].join(', ');
 }
 
 function LocationResult({
   item: {
-    entry: { name, admin, country },
+    entry: { name, admin, country, lat, long },
   },
 }: {
   item: GeoSearchResult;
 }): React.ReactElement {
   return (
     <button
+      onClick={async () => {
+        try {
+          await api('/users/profile/location', {
+            method: 'PATCH',
+            body: {
+              city: name,
+              admin: admin.name,
+              country: country,
+              lat,
+              long,
+            },
+          });
+          window.location.reload();
+          return;
+        } catch (err) {
+          toast.error('Something went wrong');
+        }
+      }}
       className={cn(
         'hover:bg-neutral-400/10 rounded py-1 px-2 block w-full text-left text-neutral-600 text-sm'
       )}
@@ -59,7 +82,7 @@ let timeout: NodeJS.Timeout | null = null;
 
 function LocationTab({ user }: { user: GetMeResponse }): React.ReactElement {
   const [input, setInput] = useState(() => formatLocation(user.location));
-  const [loc, setLoc] = useState(input);
+  const [loc, setLoc] = useState('');
   const query = useSearch(loc);
 
   const showResults =
