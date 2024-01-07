@@ -10,14 +10,14 @@ import { z } from 'zod';
 import TextArea from '@/components/TextArea';
 import Select from 'react-select';
 import countryCodes from 'country-codes-list';
-import InputMask from 'react-input-mask';
 import { useState } from 'react';
+import MaskedInput from 'react-text-mask';
 
 const schema = z.object({
   email: z.string().email().or(z.string().max(0)),
-  phone: z.string().max(15).optional(),
-  address: z.string().max(64).optional(),
-  other: z.string().max(64).optional(),
+  phone: z.string().length(10).or(z.string().max(0)),
+  address: z.string().max(128).optional(),
+  other: z.string().max(256).optional(),
 });
 
 type ContactInformationFormInput = z.infer<typeof schema>;
@@ -35,22 +35,46 @@ const options = countryCodes
     };
   });
 
+function getPhoneWithoutCallingCode(phone: string): string {
+  if (phone === '') {
+    return '';
+  }
+
+  if (phone.length > 10) {
+    return phone.substring(phone.length - 10);
+  }
+
+  return phone;
+}
+
+function getDefaultValue(phone: string) {
+  for (const option of options) {
+    if (phone.startsWith('+' + option.value)) {
+      return option;
+    }
+  }
+
+  return undefined;
+}
+
 function ContactInformationForm({
   className,
   user,
 }: Props): React.ReactElement {
-  const { register, formState, handleSubmit } =
+  const { register, formState, handleSubmit, setValue } =
     useForm<ContactInformationFormInput>({
       resolver: zodResolver(schema),
       defaultValues: {
         address: user.contactInformation.address,
         email: user.contactInformation.email,
         other: user.contactInformation.other,
-        phone: user.contactInformation.phone,
+        phone: getPhoneWithoutCallingCode(user.contactInformation.phone),
       },
     });
 
-  const [callCode, setCallCode] = useState('');
+  const [callCode, setCallCode] = useState(
+    getDefaultValue(user.contactInformation.phone)?.value ?? ''
+  );
 
   const onSubmit: SubmitHandler<ContactInformationFormInput> = async (
     values
@@ -58,7 +82,10 @@ function ContactInformationForm({
     try {
       await api('/users/profile/contact', {
         method: 'PATCH',
-        body: values,
+        body: {
+          ...values,
+          phone: '+' + callCode + values.phone,
+        },
       });
 
       toast.success('Updated successfully');
@@ -92,24 +119,57 @@ function ContactInformationForm({
           <Select
             options={options}
             className="w-36 lining-nums"
+            defaultValue={getDefaultValue(user.contactInformation.phone)}
             onChange={(newValue) => {
               setCallCode(newValue?.value ?? '');
             }}
           />
 
-          <InputMask
-            mask="(999) 999 9999"
+          <MaskedInput
+            mask={[
+              '(',
+              /[1-9]/,
+              /\d/,
+              /\d/,
+              ')',
+              ' ',
+              /\d/,
+              /\d/,
+              /\d/,
+              '-',
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
+            className="form-control flex-1"
+            placeholder="Enter a phone number"
+            guide={false}
             {...register('phone')}
-          >
-            <Input
-              label=""
-              className="flex-1"
-            />
-          </InputMask>
+            onChange={(e) => {
+              const v = e.target.value;
+              const deniedChars = ['(', ')', ' ', '-'];
+              const filtered = v
+                .split('')
+                .filter((x) => !deniedChars.includes(x))
+                .join('');
+              setValue('phone', filtered);
+            }}
+            defaultValue={getPhoneWithoutCallingCode(
+              user.contactInformation.phone
+            )}
+            render={(ref, props) => (
+              <Input
+                label=""
+                className="flex-1"
+                ref={ref as unknown as React.Ref<HTMLInputElement>}
+                error={formState.errors.phone}
+                {...props}
+              />
+            )}
+          />
         </div>
       </div>
-
-      <div>{callCode}</div>
 
       <TextArea
         label="Address"
@@ -120,7 +180,7 @@ function ContactInformationForm({
       />
 
       <TextArea
-        label="Other"
+        label="About You"
         placeholder="Other information you may want your client's to know."
         hint="You can provide any additional information here."
         error={formState.errors.address}
