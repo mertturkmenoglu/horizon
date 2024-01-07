@@ -30,6 +30,7 @@ type UserContactInformationDto struct {
 
 type UserLocationDto struct {
 	City    string `json:"city"`
+	Admin   string `json:"admin"`
 	Country string `json:"country"`
 	Lat     string `json:"lat"`
 	Long    string `json:"long"`
@@ -49,8 +50,9 @@ type UpdateContactInformationRequest struct {
 }
 
 type UpdateLocationRequest struct {
-	City    string `json:"city" validate:"required"`
-	Country string `json:"country" validate:"required"`
-	Lat     string `json:"lat" validate:"required"`
-	Long    string `json:"long" validate:"required"`
+	City    string `json:"city" validate:"required,max=64"`
+	Admin   string `json:"admin" validate:"omitempty,min=1,max=64"`
+	Country string `json:"country" validate:"required,max=64"`
+	Lat     string `json:"lat" validate:"required,max=64"`
+	Long    string `json:"long" validate:"required,max=64"`
 }
