@@ -1,4 +1,9 @@
 {
   "hello": "Merhaba",
-  "home": "Ana Sayfa"
+  "home": "Ana Sayfa",
+  "carousel": {
+    "slide": "Slayt",
+    "prev": "Önceki slayt",
+    "next": "Sonraki slayt"
+  }
 }

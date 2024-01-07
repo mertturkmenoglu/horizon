@@ -1,4 +1,9 @@
 {
   "hello": "Hello",
-  "home": "Home"
+  "home": "Home",
+  "carousel": {
+    "slide": "Slide",
+    "prev": "Previous slide",
+    "next": "Next slide"
+  }
 }
