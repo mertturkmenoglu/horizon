@@ -15,6 +15,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
           actionButton: 'group-[.toast]:bg-midnight group-[.toast]:text-white',
           cancelButton:
             'group-[.toast]:bg-gray-600 group-[.toast]:text-gray-200',
+          success:
+            'group toast group-[.toaster]:bg-green-500 group-[.toaster]:text-white group-[.toaster]:border-green-500 group-[.toaster]:shadow-lg',
           error:
             'group toast group-[.toaster]:bg-red-500 group-[.toaster]:text-white group-[.toaster]:border-red-500 group-[.toaster]:shadow-lg',
         },
