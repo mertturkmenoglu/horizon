@@ -46,11 +46,11 @@ interface UserPageProps {
 function UserPage({ user }: UserPageProps): React.ReactElement {
   return (
     <MainLayout>
-      <div className="mt-8">
-        <div className="mx-auto max-w-3xl">
+      <div className="">
+        <div className="">
           <UserInfoCard
             user={user}
-            className=""
+            className="mt-8"
           />
         </div>
         <div className="p-4 mt-8">
