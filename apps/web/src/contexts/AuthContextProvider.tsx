@@ -15,6 +15,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       return res.data;
     },
     refetchOnWindowFocus: false,
+    retry: false,
   });
 
   return (
