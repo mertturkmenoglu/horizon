@@ -27,7 +27,7 @@ function UserInfoCard({
   const { image, description, location, isThisUser } = useUserInfo(user);
   return (
     <div className={cn('flex flex-col', className)}>
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col space-y-8 md:flex-row md:space-y-0 justify-between items-start">
         <div className="flex space-x-8">
           <img
             src={image}
@@ -36,7 +36,7 @@ function UserInfoCard({
           />
           <div className="">
             <div className="flex items-center space-x-2">
-              <div className="text-midnight font-semibold text-4xl">
+              <div className="text-midnight font-semibold text-4xl w-fit">
                 {user.name}
               </div>
 
@@ -88,7 +88,7 @@ function UserInfoCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-center flex-col">
+        <div className="flex items-center justify-center flex-col mx-auto w-full md:mx-0 md:w-auto">
           <Button
             appearance="midnight"
             className="py-2 flex space-x-2 justify-center items-center min-w-64"
