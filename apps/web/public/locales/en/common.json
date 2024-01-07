@@ -5,5 +5,13 @@
     "slide": "Slide",
     "prev": "Previous slide",
     "next": "Next slide"
+  },
+  "cookie": {
+    "title": "We value your privacy",
+    "body": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking \"Accept All\", you consent to our use of cookies.",
+    "more": "Read More",
+    "customize": "Customize",
+    "reject": "Reject All",
+    "accept": "Accept All"
   }
 }

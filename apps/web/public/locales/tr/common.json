@@ -5,5 +5,13 @@
     "slide": "Slayt",
     "prev": "Önceki slayt",
     "next": "Sonraki slayt"
+  },
+  "cookie": {
+    "title": "Gizliliğinize Önem Veriyoruz",
+    "body": "Gezinme deneyiniminizi geliştirmek, kişiselleştirilmiş içerik sunmak ve veri trafiğini analiz etmek için çerezleri kullanıyoruz. \"Kabul Et\" butonuna tıklayarak, çerez kullanımına onay vermiş sayılırsınız.",
+    "more": "Daha Fazlası",
+    "customize": "Özelleştir",
+    "reject": "Reddet",
+    "accept": "Kabul Et"
   }
 }
