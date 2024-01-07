@@ -7,6 +7,7 @@ import Input from '../Input';
 import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import Button from '../Button';
+import { useTranslation } from 'react-i18next';
 
 interface PasswordResetRequestFormProps {
   className?: string;
@@ -21,6 +22,8 @@ type PasswordResetRequestFormInput = z.infer<typeof schema>;
 function PasswordResetRequestForm({
   className,
 }: PasswordResetRequestFormProps): React.ReactElement {
+  const { t } = useTranslation('auth');
+
   const { register, formState, handleSubmit } =
     useForm<PasswordResetRequestFormInput>({
       resolver: zodResolver(schema),
@@ -34,12 +37,10 @@ function PasswordResetRequestForm({
         method: 'POST',
         body: values,
       });
-      toast.success(
-        'If you have an account with this email address, we will send you an email with instructions to reset your password.'
-      );
+      toast.success(t('password-reset.success'));
     } catch (err) {
       if (isApiError(err)) {
-        toast.error(err.data.message, { className: 'error' });
+        toast.error(err.data.message);
       }
     }
   };
@@ -49,13 +50,11 @@ function PasswordResetRequestForm({
       className={cn('flex flex-col', className)}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div>
-        We will send you an email with instructions to reset your password.
-      </div>
+      <div>{t('password-reset.info')}</div>
       <Input
-        label="Email"
+        label={t('email')}
         type="email"
-        placeholder="Email"
+        placeholder={t('email')}
         autoComplete="username"
         className="mt-8"
         error={formState.errors.email}
@@ -65,22 +64,22 @@ function PasswordResetRequestForm({
       <Redirect
         className="mt-8"
         href="/login"
-        text="If you have an account"
-        targetText="Login"
+        text={t('if-account')}
+        targetText={t('if-account-login')}
       />
 
       <Redirect
         className="mt-1"
         href="/register"
-        text="If you are new"
-        targetText="Create Account"
+        text={t('if-new')}
+        targetText={t('create-account')}
       />
 
       <Button
         appearance="red"
         className="mt-8"
       >
-        Send Email
+        {t('send-email')}
       </Button>
     </form>
   );
