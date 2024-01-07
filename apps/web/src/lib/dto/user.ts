@@ -28,6 +28,7 @@ export type UserContactInformationDto = {
 export type UserLocationDto = {
   city: string;
   country: string;
+  admin: string;
   lat: string;
   long: string;
 };
