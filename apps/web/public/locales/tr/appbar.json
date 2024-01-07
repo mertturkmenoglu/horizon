@@ -1,0 +1,19 @@
+{
+  "welcome": "Horizon'a Hoşgeldiniz",
+  "create-service": "Yeni Hizmet Oluştur",
+  "notifications": "Bildirimler",
+  "messages": "Mesajlar",
+  "menu": {
+    "alt": "Uygulama Menüsü",
+    "my-account": "Hesabım",
+    "my-schedule": "Takvimim",
+    "explore-services": "Keşfet",
+    "overview": "Genel Bakış",
+    "settings": "Ayarlar",
+    "help": "Yardım",
+    "tos": "Hizmet Şartları",
+    "privacy": "Gizlilik",
+    "contact-us": "Bize Ulaşın",
+    "logout": "Çıkış Yap"
+  }
+}

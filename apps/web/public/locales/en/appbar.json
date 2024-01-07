@@ -1,0 +1,19 @@
+{
+  "welcome": "Welcome to Horizon",
+  "create-service": "Create new service",
+  "notifications": "Notifications",
+  "messages": "Messages",
+  "menu": {
+    "alt": "Application Menu",
+    "my-account": "My Account",
+    "my-schedule": "My Schedule",
+    "explore-services": "Explore Services",
+    "overview": "Overview",
+    "settings": "Settings",
+    "help": "Help",
+    "tos": "Terms of Service",
+    "privacy": "Privacy",
+    "contact-us": "Contact Us",
+    "logout": "Logout"
+  }
+}
