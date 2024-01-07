@@ -3,6 +3,7 @@ import Banner from '@/components/Banner';
 import CategoryFooter from '@/components/CategoryFooter';
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
+import Spinner from '@/components/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
@@ -27,7 +28,11 @@ function MainLayout({
   });
 
   if (!isAuthenticated || isLoading || !user) {
-    return <></>;
+    return (
+      <div className="h-screen w-screen flex justify-center items-center">
+        <Spinner className="size-12" />
+      </div>
+    );
   }
 
   if (user && !user.emailVerified) {
