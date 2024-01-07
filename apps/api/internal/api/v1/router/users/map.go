@@ -20,6 +20,7 @@ func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernam
 		},
 		Location: dto.UserLocationDto{
 			City:    user.Location.City,
+			Admin:   user.Location.Admin,
 			Country: user.Location.Country,
 			Lat:     user.Location.Lat,
 			Long:    user.Location.Long,
