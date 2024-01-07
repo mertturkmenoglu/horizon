@@ -43,8 +43,8 @@ type UpdateMeRequest struct {
 type UpdateContactInformationRequest struct {
 	Email   string `json:"email" validate:"omitempty,email"`
 	Phone   string `json:"phone" validate:"omitempty,e164"`
-	Address string `json:"address" validate:"omitempty"`
-	Other   string `json:"other" validate:"omitempty"`
+	Address string `json:"address" validate:"omitempty,max=128"`
+	Other   string `json:"other" validate:"omitempty,max=256"`
 }
 
 type UpdateLocationRequest struct {
