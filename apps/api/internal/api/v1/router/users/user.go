@@ -18,6 +18,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/viper"
+	"gorm.io/gorm/clause"
 )
 
 func getUser(username string) (*models.User, error) {
@@ -31,8 +32,7 @@ func getUser(username string) (*models.User, error) {
 	var user *models.User
 
 	res := db.Client.
-		Preload("ContactInformation").
-		Preload("Location").
+		Preload(clause.Associations).
 		First(&user, "username = ?", username)
 
 	if res.Error != nil {
@@ -158,7 +158,37 @@ func UpdateProfileImage(c echo.Context) error {
 }
 
 func UpdateMyLocation(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	body := c.Get("body").(dto.UpdateLocationRequest)
+
+	var loc *models.Location
+
+	res := db.Client.First(loc, "user_id = ?", auth.UserId)
+
+	if res.Error != nil {
+		id := uuid.MustParse(auth.UserId)
+
+		db.Client.Create(&models.Location{
+			UserID:  id,
+			City:    body.City,
+			Admin:   body.Admin,
+			Country: body.Country,
+			Lat:     body.Lat,
+			Long:    body.Long,
+		})
+	} else {
+		db.Client.Model(&models.Location{}).
+			Where("user_id = ?", auth.UserId).
+			Updates(map[string]interface{}{
+				"city":    body.City,
+				"admin":   body.Admin,
+				"country": body.Country,
+				"lat":     body.Lat,
+				"long":    body.Long,
+			})
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func UpdateMyContactInformation(c echo.Context) error {
