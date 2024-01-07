@@ -82,7 +82,27 @@ func GetUserByUsername(c echo.Context) error {
 }
 
 func UpdateMe(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	body := c.Get("body").(dto.UpdateMeRequest)
+
+	res := db.Client.Model(&models.User{}).
+		Where("username = ?", auth.Username).
+		Updates(map[string]interface{}{
+			"name":   body.Name,
+			"gender": body.Gender,
+		})
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return api.NewNotFoundError("Cannot found a user with username: ", auth.Username)
+		}
+
+		return api.NewInternalServerError("Cannot update record")
+	}
+
+	_ = cache.Del("user:" + auth.Username)
+
+	return c.NoContent(http.StatusOK)
 }
 
 func UpdateProfileImage(c echo.Context) error {
@@ -133,6 +153,14 @@ func UpdateProfileImage(c echo.Context) error {
 	return c.JSON(http.StatusOK, h.Response[any]{
 		"data": info.Location,
 	})
+}
+
+func UpdateMyLocation(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
+}
+
+func UpdateMyContactInformation(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
 }
 
 func getExtensionFromContentType(contentType string) string {
