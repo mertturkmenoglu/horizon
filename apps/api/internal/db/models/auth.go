@@ -13,7 +13,7 @@ type Auth struct {
 
 type AuthActivity struct {
 	Id        uuid.UUID `json:"id" gorm:"type:uuid;default:uuid_generate_v4()"`
-	AuthId    uuid.UUID `json:"-"`
+	AuthId    uuid.UUID `json:"-" gorm:"index;not null"`
 	Auth      Auth      `json:"-"`
 	CreatedAt time.Time `json:"createdAt"`
 	IpAddress string    `json:"ipAddress"`
