@@ -3,7 +3,7 @@ import Banner from '../Banner';
 import { useTranslation } from 'react-i18next';
 
 function LandingBanner(): React.ReactElement {
-  const { t } = useTranslation('landing', { keyPrefix: 'banner ' });
+  const { t } = useTranslation('landing', { keyPrefix: 'banner' });
   return (
     <Banner
       appearance="announcement"
