@@ -1,6 +1,7 @@
 import { cn } from '@/lib/cn';
 import React from 'react';
 import Card from './Card';
+import { useTranslation } from 'react-i18next';
 
 export type TRecommendation = {
   url: string;
@@ -29,6 +30,10 @@ type Props = Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> & {
 
 const RecommendationGrid = React.forwardRef<El, Props>(
   ({ className, title, items, ...props }, ref) => {
+    const { t } = useTranslation('common', {
+      keyPrefix: 'recommendation-grid',
+    });
+
     return (
       <div
         ref={ref}
@@ -41,7 +46,7 @@ const RecommendationGrid = React.forwardRef<El, Props>(
             href={title.href}
             className=" font-bold underline text-midnight flex items-center space-x-2"
           >
-            <div>See all</div>
+            <div>{t('more')}</div>
           </a>
         </div>
 

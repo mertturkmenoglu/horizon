@@ -2,37 +2,42 @@ import { cn } from '@/lib/cn';
 import { TRecommendation } from './index';
 import Rating from './Rating';
 import Chip from './Chip';
+import { useTranslation } from 'react-i18next';
 
 type CardProps = TProps & {
   item: TRecommendation;
 };
 
 function Chips({ item, className }: CardProps): React.ReactElement {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'recommendation-grid',
+  });
+
   return (
     <div className={cn('flex gap-2 flex-wrap justify-end', className)}>
       <Chip
         type="price"
-        text={`From ${item.price}`}
+        text={t('price', { price: item.price })}
       />
 
       {item.isPro && (
         <Chip
           type="pro"
-          text="Pro"
+          text={t('pro')}
         />
       )}
 
       {item.isNew && (
         <Chip
-          text="New"
           type="new"
+          text={t('new')}
         />
       )}
 
       {item.topRated && (
         <Chip
-          text="Top Rated"
           type="topRated"
+          text={t('top-rated')}
         />
       )}
     </div>
@@ -69,15 +74,8 @@ function Card({ className, item }: CardProps): React.ReactElement {
         </div>
 
         <div className="flex justify-between items-center mt-2 h-12 space-x-4">
-          <Rating
-            rating={item.rating}
-            className=""
-          />
-
-          <Chips
-            item={item}
-            className=""
-          />
+          <Rating rating={item.rating} />
+          <Chips item={item} />
         </div>
       </div>
     </a>

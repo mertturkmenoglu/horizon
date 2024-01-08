@@ -33,5 +33,12 @@
       { "text": "View payments" },
       { "text": "Read the docs" }
     ]
+  },
+  "recommendation-grid": {
+    "more": "More",
+    "price": "From {{price}}",
+    "pro": "Pro",
+    "new": "New",
+    "top-rated": "Top Rated"
   }
 }
