@@ -11,3 +11,17 @@ export const en = {
     help: 'Help',
   },
 };
+
+export const tr = {
+  tabs: {
+    account: 'Hesap',
+    profile: 'Profil',
+    location: 'Konum',
+    preferences: 'Tercihler',
+    notifications: 'Bildirimler',
+    privacy: 'Gizlilik',
+    'your-data': 'Verileriniz',
+    'auth-activity': 'Yetki Hareketleri',
+    help: 'Yardım',
+  },
+};

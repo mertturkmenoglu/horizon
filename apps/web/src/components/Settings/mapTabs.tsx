@@ -20,9 +20,10 @@ import HelpTab from './tabs/HelpTab';
 import AuthActivities from './tabs/AuthActivitiesTab';
 import LocationTab from './tabs/LocationTab';
 import i18n from '@/i18n';
-import { en } from './translations';
+import { en, tr } from './translations';
 
 i18n.addResourceBundle('en', 'settings-tabs', en, true, false);
+i18n.addResourceBundle('tr', 'settings-tabs', tr, true, false);
 
 export const tabs = [
   {
