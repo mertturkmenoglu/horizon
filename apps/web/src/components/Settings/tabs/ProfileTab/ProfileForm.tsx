@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn';
 import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -22,6 +23,7 @@ type Props = TProps & {
 };
 
 function ProfileForm({ className, user }: Props): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'profile' });
   const { register, formState, handleSubmit } = useForm<ProfileFormInput>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -37,9 +39,9 @@ function ProfileForm({ className, user }: Props): React.ReactElement {
         body: values,
       });
 
-      toast.success('Updated successfully');
+      toast.success(t('update-ok'));
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error(t('update-err'));
     }
   };
 
@@ -49,27 +51,27 @@ function ProfileForm({ className, user }: Props): React.ReactElement {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Your Name"
-        placeholder="Your name"
+        label={t('name')}
+        placeholder={t('name')}
         error={formState.errors.name}
         {...register('name')}
       />
 
       <TextArea
-        label="About You"
-        placeholder="Tell us more about yourself."
-        hint="Write to express your potential customers. Introduce yourself, list your achievements, or write about the services you provide."
+        label={t('about-you')}
+        placeholder={t('about-you-placeholder')}
+        hint={t('about-you-hint')}
         error={formState.errors.description}
         className="mt-4"
         {...register('description')}
       />
 
       <Input
-        label="Gender"
-        placeholder="Your gender"
+        label={t('gender')}
+        placeholder={t('gender-placeholder')}
         error={formState.errors.gender}
         className="mt-4"
-        hint="Some users may prefer to see your gender depending on the provided service. You are free to use your own words or to leave it empty."
+        hint={t('gender-hint')}
         {...register('gender')}
       />
 
@@ -78,7 +80,7 @@ function ProfileForm({ className, user }: Props): React.ReactElement {
         className="mt-4 max-w-32 self-end"
         type="submit"
       >
-        Update
+        {t('update')}
       </Button>
     </form>
   );

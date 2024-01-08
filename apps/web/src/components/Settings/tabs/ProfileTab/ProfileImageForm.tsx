@@ -5,9 +5,11 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { getUserImage } from '@/lib/img';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 function ProfileImageForm({ className }: TProps): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'profile' });
   const { user, refetch } = useAuth();
 
   const [file, setFile] = useState<File | null>(null);
@@ -44,13 +46,13 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
             body: formData,
           });
 
-          toast.success('Updated successfully');
+          toast.success(t('update-ok'));
 
           if (refetch) {
             await refetch();
           }
         } catch (error) {
-          toast.error('Something went wrong');
+          toast.error(t('update-err'));
         }
       }}
     >
@@ -73,7 +75,7 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
           appearance="sky"
           className="px-4 w-fit self-end"
         >
-          Upload
+          {t('upload')}
         </Button>
       </div>
     </form>

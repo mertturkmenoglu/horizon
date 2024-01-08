@@ -12,6 +12,7 @@ import Select from 'react-select';
 import countryCodes from 'country-codes-list';
 import { useState } from 'react';
 import MaskedInput from 'react-text-mask';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   email: z.string().email().or(z.string().max(0)),
@@ -61,6 +62,7 @@ function ContactInformationForm({
   className,
   user,
 }: Props): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'profile' });
   const { register, formState, handleSubmit, setValue } =
     useForm<ContactInformationFormInput>({
       resolver: zodResolver(schema),
@@ -88,9 +90,9 @@ function ContactInformationForm({
         },
       });
 
-      toast.success('Updated successfully');
+      toast.success(t('update-ok'));
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error(t('update-err'));
     }
   };
 
@@ -100,8 +102,8 @@ function ContactInformationForm({
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Contact Email"
-        placeholder="Contact email"
+        label={t('contact-email')}
+        placeholder={t('contact-email')}
         error={formState.errors.email}
         className="mt-4"
         {...register('email')}
@@ -112,7 +114,7 @@ function ContactInformationForm({
           htmlFor="phone"
           className="mt-4 block text-sm font-semibold text-midnight"
         >
-          Phone Number
+          {t('phone')}
         </label>
 
         <div className="flex flex-nowrap space-x-2 mt-1">
@@ -142,8 +144,8 @@ function ContactInformationForm({
               /\d/,
               /\d/,
             ]}
-            className="form-control flex-1"
-            placeholder="Enter a phone number"
+            className="flex-1"
+            placeholder={t('phone-placeholder')}
             guide={false}
             {...register('phone')}
             onChange={(e) => {
@@ -172,17 +174,17 @@ function ContactInformationForm({
       </div>
 
       <TextArea
-        label="Address"
-        placeholder="Address"
+        label={t('address')}
+        placeholder={t('address')}
         error={formState.errors.address}
         className="mt-4"
         {...register('address')}
       />
 
       <TextArea
-        label="Other"
-        placeholder="Other information you may want your client's to know."
-        hint="You can provide any additional information here."
+        label={t('other')}
+        placeholder={t('other-placeholder')}
+        hint={t('other-hint')}
         error={formState.errors.address}
         className="mt-4"
         {...register('other')}
@@ -193,7 +195,7 @@ function ContactInformationForm({
         className="mt-4 max-w-32 self-end"
         type="submit"
       >
-        Update
+        {t('update')}
       </Button>
     </form>
   );
