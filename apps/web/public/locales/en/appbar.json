@@ -19,5 +19,12 @@
   "category": {
     "scroll-left": "Scroll left",
     "scroll-right": "Scroll right"
+  },
+  "search": {
+    "placeholder": "Search for a service e.g: plumbing, baby sitter, tax consulting, ...",
+    "search": "Search",
+    "recent": "Recent Searches",
+    "clear": "Clear",
+    "no-recent": "You have no recent searches."
   }
 }

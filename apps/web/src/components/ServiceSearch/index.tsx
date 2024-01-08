@@ -7,6 +7,7 @@ import Button from '../Button';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useLastSearches } from './useRecentSearches';
 import RecentSearches from './RecentSearches';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   term: z.string().min(1).max(128),
@@ -15,6 +16,7 @@ const schema = z.object({
 type ServiceSearchInput = z.infer<typeof schema>;
 
 function ServiceSearch({ className }: TProps): React.ReactElement {
+  const { t } = useTranslation('appbar', { keyPrefix: 'search ' });
   const [recentSearches, setRecentSearches] = useLastSearches();
 
   const { register, handleSubmit } = useForm<ServiceSearchInput>({
@@ -38,7 +40,7 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
             'transition-max-width ease-in-out duration-500'
           )}
           inputClassName="rounded-r-none focus:ring-0 focus:border-none py-3 text-base placeholder:text-base"
-          placeholder="Search for a service e.g: plumbing, baby sitter, tax consulting, ..."
+          placeholder={t('placeholder')}
           {...register('term')}
         />
         <Button
@@ -46,6 +48,7 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
           className="px-2 w-14 flex items-center justify-center rounded-l-none hover:bg-opacity-90"
         >
           <MagnifyingGlassIcon className="size-6 text-white" />
+          <span className="sr-only">{t('search')}</span>
         </Button>
       </div>
 
