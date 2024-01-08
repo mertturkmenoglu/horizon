@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
-type Props = TProps & {
+export type Props = TProps & {
   children: React.ReactNode;
   text: string;
 };
@@ -26,6 +26,7 @@ function ActionItem({ className, children, text }: Props): React.ReactElement {
             className={cn(contentStyles, className)}
             sideOffset={5}
             side="bottom"
+            data-testid="tooltip-content"
           >
             {text}
             <Tooltip.Arrow className="fill-white" />
