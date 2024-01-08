@@ -7,6 +7,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
+    lng: localStorage.getItem('lang') ?? 'en',
     defaultNS: 'common',
     debug: import.meta.env.DEV,
     interpolation: {
