@@ -57,7 +57,7 @@ function Menu(): React.ReactElement {
 
         {/* Features */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Features</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('features')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {[0, 1, 2, 3, 4, 5].map((i) => (
@@ -75,7 +75,7 @@ function Menu(): React.ReactElement {
 
         {/* Resources */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('resources-title')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {[0, 1, 2, 3, 4, 5].map((i) => (
