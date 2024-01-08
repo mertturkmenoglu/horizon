@@ -16,5 +16,18 @@
     "new-password": "New Password",
     "confirm-password": "Confirm Password",
     "change-password-button": "Change Password"
+  },
+  "auth-activity": {
+    "title": "Auth Activities",
+    "date": "Date",
+    "ip-address": "IP Address",
+    "user-agent": "User Agent",
+    "location": "Location",
+    "success": "Success",
+    "success-true": "True",
+    "success-false": "False",
+    "activity-id": "Activity ID",
+    "prev": "Previous",
+    "next": "Next"
   }
 }

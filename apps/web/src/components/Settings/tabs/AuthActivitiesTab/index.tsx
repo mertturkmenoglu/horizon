@@ -5,8 +5,10 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import Card from './Card';
 import Pagination from './Pagination';
+import { useTranslation } from 'react-i18next';
 
 function AuthActivitiesTab(): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'auth-activity' });
   const [page, setPage] = useState(1);
 
   const query = useQuery({
@@ -21,7 +23,7 @@ function AuthActivitiesTab(): React.ReactElement {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold">Auth Activities</h2>
+      <h2 className="text-2xl font-semibold">{t('title')}</h2>
       <hr className="w-full h-[2px] bg-black" />
 
       {query.isLoading && (
@@ -29,6 +31,7 @@ function AuthActivitiesTab(): React.ReactElement {
           <Spinner className="size-12" />
         </div>
       )}
+
       {query.data && (
         <div className="mt-4 space-y-4">
           {query.data.data.map((activity) => (
@@ -39,6 +42,7 @@ function AuthActivitiesTab(): React.ReactElement {
           ))}
         </div>
       )}
+
       <Pagination
         page={page}
         setPage={setPage}
