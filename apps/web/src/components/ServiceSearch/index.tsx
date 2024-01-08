@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '../Button';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useLastSearches } from './useRecentSearches';
+import { useRecentSearches } from './useRecentSearches';
 import RecentSearches from './RecentSearches';
 import { useTranslation } from 'react-i18next';
 
@@ -17,14 +17,17 @@ type ServiceSearchInput = z.infer<typeof schema>;
 
 function ServiceSearch({ className }: TProps): React.ReactElement {
   const { t } = useTranslation('appbar', { keyPrefix: 'search' });
-  const [recentSearches, setRecentSearches] = useLastSearches();
+  const [recentSearches, setRecentSearches] = useRecentSearches();
 
   const { register, handleSubmit } = useForm<ServiceSearchInput>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<ServiceSearchInput> = (values) => {
-    console.log(values);
+    setRecentSearches((prev) => {
+      const newArr = [values.term, ...prev];
+      return newArr.slice(0, Math.min(newArr.length, 5));
+    });
   };
 
   return (

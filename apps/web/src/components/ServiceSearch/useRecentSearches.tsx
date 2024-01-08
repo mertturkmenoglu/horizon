@@ -1,40 +1,51 @@
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
+import localforage from 'localforage';
 
 const schema = z.array(z.string().min(1));
 
-export function useLastSearches(): [
+type ReturnRecentSearches = [
   string[],
   React.Dispatch<React.SetStateAction<string[]>>,
-] {
-  const key = 'recentSearches';
-  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-    const ls = localStorage.getItem(key);
+];
 
-    if (ls === null) {
-      localStorage.setItem(key, '[]');
-      return [];
-    }
+const key = 'recentSearches';
 
-    try {
-      const data = JSON.parse(ls);
-      const parseResult = schema.safeParse(data);
-
-      if (parseResult.success) {
-        return parseResult.data;
-      }
-
-      localStorage.setItem(key, '[]');
-      return [];
-    } catch (err) {
-      localStorage.setItem(key, '[]');
-      return [];
-    }
-  });
+export function useRecentSearches(): ReturnRecentSearches {
+  const [state, setState] = useState<string[]>([]);
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(recentSearches));
-  }, [recentSearches]);
+    const fn = async () => {
+      const data = await localforage.getItem<string[]>(key);
 
-  return [recentSearches, setRecentSearches];
+      if (data === null) {
+        await localforage.setItem(key, []);
+        return [];
+      }
+
+      try {
+        const parseResult = schema.safeParse(data);
+
+        if (parseResult.success) {
+          return parseResult.data;
+        }
+
+        localforage.setItem(key, []);
+        return [];
+      } catch (err) {
+        localforage.setItem(key, []);
+        return [];
+      }
+    };
+
+    fn().then((data) => {
+      setState(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    localforage.setItem(key, state);
+  }, [state]);
+
+  return [state, setState];
 }
