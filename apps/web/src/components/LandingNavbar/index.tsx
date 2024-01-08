@@ -4,12 +4,14 @@ import Logo from '../Logo';
 
 import React from 'react';
 import Menu from './Menu';
+import { useTranslation } from 'react-i18next';
 
 interface LandingNavbarProps {
   className?: string;
 }
 
 function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
+  const { t } = useTranslation('landing');
   return (
     <nav
       className={cn(
@@ -34,7 +36,7 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
           href="/demo"
           className="text-neutral-500 text-sm hover:underline"
         >
-          Request a demo
+          {t('request-demo')}
         </a>
 
         <div className="w-[1px] h-8 bg-midnight/50" />
@@ -42,7 +44,7 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
           href="/login"
           className="flex rounded-md bg-midnight text-white px-4 py-2 font-semibold text-sm items-center space-x-2"
         >
-          <span>Get started</span>
+          <span>{t('get-started')}</span>
           <ArrowRightIcon className="size-4 animate-pulse" />
         </a>
       </div>
