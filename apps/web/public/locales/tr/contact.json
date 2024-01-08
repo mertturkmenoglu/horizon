@@ -1,0 +1,15 @@
+{
+  "home": "Ana Sayfa",
+  "contact-us": "Bize Ulaşın",
+  "full-name": "Tam Adınız",
+  "full-name-ph": "Tam adınızı girin",
+  "email": "E-posta Adresiniz",
+  "email-ph": "E-posta adresinizi girin",
+  "phone": "Telefon Numarası",
+  "phone-ph": "Telefon numaranızı girin",
+  "subject": "Konu",
+  "subject-ph": "Mesajınız ne hakkında?",
+  "message": "Mesajınız",
+  "message-ph": "Mesajınızı buraya girin",
+  "send": "Gönder"
+}

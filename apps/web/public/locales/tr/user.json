@@ -1,0 +1,12 @@
+{
+  "services-badge": "{{count}} hizmet",
+  "business-account": "İş Hesabı",
+  "verified-account": "Onaylı Hesap",
+  "view-contact": "İletişim bilgilerini görüntüle",
+  "edit": "Düzenle",
+  "message": "Mesaj At",
+  "block-report": "Engelle veya bildir",
+  "about": "Hakkında",
+  "no-description": "Açıklama yok",
+  "empty-result": "Aaa! Burası bomboş."
+}

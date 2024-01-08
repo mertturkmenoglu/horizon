@@ -19,5 +19,12 @@
   "category": {
     "scroll-left": "Sola kaydır",
     "scroll-right": "Sağa kaydır"
+  },
+  "search": {
+    "placeholder": "Bir servis arayın örn: tesisatçı, bakıcı, muhasebeci, ...",
+    "search": "Ara",
+    "recent": "Son Aramalarınız",
+    "clear": "Temizle",
+    "no-recent": "Yakında yaptığınız arama yok."
   }
 }

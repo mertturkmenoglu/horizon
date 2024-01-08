@@ -25,5 +25,29 @@
     "linkedin": "LinkedIn",
     "github": "GitHub",
     "copy": "Tüm hakları saklıdır."
+  },
+  "quick-actions": {
+    "cards": [
+      { "text": "Özete git" },
+      { "text": "Takvimimi incele" },
+      { "text": "Ödemeleri görüntüle" },
+      { "text": "Dokümantasyonu oku" }
+    ]
+  },
+  "recommendation-grid": {
+    "more": "Daha fazla",
+    "price": "Şu fiyattan {{price}}",
+    "pro": "Pro",
+    "new": "Yeni",
+    "top-rated": "Çok Beğenilen"
+  },
+  "refer-to-friend": {
+    "question": "<span>Horizon</span>'ı beğendin mi?",
+    "cta": "Bizi bir <span>arkadaşına</span> öner."
+  },
+  "not-found": {
+    "not-found": "Bulunamadı",
+    "home": "Ana Sayfaya Git",
+    "help": "Yardım"
   }
 }
