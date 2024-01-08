@@ -45,6 +45,7 @@ export type AuthActivity = {
   userAgent: string;
   location: string;
   success: boolean;
+  activityType: number;
 };
 
 export type GetAuthActivitiesResponse = AuthActivity[];
