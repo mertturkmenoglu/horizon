@@ -1,0 +1,20 @@
+{
+  "account": {
+    "title": "Account Settings",
+    "password-dont-match": "Passwords don't match",
+    "password-change-success": "Password changed successfully!",
+    "account-id": "Account ID",
+    "account-id-hint": "This is your unique account ID.",
+    "email": "Email",
+    "email-hint": "You cannot change your email address.",
+    "username": "Username",
+    "username-hint": "You cannot change your username.",
+    "apply-business": "Apply for a <span>business account</span>.",
+    "apply-verified": "Apply for a <span>verified account</span>.",
+    "change-password-title": "Change Password",
+    "current-password": "Current Password",
+    "new-password": "New Password",
+    "confirm-password": "Confirm Password",
+    "change-password-button": "Change Password"
+  }
+}

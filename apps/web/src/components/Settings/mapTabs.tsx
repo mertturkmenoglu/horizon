@@ -19,59 +19,63 @@ import YourDataTab from './tabs/YourDataTab';
 import HelpTab from './tabs/HelpTab';
 import AuthActivities from './tabs/AuthActivitiesTab';
 import LocationTab from './tabs/LocationTab';
+import i18n from '@/i18n';
+import { en } from './translations';
+
+i18n.addResourceBundle('en', 'settings-tabs', en, true, false);
 
 export const tabs = [
   {
     id: 'account',
-    name: 'Account',
+    name: i18n.t('settings-tabs:tabs.account'),
     component: <AccountTab />,
     icon: UserIcon,
   },
   {
     id: 'profile',
-    name: 'Profile',
+    name: i18n.t('settings-tabs:tabs.profile'),
     component: <ProfileTab />,
     icon: IdentificationIcon,
   },
   {
     id: 'location',
-    name: 'Location',
+    name: i18n.t('settings-tabs:tabs.location'),
     component: <LocationTab />,
     icon: MapPinIcon,
   },
   {
     id: 'preferences',
-    name: 'Preferences',
+    name: i18n.t('settings-tabs:tabs.preferences'),
     component: <PreferencesTab />,
     icon: ComputerDesktopIcon,
   },
   {
     id: 'notifications',
-    name: 'Notifications',
+    name: i18n.t('settings-tabs:tabs.notifications'),
     component: <NotificationsTab />,
     icon: BellIcon,
   },
   {
     id: 'privacy',
-    name: 'Privacy',
+    name: i18n.t('settings-tabs:tabs.privacy'),
     component: <PrivacyTab />,
     icon: LockClosedIcon,
   },
   {
     id: 'your-data',
-    name: 'Your Data',
+    name: i18n.t('settings-tabs:tabs.your-data'),
     component: <YourDataTab />,
     icon: CloudIcon,
   },
   {
     id: 'auth-activity',
-    name: 'Auth Activity',
+    name: i18n.t('settings-tabs:tabs.auth-activity'),
     component: <AuthActivities />,
     icon: ShieldCheckIcon,
   },
   {
     id: 'help',
-    name: 'Help',
+    name: i18n.t('settings-tabs:tabs.help'),
     component: <HelpTab />,
     icon: QuestionMarkCircleIcon,
   },

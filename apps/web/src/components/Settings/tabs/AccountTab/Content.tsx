@@ -4,6 +4,7 @@ import { api, isApiError } from '@/lib/api';
 import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -20,6 +21,7 @@ const schema = z.object({
 type ChangePasswordFormInput = z.infer<typeof schema>;
 
 function Content({ user }: Props): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'account' });
   const { register, formState, handleSubmit } =
     useForm<ChangePasswordFormInput>({
       resolver: zodResolver(schema),
@@ -27,7 +29,7 @@ function Content({ user }: Props): React.ReactElement {
 
   const onSubmit: SubmitHandler<ChangePasswordFormInput> = async (values) => {
     if (values.newPassword !== values.confirmPassword) {
-      toast.error("Passwords don't match");
+      toast.error(t('password-dont-match'));
       return;
     }
 
@@ -39,7 +41,7 @@ function Content({ user }: Props): React.ReactElement {
           newPassword: values.newPassword,
         },
       });
-      toast.success('Password changed successfully!');
+      toast.success(t('password-change-success'));
     } catch (err) {
       if (isApiError(err)) {
         toast.error(err.data.message);
@@ -49,30 +51,30 @@ function Content({ user }: Props): React.ReactElement {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold">Account Settings</h2>
+      <h2 className="text-2xl font-semibold">{t('title')}</h2>
       <hr className="w-full h-[2px] bg-black" />
 
       <div className="max-w-lg mt-4">
         <Input
-          label="Account ID"
+          label={t('account-id')}
           value={user.id}
-          hint="This is your unique account ID."
+          hint={t('account-id-hint')}
           disabled
         />
 
         <Input
-          label="Email"
+          label={t('email')}
           value={user.email}
           className="mt-4"
-          hint="You cannot change your email address."
+          hint={t('email-hint')}
           disabled
         />
 
         <Input
-          label="Username"
+          label={t('username')}
           value={user.username}
           className="mt-4"
-          hint="You cannot change your username."
+          hint={t('username-hint')}
           disabled
         />
 
@@ -81,26 +83,32 @@ function Content({ user }: Props): React.ReactElement {
             href="/apply-business"
             className="block text-midnight font-semibold group"
           >
-            Apply for a{' '}
-            <span className="text-sky-500 group-hover:underline">
-              business account
-            </span>
-            .
+            <Trans
+              i18nKey="apply-business"
+              defaults={t('apply-business')}
+              components={{
+                span: <span className="text-sky-500 group-hover:underline" />,
+              }}
+            />
           </a>
           <a
             href="/apply-verified"
             className="block text-midnight font-semibold group"
           >
-            Apply for a{' '}
-            <span className="text-sky-500 group-hover:underline">
-              verified account
-            </span>
-            .
+            <Trans
+              i18nKey="apply-verified"
+              defaults={t('apply-verified')}
+              components={{
+                span: <span className="text-sky-500 group-hover:underline" />,
+              }}
+            />
           </a>
         </div>
       </div>
 
-      <h2 className="text-2xl font-semibold mt-8">Change Password</h2>
+      <h2 className="text-2xl font-semibold mt-8">
+        {t('change-password-title')}
+      </h2>
       <hr className="w-full h-[2px] bg-black" />
 
       <form
@@ -109,9 +117,9 @@ function Content({ user }: Props): React.ReactElement {
       >
         <Input
           className="mt-4"
-          label="Current Password"
+          label={t('current-password')}
           type="password"
-          placeholder="Current Password"
+          placeholder={t('current-password')}
           autoComplete="current-password"
           error={formState.errors.currentPassword}
           {...register('currentPassword')}
@@ -119,9 +127,9 @@ function Content({ user }: Props): React.ReactElement {
 
         <Input
           className="mt-4"
-          label="New Password"
+          label={t('new-password')}
           type="password"
-          placeholder="New Password"
+          placeholder={t('new-password')}
           autoComplete="new-password"
           error={formState.errors.newPassword}
           {...register('newPassword')}
@@ -129,9 +137,9 @@ function Content({ user }: Props): React.ReactElement {
 
         <Input
           className="mt-4"
-          label="Confirm Password"
+          label={t('confirm-password')}
           type="password"
-          placeholder="Confirm Password"
+          placeholder={t('confirm-password')}
           autoComplete="new-password"
           error={formState.errors.confirmPassword}
           {...register('confirmPassword')}
@@ -142,7 +150,7 @@ function Content({ user }: Props): React.ReactElement {
           className="mt-4 max-w-64 self-end"
           type="submit"
         >
-          Change Password
+          {t('change-password-button')}
         </Button>
       </form>
     </div>
