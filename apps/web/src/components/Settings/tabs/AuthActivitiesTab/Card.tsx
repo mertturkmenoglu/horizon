@@ -3,6 +3,7 @@ import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Line from './Line';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/cn';
+import { useMemo } from 'react';
 
 type Props = {
   activity: AuthActivity;
@@ -10,6 +11,17 @@ type Props = {
 
 function Card({ activity }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'auth-activity' });
+
+  const type = useMemo(() => {
+    const at = activity.activityType;
+    if (at === 0) return t('type-login');
+    if (at === 1) return t('type-logout');
+    if (at === 2) return t('type-password-change');
+    if (at === 3) return t('type-password-reset');
+    if (at === 4) return t('type-email-verification');
+    return t('type-unknown');
+  }, [activity.activityType, t]);
+
   return (
     <div
       className={cn(
@@ -50,6 +62,11 @@ function Card({ activity }: Props): React.ReactElement {
         <Line
           title={t('activity-id')}
           text={activity.id}
+        />
+
+        <Line
+          title={t('activity-type')}
+          text={type}
         />
       </div>
     </div>
