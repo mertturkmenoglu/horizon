@@ -19,8 +19,7 @@ const Card = React.forwardRef<El, Props>(
           'border border-midnight/20 rounded-md px-4 py-3',
           'flex items-center shadow',
           'transition-colors duration-100',
-          'hover:border-purple-500',
-          'focus:outline-none focus:ring focus:ring-sky-500 focus:border-none',
+          'hover:border-purple-500 focus:border-none',
           className
         )}
         ref={ref}
