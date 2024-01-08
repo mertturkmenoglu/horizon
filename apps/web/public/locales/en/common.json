@@ -44,5 +44,10 @@
   "refer-to-friend": {
     "question": "Enjoying <span>Horizon</span>?",
     "cta": "Refer us to a <span>friend</span>."
+  },
+  "not-found": {
+    "not-found": "Not Found",
+    "home": "Go to Home",
+    "help": "Help"
   }
 }

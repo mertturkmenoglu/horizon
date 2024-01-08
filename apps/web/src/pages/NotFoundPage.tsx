@@ -1,14 +1,17 @@
 import Logo from '@/components/Logo';
 import { cn } from '@/lib/cn';
+import { useTranslation } from 'react-i18next';
 
 function NotFoundPage(): React.ReactElement {
+  const { t } = useTranslation('common', { keyPrefix: 'not-found' });
+
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center">
       <div></div>
       <Logo />
       <h2 className="text-4xl font-extrabold">Horizon</h2>
       <div className="text-red-500 text-2xl font-light mt-16">
-        404 - Not Found
+        404 - {t('not-found')}
       </div>
 
       <a
@@ -25,7 +28,7 @@ function NotFoundPage(): React.ReactElement {
           'focus:ring focus:ring-red-500 focus:ring-offset-2 focus:outline-none'
         )}
       >
-        Go to Home
+        {t('home')}
       </a>
       <a
         href="/help"
@@ -41,7 +44,7 @@ function NotFoundPage(): React.ReactElement {
           'focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:outline-none'
         )}
       >
-        Help
+        {t('help')}
       </a>
     </div>
   );

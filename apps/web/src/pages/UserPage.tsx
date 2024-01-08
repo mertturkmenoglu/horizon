@@ -4,6 +4,7 @@ import { api } from '@/lib/api';
 import { GetUserByUsernameResponse } from '@/lib/dto';
 import { SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 
 function UserPageContainer(): React.ReactElement {
@@ -44,6 +45,7 @@ interface UserPageProps {
 }
 
 function UserPage({ user }: UserPageProps): React.ReactElement {
+  const { t } = useTranslation('user');
   return (
     <MainLayout>
       <div className="">
@@ -57,7 +59,7 @@ function UserPage({ user }: UserPageProps): React.ReactElement {
           <div className="flex flex-col justify-center items-center h-full">
             <SquaresPlusIcon className="size-12 text-sky-600" />
             <div className="mt-2 text-2xl text-midnight/70">
-              Oops! It looks like there's nothing here.
+              {t('empty-result')}
             </div>
           </div>
         </div>

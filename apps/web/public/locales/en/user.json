@@ -7,5 +7,6 @@
   "message": "Message",
   "block-report": "Block or report",
   "about": "About",
-  "no-description": "No description"
+  "no-description": "No description",
+  "empty-result": "Oops! It looks like there's nothing here."
 }
