@@ -1,0 +1,151 @@
+{
+  "main-categories": [
+    { "text": "Home Services" },
+    { "text": "Professional Services" },
+    { "text": "Health & Wellness" },
+    { "text": "Education & Tutoring" },
+    { "text": "Events & Entertainment" },
+    { "text": "Automotive" },
+    { "text": "Beauty & Personal Care" },
+    { "text": "Real Estate & Property" },
+    { "text": "Technology" },
+    { "text": "Retail" }
+  ],
+  "subcategories": [
+    {
+      "title": "Plumbing"
+    },
+    {
+      "title": "Electrical work"
+    },
+    {
+      "title": "Painting"
+    },
+    {
+      "title": "Cleaning"
+    },
+    {
+      "title": "Pest control"
+    },
+    {
+      "title": "Landscaping"
+    },
+    {
+      "title": "Legal advice"
+    },
+    {
+      "title": "Accounting and financial services"
+    },
+    {
+      "title": "Consulting"
+    },
+    {
+      "title": "Marketing and advertising"
+    },
+    {
+      "title": "Web development and IT services"
+    },
+    {
+      "title": "Personal training"
+    },
+    {
+      "title": "Nutrition consulting"
+    },
+    {
+      "title": "Massage therapy"
+    },
+    {
+      "title": "Counselling and therapy"
+    },
+    {
+      "title": "Yoga and fitness classes"
+    },
+    {
+      "title": "Academic tutoring"
+    },
+    {
+      "title": "Language lessons"
+    },
+    {
+      "title": "Music and arts lessons"
+    },
+    {
+      "title": "Test Preparation"
+    },
+    {
+      "title": "Online courses and workshops"
+    },
+    {
+      "title": "Event planning and coordination"
+    },
+    {
+      "title": "Photography and Videography"
+    },
+    {
+      "title": "DJ and music services"
+    },
+    {
+      "title": "Catering and food services"
+    },
+    {
+      "title": "Venue booking"
+    },
+    {
+      "title": "Auto repair and maintenance"
+    },
+    {
+      "title": "Car detailing"
+    },
+    {
+      "title": "Towing and roadside assistance"
+    },
+    {
+      "title": "Vehicle inspection"
+    },
+    {
+      "title": "Hairdressing and styling"
+    },
+    {
+      "title": "Makeup and beauty services"
+    },
+    {
+      "title": "Spa and wellness treatments"
+    },
+    {
+      "title": "Nail care"
+    },
+    {
+      "title": "Property management"
+    },
+    {
+      "title": "Home inspection"
+    },
+    {
+      "title": "Real estate brokerage"
+    },
+    {
+      "title": "Rental and leasing services"
+    },
+    {
+      "title": "Software development"
+    },
+    {
+      "title": "Graphic design"
+    },
+    {
+      "title": "Digital Marketing"
+    },
+    {
+      "title": "Social media management"
+    },
+    {
+      "title": "Personal shopping"
+    },
+    {
+      "title": "Online shopping assistance"
+    },
+    {
+      "title": "Product reviews and recommendations"
+    }
+  ]
+}
