@@ -39,7 +39,9 @@ func Login(c echo.Context) error {
 	err = errors.Join(err, hashErr)
 
 	if err != nil || !matched {
-		recordLoginAttempt(false, c.RealIP(), ua, auth.Id)
+		if auth != nil {
+			recordLoginAttempt(false, c.RealIP(), ua, auth.Id)
+		}
 		return api.NewBadRequestError("Invalid email or password")
 	}
 
