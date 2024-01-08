@@ -25,5 +25,13 @@
     "linkedin": "LinkedIn",
     "github": "GitHub",
     "copy": "All rights reserved."
+  },
+  "quick-actions": {
+    "cards": [
+      { "text": "Go to my overview" },
+      { "text": "Review my schedule" },
+      { "text": "View payments" },
+      { "text": "Read the docs" }
+    ]
   }
 }

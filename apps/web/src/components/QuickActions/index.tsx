@@ -7,19 +7,21 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 type El = React.ElementRef<'div'>;
 type Props = React.ComponentPropsWithoutRef<'div'>;
 
-const cards: (TCard & { href: string })[] = [
-  { text: 'Go to my overview', icon: ChartBarIcon, href: '/overview' },
-  { text: 'Review my schedule', icon: CalendarDaysIcon, href: '/schedule' },
-  { text: 'View payments', icon: BanknotesIcon, href: '/payments' },
-  { text: 'Read the docs', icon: AcademicCapIcon, href: '/docs' },
+const cards: (Omit<TCard, 'text'> & { href: string })[] = [
+  { icon: ChartBarIcon, href: '/overview' },
+  { icon: CalendarDaysIcon, href: '/schedule' },
+  { icon: BanknotesIcon, href: '/payments' },
+  { icon: AcademicCapIcon, href: '/docs' },
 ];
 
 const QuickActions = React.forwardRef<El, Props>(
   ({ className, ...props }, ref) => {
+    const { t } = useTranslation('common', { keyPrefix: 'quick-actions' });
     return (
       <div
         ref={ref}
@@ -29,11 +31,11 @@ const QuickActions = React.forwardRef<El, Props>(
         )}
         {...props}
       >
-        {cards.map((card) => (
+        {cards.map((card, i) => (
           <Card
             key={card.href}
             icon={card.icon}
-            text={card.text}
+            text={t(`cards.${i}.text`)}
             href={card.href}
           />
         ))}
