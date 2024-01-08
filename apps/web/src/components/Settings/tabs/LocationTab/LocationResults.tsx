@@ -2,6 +2,7 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { GeoSearchResult } from '@/lib/dto';
 import { formatLocation } from '@/lib/location';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 };
 
 function LocationResult({ item }: Props): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'location' });
   const entry = item.entry;
   const { name, admin, country, lat, long } = entry;
 
@@ -24,9 +26,9 @@ function LocationResult({ item }: Props): React.ReactElement {
           long,
         },
       });
-      toast.success('Updated successfully');
+      toast.success(t('update-ok'));
     } catch (err) {
-      toast.error('Something went wrong');
+      toast.error(t('update-err'));
     }
   };
 

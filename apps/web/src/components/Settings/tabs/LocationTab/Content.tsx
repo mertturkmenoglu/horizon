@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearch } from './useSearch';
 import Input from '@/components/Input';
 import SearchResults from './SearchResults';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   user: GetMeResponse;
@@ -12,6 +13,7 @@ type Props = {
 let timeout: NodeJS.Timeout | null = null;
 
 function Content({ user }: Props): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'location' });
   const [input, setInput] = useState(() => formatLocation(user.location));
   const [loc, setLoc] = useState('');
   const query = useSearch(loc);
@@ -30,18 +32,17 @@ function Content({ user }: Props): React.ReactElement {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold">Location Settings</h2>
+      <h2 className="text-2xl font-semibold">{t('title')}</h2>
       <hr className="w-full h-[2px] bg-black" />
 
       <div className="max-w-lg mt-4">
         <Input
-          label="Location"
+          label={t('location')}
           value={input}
           onChange={(e) => {
             setInput(e.target.value);
           }}
-          hint="Your location determines what we can offer to you."
-          className=""
+          hint={t('location-hint')}
         />
 
         {showResults && <SearchResults items={query.data} />}

@@ -29,5 +29,13 @@
     "activity-id": "Activity ID",
     "prev": "Previous",
     "next": "Next"
+  },
+  "location": {
+    "title": "Location Settings",
+    "location": "Location",
+    "location-hint": "Your location determines what services we can offer to you.",
+    "update-ok": "Updated successfully",
+    "update-err": "Something went wrong",
+    "results": "Results"
   }
 }
