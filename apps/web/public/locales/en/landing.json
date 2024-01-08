@@ -10,7 +10,6 @@
   },
   "request-demo": "Request a demo",
   "get-started": "Get started",
-
   "menu": {
     "getting-started": "Getting started",
     "slogan": "People turn their ideas into reality with Horizon.",
@@ -31,6 +30,7 @@
         "text": "You can create a business account and become a highlighted selection."
       }
     ],
+    "features": "Features",
     "services": [
       {
         "title": "Find Services",
@@ -63,6 +63,7 @@
         "description": "Learn how to connect your other favorite apps with Horizon."
       }
     ],
+    "resources-title": "Resources",
     "resources": [
       {
         "title": "Blog",
