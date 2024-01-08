@@ -34,7 +34,7 @@ function NewServicePage(): React.ReactElement {
         className="mt-8 max-w-5xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h2 className="font-bold text-midnight text-2xl">New Service</h2>
+        <h2 className="text-2xl font-bold text-midnight">New Service</h2>
 
         <Input
           label="Title"

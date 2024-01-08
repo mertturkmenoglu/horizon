@@ -27,7 +27,7 @@ function MainLayout({
 
   if (!isAuthenticated || isLoading || !user) {
     return (
-      <div className="h-screen w-screen flex justify-center items-center">
+      <div className="flex h-screen w-screen items-center justify-center">
         <Spinner className="size-12" />
       </div>
     );
@@ -40,14 +40,14 @@ function MainLayout({
   return (
     <main
       className={cn('flex flex-col', {
-        'max-w-screen-2xl mx-auto': !isFullWidth,
+        'mx-auto max-w-screen-2xl': !isFullWidth,
         'w-full px-4': isFullWidth,
       })}
     >
       <Appbar isFullWidth={isFullWidth} />
 
       <div className="mx-auto w-full">
-        <div className="w-full mx-auto px-4 2xl:px-0">{children}</div>
+        <div className="mx-auto w-full px-4 2xl:px-0">{children}</div>
         <CookieConsent
           open={showCookieConsent}
           onAcceptAll={() => {

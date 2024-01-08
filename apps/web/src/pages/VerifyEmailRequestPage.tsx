@@ -42,12 +42,12 @@ function VerifyEmailPage(): React.ReactElement {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full justify-center items-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center">
       <h1 className="text-2xl">{t('title')}</h1>
       <div className="mt-8 max-w-sm text-center">{t('info')}</div>
 
       <form
-        className={cn('flex flex-col max-w-md w-full mt-8')}
+        className={cn('mt-8 flex w-full max-w-md flex-col')}
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input

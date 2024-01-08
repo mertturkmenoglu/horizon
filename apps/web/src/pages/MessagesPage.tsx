@@ -7,7 +7,7 @@ function MessagesPage(): React.ReactElement {
       showFooter={false}
       isFullWidth={true}
     >
-      <div className="w-full mt-32 flex flex-col justify-center items-center">
+      <div className="mt-32 flex w-full flex-col items-center justify-center">
         <ExclamationTriangleIcon className="size-24 text-red-500" />
         <div className="text-2xl">
           We are working on this page. Come back later.

@@ -55,8 +55,8 @@ function UserPage({ user }: UserPageProps): React.ReactElement {
             className="mt-8"
           />
         </div>
-        <div className="p-4 mt-8">
-          <div className="flex flex-col justify-center items-center h-full">
+        <div className="mt-8 p-4">
+          <div className="flex h-full flex-col items-center justify-center">
             <SquaresPlusIcon className="size-12 text-sky-600" />
             <div className="mt-2 text-2xl text-midnight/70">
               {t('empty-result')}

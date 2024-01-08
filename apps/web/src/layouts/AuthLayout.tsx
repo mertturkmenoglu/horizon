@@ -8,15 +8,15 @@ interface AuthLayoutProps {
 
 function AuthLayout({ children, title }: AuthLayoutProps): React.ReactElement {
   return (
-    <div className="w-full h-screen flex flex-col lg:flex-row">
+    <div className="flex h-screen w-full flex-col lg:flex-row">
       <FancyGreeting className=" lg:w-1/2" />
 
-      <div className="hidden lg:flex w-[1px] bg-gray-500 h-screen" />
+      <div className="hidden h-screen w-[1px] bg-gray-500 lg:flex" />
 
-      <div className="mt-16 lg:mt-0 lg:h-screen lg:w-1/2 flex flex-col justify-center items-start mx-auto lg:px-32 xl:px-64">
+      <div className="mx-auto mt-16 flex flex-col items-start justify-center lg:mt-0 lg:h-screen lg:w-1/2 lg:px-32 xl:px-64">
         <div className="min-w-96">
-          <Logo className="w-16 h-16 -ml-4" />
-          <div className="text-2xl font-extrabold mt-16">
+          <Logo className="-ml-4 h-16 w-16" />
+          <div className="mt-16 text-2xl font-extrabold">
             <div>Hey,</div>
             {title}
           </div>

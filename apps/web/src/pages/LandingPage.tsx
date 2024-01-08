@@ -9,14 +9,14 @@ function LandingPage(): React.ReactElement {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex justify-center items-center">
+      <div className="flex h-screen w-screen items-center justify-center">
         <Spinner className="size-12" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white w-full h-screen flex flex-col items-center">
+    <div className="flex h-screen w-full flex-col items-center bg-white">
       <LandingBanner />
       <LandingNavbar className="mt-2" />
       <LandingHero className="mt-64" />

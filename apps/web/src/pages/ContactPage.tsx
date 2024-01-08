@@ -39,25 +39,25 @@ function ContactPage(): React.ReactElement {
 
   return (
     <main>
-      <div className="max-w-3xl mx-auto mt-16">
+      <div className="mx-auto mt-16 max-w-3xl">
         <a
           href="/"
-          className="flex items-center space-x-4 hover:underline w-min"
+          className="flex w-min items-center space-x-4 hover:underline"
         >
           <ArrowLeftIcon className="size-5" />
           <span>{t('home')}</span>
         </a>
 
-        <div className="w-full flex flex-col items-center mt-8">
+        <div className="mt-8 flex w-full flex-col items-center">
           <Logo />
           <h2 className="text-4xl font-extrabold">Horizon</h2>
-          <div className="text-midnight text-2xl font-light mt-8">
+          <div className="mt-8 text-2xl font-light text-midnight">
             {t('contact-us')}
           </div>
         </div>
 
         <form
-          className={cn('grid grid-cols-2 gap-4 mt-8')}
+          className={cn('mt-8 grid grid-cols-2 gap-4')}
           onSubmit={handleSubmit(onSubmit)}
         >
           <Input
@@ -97,7 +97,7 @@ function ContactPage(): React.ReactElement {
 
           <TextArea
             label={t('message')}
-            className="w-full col-span-2"
+            className="col-span-2 w-full"
             rows={3}
             placeholder={t('message-ph')}
             error={errors.message}
@@ -106,7 +106,7 @@ function ContactPage(): React.ReactElement {
 
           <Button
             appearance="sky"
-            className="col-span-2 mx-auto max-w-48 mt-4"
+            className="col-span-2 mx-auto mt-4 max-w-48"
             type="submit"
           >
             {t('send')}
