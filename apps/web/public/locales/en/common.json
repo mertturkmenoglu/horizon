@@ -40,5 +40,9 @@
     "pro": "Pro",
     "new": "New",
     "top-rated": "Top Rated"
+  },
+  "refer-to-friend": {
+    "question": "Enjoying <span>Horizon</span>?",
+    "cta": "Refer us to a <span>friend</span>."
   }
 }
