@@ -3,5 +3,9 @@
     "new": "New",
     "text": "Introducing Horizon - your new address to find services.",
     "cta": "Sign up now"
+  },
+  "hero": {
+    "text1": "We are so back",
+    "text2": "It's so over"
   }
 }

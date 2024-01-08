@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface LandingHeroProps {
   className?: string;
@@ -8,7 +9,8 @@ interface LandingHeroProps {
 function LandingHero({ className }: LandingHeroProps): React.ReactElement {
   const ref1 = useRef<HTMLDivElement | null>(null);
   const ref2 = useRef<HTMLDivElement | null>(null);
-  const texts = ['We are so back', "It's so over"];
+  const { t } = useTranslation('landing', { keyPrefix: 'hero' });
+  const texts = [t('text1'), t('text2')];
   const morphTime = 1.5;
   const cooldownTime = 2.5;
   let textIndex = texts.length - 1;
@@ -105,14 +107,14 @@ function LandingHero({ className }: LandingHeroProps): React.ReactElement {
         className="absolute m-auto w-full inline-block text-center select-none"
         ref={ref1}
       >
-        We are so back
+        {t('text1')}
       </div>
       <div
         id="text-2"
         className="absolute m-auto w-full inline-block text-center select-none"
         ref={ref2}
       >
-        It's so over
+        {t('text2')}
       </div>
 
       <svg id="filters">
