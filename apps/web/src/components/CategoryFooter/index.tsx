@@ -1,4 +1,4 @@
-import { categoryData } from '@/lib/categorydata';
+import { useCategoryData } from '@/hooks/useCategoryData';
 import { cn } from '@/lib/cn';
 import React from 'react';
 
@@ -7,6 +7,8 @@ type Props = React.ComponentPropsWithoutRef<'nav'>;
 
 const CategoryFooter = React.forwardRef<El, Props>(
   ({ className, ...props }, ref) => {
+    const categoryData = useCategoryData();
+
     return (
       <nav
         ref={ref}

@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import NavItem from './NavItem';
 import NavButton from './NavButton';
 import { useCategoryNavigation } from './useCategoryNavigation';
-import { categoryData } from '@/lib/categorydata';
+import { useCategoryData } from '@/hooks/useCategoryData';
 import { useTranslation } from 'react-i18next';
 
 export type CategoryNavigationProps = React.ComponentPropsWithoutRef<'nav'>;
@@ -21,10 +21,11 @@ function CategoryNavigation({
   const scrollAmount = 256;
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  const categoryData = useCategoryData();
 
   const category = useMemo(() => {
     return categoryData.data.at(index);
-  }, [index]);
+  }, [index, categoryData]);
 
   const {
     ref,
