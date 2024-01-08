@@ -28,7 +28,14 @@
     "success-false": "False",
     "activity-id": "Activity ID",
     "prev": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "activity-type": "Type",
+    "type-login": "Login Attempt",
+    "type-logout": "Logout",
+    "type-password-change": "Password Change Attempt",
+    "type-password-reset": "Password Reset Attempt",
+    "type-email-verification": "Email Verification Attempt",
+    "type-unknown": "Unknown Activity"
   },
   "location": {
     "title": "Location Settings",

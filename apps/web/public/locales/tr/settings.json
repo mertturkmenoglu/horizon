@@ -28,7 +28,14 @@
     "success-false": "Hayır",
     "activity-id": "Aktivite NO",
     "prev": "Önceki",
-    "next": "Sonraki"
+    "next": "Sonraki",
+    "activity-type": "Tip",
+    "type-login": "Giriş Denemesi",
+    "type-logout": "Çıkış",
+    "type-password-change": "Şifre Değiştirme Denemesi",
+    "type-password-reset": "Şifre Sıfırlama Denemesi",
+    "type-email-verification": "E-posta Doğrulama Denemesi",
+    "type-unknown": "Bilinmeyen Aktivite"
   },
   "location": {
     "title": "Konum Ayarları",
