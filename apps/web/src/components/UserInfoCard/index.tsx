@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Button from '../Button';
 import { VerifiedIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface UserInfoCardProps {
   user: GetUserByUsernameResponse;
@@ -24,14 +25,16 @@ function UserInfoCard({
   user,
   className,
 }: UserInfoCardProps): React.ReactElement {
+  const { t } = useTranslation('user');
   const { image, description, location, isThisUser } = useUserInfo(user);
+
   return (
     <div className={cn('flex flex-col', className)}>
       <div className="flex flex-col space-y-8 md:flex-row md:space-y-0 justify-between items-start">
         <div className="flex space-x-8">
           <img
             src={image}
-            alt="Profile Image"
+            alt=""
             className="size-36 rounded-full ring ring-offset-2 ring-sky-500"
           />
           <div className="">
@@ -52,21 +55,21 @@ function UserInfoCard({
             <div className="flex items-center flex-wrap">
               <Info
                 icon={SquaresPlusIcon}
-                text="42 services"
+                text={t('services-badge', { count: 42 })}
                 className="mt-2"
                 show={true}
               />
 
               <Info
                 icon={BuildingStorefrontIcon}
-                text="Business Account"
+                text={t('business-account')}
                 className="mt-2"
                 show={user.isBusinessAccount}
               />
 
               <Info
                 icon={CheckBadgeIcon}
-                text="Verified Account"
+                text={t('verified-account')}
                 className="mt-2"
                 show={user.isVerifiedAccount}
               />
@@ -94,7 +97,7 @@ function UserInfoCard({
             className="py-2 flex space-x-2 justify-center items-center min-w-64"
           >
             <AtSymbolIcon className="size-5 text-white" />
-            <span>View contact info</span>
+            <span>{t('view-contact')}</span>
           </Button>
           {isThisUser && (
             <Button
@@ -105,7 +108,7 @@ function UserInfoCard({
               }}
             >
               <PencilIcon className="size-5 text-white" />
-              <span>Edit</span>
+              <span>{t('edit')}</span>
             </Button>
           )}
 
@@ -116,13 +119,13 @@ function UserInfoCard({
                 className="mt-2 py-2 flex space-x-2 justify-center items-center min-w-64"
               >
                 <EnvelopeIcon className="size-5 text-white" />
-                <span>Message</span>
+                <span>{t('message')}</span>
               </Button>
               <a
                 href={`/report?u=${user.username}`}
                 className="w-full text-sm mt-2 text-center block hover:underline text-midnight/70"
               >
-                Block or report
+                {t('block-report')}
               </a>
             </>
           )}
@@ -130,7 +133,7 @@ function UserInfoCard({
       </div>
 
       <div className="mt-8 max-w-2xl">
-        <h2 className="text-xl font-bold">About</h2>
+        <h2 className="text-xl font-bold">{t('about')}</h2>
         <div className="text-lg font-medium mt-1">{description}</div>
       </div>
     </div>

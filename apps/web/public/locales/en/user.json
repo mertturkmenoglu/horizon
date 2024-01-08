@@ -1,0 +1,11 @@
+{
+  "services-badge": "{{count}} services",
+  "business-account": "Business Account",
+  "verified-account": "Verified Account",
+  "view-contact": "View contact info",
+  "edit": "Edit",
+  "message": "Message",
+  "block-report": "Block or report",
+  "about": "About",
+  "no-description": "No description"
+}
