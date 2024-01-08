@@ -26,18 +26,18 @@ function CookieConsent({
   return (
     <div
       className={cn(
-        'fixed bottom-0 left-0 right-0 px-8 py-4 bg-neutral-100 flex flex-col shadow-lg',
+        'fixed bottom-0 left-0 right-0 flex flex-col bg-neutral-100 px-8 py-4 shadow-lg',
         className
       )}
     >
-      <div className="mt-2 flex justify-between items-center">
+      <div className="mt-2 flex items-center justify-between">
         <div>
-          <div className="font-black text-xl text-midnight">{t('title')}</div>
+          <div className="text-xl font-black text-midnight">{t('title')}</div>
           <div className="max-w-5xl leading-8 text-midnight">
             {t('body')}{' '}
             <a
               href="/cookies"
-              className="text-blue-500 font-semibold underline"
+              className="font-semibold text-blue-500 underline"
             >
               {t('more')}
             </a>

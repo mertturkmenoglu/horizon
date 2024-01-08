@@ -26,7 +26,7 @@ const QuickActions = React.forwardRef<El, Props>(
       <div
         ref={ref}
         className={cn(
-          'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full',
+          'grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4',
           className
         )}
         {...props}

@@ -61,20 +61,20 @@ function FeaturesCarousel({ className }: TProps): React.ReactElement {
       <CarouselContent>
         {items.map((item) => (
           <CarouselItem key={item.image}>
-            <div className="p-1 rounded-md">
+            <div className="rounded-md p-1">
               <div>
-                <div className="flex items-center justify-center relative bg-black/90 rounded-md">
+                <div className="relative flex items-center justify-center rounded-md bg-black/90">
                   <img
                     src={item.image}
                     className={cn(
-                      'h-full object-cover aspect-[3] rounded-md opacity-70'
+                      'aspect-[3] h-full rounded-md object-cover opacity-70'
                     )}
                   />
-                  <div className="absolute left-2 bottom-2 md:left-16 md:bottom-8 py-4 px-8 rounded-md">
-                    <div className="text-white font-bold text-sm md:text-base">
+                  <div className="absolute bottom-2 left-2 rounded-md px-8 py-4 md:bottom-8 md:left-16">
+                    <div className="text-sm font-bold text-white md:text-base">
                       {item.text[i18n.language]}
                     </div>
-                    <div className="text-white font-bold text-xl md:text-3xl">
+                    <div className="text-xl font-bold text-white md:text-3xl">
                       {slogan[i18n.language]}
                     </div>
                   </div>

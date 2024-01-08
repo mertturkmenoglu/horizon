@@ -26,7 +26,7 @@ function Menu(): React.ReactElement {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="rounded-full size-10 inline-flex items-center justify-center text-midnight bg-white outline-none"
+          className="inline-flex size-10 items-center justify-center rounded-full bg-white text-midnight outline-none"
           aria-label="Navigation options"
         >
           <img
@@ -40,10 +40,10 @@ function Menu(): React.ReactElement {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className={cn(
-            'min-w-56 bg-white rounded-md p-2',
+            'min-w-56 rounded-md bg-white p-2',
             'border border-midnight/10',
             'will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade',
-            'data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade',
+            'data-[side=bottom]:animate-slideUpAndFade data-[side=right]:animate-slideLeftAndFade',
             'data-[side=left]:animate-slideRightAndFade'
           )}
           sideOffset={10}
@@ -84,7 +84,7 @@ function Menu(): React.ReactElement {
             text={t('settings')}
           />
 
-          <DropdownMenu.Separator className="h-[1px] bg-midnight my-2" />
+          <DropdownMenu.Separator className="my-2 h-[1px] bg-midnight" />
 
           <DropdownItem
             as="link"
@@ -114,7 +114,7 @@ function Menu(): React.ReactElement {
             text={t('contact-us')}
           />
 
-          <DropdownMenu.Separator className="h-[1px] bg-midnight my-2" />
+          <DropdownMenu.Separator className="my-2 h-[1px] bg-midnight" />
 
           <DropdownItem
             as="button"

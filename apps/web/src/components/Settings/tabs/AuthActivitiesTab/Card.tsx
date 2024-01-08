@@ -13,15 +13,15 @@ function Card({ activity }: Props): React.ReactElement {
   return (
     <div
       className={cn(
-        'border border-midnight rounded px-4 py-2',
-        'text-midnight font-sans lining-nums text-sm flex sm:space-x-8'
+        'rounded border border-midnight px-4 py-2',
+        'flex font-sans text-sm lining-nums text-midnight sm:space-x-8'
       )}
     >
-      <div className="hidden sm:flex items-center">
+      <div className="hidden items-center sm:flex">
         {activity.success && <CheckIcon className="size-8 text-green-500" />}
         {!activity.success && <XMarkIcon className="size-8 text-red-500" />}
       </div>
-      <div className="space-y-2 w-full">
+      <div className="w-full space-y-2">
         <Line
           title={t('date')}
           text={new Date(activity.createdAt).toLocaleString()}

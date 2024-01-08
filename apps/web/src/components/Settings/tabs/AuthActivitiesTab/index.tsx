@@ -24,10 +24,10 @@ function AuthActivitiesTab(): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">{t('title')}</h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <hr className="h-[2px] w-full bg-black" />
 
       {query.isLoading && (
-        <div className="flex justify-center items-center my-16">
+        <div className="my-16 flex items-center justify-center">
           <Spinner className="size-12" />
         </div>
       )}

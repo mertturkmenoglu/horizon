@@ -40,17 +40,17 @@ const RecommendationGrid = React.forwardRef<El, Props>(
         className={cn('', className)}
         {...props}
       >
-        <div className="flex space-x-4 items-baseline">
-          <div className="text-midnight text-2xl">{title.text}</div>
+        <div className="flex items-baseline space-x-4">
+          <div className="text-2xl text-midnight">{title.text}</div>
           <a
             href={title.href}
-            className=" font-bold underline text-midnight flex items-center space-x-2"
+            className=" flex items-center space-x-2 font-bold text-midnight underline"
           >
             <div>{t('more')}</div>
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 mt-4 items-center gap-4">
+        <div className="mt-4 grid grid-cols-1 items-center gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {items.map((item) => (
             <Card
               item={item}

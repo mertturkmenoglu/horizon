@@ -18,7 +18,7 @@ function Redirect({
       <div>{text} / </div>
       <a
         href={href}
-        className="hover:underline hover:decoration-sky-500 hover:decoration-2 ml-2 focus:ring focus:ring-sky-500 focus:outline-none rounded"
+        className="ml-2 rounded hover:underline hover:decoration-sky-500 hover:decoration-2 focus:outline-none focus:ring focus:ring-sky-500"
       >
         {targetText}
       </a>

@@ -8,7 +8,7 @@ function NavItem({ text, className, ...props }: Props): React.ReactElement {
   return (
     <li
       className={cn(
-        'hover:bg-neutral-400/20 py-1 px-2 rounded list-none whitespace-nowrap',
+        'list-none whitespace-nowrap rounded px-2 py-1 hover:bg-neutral-400/20',
         className
       )}
       {...props}

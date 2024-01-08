@@ -52,9 +52,9 @@ function Content({ user }: Props): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">{t('title')}</h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <hr className="h-[2px] w-full bg-black" />
 
-      <div className="max-w-lg mt-4">
+      <div className="mt-4 max-w-lg">
         <Input
           label={t('account-id')}
           value={user.id}
@@ -81,7 +81,7 @@ function Content({ user }: Props): React.ReactElement {
         <div className="mt-8 space-y-2">
           <a
             href="/apply-business"
-            className="block text-midnight font-semibold group"
+            className="group block font-semibold text-midnight"
           >
             <Trans
               i18nKey="apply-business"
@@ -93,7 +93,7 @@ function Content({ user }: Props): React.ReactElement {
           </a>
           <a
             href="/apply-verified"
-            className="block text-midnight font-semibold group"
+            className="group block font-semibold text-midnight"
           >
             <Trans
               i18nKey="apply-verified"
@@ -106,13 +106,13 @@ function Content({ user }: Props): React.ReactElement {
         </div>
       </div>
 
-      <h2 className="text-2xl font-semibold mt-8">
+      <h2 className="mt-8 text-2xl font-semibold">
         {t('change-password-title')}
       </h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <hr className="h-[2px] w-full bg-black" />
 
       <form
-        className="max-w-lg mt-4 flex flex-col"
+        className="mt-4 flex max-w-lg flex-col"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input

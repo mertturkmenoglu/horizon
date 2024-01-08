@@ -18,7 +18,7 @@ const ReferToFriend = React.forwardRef<El, Props>(
         {...props}
       >
         <Doodle className="size-[256px] text-sky-500" />
-        <div className="flex flex-col justify-center ml-32">
+        <div className="ml-32 flex flex-col justify-center">
           <div className="text-4xl font-semibold">
             <Trans
               i18nKey="question"
@@ -29,7 +29,7 @@ const ReferToFriend = React.forwardRef<El, Props>(
 
           <a
             href="/referral"
-            className="mt-2 text-lg hover:underline hover:underline-offset-8 hover:decoration-sky-500 hover:decoration-4 rounded-md"
+            className="mt-2 rounded-md text-lg hover:underline hover:decoration-sky-500 hover:decoration-4 hover:underline-offset-8"
           >
             <Trans
               i18nKey="cta"

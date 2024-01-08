@@ -15,7 +15,7 @@ const NavButton = React.forwardRef<El, Props>(
         className={cn('border-4 border-white', className)}
         {...props}
       >
-        <Icon className="size-10 bg-neutral-400/20 rounded-full p-2 mr-2" />
+        <Icon className="mr-2 size-10 rounded-full bg-neutral-400/20 p-2" />
       </button>
     );
   }

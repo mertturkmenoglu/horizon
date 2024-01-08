@@ -36,7 +36,7 @@ function LocationResult({ item }: Props): React.ReactElement {
     <button
       onClick={updateLocation}
       className={cn(
-        'hover:bg-neutral-400/10 rounded py-1 px-2 block w-full text-left text-neutral-600 text-sm'
+        'block w-full rounded px-2 py-1 text-left text-sm text-neutral-600 hover:bg-neutral-400/10'
       )}
     >
       {formatLocation({ admin: admin.name, country, city: name })}

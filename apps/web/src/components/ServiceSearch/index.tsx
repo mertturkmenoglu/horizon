@@ -35,12 +35,12 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
       className={cn('group rounded', className)}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex items-stretch w-full">
+      <div className="flex w-full items-stretch">
         <Input
           label=""
           className={cn(
-            'max-w-2xl w-full group-focus-within:max-w-full group-focus-within:w-full',
-            'transition-max-width ease-in-out duration-500'
+            'w-full max-w-2xl group-focus-within:w-full group-focus-within:max-w-full',
+            'transition-max-width duration-500 ease-in-out'
           )}
           inputClassName="rounded-r-none focus:ring-0 focus:border-none py-3 text-base placeholder:text-base"
           placeholder={t('placeholder')}
@@ -48,7 +48,7 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
         />
         <Button
           appearance="midnight"
-          className="px-2 w-14 flex items-center justify-center rounded-l-none hover:bg-opacity-90"
+          className="flex w-14 items-center justify-center rounded-l-none px-2 hover:bg-opacity-90"
         >
           <MagnifyingGlassIcon className="size-6 text-white" />
           <span className="sr-only">{t('search')}</span>

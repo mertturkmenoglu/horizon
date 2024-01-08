@@ -104,7 +104,7 @@ function CategoryNavigation({
       }}
     >
       <nav
-        className={cn('flex items-center max-w-fit py-2 mt-4', className)}
+        className={cn('mt-4 flex max-w-fit items-center py-2', className)}
         ref={navRef}
         {...props}
       >
@@ -158,28 +158,28 @@ function CategoryNavigation({
       {open && category && (
         <div
           className={cn(
-            'mt-2 border border-midnight/20 rounded-md p-4 grid grid-cols-2 lg:grid-cols-3 gap-8'
+            'mt-2 grid grid-cols-2 gap-8 rounded-md border border-midnight/20 p-4 lg:grid-cols-3'
           )}
         >
-          <div className="col-span-2 lg:col-span-2 relative">
+          <div className="relative col-span-2 lg:col-span-2">
             <img
               src={category.image}
-              className="h-full lg:h-auto lg:aspect-[4] object-cover rounded"
+              className="h-full rounded object-cover lg:aspect-[4] lg:h-auto"
               alt=""
             />
             <a
               href={`/services/${encodeURIComponent(category.category)}`}
-              className="text-xl font-bold ml-2 absolute left-8 bottom-2 text-neutral-50"
+              className="absolute bottom-2 left-8 ml-2 text-xl font-bold text-neutral-50"
             >
               {category.category}
             </a>
           </div>
 
-          <div className="mx-auto lg:mx-0 col-span-2 lg:col-span-1 grid grid-cols-3 gap-4">
+          <div className="col-span-2 mx-auto grid grid-cols-3 gap-4 lg:col-span-1 lg:mx-0">
             {category.subcategories.map((subcategory) => (
               <a
                 href={`/services?category=${subcategory.id}`}
-                className="hover:bg-neutral-400/10 rounded px-2 py-2 text-sm text-neutral-600 flex justify-center items-center text-center"
+                className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-neutral-600 hover:bg-neutral-400/10"
               >
                 {subcategory.title}
               </a>

@@ -27,7 +27,7 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
   return (
     <form
       className={cn(
-        'flex items-center justify-between gap-4 flex-wrap',
+        'flex flex-wrap items-center justify-between gap-4',
         className
       )}
       onSubmit={async (e) => {
@@ -58,10 +58,10 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
     >
       <img
         src={getUserImage(user.profileImage)}
-        className="size-24 min-w-12 min-h-12 rounded-lg"
+        className="size-24 min-h-12 min-w-12 rounded-lg"
       />
 
-      <div className="space-y-2 flex flex-col">
+      <div className="flex flex-col space-y-2">
         <Input
           label=""
           type="file"
@@ -73,7 +73,7 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
         <Button
           disabled={file === null}
           appearance="sky"
-          className="px-4 w-fit self-end"
+          className="w-fit self-end px-4"
         >
           {t('upload')}
         </Button>

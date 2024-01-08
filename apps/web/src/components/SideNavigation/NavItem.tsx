@@ -22,7 +22,7 @@ const NavItem = React.forwardRef<React.ElementRef<'li'>, NavItemProps>(
         <NavLink
           className={({ isActive }) =>
             cn(
-              'flex items-center py-2 rounded-md px-2',
+              'flex items-center rounded-md px-2 py-2',
               'focus:outline-none focus:ring focus:ring-sky-500',
               {
                 'bg-midnight text-white': isActive,

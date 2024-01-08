@@ -30,16 +30,16 @@ function UserInfoCard({
 
   return (
     <div className={cn('flex flex-col', className)}>
-      <div className="flex flex-col space-y-8 md:flex-row md:space-y-0 justify-between items-start">
+      <div className="flex flex-col items-start justify-between space-y-8 md:flex-row md:space-y-0">
         <div className="flex space-x-8">
           <img
             src={image}
             alt=""
-            className="size-36 rounded-full ring ring-offset-2 ring-sky-500"
+            className="size-36 rounded-full ring ring-sky-500 ring-offset-2"
           />
           <div className="">
             <div className="flex items-center space-x-2">
-              <div className="text-midnight font-semibold text-4xl w-fit">
+              <div className="w-fit text-4xl font-semibold text-midnight">
                 {user.name}
               </div>
 
@@ -48,11 +48,11 @@ function UserInfoCard({
               )}
             </div>
 
-            <div className="text-midnight/70 font-semibold text-lg">
+            <div className="text-lg font-semibold text-midnight/70">
               @{user.username}
             </div>
 
-            <div className="flex items-center flex-wrap">
+            <div className="flex flex-wrap items-center">
               <Info
                 icon={SquaresPlusIcon}
                 text={t('services-badge', { count: 42 })}
@@ -91,10 +91,10 @@ function UserInfoCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-center flex-col mx-auto w-full md:mx-0 md:w-auto">
+        <div className="mx-auto flex w-full flex-col items-center justify-center md:mx-0 md:w-auto">
           <Button
             appearance="midnight"
-            className="py-2 flex space-x-2 justify-center items-center min-w-64"
+            className="flex min-w-64 items-center justify-center space-x-2 py-2"
           >
             <AtSymbolIcon className="size-5 text-white" />
             <span>{t('view-contact')}</span>
@@ -102,7 +102,7 @@ function UserInfoCard({
           {isThisUser && (
             <Button
               appearance="midnight"
-              className="mt-2 py-2 flex space-x-2 justify-center items-center min-w-64"
+              className="mt-2 flex min-w-64 items-center justify-center space-x-2 py-2"
               onClick={() => {
                 window.location.href = '/settings?tab=profile';
               }}
@@ -116,14 +116,14 @@ function UserInfoCard({
             <>
               <Button
                 appearance="midnight"
-                className="mt-2 py-2 flex space-x-2 justify-center items-center min-w-64"
+                className="mt-2 flex min-w-64 items-center justify-center space-x-2 py-2"
               >
                 <EnvelopeIcon className="size-5 text-white" />
                 <span>{t('message')}</span>
               </Button>
               <a
                 href={`/report?u=${user.username}`}
-                className="w-full text-sm mt-2 text-center block hover:underline text-midnight/70"
+                className="mt-2 block w-full text-center text-sm text-midnight/70 hover:underline"
               >
                 {t('block-report')}
               </a>
@@ -134,7 +134,7 @@ function UserInfoCard({
 
       <div className="mt-8 max-w-2xl">
         <h2 className="text-xl font-bold">{t('about')}</h2>
-        <div className="text-lg font-medium mt-1">{description}</div>
+        <div className="mt-1 text-lg font-medium">{description}</div>
       </div>
     </div>
   );

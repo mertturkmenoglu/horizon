@@ -8,10 +8,10 @@ type RatingProps = TProps & {
 
 function Rating({ className, rating }: RatingProps): React.ReactElement {
   return (
-    <div className={cn('lining-nums flex items-center', className)}>
+    <div className={cn('flex items-center lining-nums', className)}>
       <StarIcon className="size-5 text-sky-500" />
       <div className="ml-2 font-semibold">{rating.score}</div>
-      <div className="ml-1 text-neutral-500 text-sm">({rating.reviews})</div>
+      <div className="ml-1 text-sm text-neutral-500">({rating.reviews})</div>
     </div>
   );
 }

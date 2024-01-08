@@ -21,8 +21,8 @@ export function NavItem({
       <a
         href={`/settings?tab=${id}`}
         className={cn(
-          'flex space-x-2 items-center py-2 px-4 rounded-md mx-2',
-          'transition-all ease-out duration-100',
+          'mx-2 flex items-center space-x-2 rounded-md px-4 py-2',
+          'transition-all duration-100 ease-out',
           'font-semibold',
           {
             'bg-midnight text-white hover:bg-opacity-80': isCurrentTab,

@@ -18,31 +18,31 @@ function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
       {!isFullWidth && (
         <Banner
           appearance="announcement"
-          className="flex justify-center items-center py-2"
+          className="flex items-center justify-center py-2"
         >
           {t('welcome')}
         </Banner>
       )}
 
-      <div className="flex items-start mt-4 w-full justify-between mx-auto px-4 2xl:px-0">
-        <div className="flex items-start w-full">
+      <div className="mx-auto mt-4 flex w-full items-start justify-between px-4 2xl:px-0">
+        <div className="flex w-full items-start">
           <a
             href="/"
-            className="mt-2 text-midnight text-2xl rounded-md"
+            className="mt-2 rounded-md text-2xl text-midnight"
           >
             Horizon
           </a>
-          <SearchHeader className="hidden md:block md:mx-8" />
+          <SearchHeader className="hidden md:mx-8 md:block" />
         </div>
 
-        <div className="flex items-center mt-1.5 space-x-2">
+        <div className="mt-1.5 flex items-center space-x-2">
           <Actions />
 
           <Menu />
         </div>
       </div>
 
-      <SearchHeader className="block md:hidden mt-4 px-4 md:mx-0" />
+      <SearchHeader className="mt-4 block px-4 md:mx-0 md:hidden" />
       {!isFullWidth && <CategoryNavigation className="-ml-2 px-4 2xl:px-0" />}
     </div>
   );

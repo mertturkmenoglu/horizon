@@ -33,9 +33,9 @@ function Content({ user }: Props): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">{t('title')}</h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <hr className="h-[2px] w-full bg-black" />
 
-      <div className="max-w-lg mt-4">
+      <div className="mt-4 max-w-lg">
         <Input
           label={t('location')}
           value={input}

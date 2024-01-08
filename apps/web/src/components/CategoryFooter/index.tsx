@@ -13,7 +13,7 @@ const CategoryFooter = React.forwardRef<El, Props>(
       <nav
         ref={ref}
         className={cn(
-          'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4',
+          'grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
           className
         )}
         {...props}
@@ -22,7 +22,7 @@ const CategoryFooter = React.forwardRef<El, Props>(
           <div key={category.category}>
             <a
               href={`/categories/${encodeURIComponent(category.category)}`}
-              className="font-semibold hover:underline text-base line-clamp-1"
+              className="line-clamp-1 text-base font-semibold hover:underline"
             >
               {category.category}
             </a>
@@ -31,7 +31,7 @@ const CategoryFooter = React.forwardRef<El, Props>(
                 <li key={subcategory.id}>
                   <a
                     href={`/categories/${encodeURIComponent(subcategory.id)}`}
-                    className="hover:underline text-base text-neutral-500"
+                    className="text-base text-neutral-500 hover:underline"
                   >
                     {subcategory.title}
                   </a>

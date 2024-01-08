@@ -16,7 +16,7 @@ const Card = React.forwardRef<El, Props>(
       <a
         href={href}
         className={cn(
-          'border border-midnight/20 rounded-md px-4 py-3',
+          'rounded-md border border-midnight/20 px-4 py-3',
           'flex items-center shadow',
           'transition-colors duration-100',
           'hover:border-purple-500 focus:border-none',
@@ -25,8 +25,8 @@ const Card = React.forwardRef<El, Props>(
         ref={ref}
         {...props}
       >
-        <Icon className="size-10 text-purple-500 bg-purple-200 rounded-lg p-1" />
-        <span className="text-sm line-clamp-1 ml-4">{text}</span>
+        <Icon className="size-10 rounded-lg bg-purple-200 p-1 text-purple-500" />
+        <span className="ml-4 line-clamp-1 text-sm">{text}</span>
       </a>
     );
   }

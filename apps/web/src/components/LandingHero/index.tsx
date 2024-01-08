@@ -97,21 +97,21 @@ function LandingHero({ className }: LandingHeroProps): React.ReactElement {
   return (
     <div
       className={cn(
-        'text-8xl antialiased text-black absolute w-full max-w-5xl',
+        'absolute w-full max-w-5xl text-8xl text-black antialiased',
         className
       )}
       id="container"
     >
       <div
         id="text-1"
-        className="absolute m-auto w-full inline-block text-center select-none"
+        className="absolute m-auto inline-block w-full select-none text-center"
         ref={ref1}
       >
         {t('text1')}
       </div>
       <div
         id="text-2"
-        className="absolute m-auto w-full inline-block text-center select-none"
+        className="absolute m-auto inline-block w-full select-none text-center"
         ref={ref2}
       >
         {t('text2')}

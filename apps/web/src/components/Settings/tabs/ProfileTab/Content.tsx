@@ -13,23 +13,23 @@ function Content({ user }: Props): React.ReactElement {
   return (
     <div>
       <h2 className="text-2xl font-semibold">{t('title')}</h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <hr className="h-[2px] w-full bg-black" />
 
-      <ProfileImageForm className="max-w-lg mt-4" />
+      <ProfileImageForm className="mt-4 max-w-lg" />
 
-      <h2 className="text-2xl font-semibold mt-8">{t('about-you')}</h2>
-      <hr className="w-full h-[2px] bg-black" />
+      <h2 className="mt-8 text-2xl font-semibold">{t('about-you')}</h2>
+      <hr className="h-[2px] w-full bg-black" />
 
       <ProfileForm
         className="mt-4"
         user={user}
       />
 
-      <h2 className="text-2xl font-semibold mt-8">
+      <h2 className="mt-8 text-2xl font-semibold">
         {t('contact-information')}
       </h2>
-      <hr className="w-full h-[2px] bg-black" />
-      <div className="text-xs text-neutral-500 font-medium mt-1">
+      <hr className="h-[2px] w-full bg-black" />
+      <div className="mt-1 text-xs font-medium text-neutral-500">
         {t('contact-information-hint')}
       </div>
 

@@ -15,14 +15,14 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
   return (
     <nav
       className={cn(
-        'flex justify-between mx-auto w-full items-center py-1 px-4',
+        'mx-auto flex w-full items-center justify-between px-4 py-1',
         className
       )}
     >
       <div className="flex items-center space-x-8">
         <a
           href="/"
-          className="text-2xl inline-flex text-midnight items-center"
+          className="inline-flex items-center text-2xl text-midnight"
         >
           <Logo className="size-12" />
           <div className="ml-4 font-medium">Horizon</div>
@@ -34,15 +34,15 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
       <div className="flex items-center space-x-4">
         <a
           href="/demo"
-          className="text-neutral-500 text-sm hover:underline"
+          className="text-sm text-neutral-500 hover:underline"
         >
           {t('request-demo')}
         </a>
 
-        <div className="w-[1px] h-8 bg-midnight/50" />
+        <div className="h-8 w-[1px] bg-midnight/50" />
         <a
           href="/login"
-          className="flex rounded-md bg-midnight text-white px-4 py-2 font-semibold text-sm items-center space-x-2"
+          className="flex items-center space-x-2 rounded-md bg-midnight px-4 py-2 text-sm font-semibold text-white"
         >
           <span>{t('get-started')}</span>
           <ArrowRightIcon className="size-4 animate-pulse" />

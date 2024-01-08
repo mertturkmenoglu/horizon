@@ -10,12 +10,12 @@ type Props = {
 function SearchResults({ items }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'location' });
   return (
-    <div className="mt-2 border border-midnight/20 p-4 rounded-md">
-      <div className="font-semibold text-xs uppercase flex space-x-2 items-center">
+    <div className="mt-2 rounded-md border border-midnight/20 p-4">
+      <div className="flex items-center space-x-2 text-xs font-semibold uppercase">
         <MapPinIcon className="size-4" />
         <div>{t('results')}:</div>
       </div>
-      <div className="mt-2 space-y-2 ml-4">
+      <div className="ml-4 mt-2 space-y-2">
         {items.map((item) => (
           <LocationResult
             item={item}

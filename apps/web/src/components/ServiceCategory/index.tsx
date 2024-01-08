@@ -20,8 +20,8 @@ function CategoryCard({
       href={`/services?category=${id}`}
       className={cn(
         'border border-midnight p-4',
-        'rounded-md flex justify-start items-center size-48',
-        'focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
+        'flex size-48 items-center justify-start rounded-md',
+        'focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2',
         'group',
         className
       )}
@@ -37,8 +37,8 @@ function ServiceCategory({
 }: ServiceCategoryProps): React.ReactElement {
   return (
     <div className={cn('', className)}>
-      <h2 className="font-bold text-2xl">{cat.category}</h2>
-      <div className="flex space-x-4 mt-4">
+      <h2 className="text-2xl font-bold">{cat.category}</h2>
+      <div className="mt-4 flex space-x-4">
         {cat.subcategories.map((c) => (
           <CategoryCard
             key={c.id}

@@ -34,7 +34,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
       <div
         ref={ref}
         className={cn(
-          'border-t border-t-midnight/20 py-4 flex items-center justify-between',
+          'flex items-center justify-between border-t border-t-midnight/20 py-4',
           className
         )}
       >
@@ -43,7 +43,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
             <button
               className={cn(
                 'flex items-center',
-                'hover:bg-neutral-400/20 w-full',
+                'w-full hover:bg-neutral-400/20',
                 'focus:outline-none focus:ring focus:ring-sky-500',
                 {
                   'space-x-4 rounded-lg py-1': !collapsed,
@@ -57,9 +57,9 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
                 alt=""
               />
               {!collapsed && (
-                <div className="flex flex-col items-start text-left overflow-x-hidden">
-                  <div className="font-bold line-clamp-1">{user.name}</div>
-                  <div className="text-neutral-500 text-sm line-clamp-1">
+                <div className="flex flex-col items-start overflow-x-hidden text-left">
+                  <div className="line-clamp-1 font-bold">{user.name}</div>
+                  <div className="line-clamp-1 text-sm text-neutral-500">
                     @{user.username}
                   </div>
                 </div>
@@ -70,10 +70,10 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               className={cn(
-                'min-w-52 w-full bg-white rounded-md p-2',
+                'w-full min-w-52 rounded-md bg-white p-2',
                 'border border-midnight/20',
                 'will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade',
-                'data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade'
+                'data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade'
               )}
               sideOffset={20}
               align={collapsed ? 'start' : 'center'}
@@ -92,7 +92,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
                 text="Settings"
               />
 
-              <DropdownMenu.Separator className="h-[1px] bg-sky-500 my-2" />
+              <DropdownMenu.Separator className="my-2 h-[1px] bg-sky-500" />
 
               <DropdownItem
                 as="link"
@@ -122,7 +122,7 @@ const UserCard = React.forwardRef<React.ElementRef<'div'>, UserCardProps>(
                 text="Contact Us"
               />
 
-              <DropdownMenu.Separator className="h-[1px] bg-sky-500 my-2" />
+              <DropdownMenu.Separator className="my-2 h-[1px] bg-sky-500" />
 
               <DropdownItem
                 as="button"

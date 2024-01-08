@@ -13,8 +13,8 @@ const CookieButton = React.forwardRef<HTMLButtonElement, CookieButtonProps>(
           'px-4 py-2',
           'font-bold text-blue-500',
           'hover:bg-blue-500 hover:text-white',
-          'focus:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:text-white',
-          'transition-all duration-250',
+          'focus:bg-blue-500 focus:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          'duration-250 transition-all',
           className
         )}
         {...props}

@@ -32,7 +32,7 @@ function Menu(): React.ReactElement {
                     )}
                     href="/"
                   >
-                    <Logo className="size-12 -ml-2 fill-sky-600" />
+                    <Logo className="-ml-2 size-12 fill-sky-600" />
                     <div className="mb-2 mt-4 text-lg font-bold text-white">
                       Horizon
                     </div>

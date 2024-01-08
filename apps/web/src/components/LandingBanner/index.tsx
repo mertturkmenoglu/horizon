@@ -7,21 +7,21 @@ function LandingBanner(): React.ReactElement {
   return (
     <Banner
       appearance="announcement"
-      className="flex justify-center items-baseline"
+      className="flex items-baseline justify-center"
     >
-      <div className="bg-sky-600 rounded-full text-white text-sm font-bold px-3 py-0.5">
+      <div className="rounded-full bg-sky-600 px-3 py-0.5 text-sm font-bold text-white">
         {t('new')}
       </div>
-      <div className="py-1 text-base font-medium text-midnight ml-4">
+      <div className="ml-4 py-1 text-base font-medium text-midnight">
         {t('text')}
       </div>
       <div className="ml-4">
         <a
           href="/register"
-          className="font-bold text-midnight flex items-center text-base"
+          className="flex items-center text-base font-bold text-midnight"
         >
           {t('cta')}
-          <ArrowRightIcon className="size-4 ml-1" />
+          <ArrowRightIcon className="ml-1 size-4" />
         </a>
       </div>
     </Banner>

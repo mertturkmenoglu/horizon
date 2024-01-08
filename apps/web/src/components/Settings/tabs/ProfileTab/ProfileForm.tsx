@@ -47,7 +47,7 @@ function ProfileForm({ className, user }: Props): React.ReactElement {
 
   return (
     <form
-      className={cn('max-w-lg mt-4 flex flex-col', className)}
+      className={cn('mt-4 flex max-w-lg flex-col', className)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input

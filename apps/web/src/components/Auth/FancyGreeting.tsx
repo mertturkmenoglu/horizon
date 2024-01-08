@@ -13,13 +13,13 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
   return (
     <div
       className={cn(
-        'w-full flex flex-col items-center justify-center relative',
+        'relative flex w-full flex-col items-center justify-center',
         className
       )}
     >
       <a
         href="/"
-        className="absolute top-8 left-8 flex items-center space-x-4 hover:underline"
+        className="absolute left-8 top-8 flex items-center space-x-4 hover:underline"
       >
         <ArrowLeftIcon className="size-6" />
         <span>{t('home')}</span>
@@ -27,11 +27,11 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
       <img
         src="https://images.unsplash.com/photo-1508385082359-f38ae991e8f2?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt=""
-        className="hidden lg:flex lg:w-[384px] rounded z-50 shadow-2xl"
+        className="z-50 hidden rounded shadow-2xl lg:flex lg:w-[384px]"
       />
-      <div className="mt-32 lg:mt-0 flex-col items-start text-start w-[384px] z-50">
-        <div className="text-gray-500 text-sm mt-8">{t('get-started')}</div>
-        <div className="mt-2 font-bold text-2xl">
+      <div className="z-50 mt-32 w-[384px] flex-col items-start text-start lg:mt-0">
+        <div className="mt-8 text-sm text-gray-500">{t('get-started')}</div>
+        <div className="mt-2 text-2xl font-bold">
           <Trans
             i18nKey="slogan"
             defaults={t('slogan')}
@@ -41,7 +41,7 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
       </div>
 
       <Logo2
-        className="hidden lg:block lg:absolute lg:top-[30rem] lg:h-20"
+        className="hidden lg:absolute lg:top-[30rem] lg:block lg:h-20"
         dist={6}
       />
     </div>

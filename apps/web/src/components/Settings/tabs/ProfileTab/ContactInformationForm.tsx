@@ -98,7 +98,7 @@ function ContactInformationForm({
 
   return (
     <form
-      className={cn('max-w-lg mt-4 flex flex-col', className)}
+      className={cn('mt-4 flex max-w-lg flex-col', className)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
@@ -117,7 +117,7 @@ function ContactInformationForm({
           {t('phone')}
         </label>
 
-        <div className="flex flex-nowrap space-x-2 mt-1">
+        <div className="mt-1 flex flex-nowrap space-x-2">
           <Select
             options={options}
             className="w-36 lining-nums"

@@ -9,7 +9,7 @@ type Props = React.ComponentPropsWithoutRef<'div'> & {
 const Logo2 = React.forwardRef<El, Props>(
   ({ className, dist, ...props }, ref) => {
     const commonStyles = cn(
-      '-skew-x-[32deg] h-full w-full -rotate-[24deg] shadow-2xl'
+      'h-full w-full -rotate-[24deg] -skew-x-[32deg] shadow-2xl'
     );
     return (
       <div

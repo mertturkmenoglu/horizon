@@ -9,12 +9,12 @@ function Chip({ className, type, text }: ChipProps): React.ReactElement {
   return (
     <div
       className={cn(
-        'lining-nums px-2 w-fit rounded-md text-xs py-[1px] border text-center text-nowrap',
+        'w-fit text-nowrap rounded-md border px-2 py-[1px] text-center text-xs lining-nums',
         {
-          'bg-sky-50 border-sky-500  text-sky-500': type === 'price',
-          'bg-indigo-50 border-indigo-500  text-indigo-500': type === 'pro',
-          'bg-amber-50 border-amber-500  text-amber-500': type === 'new',
-          'bg-green-50 border-green-500  text-green-500': type === 'topRated',
+          'border-sky-500 bg-sky-50  text-sky-500': type === 'price',
+          'border-indigo-500 bg-indigo-50  text-indigo-500': type === 'pro',
+          'border-amber-500 bg-amber-50  text-amber-500': type === 'new',
+          'border-green-500 bg-green-50  text-green-500': type === 'topRated',
         },
         className
       )}

@@ -34,16 +34,16 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         <textarea
           id={id}
           className={cn(
-            'bg-gray-500/10 rounded',
+            'rounded bg-gray-500/10',
             'p-2',
             {
               'border-red-500': error?.type,
               'focus:border-sky-500': !error?.type,
             },
-            'focus:ring focus:ring-sky-500 focus:outline-none',
+            'focus:outline-none focus:ring focus:ring-sky-500',
             'text-midnight',
             'placeholder:text-sm placeholder:font-light',
-            'disabled:text-neutral-500 disabled:bg-neutral-400/50 disabled:border-none',
+            'disabled:border-none disabled:bg-neutral-400/50 disabled:text-neutral-500',
             inputClassName
           )}
           {...props}

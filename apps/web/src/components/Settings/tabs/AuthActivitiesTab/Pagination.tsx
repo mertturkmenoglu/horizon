@@ -11,10 +11,10 @@ type Props = {
 function Pagination({ page, setPage, totalPages }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'auth-activity' });
   return (
-    <div className="flex items-center justify-center space-x-4 my-16">
+    <div className="my-16 flex items-center justify-center space-x-4">
       <Button
         appearance="sky"
-        className="max-w-48 flex items-center justify-center space-x-2"
+        className="flex max-w-48 items-center justify-center space-x-2"
         disabled={page === 1}
         onClick={() => {
           setPage((prev) => prev - 1);
@@ -28,7 +28,7 @@ function Pagination({ page, setPage, totalPages }: Props): React.ReactElement {
       </div>
       <Button
         appearance="sky"
-        className="max-w-48 flex items-center justify-center space-x-2"
+        className="flex max-w-48 items-center justify-center space-x-2"
         disabled={totalPages === page}
         onClick={() => {
           setPage((prev) => prev + 1);

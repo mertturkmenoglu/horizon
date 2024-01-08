@@ -24,16 +24,16 @@ function isLink(props: DropdownItemProps): props is Base & AsLink {
 
 const itemStyles = cn(
   'group text-sm leading-none text-black',
-  'rounded flex items-center px-2 relative mt-2 py-1',
+  'relative mt-2 flex items-center rounded px-2 py-1',
   'select-none outline-none',
-  'data-[disabled]:text-neutral-400 data-[disabled]:pointer-events-none',
+  'data-[disabled]:pointer-events-none data-[disabled]:text-neutral-400',
   'data-[highlighted]:bg-midnight data-[highlighted]:text-white'
 );
 
 export function DropdownItem(props: DropdownItemProps): React.ReactElement {
   const component = (
     <DropdownMenu.Item className={itemStyles}>
-      <div className="flex items-center space-x-2 w-full">
+      <div className="flex w-full items-center space-x-2">
         <props.icon className="size-6" />
         <span>{props.text}</span>
       </div>
