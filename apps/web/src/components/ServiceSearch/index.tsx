@@ -16,7 +16,7 @@ const schema = z.object({
 type ServiceSearchInput = z.infer<typeof schema>;
 
 function ServiceSearch({ className }: TProps): React.ReactElement {
-  const { t } = useTranslation('appbar', { keyPrefix: 'search ' });
+  const { t } = useTranslation('appbar', { keyPrefix: 'search' });
   const [recentSearches, setRecentSearches] = useLastSearches();
 
   const { register, handleSubmit } = useForm<ServiceSearchInput>({

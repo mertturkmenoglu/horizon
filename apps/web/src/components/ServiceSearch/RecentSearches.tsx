@@ -13,7 +13,7 @@ function RecentSearches({
   searches,
   setSearches,
 }: Props): React.ReactElement {
-  const { t } = useTranslation('appbar', { keyPrefix: 'search ' });
+  const { t } = useTranslation('appbar', { keyPrefix: 'search' });
 
   return (
     <div
