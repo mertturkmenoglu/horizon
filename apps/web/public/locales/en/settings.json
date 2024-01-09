@@ -67,6 +67,12 @@
     "gender": "Gender",
     "gender-placeholder": "Your gender",
     "gender-hint": "Some users may prefer to see your gender depending on the provided service. You are free to use your own words or to leave it empty.",
-    "upload": "Upload"
+    "upload": "Upload",
+    "links": "Links",
+    "link-name": "Name",
+    "link-value": "Value",
+    "remove-link": "Remove link",
+    "no-link": "You haven't added any links",
+    "add-link": "Add new link"
   }
 }

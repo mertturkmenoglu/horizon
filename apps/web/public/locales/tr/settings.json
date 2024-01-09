@@ -67,6 +67,12 @@
     "gender": "Cinsiyet",
     "gender-placeholder": "Cinsiyetiniz",
     "gender-hint": "Bazı kullanıcılar verilen hizmete bağlı olarak cinsiyetinizi bilmek isteyebilir. Kendi kelimelerinizi kullanmakta veya boş bırakmakta serbestsiniz.",
-    "upload": "Yükle"
+    "upload": "Yükle",
+    "links": "Bağlantılar",
+    "link-name": "Ad",
+    "link-value": "Değer",
+    "remove-link": "Bağlantıyı kaldır",
+    "no-link": "Henüz hiçbir bağlantı eklemediniz",
+    "add-link": "Yeni bağlantı ekle"
   }
 }
