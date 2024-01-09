@@ -22,10 +22,16 @@ type GetMeResponse struct {
 }
 
 type UserContactInformationDto struct {
-	Email   string `json:"email"`
-	Phone   string `json:"phone"`
-	Address string `json:"address"`
-	Other   string `json:"other"`
+	Email   string           `json:"email"`
+	Phone   string           `json:"phone"`
+	Address string           `json:"address"`
+	Other   string           `json:"other"`
+	Links   []ContactLinkDto `json:"links"`
+}
+
+type ContactLinkDto struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type UserLocationDto struct {
@@ -43,10 +49,11 @@ type UpdateMeRequest struct {
 }
 
 type UpdateContactInformationRequest struct {
-	Email   string `json:"email" validate:"omitempty,email"`
-	Phone   string `json:"phone" validate:"omitempty,e164"`
-	Address string `json:"address" validate:"omitempty,max=128"`
-	Other   string `json:"other" validate:"omitempty,max=256"`
+	Email   string           `json:"email" validate:"omitempty,email"`
+	Phone   string           `json:"phone" validate:"omitempty,e164"`
+	Address string           `json:"address" validate:"omitempty,max=128"`
+	Other   string           `json:"other" validate:"omitempty,max=256"`
+	Links   []ContactLinkDto `json:"links" validate:"omitempty"`
 }
 
 type UpdateLocationRequest struct {
