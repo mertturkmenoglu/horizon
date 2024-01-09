@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"horizon/config"
+	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
 	"horizon/internal/geo"
@@ -76,12 +77,7 @@ func main() {
 			UnsafeWildcardOriginWithAllowCredentials: true,
 		}))
 
-		e.Use(middleware.BodyDump(func(ctx echo.Context, b1, b2 []byte) {
-			sp := jaegertracing.CreateChildSpan(ctx, ctx.Response().Header().Get(echo.HeaderXRequestID))
-			defer sp.Finish()
-			sp.SetBaggageItem("Request", string(b1))
-			sp.SetBaggageItem("Response", string(b2))
-		}))
+		e.Use(middleware.BodyDump(middlewares.Dump))
 	}
 
 	// Call once to initialize the database connection
