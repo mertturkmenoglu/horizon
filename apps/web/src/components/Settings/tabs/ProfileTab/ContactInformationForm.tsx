@@ -3,67 +3,25 @@ import Input from '@/components/Input';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { GetMeResponse } from '@/lib/dto';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import TextArea from '@/components/TextArea';
 import Select from 'react-select';
-import countryCodes from 'country-codes-list';
+import {
+  getDefaultValue,
+  getPhoneWithoutCallingCode,
+  phoneOptions,
+} from './utils';
 import { useState } from 'react';
 import MaskedInput from 'react-text-mask';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-
-const schema = z.object({
-  email: z.string().email().or(z.string().max(0)),
-  phone: z.string().length(10).or(z.string().max(0)),
-  address: z.string().max(128).optional(),
-  other: z.string().max(256).optional(),
-  links: z.array(
-    z.object({
-      name: z.string().max(64),
-      value: z.string().url().max(64).optional(),
-    })
-  ),
-});
-
-type ContactInformationFormInput = z.infer<typeof schema>;
+import { ContactInformationFormInput, useContactForm } from './useContactForm';
 
 type Props = TProps & {
   user: GetMeResponse;
 };
-
-const phoneOptions = countryCodes
-  .all()
-  .map(({ countryCallingCode, countryCode, flag }) => {
-    return {
-      value: countryCallingCode,
-      label: flag + ' ' + countryCode + ' +' + countryCallingCode,
-    };
-  });
-
-function getPhoneWithoutCallingCode(phone: string): string {
-  if (phone === '') {
-    return '';
-  }
-
-  if (phone.length > 10) {
-    return phone.substring(phone.length - 10);
-  }
-
-  return phone;
-}
-
-function getDefaultValue(phone: string) {
-  for (const option of phoneOptions) {
-    if (phone.startsWith('+' + option.value)) {
-      return option;
-    }
-  }
-
-  return undefined;
-}
 
 function ContactInformationForm({
   className,
@@ -79,16 +37,7 @@ function ContactInformationForm({
     trigger,
     setError,
     clearErrors,
-  } = useForm<ContactInformationFormInput>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      address: user.contactInformation.address,
-      email: user.contactInformation.email,
-      other: user.contactInformation.other,
-      phone: getPhoneWithoutCallingCode(user.contactInformation.phone),
-      links: user.contactInformation.links,
-    },
-  });
+  } = useContactForm(user);
 
   const [callCode, setCallCode] = useState(
     getDefaultValue(user.contactInformation.phone)?.value ?? ''
