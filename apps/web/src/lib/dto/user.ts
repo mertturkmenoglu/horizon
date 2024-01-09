@@ -23,6 +23,12 @@ export type UserContactInformationDto = {
   phone: string;
   address: string;
   other: string;
+  links: UserContactLinkDto[];
+};
+
+export type UserContactLinkDto = {
+  name: string;
+  value: string;
 };
 
 export type UserLocationDto = {
