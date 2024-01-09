@@ -5,6 +5,11 @@ export const API_URL = import.meta.env.VITE_API_URL;
 export const api = ofetch.create({
   baseURL: API_URL,
   credentials: 'include',
+  headers: {
+    'Accept-Language': ['en', 'tr'].includes(localStorage.getItem('lang') ?? '')
+      ? localStorage.getItem('lang') ?? 'en'
+      : 'en',
+  },
 });
 
 export type ApiError = {
