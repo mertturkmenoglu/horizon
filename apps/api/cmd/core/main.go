@@ -6,6 +6,7 @@ import (
 	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
 	"horizon/internal/geo"
+	"horizon/internal/locale"
 	"horizon/internal/tasks"
 	"horizon/internal/upload"
 	"horizon/internal/validation"
@@ -107,6 +108,9 @@ func main() {
 
 	// Init upload service
 	upload.New()
+
+	// Init localization
+	locale.New()
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
