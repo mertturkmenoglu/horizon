@@ -3,7 +3,20 @@ package users
 import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db/models"
+
+	"gorm.io/datatypes"
 )
+
+func mapLinks(links datatypes.JSONSlice[models.ContactLink]) []dto.ContactLinkDto {
+	res := make([]dto.ContactLinkDto, 0)
+	for _, l := range links {
+		res = append(res, dto.ContactLinkDto{
+			Name:  l.Name,
+			Value: l.Value,
+		})
+	}
+	return res
+}
 
 func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernameResponse {
 	return dto.GetUserByUsernameResponse{
@@ -17,6 +30,7 @@ func mapModelToGetUserByUsernameResponse(user *models.User) dto.GetUserByUsernam
 			Phone:   user.ContactInformation.Phone,
 			Address: user.ContactInformation.Address,
 			Other:   user.ContactInformation.Other,
+			Links:   mapLinks(user.ContactInformation.Links),
 		},
 		Location: dto.UserLocationDto{
 			City:    user.Location.City,

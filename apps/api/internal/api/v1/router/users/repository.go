@@ -80,6 +80,15 @@ func upsertLocation(userId string, dto dto.UpdateLocationRequest) error {
 
 func upsertContact(userId string, dto dto.UpdateContactInformationRequest) error {
 	id := uuid.MustParse(userId)
+	links := make([]models.ContactLink, 0)
+
+	for _, l := range dto.Links {
+		links = append(links, models.ContactLink{
+			Name:  l.Name,
+			Value: l.Value,
+		})
+	}
+
 	return db.Client.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "user_id"}},
 		UpdateAll: true,
@@ -89,5 +98,6 @@ func upsertContact(userId string, dto dto.UpdateContactInformationRequest) error
 		Phone:   dto.Phone,
 		Address: dto.Address,
 		Other:   dto.Other,
+		Links:   links,
 	}).Error
 }
