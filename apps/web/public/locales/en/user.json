@@ -8,5 +8,12 @@
   "block-report": "Block or report",
   "about": "About",
   "no-description": "No description",
-  "empty-result": "Oops! It looks like there's nothing here."
+  "empty-result": "Oops! It looks like there's nothing here.",
+  "share": {
+    "copy-ok": "Copied to your clipboard!",
+    "check": "Check {{name}} on Horizon: {{url}}",
+    "copy": "Copy to your clipboard",
+    "twitter": "Share on Twitter",
+    "linkedin": "Share on LinkedIn"
+  }
 }
