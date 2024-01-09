@@ -52,6 +52,7 @@
     "contact-information-hint": "Burada girdiğiniz bilgiler tüm kullanıcılar tarafından görünebilir.",
     "update-ok": "Başarıyla güncellendi!",
     "update-err": "Bir şeyler ters gitti",
+    "update-fail": "Geçersiz değer(ler)",
     "contact-email": "Bağlantı E-postası",
     "phone": "Telefon Numarası",
     "phone-placeholder": "Bir telefon numarası girin",

@@ -52,6 +52,7 @@
     "contact-information-hint": "The information you provide here will be visible to all users.",
     "update-ok": "Updated successfully!",
     "update-err": "Something went wrong",
+    "update-fail": "Incorrect form value(s)",
     "contact-email": "Contact Email",
     "phone": "Phone Number",
     "phone-placeholder": "Enter a phone number",
