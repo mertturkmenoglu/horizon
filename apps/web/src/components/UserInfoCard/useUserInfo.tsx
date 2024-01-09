@@ -1,5 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { GetUserByUsernameResponse } from '@/lib/dto';
+import { formatLocation } from '@/lib/location';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,11 +17,7 @@ export function useUserInfo(user: GetUserByUsernameResponse) {
   }, [user.description, t]);
 
   const location = useMemo(() => {
-    if (user.location.city === '' || user.location.city === '') {
-      return '';
-    }
-
-    return `${user.location.city}, ${user.location.country}`;
+    return formatLocation(user.location);
   }, [user.location]);
 
   const isThisUser = useMemo(() => {
