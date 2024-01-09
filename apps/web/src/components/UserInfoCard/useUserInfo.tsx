@@ -1,5 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { GetUserByUsernameResponse } from '@/lib/dto';
+import { getUserImage } from '@/lib/img';
 import { formatLocation } from '@/lib/location';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,7 @@ export function useUserInfo(user: GetUserByUsernameResponse) {
   const { t } = useTranslation('user');
 
   const image = useMemo(() => {
-    return user.profileImage !== '' ? user.profileImage : '/user.jpg';
+    return getUserImage(user.profileImage);
   }, [user.profileImage]);
 
   const description = useMemo(() => {
