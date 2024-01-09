@@ -4,17 +4,16 @@ import { cn } from '@/lib/cn';
 import { Info } from './Info';
 import {
   ArrowRightIcon,
-  AtSymbolIcon,
   BuildingStorefrontIcon,
   CheckBadgeIcon,
-  EnvelopeIcon,
   MapPinIcon,
-  PencilIcon,
   SquaresPlusIcon,
 } from '@heroicons/react/24/outline';
-import Button from '../Button';
-import { VerifiedIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import ThisUserActions from './ThisUserActions';
+import GeneralActions from './GeneralActions';
+import OtherUserActions from './OtherUserActions';
+import ShareActions from './ShareActions';
 
 interface UserInfoCardProps {
   user: GetUserByUsernameResponse;
@@ -44,7 +43,7 @@ function UserInfoCard({
               </div>
 
               {user.isVerifiedAccount && (
-                <VerifiedIcon className="size-6 text-blue-500" />
+                <CheckBadgeIcon className="size-6 text-blue-500" />
               )}
             </div>
 
@@ -92,43 +91,13 @@ function UserInfoCard({
         </div>
 
         <div className="mx-auto flex w-full flex-col items-center justify-center md:mx-0 md:w-auto">
-          <Button
-            appearance="midnight"
-            className="flex min-w-64 items-center justify-center space-x-2 py-2"
-          >
-            <AtSymbolIcon className="size-5 text-white" />
-            <span>{t('view-contact')}</span>
-          </Button>
-          {isThisUser && (
-            <Button
-              appearance="midnight"
-              className="mt-2 flex min-w-64 items-center justify-center space-x-2 py-2"
-              onClick={() => {
-                window.location.href = '/settings?tab=profile';
-              }}
-            >
-              <PencilIcon className="size-5 text-white" />
-              <span>{t('edit')}</span>
-            </Button>
-          )}
+          <GeneralActions />
 
-          {!isThisUser && (
-            <>
-              <Button
-                appearance="midnight"
-                className="mt-2 flex min-w-64 items-center justify-center space-x-2 py-2"
-              >
-                <EnvelopeIcon className="size-5 text-white" />
-                <span>{t('message')}</span>
-              </Button>
-              <a
-                href={`/report?u=${user.username}`}
-                className="mt-2 block w-full text-center text-sm text-midnight/70 hover:underline"
-              >
-                {t('block-report')}
-              </a>
-            </>
-          )}
+          {isThisUser && <ThisUserActions />}
+
+          {!isThisUser && <OtherUserActions user={user} />}
+
+          <ShareActions user={user} />
         </div>
       </div>
 
