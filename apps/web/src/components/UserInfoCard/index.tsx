@@ -1,19 +1,13 @@
 import { GetUserByUsernameResponse } from '@/lib/dto';
 import { useUserInfo } from './useUserInfo';
 import { cn } from '@/lib/cn';
-import { Info } from './Info';
-import {
-  ArrowRightIcon,
-  BuildingStorefrontIcon,
-  CheckBadgeIcon,
-  MapPinIcon,
-  SquaresPlusIcon,
-} from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 import ThisUserActions from './ThisUserActions';
 import GeneralActions from './GeneralActions';
 import OtherUserActions from './OtherUserActions';
 import ShareActions from './ShareActions';
+import InfoSection from './InfoSection';
+import Title from './Title';
 
 interface UserInfoCardProps {
   user: GetUserByUsernameResponse;
@@ -36,67 +30,19 @@ function UserInfoCard({
             alt=""
             className="size-36 rounded-full ring ring-sky-500 ring-offset-2"
           />
-          <div className="">
-            <div className="flex items-center space-x-2">
-              <div className="w-fit text-4xl font-semibold text-midnight">
-                {user.name}
-              </div>
-
-              {user.isVerifiedAccount && (
-                <CheckBadgeIcon className="size-6 text-blue-500" />
-              )}
-            </div>
-
-            <div className="text-lg font-semibold text-midnight/70">
-              @{user.username}
-            </div>
-
-            <div className="flex flex-wrap items-center">
-              <Info
-                icon={SquaresPlusIcon}
-                text={t('services-badge', { count: 42 })}
-                className="mt-2"
-                show={true}
-              />
-
-              <Info
-                icon={BuildingStorefrontIcon}
-                text={t('business-account')}
-                className="mt-2"
-                show={user.isBusinessAccount}
-              />
-
-              <Info
-                icon={CheckBadgeIcon}
-                text={t('verified-account')}
-                className="mt-2"
-                show={user.isVerifiedAccount}
-              />
-
-              <Info
-                icon={MapPinIcon}
-                text={location}
-                className="mt-2"
-                show={location !== ''}
-              />
-
-              <Info
-                icon={ArrowRightIcon}
-                text={user.gender}
-                className="mt-2"
-                show={user.gender !== ''}
-              />
-            </div>
+          <div>
+            <Title user={user} />
+            <InfoSection
+              user={user}
+              location={location}
+            />
           </div>
         </div>
 
         <div className="mx-auto flex w-full flex-col items-center justify-center md:mx-0 md:w-auto">
           <GeneralActions />
-
           {isThisUser && <ThisUserActions />}
-
           {!isThisUser && <OtherUserActions user={user} />}
-
           <ShareActions user={user} />
         </div>
       </div>
