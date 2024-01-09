@@ -34,7 +34,7 @@ type Props = TProps & {
   user: GetMeResponse;
 };
 
-const options = countryCodes
+const phoneOptions = countryCodes
   .all()
   .map(({ countryCallingCode, countryCode, flag }) => {
     return {
@@ -56,7 +56,7 @@ function getPhoneWithoutCallingCode(phone: string): string {
 }
 
 function getDefaultValue(phone: string) {
-  for (const option of options) {
+  for (const option of phoneOptions) {
     if (phone.startsWith('+' + option.value)) {
       return option;
     }
@@ -142,7 +142,7 @@ function ContactInformationForm({
 
         <div className="mt-1 flex flex-nowrap space-x-2">
           <Select
-            options={options}
+            options={phoneOptions}
             className="w-36 lining-nums"
             defaultValue={getDefaultValue(user.contactInformation.phone)}
             onChange={(newValue) => {
@@ -214,7 +214,7 @@ function ContactInformationForm({
       />
 
       <div className="mt-4">
-        <div className="text-sm font-semibold text-midnight">Links</div>
+        <div className="text-sm font-semibold text-midnight">{t('links')}</div>
         <div className="mt-2">
           {getValues('links').map((link, i) => (
             <div
@@ -233,29 +233,33 @@ function ContactInformationForm({
                 }}
               >
                 <XMarkIcon className="size-3 text-white" />
-                <span className="sr-only">Remove link {link.name}</span>
+                <span className="sr-only">
+                  {t('remove-link')} {link.name}
+                </span>
               </Button>
-              <div className="grid w-full grid-cols-2">
-                <div className="text-sm font-semibold text-midnight">Name</div>
-                <div className="text-sm font-semibold text-midnight">Value</div>
+              <div className="grid w-full grid-cols-3 text-wrap">
+                <div className="col-span-1 text-sm font-semibold text-midnight">
+                  {t('link-name')}
+                </div>
+                <div className="col-span-2 text-sm font-semibold text-midnight">
+                  {t('link-value')}
+                </div>
                 <div>{link.name}</div>
-                <div>{link.value}</div>
+                <div className="text-wrap">{link.value}</div>
               </div>
             </div>
           ))}
-          {getValues('links').length === 0 && (
-            <div>You haven't added any links</div>
-          )}
+          {getValues('links').length === 0 && <div>{t('no-link')}</div>}
         </div>
         <div className="mt-4 flex items-end space-x-2">
           <Input
-            label="Name"
+            label={t('link-name')}
             className="flex-1"
             value={newLinkName}
             onChange={(e) => setNewLinkName(e.target.value)}
           />
           <Input
-            label="Value"
+            label={t('link-value')}
             className="flex-1"
             value={newLinkValue}
             onChange={(e) => setNewLinkValue(e.target.value)}
@@ -293,7 +297,7 @@ function ContactInformationForm({
             }}
           >
             <PlusIcon className="size-4 text-white" />
-            <span className="sr-only">Add new</span>
+            <span className="sr-only">{t('add-link')}</span>
           </Button>
         </div>
         <div className="mt-2">
