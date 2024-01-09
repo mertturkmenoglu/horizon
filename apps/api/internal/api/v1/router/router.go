@@ -7,12 +7,16 @@ import (
 	"horizon/internal/api/v1/router/location"
 	"horizon/internal/api/v1/router/services"
 	"horizon/internal/api/v1/router/users"
+	"horizon/internal/locale"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 func RegisterRoutes(e *echo.Echo) {
 	api := e.Group("/api/v1")
+	api.Use(middlewares.GetLocaleFromHeader)
 
 	authRoutes := api.Group("/auth")
 
@@ -60,4 +64,20 @@ func RegisterRoutes(e *echo.Echo) {
 
 	locationRoutes := api.Group("/location")
 	locationRoutes.GET("/", location.SearchLocation)
+
+	api.GET("/dummy", func(c echo.Context) error {
+		localizer := locale.Localizer(c.Get("lang").(string))
+		msg, err := localizer.Localize(&i18n.LocalizeConfig{
+			MessageID: "HelloPerson",
+			TemplateData: map[string]string{
+				"Name": "Mert",
+			},
+		})
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "localization error")
+		}
+
+		return c.HTML(http.StatusOK, msg)
+	})
 }
