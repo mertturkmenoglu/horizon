@@ -14,7 +14,7 @@ function OtherUserActions({ user }: Props): React.ReactElement {
     <>
       <Button
         appearance="midnight"
-        className="mt-2 flex min-w-64 items-center justify-center space-x-2 py-2"
+        className="mt-2 flex min-w-80 items-center justify-center space-x-2 py-2"
       >
         <EnvelopeIcon className="size-5 text-white" />
         <span>{t('message')}</span>
