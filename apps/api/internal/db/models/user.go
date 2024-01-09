@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"gorm.io/datatypes"
+)
 
 type User struct {
 	BaseModel
@@ -23,11 +26,17 @@ type User struct {
 
 type ContactInformation struct {
 	BaseModel
-	UserId  uuid.UUID `json:"userId" gorm:"type:uuid;uniqueIndex;not null"`
-	Email   string    `json:"email" gorm:"size:64"`
-	Phone   string    `json:"phone" gorm:"size:32"`
-	Address string    `json:"address" gorm:"size:128"`
-	Other   string    `json:"other" gorm:"size:256"`
+	UserId  uuid.UUID                        `json:"userId" gorm:"type:uuid;uniqueIndex;not null"`
+	Email   string                           `json:"email" gorm:"size:64"`
+	Phone   string                           `json:"phone" gorm:"size:32"`
+	Address string                           `json:"address" gorm:"size:128"`
+	Other   string                           `json:"other" gorm:"size:256"`
+	Links   datatypes.JSONSlice[ContactLink] `json:"links"`
+}
+
+type ContactLink struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type Location struct {
