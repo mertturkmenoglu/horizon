@@ -42,7 +42,7 @@ function ContactPage(): React.ReactElement {
       <div className="mx-auto mt-16 max-w-3xl">
         <a
           href="/"
-          className="flex w-min items-center space-x-4 hover:underline"
+          className="flex w-fit items-center space-x-4 hover:underline"
         >
           <ArrowLeftIcon className="size-5" />
           <span>{t('home')}</span>
