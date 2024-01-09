@@ -63,10 +63,12 @@ func updateProfileImage(userId string, url string) error {
 	return res.Error
 }
 
-func createLocation(userId string, dto dto.UpdateLocationRequest) error {
+func upsertLocation(userId string, dto dto.UpdateLocationRequest) error {
 	id := uuid.MustParse(userId)
-
-	return db.Client.Create(&models.Location{
+	return db.Client.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}},
+		UpdateAll: true,
+	}).Create(&models.Location{
 		UserID:  id,
 		City:    dto.City,
 		Admin:   dto.Admin,
@@ -76,36 +78,16 @@ func createLocation(userId string, dto dto.UpdateLocationRequest) error {
 	}).Error
 }
 
-func updateLocation(userId string, dto dto.UpdateLocationRequest) error {
-	return db.Client.Model(&models.Location{}).
-		Where("user_id = ?", userId).
-		Updates(map[string]interface{}{
-			"city":    dto.City,
-			"admin":   dto.Admin,
-			"country": dto.Country,
-			"lat":     dto.Lat,
-			"long":    dto.Long,
-		}).Error
-}
-
-func createContact(userId string, dto dto.UpdateContactInformationRequest) error {
+func upsertContact(userId string, dto dto.UpdateContactInformationRequest) error {
 	id := uuid.MustParse(userId)
-	return db.Client.Create(&models.ContactInformation{
+	return db.Client.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}},
+		UpdateAll: true,
+	}).Create(&models.ContactInformation{
 		UserId:  id,
 		Email:   dto.Email,
 		Phone:   dto.Phone,
 		Address: dto.Address,
 		Other:   dto.Other,
 	}).Error
-}
-
-func updateContact(userId string, dto dto.UpdateContactInformationRequest) error {
-	return db.Client.Model(&models.ContactInformation{}).
-		Where("user_id = ?", userId).
-		Updates(map[string]interface{}{
-			"email":   dto.Email,
-			"phone":   dto.Phone,
-			"address": dto.Address,
-			"other":   dto.Other,
-		}).Error
 }

@@ -4,8 +4,6 @@ import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/cache"
-	"horizon/internal/db"
-	"horizon/internal/db/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -51,7 +49,6 @@ func GetUserByUsername(c echo.Context) error {
 func UpdateMe(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateMeRequest)
-
 	err := updateProfile(auth.Username, body)
 
 	if err != nil {
@@ -102,16 +99,7 @@ func UpdateMyLocation(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateLocationRequest)
 	userId := auth.UserId
-
-	var loc *models.Location
-	var err error
-	res := db.Client.First(loc, "user_id = ?", userId)
-
-	if res.Error != nil {
-		err = createLocation(userId, body)
-	} else {
-		err = updateLocation(userId, body)
-	}
+	err := upsertLocation(userId, body)
 
 	if err != nil {
 		return api.NewInternalServerError(err.Error())
@@ -125,16 +113,7 @@ func UpdateMyContactInformation(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.UpdateContactInformationRequest)
 	userId := auth.UserId
-
-	var contact *models.ContactInformation
-	var err error
-	res := db.Client.First(&contact, "user_id = ?", userId)
-
-	if res.Error != nil {
-		err = createContact(userId, body)
-	} else {
-		err = updateContact(userId, body)
-	}
+	err := upsertContact(userId, body)
 
 	if err != nil {
 		return api.NewInternalServerError(err.Error())
