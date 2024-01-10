@@ -10,7 +10,7 @@ import (
 )
 
 type GeoCoding struct {
-	data []GeoLocation
+	Data []GeoLocation
 }
 
 type GeoLocation struct {
@@ -41,14 +41,14 @@ func (g *GeoCoding) LoadGeocodingDataFromFile(path string) error {
 		return err
 	}
 
-	return json.Unmarshal(bytes, &g.data)
+	return json.Unmarshal(bytes, &g.Data)
 }
 
 func (g *GeoCoding) SearchAll(term string) []SearchResult {
 	similars := make([]SearchResult, 0)
 	m := metrics.NewLevenshtein()
 
-	for _, entry := range g.data {
+	for _, entry := range g.Data {
 		nameSimScore := strutil.Similarity(term, entry.Name, m)
 		adminSimScore := strutil.Similarity(term, entry.Admin.Name, m)
 		maxSimScore := -1.0
