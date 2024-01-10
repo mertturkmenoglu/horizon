@@ -3,16 +3,19 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 )
 
-var client *redis.Client
-var redisContext = context.Background()
+type Cache struct {
+	Client  *redis.Client
+	Context context.Context
+}
 
-func newClient() *redis.Client {
+func New() *Cache {
 	url := viper.GetString("redis.url")
 	options, err := redis.ParseURL(url)
 
@@ -20,53 +23,57 @@ func newClient() *redis.Client {
 		panic(err)
 	}
 
-	return redis.NewClient(options)
-}
+	client := redis.NewClient(options)
 
-func GetClient() *redis.Client {
-	if client == nil {
-		client = newClient()
+	return &Cache{
+		Client:  client,
+		Context: context.Background(),
 	}
-
-	return client
 }
 
-func Get(key string) (string, error) {
-	return GetClient().Get(redisContext, key).Result()
+func (c *Cache) Get(key string) (string, error) {
+	return c.Client.Get(c.Context, key).Result()
 }
 
-func Set(key string, value string, exp time.Duration) error {
-	return GetClient().Set(redisContext, key, value, exp).Err()
+func (c *Cache) Set(key string, value string, exp time.Duration) error {
+	return c.Client.Set(c.Context, key, value, exp).Err()
 }
 
-func Del(key string) error {
-	return GetClient().Del(redisContext, key).Err()
+func (c *Cache) Del(key string) error {
+	return c.Client.Del(c.Context, key).Err()
 }
 
-func GetObj[T any](key string) (*T, error) {
-	res, err := Get(key)
+func (c *Cache) ReadObj(key string, v any) error {
+	res, err := c.Get(key)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	var data *T
-
-	err = json.Unmarshal([]byte(res), &data)
+	err = json.Unmarshal([]byte(res), v)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return data, nil
+	return nil
 }
 
-func SetObj[T any](key string, data T, exp time.Duration) error {
+func (c *Cache) SetObj(key string, data any, exp time.Duration) error {
 	serialized, err := json.Marshal(data)
 
 	if err != nil {
 		return err
 	}
 
-	return Set(key, string(serialized), exp)
+	return c.Set(key, string(serialized), exp)
+}
+
+func (c *Cache) FmtKey(name string, id string) string {
+	return fmt.Sprintf("%s:%s", name, id)
+}
+
+func (c *Cache) Has(key string) bool {
+	_, err := c.Get(key)
+	return err == nil
 }
