@@ -18,3 +18,7 @@ func GetServiceCategories(c echo.Context) error {
 func GetServices(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusNotImplemented)
 }
+
+func CreateService(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
+}
