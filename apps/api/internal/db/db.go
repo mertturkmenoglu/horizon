@@ -33,5 +33,8 @@ func AutoMigrate() error {
 		&models.User{},
 		&models.ContactInformation{},
 		&models.Location{},
+		&models.Service{},
+		&models.ServicePhoto{},
+		&models.ServiceVideo{},
 	)
 }
