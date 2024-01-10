@@ -17,6 +17,7 @@
     "logout": "Çıkış Yap"
   },
   "category": {
+    "description": "Kategori Navigasyon Menüsü",
     "scroll-left": "Sola kaydır",
     "scroll-right": "Sağa kaydır"
   },

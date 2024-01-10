@@ -17,6 +17,7 @@
     "logout": "Logout"
   },
   "category": {
+    "description": "Category Navigation Menu",
     "scroll-left": "Scroll left",
     "scroll-right": "Scroll right"
   },
