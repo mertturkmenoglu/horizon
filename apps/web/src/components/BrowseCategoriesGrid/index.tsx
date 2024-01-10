@@ -23,7 +23,7 @@ function BrowseCategoriesGrid({
       <div className="flex space-x-2 text-sm font-medium">
         <div>{t('looking-all')}</div>
         <a
-          href="#"
+          href="/services/categories"
           className="text-yellow-500 hover:underline"
         >
           {t('browse-all')}
