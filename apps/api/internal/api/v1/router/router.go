@@ -1,13 +1,13 @@
 package router
 
 import (
+	app "horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router/auth"
 	"horizon/internal/api/v1/router/location"
 	"horizon/internal/api/v1/router/services"
 	"horizon/internal/api/v1/router/users"
-	"horizon/internal/locale"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -66,7 +66,7 @@ func RegisterRoutes(e *echo.Echo) {
 	locationRoutes.GET("/", location.SearchLocation)
 
 	api.GET("/dummy", func(c echo.Context) error {
-		localizer := locale.Localizer(c.Get("lang").(string))
+		localizer := app.App.Locale.Localizer(c.Get("lang").(string))
 		msg, err := localizer.Localize(&i18n.LocalizeConfig{
 			MessageID: "HelloPerson",
 			TemplateData: map[string]string{
