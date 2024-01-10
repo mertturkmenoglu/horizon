@@ -1,3 +1,4 @@
+import BrowseCategoriesGrid from '@/components/BrowseCategoriesGrid';
 import FeaturesCarousel from '@/components/FeaturesCarousel';
 import QuickActions from '@/components/QuickActions';
 import RecommendationGrid from '@/components/RecommendationGrid';
@@ -20,6 +21,8 @@ function HomePage(): React.ReactElement {
       <div className="mt-2 text-lg font-bold">{t('subtitle')}</div>
 
       <QuickActions className="mt-8" />
+
+      <BrowseCategoriesGrid className="mt-16" />
 
       <RecommendationGrid
         className="mt-16"
