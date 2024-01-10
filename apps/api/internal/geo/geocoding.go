@@ -9,6 +9,10 @@ import (
 	"github.com/adrg/strutil/metrics"
 )
 
+type GeoCoding struct {
+	data []GeoLocation
+}
+
 type GeoLocation struct {
 	Id      string           `json:"id"`
 	Name    string           `json:"name"`
@@ -28,25 +32,23 @@ type SearchResult struct {
 	Entry      GeoLocation `json:"entry"`
 }
 
-var data []GeoLocation = []GeoLocation{}
-
 const minSimilarity = 0.5
 
-func LoadGeocodingDataFromFile(path string) error {
+func (g *GeoCoding) LoadGeocodingDataFromFile(path string) error {
 	bytes, err := os.ReadFile(path)
 
 	if err != nil {
 		return err
 	}
 
-	return json.Unmarshal(bytes, &data)
+	return json.Unmarshal(bytes, &g.data)
 }
 
-func SearchAll(term string) []SearchResult {
+func (g *GeoCoding) SearchAll(term string) []SearchResult {
 	similars := make([]SearchResult, 0)
 	m := metrics.NewLevenshtein()
 
-	for _, entry := range data {
+	for _, entry := range g.data {
 		nameSimScore := strutil.Similarity(term, entry.Name, m)
 		adminSimScore := strutil.Similarity(term, entry.Admin.Name, m)
 		maxSimScore := -1.0
