@@ -46,6 +46,7 @@ const RecommendationGrid = React.forwardRef<El, Props>(
             href={title.href}
             className=" flex items-center space-x-2 font-bold text-midnight underline"
           >
+            <span className="sr-only">{title.text}</span>
             <div>{t('more')}</div>
           </a>
         </div>
