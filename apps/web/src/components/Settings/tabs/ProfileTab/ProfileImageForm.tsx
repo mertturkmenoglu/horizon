@@ -59,13 +59,15 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
       <img
         src={getUserImage(user.profileImage)}
         className="size-24 min-h-12 min-w-12 rounded-lg"
+        role="presentation"
       />
 
       <div className="flex flex-col space-y-2">
         <Input
-          label=""
+          label={t('profile-image-upload')}
           type="file"
           name="file"
+          labelClassName="sr-only"
           accept=".png,.jpg,.jpeg"
           className="bg-transparent"
           onChange={handleFileChange}

@@ -93,6 +93,7 @@ function ContactInformationForm({
           <Select
             options={phoneOptions}
             className="w-36 lining-nums"
+            aria-label={t('phone-country-code')}
             defaultValue={getDefaultValue(user.contactInformation.phone)}
             onChange={(newValue) => {
               setCallCode(newValue?.value ?? '');
