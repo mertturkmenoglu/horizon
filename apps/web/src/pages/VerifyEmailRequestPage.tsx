@@ -42,7 +42,7 @@ function VerifyEmailPage(): React.ReactElement {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
+    <main className="flex h-screen w-full flex-col items-center justify-center">
       <h1 className="text-2xl">{t('title')}</h1>
       <div className="mt-8 max-w-sm text-center">{t('info')}</div>
 
@@ -66,7 +66,7 @@ function VerifyEmailPage(): React.ReactElement {
           {t('btn')}
         </Button>
       </form>
-    </div>
+    </main>
   );
 }
 
