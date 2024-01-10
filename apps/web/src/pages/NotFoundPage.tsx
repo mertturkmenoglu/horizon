@@ -6,10 +6,9 @@ function NotFoundPage(): React.ReactElement {
   const { t } = useTranslation('common', { keyPrefix: 'not-found' });
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
-      <div></div>
+    <main className="flex h-screen w-full flex-col items-center justify-center">
       <Logo />
-      <h2 className="text-4xl font-extrabold">Horizon</h2>
+      <h1 className="text-4xl font-extrabold">Horizon</h1>
       <div className="mt-16 text-2xl font-light text-red-500">
         404 - {t('not-found')}
       </div>
@@ -17,15 +16,15 @@ function NotFoundPage(): React.ReactElement {
       <a
         href="/"
         className={cn(
-          'h-12 w-[18rem] bg-red-500',
+          'h-12 w-[18rem] bg-red-600',
           '-rotate-6 -skew-x-[32deg]',
-          'shadow-2xl shadow-red-500/80',
+          'shadow-2xl shadow-red-600/80',
           'mt-12 text-2xl text-white',
           'flex items-center px-8',
           'transform transition-all duration-500 ease-in-out',
           'hover:rotate-0 hover:skew-x-0',
           'focus:rotate-0 focus:skew-x-0',
-          'focus:outline-none focus:ring focus:ring-red-500 focus:ring-offset-2'
+          'focus:outline-none focus:ring focus:ring-red-600 focus:ring-offset-2'
         )}
       >
         {t('home')}
@@ -33,20 +32,20 @@ function NotFoundPage(): React.ReactElement {
       <a
         href="/help"
         className={cn(
-          'h-12 w-[18rem] bg-sky-500',
+          'h-12 w-[18rem] bg-sky-600',
           '-rotate-6 -skew-x-[32deg]',
-          'shadow-2xl shadow-sky-500/80',
+          'shadow-2xl shadow-sky-600/80',
           'mt-6 text-2xl text-white',
           'flex items-center px-8',
           'transform transition-all duration-500 ease-in-out',
           'hover:rotate-0 hover:skew-x-0',
           'focus:rotate-0 focus:skew-x-0',
-          'focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2'
+          'focus:outline-none focus:ring focus:ring-sky-600 focus:ring-offset-2'
         )}
       >
         {t('help')}
       </a>
-    </div>
+    </main>
   );
 }
 
