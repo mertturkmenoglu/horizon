@@ -55,6 +55,7 @@
     "update-fail": "Geçersiz değer(ler)",
     "contact-email": "Bağlantı E-postası",
     "phone": "Telefon Numarası",
+    "phone-country-code": "Ülke kodu seçimi",
     "phone-placeholder": "Bir telefon numarası girin",
     "address": "Adres",
     "other": "Diğer",
@@ -73,6 +74,7 @@
     "link-value": "Değer",
     "remove-link": "Bağlantıyı kaldır",
     "no-link": "Henüz hiçbir bağlantı eklemediniz",
-    "add-link": "Yeni bağlantı ekle"
+    "add-link": "Yeni bağlantı ekle",
+    "profile-image-upload": "Bir profil fotoğrafı yükleyin"
   }
 }

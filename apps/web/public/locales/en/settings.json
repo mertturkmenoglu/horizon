@@ -55,6 +55,7 @@
     "update-fail": "Incorrect form value(s)",
     "contact-email": "Contact Email",
     "phone": "Phone Number",
+    "phone-country-code": "Country code selection",
     "phone-placeholder": "Enter a phone number",
     "address": "Address",
     "other": "Other",
@@ -73,6 +74,7 @@
     "link-value": "Value",
     "remove-link": "Remove link",
     "no-link": "You haven't added any links",
-    "add-link": "Add new link"
+    "add-link": "Add new link",
+    "profile-image-upload": "Upload a profile picture"
   }
 }
