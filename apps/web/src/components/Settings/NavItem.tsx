@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
 export type TNavItem = {
@@ -13,6 +14,7 @@ export function NavItem({
   name,
   icon: Icon,
 }: TNavItem): React.ReactElement {
+  const { t } = useTranslation('settings');
   const [searchParams] = useSearchParams();
   const tab = searchParams.get('tab') ?? 'account';
   const isCurrentTab = tab === id;
@@ -35,7 +37,7 @@ export function NavItem({
             'text-white': isCurrentTab,
           })}
         />
-        <span>{name}</span>
+        <span>{t(name)}</span>
       </a>
     </li>
   );
