@@ -147,5 +147,9 @@
     {
       "title": "Ürün inceleme ve tavsiyeleri"
     }
-  ]
+  ],
+  "explore": {
+    "breadcrumb": "Kategoriler",
+    "title": "Tüm Kategorileri Keşfedin"
+  }
 }

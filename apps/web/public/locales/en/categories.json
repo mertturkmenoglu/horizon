@@ -147,5 +147,9 @@
     {
       "title": "Product reviews and recommendations"
     }
-  ]
+  ],
+  "explore": {
+    "breadcrumb": "Categories",
+    "title": "Explore All Services"
+  }
 }
