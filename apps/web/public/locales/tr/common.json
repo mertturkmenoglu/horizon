@@ -55,5 +55,12 @@
     "not-found": "Bulunamadı",
     "home": "Ana Sayfaya Git",
     "help": "Yardım"
+  },
+  "browse-categories": {
+    "looking-all": "Tüm kategorileri mi arıyorsunuz?",
+    "browse-all": "Hepsini gör",
+    "title": "Kategorileri Keşfet",
+    "num-services": "{{count}} servis",
+    "see-all": "Hepsini gör"
   }
 }

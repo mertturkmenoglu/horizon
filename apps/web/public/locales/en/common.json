@@ -55,5 +55,12 @@
     "not-found": "Not Found",
     "home": "Go to Home",
     "help": "Help"
+  },
+  "browse-categories": {
+    "looking-all": "Looking for all the categories?",
+    "browse-all": "Browse all",
+    "title": "Browse Categories",
+    "num-services": "{{count}} services",
+    "see-all": "See all"
   }
 }
