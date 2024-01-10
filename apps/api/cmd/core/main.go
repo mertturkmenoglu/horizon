@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"horizon/config"
+	"horizon/internal/api"
 	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
-	"horizon/internal/geo"
 	"horizon/internal/locale"
 	"horizon/internal/tasks"
 	"horizon/internal/upload"
@@ -96,11 +96,7 @@ func main() {
 	go tasks.Init()
 	defer tasks.Close()
 
-	// Init ip2location
-	geo.New()
-
-	// Read geocoding data
-	geo.LoadGeocodingDataFromFile(viper.GetString("api.geo.geocode"))
+	api.Init()
 
 	// Init upload service
 	upload.New()
