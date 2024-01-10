@@ -11,8 +11,6 @@ import (
 	"horizon/internal/tasks"
 	"horizon/internal/upload"
 	"horizon/internal/validation"
-	"net/http"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo-contrib/jaegertracing"
@@ -23,7 +21,6 @@ import (
 
 func main() {
 	config.Bootstrap()
-
 	e := echo.New()
 
 	// Attach custom validator
@@ -32,25 +29,7 @@ func main() {
 	}
 
 	e.Use(middleware.Recover())
-
-	config := middleware.RateLimiterConfig{
-		Skipper: middleware.DefaultSkipper,
-		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
-			middleware.RateLimiterMemoryStoreConfig{Rate: 10, Burst: 30, ExpiresIn: 3 * time.Minute},
-		),
-		IdentifierExtractor: func(ctx echo.Context) (string, error) {
-			id := ctx.RealIP()
-			return id, nil
-		},
-		ErrorHandler: func(context echo.Context, err error) error {
-			return context.JSON(http.StatusForbidden, nil)
-		},
-		DenyHandler: func(context echo.Context, identifier string, err error) error {
-			return context.JSON(http.StatusTooManyRequests, nil)
-		},
-	}
-
-	e.Use(middleware.RateLimiterWithConfig(config))
+	e.Use(middleware.RateLimiterWithConfig(middlewares.GetConfig()))
 
 	// Enable tracing middleware
 	c := jaegertracing.New(e, nil)
