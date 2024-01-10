@@ -12,6 +12,7 @@ require (
 	github.com/bep/golibsass v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/cli/safeexec v1.0.1 // indirect
+	github.com/corpix/uarand v0.0.0-20170723150923-031be390f409 // indirect
 	github.com/cosmtrek/air v1.49.0 // indirect
 	github.com/creack/pty v1.1.21 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
@@ -27,6 +28,7 @@ require (
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/icrowley/fake v0.0.0-20221112152111-d7b7e2276db2 // indirect
 	github.com/ip2location/ip2location-go/v9 v9.6.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
