@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "e2e": "npx playwright test",
+    "e2e:show": "npx playwright show-report",
+    "e2e:ui": "npx playwright test --ui"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
