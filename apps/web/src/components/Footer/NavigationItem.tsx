@@ -10,7 +10,7 @@ function NavigationItem({ href, text }: NavigationItemProps): JSX.Element {
     <li>
       <Link
         to={href}
-        className="text-sm text-gray-400 hover:underline"
+        className="text-sm text-neutral-600 hover:underline"
       >
         {text}
       </Link>

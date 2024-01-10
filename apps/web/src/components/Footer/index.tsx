@@ -71,7 +71,7 @@ function Footer({ className }: FooterProps): JSX.Element {
       </div>
 
       <div className="mt-8">
-        <p className="text-xs lining-nums text-gray-400">
+        <p className="text-xs lining-nums text-neutral-600">
           &copy; {new Date().getFullYear()} Horizon. {t('copy')}
         </p>
       </div>
