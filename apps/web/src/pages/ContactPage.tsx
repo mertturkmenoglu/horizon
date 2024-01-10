@@ -50,10 +50,10 @@ function ContactPage(): React.ReactElement {
 
         <div className="mt-8 flex w-full flex-col items-center">
           <Logo />
-          <h2 className="text-4xl font-extrabold">Horizon</h2>
-          <div className="mt-8 text-2xl font-light text-midnight">
+          <h1 className="text-4xl font-extrabold">Horizon</h1>
+          <h2 className="mt-8 text-2xl font-light text-midnight">
             {t('contact-us')}
-          </div>
+          </h2>
         </div>
 
         <form
@@ -105,7 +105,7 @@ function ContactPage(): React.ReactElement {
           />
 
           <Button
-            appearance="sky"
+            appearance="midnight"
             className="col-span-2 mx-auto mt-4 max-w-48"
             type="submit"
           >
