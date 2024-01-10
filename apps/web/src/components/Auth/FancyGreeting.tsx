@@ -35,7 +35,7 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
           <Trans
             i18nKey="slogan"
             defaults={t('slogan')}
-            components={{ span: <span className="text-sky-500" /> }}
+            components={{ span: <span className="text-sky-600" /> }}
           />
         </div>
       </div>
