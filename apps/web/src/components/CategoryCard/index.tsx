@@ -5,7 +5,7 @@ type Props = React.ComponentPropsWithoutRef<'a'> & {
   category: string;
 };
 
-function Card({ className, category, ...props }: Props) {
+function CategoryCard({ className, category, ...props }: Props) {
   const { t } = useTranslation('common', { keyPrefix: 'browse-categories' });
   const href = `/categories/${encodeURIComponent(category)}`;
 
@@ -32,4 +32,4 @@ function Card({ className, category, ...props }: Props) {
   );
 }
 
-export default Card;
+export default CategoryCard;
