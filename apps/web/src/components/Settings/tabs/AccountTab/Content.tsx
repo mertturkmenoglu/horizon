@@ -87,7 +87,7 @@ function Content({ user }: Props): React.ReactElement {
               i18nKey="apply-business"
               defaults={t('apply-business')}
               components={{
-                span: <span className="text-sky-500 group-hover:underline" />,
+                span: <span className="text-sky-700 group-hover:underline" />,
               }}
             />
           </a>
@@ -99,7 +99,7 @@ function Content({ user }: Props): React.ReactElement {
               i18nKey="apply-verified"
               defaults={t('apply-verified')}
               components={{
-                span: <span className="text-sky-500 group-hover:underline" />,
+                span: <span className="text-sky-700 group-hover:underline" />,
               }}
             />
           </a>
