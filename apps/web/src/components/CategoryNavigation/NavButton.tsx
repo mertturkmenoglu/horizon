@@ -16,6 +16,7 @@ const NavButton = React.forwardRef<El, Props>(
         {...props}
       >
         <Icon className="mr-2 size-10 rounded-full bg-neutral-400/20 p-2" />
+        <span className="sr-only">{props['aria-description'] ?? ''}</span>
       </button>
     );
   }
