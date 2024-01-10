@@ -1,4 +1,3 @@
-import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import {
   ArrowLeftStartOnRectangleIcon,
@@ -17,6 +16,7 @@ import { DropdownItem } from '../NavDropdownItem';
 import { useAuth } from '@/hooks/useAuth';
 import { getUserImage } from '@/lib/img';
 import { useTranslation } from 'react-i18next';
+import { logout } from '@/lib/logout';
 
 function Menu(): React.ReactElement {
   const { user } = useAuth();
@@ -118,16 +118,7 @@ function Menu(): React.ReactElement {
 
           <DropdownItem
             as="button"
-            onClick={async () => {
-              try {
-                await api('/auth/logout', {
-                  method: 'POST',
-                });
-                window.location.href = '/';
-              } catch (err) {
-                /* empty */
-              }
-            }}
+            onClick={() => logout()}
             icon={ArrowLeftStartOnRectangleIcon}
             text={t('logout')}
           />
