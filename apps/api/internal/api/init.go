@@ -1,6 +1,7 @@
 package api
 
 import (
+	"horizon/internal/cache"
 	"horizon/internal/geo"
 	"horizon/internal/locale"
 
@@ -10,6 +11,7 @@ import (
 type AppModule struct {
 	Geo    *geo.GeoCoding
 	Locale *locale.Locale
+	Cache  *cache.Cache
 }
 
 var App *AppModule
@@ -18,6 +20,7 @@ func Init() {
 	App = &AppModule{
 		Geo:    &geo.GeoCoding{},
 		Locale: locale.New(),
+		Cache:  cache.New(),
 	}
 
 	// Init ip2location
