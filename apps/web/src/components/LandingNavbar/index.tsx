@@ -25,7 +25,7 @@ function LandingNavbar({ className }: LandingNavbarProps): React.ReactElement {
           className="inline-flex items-center text-2xl text-midnight"
         >
           <Logo className="size-12" />
-          <div className="ml-4 font-medium">Horizon</div>
+          <h1 className="ml-4 font-medium">Horizon</h1>
         </a>
 
         <Menu />

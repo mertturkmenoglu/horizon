@@ -16,11 +16,11 @@ function LandingPage(): React.ReactElement {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col items-center bg-white">
+    <main className="flex h-screen w-full flex-col items-center bg-white">
       <LandingBanner />
       <LandingNavbar className="mt-2" />
       <LandingHero className="mt-64" />
-    </div>
+    </main>
   );
 }
 

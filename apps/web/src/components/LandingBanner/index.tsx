@@ -9,7 +9,7 @@ function LandingBanner(): React.ReactElement {
       appearance="announcement"
       className="flex items-baseline justify-center"
     >
-      <div className="rounded-full bg-sky-600 px-3 py-0.5 text-sm font-bold text-white">
+      <div className="rounded-full bg-sky-700 px-3 py-0.5 text-sm font-bold text-white">
         {t('new')}
       </div>
       <div className="ml-4 py-1 text-base font-medium text-midnight">
