@@ -3,6 +3,7 @@ import { Facebook, Github, Linkedin, Twitter } from 'lucide-react';
 import NavigationItem from './NavigationItem';
 import SocialIcon from './SocialIcon';
 import { useTranslation } from 'react-i18next';
+import { validLangKeys } from '@/lib/lang';
 
 export interface FooterProps {
   className?: string;
@@ -14,7 +15,25 @@ function Footer({ className }: FooterProps): JSX.Element {
     <footer
       className={clsx('container flex flex-col items-center py-8', className)}
     >
-      <nav aria-label={t('description')}>
+      <div className="flex space-x-2">
+        {validLangKeys.map((key) => (
+          <button
+            key={key}
+            className="text-sm text-neutral-600 hover:underline"
+            onClick={() => {
+              localStorage.setItem('lang', key);
+              window.location.reload();
+            }}
+          >
+            {t(`lang.${key}`)}
+          </button>
+        ))}
+      </div>
+
+      <nav
+        aria-label={t('description')}
+        className="mt-4"
+      >
         <ul className="flex space-x-8">
           <NavigationItem
             href="/about"

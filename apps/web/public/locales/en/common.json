@@ -26,7 +26,11 @@
     "twitter": "Twitter",
     "linkedin": "LinkedIn",
     "github": "GitHub",
-    "copy": "All rights reserved."
+    "copy": "All rights reserved.",
+    "lang": {
+      "en": "English",
+      "tr": "Turkish"
+    }
   },
   "quick-actions": {
     "cards": [
