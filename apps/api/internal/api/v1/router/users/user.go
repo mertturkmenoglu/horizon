@@ -3,7 +3,6 @@ package users
 import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/cache"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -88,7 +87,7 @@ func UpdateProfileImage(c echo.Context) error {
 	}
 
 	err = updateProfileImage(auth.UserId, info.Location)
-	_ = cache.Del("user:" + auth.Username)
+	cacheDelete(auth.Username)
 
 	return c.JSON(http.StatusOK, h.Response[any]{
 		"data": info.Location,
@@ -105,7 +104,7 @@ func UpdateMyLocation(c echo.Context) error {
 		return api.NewInternalServerError(err.Error())
 	}
 
-	_ = cache.Del("user:" + auth.Username)
+	cacheDelete(auth.Username)
 	return c.NoContent(http.StatusOK)
 }
 
@@ -119,6 +118,6 @@ func UpdateMyContactInformation(c echo.Context) error {
 		return api.NewInternalServerError(err.Error())
 	}
 
-	_ = cache.Del("user:" + auth.Username)
+	cacheDelete(auth.Username)
 	return c.NoContent(http.StatusOK)
 }

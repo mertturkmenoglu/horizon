@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/cache"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 	"horizon/internal/db/query"
@@ -183,10 +182,11 @@ func ChangePassword(c echo.Context) error {
 
 func SendPasswordResetEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
-	key := fmt.Sprintf("passwordReset:%s", body.Email)
-	_, err := cache.Get(key)
+	cache := api.App.Cache
+	key := cache.FmtKey("passwordReset", body.Email)
+	has := cache.Has(key)
 
-	if err == nil {
+	if has {
 		return api.NewTooManyRequestsError("Previous link hasn't expired")
 	}
 
@@ -216,8 +216,9 @@ func SendPasswordResetEmail(c echo.Context) error {
 
 func ResetPassword(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetRequest)
-	key := fmt.Sprintf("passwordReset:%s", body.Email)
-	cacheCode, cacheErr := cache.Get(key)
+	cache := api.App.Cache
+	key := cache.FmtKey("passwordReset", body.Email)
+	ccode, cerr := cache.Get(key)
 	ua := api.FormatUserAgentString(c)
 
 	user, err := query.GetUserByEmail(body.Email)
@@ -226,7 +227,7 @@ func ResetPassword(c echo.Context) error {
 		return api.NewBadRequestError(err.Error())
 	}
 
-	if cacheErr != nil || body.Code != cacheCode {
+	if cerr != nil || body.Code != ccode {
 		recordPasswordReset(false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError("Invalid code")
 	}
@@ -254,11 +255,11 @@ func ResetPassword(c echo.Context) error {
 
 func SendVerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailEmailRequest)
-	key := fmt.Sprintf("verifyEmail:%s", body.Email)
+	cache := api.App.Cache
+	key := cache.FmtKey("verifyEmail", body.Email)
+	has := cache.Has(key)
 
-	_, err := cache.Get(key)
-
-	if err == nil {
+	if has {
 		return api.NewTooManyRequestsError("Previous code hasn't expired")
 	}
 
@@ -287,8 +288,9 @@ func SendVerifyEmail(c echo.Context) error {
 
 func VerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailRequest)
-	key := fmt.Sprintf("verifyEmail:%s", body.Email)
-	cacheCode, cacheErr := cache.Get(key)
+	cache := api.App.Cache
+	key := cache.FmtKey("verifyEmail", body.Email)
+	ccode, cerr := cache.Get(key)
 	ua := api.FormatUserAgentString(c)
 
 	user, err := query.GetUserByEmail(body.Email)
@@ -297,7 +299,7 @@ func VerifyEmail(c echo.Context) error {
 		return api.NewBadRequestError(err.Error())
 	}
 
-	if cacheErr != nil || body.Code != cacheCode {
+	if cerr != nil || body.Code != ccode {
 		recordEmailVerification(false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError("Invalid code")
 	}
@@ -338,7 +340,8 @@ func GetNewTokens(c echo.Context) error {
 		return api.NewBadRequestError("Missing refresh token")
 	}
 
-	key := fmt.Sprintf("refreshToken:%s", refreshTokenCookie.Value)
+	cache := api.App.Cache
+	key := cache.FmtKey("refreshToken", refreshTokenCookie.Value)
 	email, err := cache.Get(key)
 
 	if err != nil {

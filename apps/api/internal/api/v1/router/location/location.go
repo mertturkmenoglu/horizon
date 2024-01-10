@@ -3,7 +3,6 @@ package location
 import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/cache"
 	"horizon/internal/geo"
 	"horizon/internal/h"
 	"net/http"
@@ -13,17 +12,20 @@ import (
 )
 
 func SearchLocation(c echo.Context) error {
+	var res []geo.SearchResult
 	term := c.QueryParam("term")
-	res, err := cache.GetObj[[]geo.SearchResult]("location-search:" + term)
+	cache := api.App.Cache
+	key := cache.FmtKey("location-search", term)
+	err := api.App.Cache.ReadObj(key, &res)
 
 	if err == nil {
 		return c.JSON(http.StatusOK, h.Response[dto.SearchLocationResponse]{
-			"data": *res,
+			"data": res,
 		})
 	}
 
 	results := api.App.Geo.SearchAll(term)
-	cache.SetObj[[]geo.SearchResult]("location-search:"+term, results, time.Minute*10)
+	cache.SetObj(key, results, time.Minute*10)
 
 	return c.JSON(http.StatusOK, h.Response[dto.SearchLocationResponse]{
 		"data": results,

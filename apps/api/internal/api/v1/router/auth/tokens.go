@@ -3,7 +3,6 @@ package auth
 import (
 	"fmt"
 	"horizon/internal/api"
-	"horizon/internal/cache"
 	"horizon/internal/db/models"
 	"horizon/internal/jsonwebtoken"
 	"time"
@@ -52,11 +51,10 @@ func createNewRefreshToken(email string) (string, time.Time, error) {
 	key := fmt.Sprintf("refreshToken:%s", token)
 	ttl := time.Minute * time.Duration(viper.GetInt64("api.auth.token.refresh-ttl"))
 	exp := time.Now().Add(ttl)
-	err := cache.Set(key, email, ttl)
+	err := api.App.Cache.Set(key, email, ttl)
 	return token, exp, err
 }
 
 func removeRefreshToken(token string) error {
-	key := fmt.Sprintf("refreshToken:%s", token)
-	return cache.Del(key)
+	return api.App.Cache.Del(api.App.Cache.FmtKey("refreshToken", token))
 }
