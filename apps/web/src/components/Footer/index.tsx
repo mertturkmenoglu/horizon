@@ -14,7 +14,7 @@ function Footer({ className }: FooterProps): JSX.Element {
     <footer
       className={clsx('container flex flex-col items-center py-8', className)}
     >
-      <nav>
+      <nav aria-label={t('description')}>
         <ul className="flex space-x-8">
           <NavigationItem
             href="/about"

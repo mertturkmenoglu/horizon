@@ -30,7 +30,7 @@ function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
             href="/"
             className="mt-2 rounded-md text-2xl text-midnight"
           >
-            Horizon
+            <h1>Horizon</h1>
           </a>
           <SearchHeader className="hidden md:mx-8 md:block" />
         </div>

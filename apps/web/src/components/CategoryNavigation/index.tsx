@@ -105,6 +105,7 @@ function CategoryNavigation({
     >
       <nav
         className={cn('mt-4 flex max-w-fit items-center py-2', className)}
+        aria-label={t('category.description')}
         ref={navRef}
         {...props}
       >
