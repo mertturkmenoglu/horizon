@@ -1,9 +1,7 @@
 package middlewares
 
 import (
-	"fmt"
 	"horizon/internal/api"
-	"horizon/internal/cache"
 	"horizon/internal/db/query"
 	"horizon/internal/jsonwebtoken"
 
@@ -31,8 +29,8 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return api.NewUnauthorizedError("Invalid credentials")
 		}
 
-		key := fmt.Sprintf("refreshToken:%s", refreshCookie.Value)
-		cacheValue, err := cache.Get(key)
+		key := api.App.Cache.FmtKey("refreshToken", refreshCookie.Value)
+		cacheValue, err := api.App.Cache.Get(key)
 
 		if err != nil || cacheValue != user.Email {
 			return api.NewUnauthorizedError("Invalid credentials")
