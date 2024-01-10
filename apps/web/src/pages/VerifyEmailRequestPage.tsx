@@ -3,6 +3,7 @@ import Input from '@/components/Input';
 import { useAuth } from '@/hooks/useAuth';
 import { api, isApiError } from '@/lib/api';
 import { cn } from '@/lib/cn';
+import { logout } from '@/lib/logout';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -64,6 +65,15 @@ function VerifyEmailPage(): React.ReactElement {
           className="mt-8"
         >
           {t('btn')}
+        </Button>
+
+        <Button
+          appearance="red"
+          className="mt-2"
+          type="button"
+          onClick={() => logout()}
+        >
+          {t('logout')}
         </Button>
       </form>
     </main>
