@@ -1,8 +1,8 @@
 import { cn } from '@/lib/cn';
-import { ServiceCategory } from '@/lib/dto';
+import { ServiceCategory as ServiceCategoryDto } from '@/lib/dto';
 
 interface ServiceCategoryProps {
-  cat: ServiceCategory;
+  cat: ServiceCategoryDto;
   className?: string;
 }
 
