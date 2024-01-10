@@ -27,7 +27,7 @@ const Breadcrumb = React.forwardRef<El, Props>(
           <li>
             <a href="/home">
               <HomeIcon className="size-6 text-midnight" />
-              <span className="sr-on">{t('home')}</span>
+              <span className="sr-only">{t('home')}</span>
             </a>
           </li>
 
