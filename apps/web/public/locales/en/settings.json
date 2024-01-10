@@ -76,5 +76,27 @@
     "no-link": "You haven't added any links",
     "add-link": "Add new link",
     "profile-image-upload": "Upload a profile picture"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "lang": {
+      "en": "English",
+      "tr": "Turkish"
+    },
+    "lang-label": "Display Language",
+    "lang-select": "Select your display language",
+    "update": "Update",
+    "lang-ok": "Language changed successfully"
+  },
+  "tabs": {
+    "account": "Account",
+    "profile": "Profile",
+    "location": "Location",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "your-data": "Your data",
+    "auth-activity": "Auth Activity",
+    "help": "Help"
   }
 }

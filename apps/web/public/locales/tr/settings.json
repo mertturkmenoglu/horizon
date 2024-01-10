@@ -76,5 +76,27 @@
     "no-link": "Henüz hiçbir bağlantı eklemediniz",
     "add-link": "Yeni bağlantı ekle",
     "profile-image-upload": "Bir profil fotoğrafı yükleyin"
+  },
+  "preferences": {
+    "title": "Tercihler",
+    "lang": {
+      "en": "İngilizce",
+      "tr": "Türkçe"
+    },
+    "lang-label": "Arayüz Dili",
+    "lang-select": "Arayüz dilinizi seçin",
+    "update": "Güncelle",
+    "lang-ok": "Dil başarıyla değiştirildi"
+  },
+  "tabs": {
+    "account": "Hesap",
+    "profile": "Profil",
+    "location": "Konum",
+    "preferences": "Tercihler",
+    "notifications": "Bildirimler",
+    "privacy": "Gizlilik",
+    "your-data": "Verileriniz",
+    "auth-activity": "Yetki Hareketleri",
+    "help": "Yardım"
   }
 }
