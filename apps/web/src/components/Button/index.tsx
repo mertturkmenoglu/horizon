@@ -13,7 +13,7 @@ const buttonVariants = cva(
     variants: {
       appearance: {
         red: ['bg-red-600', 'text-white', 'focus:ring-red-600'],
-        sky: ['bg-sky-600', 'text-white', 'focus:ring-sky-600'],
+        sky: ['bg-sky-700', 'text-white', 'focus:ring-sky-700'],
         green: ['bg-green-600', 'text-white', 'focus:ring-green-600'],
         midnight: ['bg-midnight', 'text-white', 'focus:ring-midnight'],
         gray: ['bg-gray-400/70', 'text-gray-500/70', 'focus:ring-gray-400/70'],
