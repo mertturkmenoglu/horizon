@@ -1,23 +1,21 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import ServiceCategory from '@/components/ServiceCategory';
-import { useServiceCategories } from '@/hooks/useServiceCategories';
+import { useCategoryData } from '@/hooks/useCategoryData';
 import MainLayout from '@/layouts/MainLayout';
+import { useTranslation } from 'react-i18next';
 
 function CategoriesPage(): React.ReactElement {
-  const { isLoading, categories } = useServiceCategories();
-
-  if (isLoading || categories === null) {
-    return <></>;
-  }
+  const { t } = useTranslation('categories', { keyPrefix: 'explore' });
+  const categories = useCategoryData();
 
   return (
     <MainLayout>
       <Breadcrumb
-        items={[{ href: '/categories', text: 'Categories' }]}
+        items={[{ href: '/categories', text: t('breadcrumb') }]}
         className="mt-8"
       />
-      <h2 className="my-8 text-3xl">Explore All Services</h2>
-      {categories.map((c) => (
+      <h2 className="my-8 text-3xl">{t('title')}</h2>
+      {categories.data.map((c) => (
         <ServiceCategory
           cat={c}
           className="mt-8"
