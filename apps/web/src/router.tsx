@@ -17,6 +17,7 @@ const CategoriesPage = React.lazy(
 );
 const UserPage = React.lazy(() => import('./pages/UserPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
+const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
 const NewServicePage = React.lazy(
   () => import('./pages/Services/NewServicePage')
 );
@@ -78,6 +79,14 @@ export const router = createBrowserRouter([
       <GuestRoute>
         <PasswordResetRequestPage />
       </GuestRoute>
+    ),
+  },
+  {
+    path: '/services',
+    element: (
+      <ProtectedRoute>
+        <ServicesPage />
+      </ProtectedRoute>
     ),
   },
   {
