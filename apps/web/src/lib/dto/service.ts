@@ -1,4 +1,4 @@
-type GetServiceByIdResponse = {
+export type GetServiceByIdResponse = {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -22,7 +22,7 @@ type GetServiceByIdResponse = {
   videos: ServiceVideoDto[];
 };
 
-type ServiceUserDto = {
+export type ServiceUserDto = {
   id: string;
   name: string;
   username: string;
@@ -32,7 +32,7 @@ type ServiceUserDto = {
   profileImage: string;
 };
 
-type CreateServiceRequest = {
+export type CreateServiceRequest = {
   title: string;
   description: string;
   category: number;
@@ -45,21 +45,21 @@ type CreateServiceRequest = {
   deliveryTimespan: number;
 };
 
-type UploadServicePhotosRequest = {
+export type UploadServicePhotosRequest = {
   photos: ServicePhotoDto[];
 };
 
-type UploadServiceVideosRequest = {
+export type UploadServiceVideosRequest = {
   videos: ServiceVideoDto[];
 };
 
-type ServicePhotoDto = {
+export type ServicePhotoDto = {
   serviceId: number;
   url: string;
   alt: string;
 };
 
-type ServiceVideoDto = {
+export type ServiceVideoDto = {
   serviceId: number;
   url: string;
   alt: string;
