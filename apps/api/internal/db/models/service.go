@@ -24,6 +24,7 @@ type Service struct {
 	Location         string    `gorm:"not null;size:128;default:''"`
 	DeliveryTime     int       `gorm:"not null;default:1"`
 	DeliveryTimespan int       `gorm:"not null;default:0"`
+	Status           int       `gorm:"not null;default:0"`
 	Photos           []ServicePhoto
 	Videos           []ServiceVideo
 }

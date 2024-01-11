@@ -23,6 +23,7 @@ type GetServiceByIdResponse struct {
 	Location         string                    `json:"location"`
 	DeliveryTime     int                       `json:"deliveryTime"`
 	DeliveryTimespan int                       `json:"deliveryTimespan"`
+	Status           int                       `json:"status"`
 	Photos           []ServicePhotoDto         `json:"photos"`
 	Videos           []ServiceVideoDto         `json:"videos"`
 }
