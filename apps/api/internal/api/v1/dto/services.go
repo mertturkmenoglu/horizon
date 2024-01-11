@@ -8,24 +8,34 @@ import (
 type GetServiceCategoriesRespose = []categories.ServiceCategory
 
 type GetServiceByIdResponse struct {
-	Id               uint64                    `json:"id"`
-	CreatedAt        time.Time                 `json:"createdAt"`
-	UpdatedAt        time.Time                 `json:"updatedAt"`
-	User             GetUserByUsernameResponse `json:"user"`
-	Title            string                    `json:"title"`
-	Slug             string                    `json:"slug"`
-	Description      string                    `json:"description"`
-	Category         int                       `json:"category"`
-	Price            string                    `json:"price"`
-	PriceUnit        string                    `json:"priceUnit"`
-	PriceTimespan    int                       `json:"priceTimespan"`
-	IsOnline         bool                      `json:"isOnline"`
-	Location         string                    `json:"location"`
-	DeliveryTime     int                       `json:"deliveryTime"`
-	DeliveryTimespan int                       `json:"deliveryTimespan"`
-	Status           int                       `json:"status"`
-	Photos           []ServicePhotoDto         `json:"photos"`
-	Videos           []ServiceVideoDto         `json:"videos"`
+	Id               uint64            `json:"id"`
+	CreatedAt        time.Time         `json:"createdAt"`
+	UpdatedAt        time.Time         `json:"updatedAt"`
+	User             ServiceUserDto    `json:"user"`
+	Title            string            `json:"title"`
+	Slug             string            `json:"slug"`
+	Description      string            `json:"description"`
+	Category         int               `json:"category"`
+	Price            string            `json:"price"`
+	PriceUnit        string            `json:"priceUnit"`
+	PriceTimespan    int               `json:"priceTimespan"`
+	IsOnline         bool              `json:"isOnline"`
+	Location         string            `json:"location"`
+	DeliveryTime     int               `json:"deliveryTime"`
+	DeliveryTimespan int               `json:"deliveryTimespan"`
+	Status           int               `json:"status"`
+	Photos           []ServicePhotoDto `json:"photos"`
+	Videos           []ServiceVideoDto `json:"videos"`
+}
+
+type ServiceUserDto struct {
+	Id                string `json:"id"`
+	Name              string `json:"name"`
+	Username          string `json:"username"`
+	IsBusinessAccount bool   `json:"isBusinessAccount"`
+	IsVerifiedAccount bool   `json:"isVerifiedAccount"`
+	AccountStatus     int    `json:"accountStatus"`
+	ProfileImage      string `json:"profileImage"`
 }
 
 type CreateServiceRequest struct {
