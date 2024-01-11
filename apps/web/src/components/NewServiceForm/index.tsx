@@ -71,46 +71,39 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
           form.trigger('category');
         }}
       />
-      <Input
-        label="Price"
-        type="text"
-        className="mt-8"
-        placeholder="Enter an amount"
-        error={errors.price}
-        {...form.register('price')}
-      />
-      <label
-        htmlFor="price-unit-select"
-        className="mt-8 block text-sm font-semibold text-midnight"
-      >
-        Currency
-      </label>
-      <Select
-        options={ops.price}
-        className=""
-        id="price-unit-select"
-        aria-label={'Select a currency'}
-        onChange={(newValue): void => {
-          form.setValue('priceUnit', newValue?.value ?? 'USD');
-          form.trigger('priceUnit');
-        }}
-      />
-      <label
-        htmlFor="price-timespan-select"
-        className="mt-8 block text-sm font-semibold text-midnight"
-      >
-        Timespan
-      </label>
-      <Select
-        options={ops.timespan}
-        className=""
-        id="price-timespan-select"
-        aria-label={'Select a timespan'}
-        onChange={(newValue): void => {
-          form.setValue('priceTimespan', newValue?.value ?? 0);
-          form.trigger('priceTimespan');
-        }}
-      />
+
+      <div className="mt-8 flex items-end space-x-4">
+        <Input
+          label="Price"
+          type="text"
+          placeholder="Enter an amount"
+          error={errors.price}
+          {...form.register('price')}
+        />
+
+        <Select
+          options={ops.price}
+          className="py-0.5"
+          id="price-unit-select"
+          aria-label={'Select a currency'}
+          onChange={(newValue): void => {
+            form.setValue('priceUnit', newValue?.value ?? 'USD');
+            form.trigger('priceUnit');
+          }}
+        />
+
+        <Select
+          options={ops.timespan}
+          className="py-0.5"
+          id="price-timespan-select"
+          aria-label={'Select a timespan'}
+          onChange={(newValue): void => {
+            form.setValue('priceTimespan', newValue?.value ?? 0);
+            form.trigger('priceTimespan');
+          }}
+        />
+      </div>
+
       <div className="mt-8 flex space-x-2">
         <input
           type="checkbox"
@@ -120,6 +113,7 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
 
         <div>This service is online</div>
       </div>
+
       <TextArea
         label="Location"
         className="mt-8"
@@ -128,39 +122,35 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
         error={errors.location}
         {...form.register('location')}
       />
-      <Input
-        label="Delivery Time"
-        type="number"
-        className="mt-8"
-        placeholder="Enter a duration"
-        value={form.getValues('deliveryTime')}
-        error={errors.deliveryTime}
-        onChange={(e) => {
-          form.setValue('deliveryTime', e.target.valueAsNumber);
-          form.trigger('deliveryTime');
-        }}
-      />
 
-      <label
-        htmlFor="delivery-timespan-select"
-        className="mt-8 block text-sm font-semibold text-midnight"
-      >
-        Delivery Timespan
-      </label>
-      <Select
-        options={ops.timespan}
-        className=""
-        id="delivery-timespan-select"
-        aria-label={'Select a timespan'}
-        onChange={(newValue): void => {
-          form.setValue('deliveryTimespan', newValue?.value ?? 0);
-          form.trigger('deliveryTimespan');
-        }}
-      />
+      <div className="mt-8 flex items-end space-x-4">
+        <Input
+          label="Delivery Time"
+          type="number"
+          placeholder="Enter a duration"
+          value={form.getValues('deliveryTime')}
+          error={errors.deliveryTime}
+          onChange={(e) => {
+            form.setValue('deliveryTime', e.target.valueAsNumber);
+            form.trigger('deliveryTime');
+          }}
+        />
+
+        <Select
+          options={ops.timespan}
+          className="py-0.5"
+          id="delivery-timespan-select"
+          aria-label={'Select a timespan'}
+          onChange={(newValue): void => {
+            form.setValue('deliveryTimespan', newValue?.value ?? 0);
+            form.trigger('deliveryTimespan');
+          }}
+        />
+      </div>
 
       <Button
         className="mt-8 w-min"
-        appearance="trans"
+        appearance="sky"
       >
         Create
       </Button>
