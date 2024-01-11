@@ -4,7 +4,7 @@ import { cva } from 'class-variance-authority';
 
 const buttonVariants = cva(
   [
-    'w-full py-2',
+    'w-full px-4 py-2',
     'rounded font-bold',
     'hover:bg-opacity-90 focus:outline-none focus:ring focus:ring-offset-2',
     'disabled:cursor-not-allowed disabled:bg-opacity-40',
@@ -17,6 +17,12 @@ const buttonVariants = cva(
         green: ['bg-green-600', 'text-white', 'focus:ring-green-600'],
         midnight: ['bg-midnight', 'text-white', 'focus:ring-midnight'],
         gray: ['bg-gray-400/70', 'text-gray-500/70', 'focus:ring-gray-400/70'],
+        trans: [
+          'bg-transparent',
+          'text-midnight',
+          'hover:bg-neutral-400/20',
+          'focus:ring-sky-500',
+        ],
       },
     },
     defaultVariants: {
