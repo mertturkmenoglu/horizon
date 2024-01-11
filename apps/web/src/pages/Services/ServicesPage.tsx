@@ -14,6 +14,7 @@ function ServicesPage(): React.ReactElement {
     queryFn: async () => {
       return await api<{ data: GetServiceByIdResponse[] }>('/services/');
     },
+    refetchOnWindowFocus: false,
   });
 
   if (query.isLoading) {
