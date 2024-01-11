@@ -18,6 +18,9 @@ const CategoriesPage = React.lazy(
 const UserPage = React.lazy(() => import('./pages/UserPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
 const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
+const ServiceDetailPage = React.lazy(
+  () => import('./pages/Services/ServiceDetailPage')
+);
 const NewServicePage = React.lazy(
   () => import('./pages/Services/NewServicePage')
 );
@@ -86,6 +89,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ServicesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/services/:id',
+    element: (
+      <ProtectedRoute>
+        <ServiceDetailPage />
       </ProtectedRoute>
     ),
   },
