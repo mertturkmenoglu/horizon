@@ -60,6 +60,8 @@ func RegisterRoutes(e *echo.Echo) {
 	servicesRoutes := api.Group("/services")
 
 	servicesRoutes.GET("/", services.GetServices)
+	servicesRoutes.GET("/:id", services.GetServiceById)
+	servicesRoutes.POST("/", services.CreateService, middlewares.ParseBody[dto.CreateServiceRequest], middlewares.IsAuth)
 	servicesRoutes.GET("/categories", services.GetServiceCategories)
 
 	locationRoutes := api.Group("/location")
