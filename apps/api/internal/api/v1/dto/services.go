@@ -29,16 +29,16 @@ type GetServiceByIdResponse struct {
 }
 
 type CreateServiceRequest struct {
-	Title            string `json:"title"`
-	Description      string `json:"description"`
-	Category         int    `json:"category"`
-	Price            string `json:"price"`
-	PriceUnit        string `json:"priceUnit"`
-	PriceTimespan    int    `json:"priceTimespan"`
-	IsOnline         bool   `json:"isOnline"`
-	Location         string `json:"location"`
-	DeliveryTime     int    `json:"deliveryTime"`
-	DeliveryTimespan int    `json:"deliveryTimespan"`
+	Title            string `json:"title" validation:"required,min=1,max=64"`
+	Description      string `json:"description" validation:"required,min=1,max=4096"`
+	Category         int    `json:"category" validation:"required,min=1,max=45"`
+	Price            string `json:"price" validation:"required,min=1,max=10"`
+	PriceUnit        string `json:"priceUnit" validation:"required,iso4217"`
+	PriceTimespan    int    `json:"priceTimespan" validation:"required,min=0,max=3"`
+	IsOnline         bool   `json:"isOnline" validation:"required"`
+	Location         string `json:"location" validation:"required,min=1,max=128"`
+	DeliveryTime     int    `json:"deliveryTime" validation:"required,min=0,max=50"`
+	DeliveryTimespan int    `json:"deliveryTimespan" validation:"required,min=0,max=3"`
 }
 
 type UploadServicePhotosRequest struct {
