@@ -179,6 +179,7 @@ function CategoryNavigation({
           <div className="col-span-2 mx-auto grid grid-cols-3 gap-4 lg:col-span-1 lg:mx-0">
             {category.subcategories.map((subcategory) => (
               <a
+                key={subcategory.id}
                 href={`/services?category=${subcategory.id}`}
                 className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-neutral-600 hover:bg-neutral-400/10"
               >
