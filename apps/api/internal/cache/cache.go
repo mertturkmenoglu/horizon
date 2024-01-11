@@ -77,3 +77,7 @@ func (c *Cache) Has(key string) bool {
 	_, err := c.Get(key)
 	return err == nil
 }
+
+func (c *Cache) IncrBy(key string, amount int64) error {
+	return c.Client.IncrBy(c.Context, key, amount).Err()
+}
