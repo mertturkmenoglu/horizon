@@ -1,10 +1,12 @@
 package services
 
 import (
+	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	categories "horizon/internal/category"
 	"horizon/internal/h"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -19,6 +21,33 @@ func GetServices(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusNotImplemented)
 }
 
+func GetServiceById(c echo.Context) error {
+	idstr := c.Param("id")
+	id, err := strconv.ParseUint(idstr, 10, 64)
+
+	if err != nil {
+		return api.NewBadRequestError("Invalid id")
+	}
+
+	service, err := getServiceById(id)
+
+	if err != nil {
+		return nil
+	}
+
+	return c.JSON(http.StatusOK, h.Response[dto.GetServiceByIdResponse]{
+		"data": mapModelToGetServiceByIdResponse(service),
+	})
+}
+
 func CreateService(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	id, err := createService(c)
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, h.Response[any]{
+		"data": id,
+	})
 }
