@@ -35,8 +35,10 @@ func GetServiceById(c echo.Context) error {
 		return nil
 	}
 
+	defer incVisit(id)
+
 	return c.JSON(http.StatusOK, h.Response[dto.GetServiceByIdResponse]{
-		"data": mapModelToGetServiceByIdResponse(service),
+		"data": mapModelToGetServiceByIdResponse(service, getVisitCount(id), getTotalVisitsCount()),
 	})
 }
 
