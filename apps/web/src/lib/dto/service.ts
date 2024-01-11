@@ -1,5 +1,5 @@
 export type GetServiceByIdResponse = {
-  id: number;
+  id: string;
   createdAt: string;
   updatedAt: string;
   user: ServiceUserDto;
@@ -54,13 +54,13 @@ export type UploadServiceVideosRequest = {
 };
 
 export type ServicePhotoDto = {
-  serviceId: number;
+  serviceId: string;
   url: string;
   alt: string;
 };
 
 export type ServiceVideoDto = {
-  serviceId: number;
+  serviceId: string;
   url: string;
   alt: string;
 };

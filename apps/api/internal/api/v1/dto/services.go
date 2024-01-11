@@ -8,7 +8,7 @@ import (
 type GetServiceCategoriesRespose = []categories.ServiceCategory
 
 type GetServiceByIdResponse struct {
-	Id               uint64            `json:"id"`
+	Id               string            `json:"id"`
 	CreatedAt        time.Time         `json:"createdAt"`
 	UpdatedAt        time.Time         `json:"updatedAt"`
 	User             ServiceUserDto    `json:"user"`
@@ -63,13 +63,13 @@ type UploadServiceVideosRequest struct {
 }
 
 type ServicePhotoDto struct {
-	ServiceId uint64 `json:"serviceId"`
+	ServiceId string `json:"serviceId"`
 	Url       string `json:"url"`
 	Alt       string `json:"alt"`
 }
 
 type ServiceVideoDto struct {
-	ServiceId uint64 `json:"serviceId"`
+	ServiceId string `json:"serviceId"`
 	Url       string `json:"url"`
 	Alt       string `json:"alt"`
 }

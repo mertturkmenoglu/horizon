@@ -16,7 +16,7 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
 
   const onSubmit: SubmitHandler<NewServiceFormInput> = async (values) => {
     try {
-      const res = await api<{ data: number }>('/services/', {
+      const res = await api<{ data: string }>('/services/', {
         method: 'POST',
         body: values,
       });

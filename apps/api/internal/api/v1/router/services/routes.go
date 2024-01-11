@@ -1,12 +1,10 @@
 package services
 
 import (
-	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	categories "horizon/internal/category"
 	"horizon/internal/h"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -37,17 +35,12 @@ func GetServices(c echo.Context) error {
 }
 
 func GetServiceById(c echo.Context) error {
-	idstr := c.Param("id")
-	id, err := strconv.ParseUint(idstr, 10, 64)
-
-	if err != nil {
-		return api.NewBadRequestError("Invalid id")
-	}
+	id := c.Param("id")
 
 	service, err := getServiceById(id)
 
 	if err != nil {
-		return nil
+		return err
 	}
 
 	defer incVisit(id)

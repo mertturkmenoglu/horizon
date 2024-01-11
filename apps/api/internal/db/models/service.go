@@ -7,7 +7,7 @@ import (
 )
 
 type Service struct {
-	Id               uint64    `gorm:"not null;uniqueIndex"`
+	Id               string    `gorm:"not null;uniqueIndex;autoIncrement:false;default:''"`
 	CreatedAt        time.Time ``
 	UpdatedAt        time.Time `gorm:"default:null"`
 	DeletedAt        time.Time `gorm:"default:null"`
@@ -31,14 +31,14 @@ type Service struct {
 
 type ServicePhoto struct {
 	BaseModel
-	ServiceId uint64 `gorm:"not null;index"`
+	ServiceId string `gorm:"not null;index"`
 	Url       string `gorm:"not null"`
 	Alt       string `gorm:"not null;size:128"`
 }
 
 type ServiceVideo struct {
 	BaseModel
-	ServiceId uint64 `gorm:"not null;index"`
+	ServiceId string `gorm:"not null;index"`
 	Url       string `gorm:"not null"`
 	Alt       string `gorm:"not null;size:128"`
 }

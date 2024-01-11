@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
@@ -15,14 +16,14 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func getServiceById(id uint64) (*models.Service, error) {
+func getServiceById(id string) (*models.Service, error) {
 	var service *models.Service
 
 	res := db.Client.Preload(clause.Associations).First(&service, "id = ?", id)
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
-			return nil, api.NewNotFoundError("Cannot found service with id ", id)
+			return nil, api.NewNotFoundError("Cannot found service with id", id)
 		}
 
 		return nil, api.NewInternalServerError(res.Error.Error())
@@ -31,7 +32,7 @@ func getServiceById(id uint64) (*models.Service, error) {
 	return service, nil
 }
 
-func createService(c echo.Context) (uint64, error) {
+func createService(c echo.Context) (string, error) {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	dto := c.Get("body").(dto.CreateServiceRequest)
 	newId, flakeErr := api.App.Flake.NextID()
@@ -39,11 +40,13 @@ func createService(c echo.Context) (uint64, error) {
 	err := errors.Join(flakeErr, uuidErr)
 
 	if err != nil {
-		return 0, api.NewInternalServerError(err.Error())
+		return "", api.NewInternalServerError(err.Error())
 	}
 
+	idstr := fmt.Sprintf("%d", newId)
+
 	service := models.Service{
-		Id:               newId,
+		Id:               idstr,
 		UserId:           userId,
 		Title:            dto.Title,
 		Slug:             slug.Make(dto.Title),
@@ -62,10 +65,10 @@ func createService(c echo.Context) (uint64, error) {
 	res := db.Client.Create(&service)
 
 	if res.Error != nil {
-		return 0, api.NewInternalServerError(err.Error())
+		return "", api.NewInternalServerError(err.Error())
 	}
 
-	return newId, nil
+	return idstr, nil
 }
 
 func getServices(c echo.Context) ([]*models.Service, error) {
