@@ -31,14 +31,14 @@ type Service struct {
 
 type ServicePhoto struct {
 	BaseModel
-	ServiceId uuid.UUID `gorm:"type:uuid;not null;index"`
-	Url       string    `gorm:"not null"`
-	Alt       string    `gorm:"not null;size:128"`
+	ServiceId uint64 `gorm:"not null;index"`
+	Url       string `gorm:"not null"`
+	Alt       string `gorm:"not null;size:128"`
 }
 
 type ServiceVideo struct {
 	BaseModel
-	ServiceId uuid.UUID `gorm:"type:uuid;not null;index"`
-	Url       string    `gorm:"not null"`
-	Alt       string    `gorm:"not null;size:128"`
+	ServiceId uint64 `gorm:"not null;index"`
+	Url       string `gorm:"not null"`
+	Alt       string `gorm:"not null;size:128"`
 }
