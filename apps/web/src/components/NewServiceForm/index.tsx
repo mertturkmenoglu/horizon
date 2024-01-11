@@ -84,7 +84,6 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
         <Select
           options={ops.price}
           className="py-0.5"
-          id="price-unit-select"
           aria-label={'Select a currency'}
           onChange={(newValue): void => {
             form.setValue('priceUnit', newValue?.value ?? 'USD');
@@ -95,7 +94,6 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
         <Select
           options={ops.timespan}
           className="py-0.5"
-          id="price-timespan-select"
           aria-label={'Select a timespan'}
           onChange={(newValue): void => {
             form.setValue('priceTimespan', newValue?.value ?? 0);
@@ -139,7 +137,6 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
         <Select
           options={ops.timespan}
           className="py-0.5"
-          id="delivery-timespan-select"
           aria-label={'Select a timespan'}
           onChange={(newValue): void => {
             form.setValue('deliveryTimespan', newValue?.value ?? 0);
