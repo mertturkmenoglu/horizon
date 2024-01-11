@@ -3,6 +3,7 @@ package services
 import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db/models"
+	"time"
 )
 
 func mapPhotos(models []models.ServicePhoto) []dto.ServicePhotoDto {
@@ -33,7 +34,22 @@ func mapVideos(models []models.ServiceVideo) []dto.ServiceVideoDto {
 	return videos
 }
 
-func mapModelToGetServiceByIdResponse(service *models.Service) dto.GetServiceByIdResponse {
+func isNew(createdAt time.Time) bool {
+	diff := time.Now().Sub(createdAt)
+	week := time.Hour * 24 * 7.0
+	return diff.Hours() < week.Hours()
+}
+
+func isPopular(visits uint64, totalVisits uint64) bool {
+	if totalVisits == 0 {
+		return false
+	}
+
+	ratio := float64(visits) / float64(totalVisits)
+	return ratio > 0.0001
+}
+
+func mapModelToGetServiceByIdResponse(service *models.Service, visits uint64, totalVisits uint64) dto.GetServiceByIdResponse {
 	return dto.GetServiceByIdResponse{
 		Id:        service.Id,
 		CreatedAt: service.CreatedAt,
@@ -59,6 +75,9 @@ func mapModelToGetServiceByIdResponse(service *models.Service) dto.GetServiceByI
 		DeliveryTime:     service.DeliveryTime,
 		DeliveryTimespan: service.DeliveryTimespan,
 		Status:           service.Status,
+		Visits:           visits,
+		IsNew:            isNew(service.CreatedAt),
+		IsPopular:        isPopular(visits, totalVisits),
 		Photos:           mapPhotos(service.Photos),
 		Videos:           mapVideos(service.Videos),
 	}
