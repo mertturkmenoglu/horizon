@@ -6,6 +6,7 @@ import ReferToFriend from '@/components/ReferToFriend';
 import { useAuth } from '@/hooks/useAuth';
 import MainLayout from '@/layouts/MainLayout';
 import { newServices, populerRightNow } from '@/lib/dummydata';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 
 function HomePage(): React.ReactElement {
@@ -14,6 +15,9 @@ function HomePage(): React.ReactElement {
 
   return (
     <MainLayout>
+      <Helmet>
+        <title>{t('page-title')}</title>
+      </Helmet>
       <ReferToFriend className="mt-0" />
       <h2 className="mt-8 text-4xl font-bold">
         {t('title', { name: user?.name ?? '' })}
