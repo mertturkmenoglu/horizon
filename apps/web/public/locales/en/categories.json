@@ -149,7 +149,8 @@
     }
   ],
   "explore": {
-    "breadcrumb": "Categories",
+    "services": "Services",
+    "categories": "Categories",
     "title": "Explore All Services"
   }
 }

@@ -149,7 +149,8 @@
     }
   ],
   "explore": {
-    "breadcrumb": "Kategoriler",
+    "services": "Servisler",
+    "categories": "Kategoriler",
     "title": "Tüm Kategorileri Keşfedin"
   }
 }
