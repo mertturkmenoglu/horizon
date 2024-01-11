@@ -7,6 +7,7 @@ import (
 	"horizon/internal/db"
 	"horizon/internal/db/models"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/pagination"
 
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
@@ -65,4 +66,34 @@ func createService(c echo.Context) (uint64, error) {
 	}
 
 	return newId, nil
+}
+
+func getServices(c echo.Context) ([]*models.Service, error) {
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return nil, api.NewBadRequestError(err.Error())
+	}
+
+	var services []*models.Service
+	var count int64
+
+	res := db.Client.
+		Preload(clause.Associations).
+		Order("created_at DESC").
+		Limit(params.PageSize).
+		Offset(params.Offset).
+		Find(&services)
+
+	if res.Error != nil {
+		return nil, api.NewBadRequestError()
+	}
+
+	res = db.Client.Table("services").Count(&count)
+
+	if res.Error != nil {
+		return nil, api.NewBadRequestError()
+	}
+
+	return services, nil
 }

@@ -18,7 +18,22 @@ func GetServiceCategories(c echo.Context) error {
 }
 
 func GetServices(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	services, err := getServices(c)
+
+	if err != nil {
+		return err
+	}
+
+	dtos := make([]dto.GetServiceByIdResponse, len(services))
+	totalVisits := getTotalVisitsCount()
+
+	for i, s := range services {
+		dtos[i] = mapModelToGetServiceByIdResponse(s, getVisitCount(s.Id), totalVisits)
+	}
+
+	return c.JSON(http.StatusOK, h.Response[[]dto.GetServiceByIdResponse]{
+		"data": dtos,
+	})
 }
 
 func GetServiceById(c echo.Context) error {
