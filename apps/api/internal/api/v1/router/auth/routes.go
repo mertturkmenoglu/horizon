@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db/query"
@@ -11,9 +10,7 @@ import (
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/pagination"
 	"horizon/internal/password"
-	"horizon/internal/tasks"
 	"net/http"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -147,30 +144,12 @@ func ChangePassword(c echo.Context) error {
 
 func SendPasswordResetEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
-	cache := api.App.Cache
-	key := cache.FmtKey("passwordReset", body.Email)
-	has := cache.Has(key)
 
-	if has {
+	if api.App.Cache.Has(api.App.Cache.FmtKey("passwordReset", body.Email)) {
 		return api.NewTooManyRequestsError(ErrPrevLinkNotExpired)
 	}
 
-	randUuid := uuid.New().String()
-	ttl := time.Minute * 15
-	url := fmt.Sprintf(viper.GetString("api.auth.password.reset-url"), randUuid, body.Email)
-	_ = cache.Set(key, randUuid, ttl)
-	payload := tasks.PasswordResetEmailPayload{
-		Email: body.Email,
-		Url:   url,
-	}
-
-	t, err := tasks.NewTask(tasks.TypePasswordResetEmail, payload)
-
-	if err != nil {
-		return api.NewInternalServerError(err.Error())
-	}
-
-	_, err = tasks.Client.Enqueue(t)
+	err := sendPasswordResetEmail(body.Email)
 
 	if err != nil {
 		return api.NewInternalServerError(err.Error())
@@ -216,29 +195,12 @@ func ResetPassword(c echo.Context) error {
 
 func SendVerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailEmailRequest)
-	cache := api.App.Cache
-	key := cache.FmtKey("verifyEmail", body.Email)
-	has := cache.Has(key)
 
-	if has {
+	if api.App.Cache.Has(api.App.Cache.FmtKey("verifyEmail", body.Email)) {
 		return api.NewTooManyRequestsError(ErrPrevCodeNotExpired)
 	}
 
-	randUuid := uuid.New().String()
-	ttl := time.Minute * 15
-	url := fmt.Sprintf(viper.GetString("api.auth.email.verify-url"), randUuid, body.Email)
-	_ = cache.Set(key, randUuid, ttl)
-
-	t, err := tasks.NewTask(tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
-		Email: body.Email,
-		Url:   url,
-	})
-
-	if err != nil {
-		return api.NewInternalServerError(err.Error())
-	}
-
-	_, err = tasks.Client.Enqueue(t)
+	err := sendVerifyEmailEmail(body.Email)
 
 	if err != nil {
 		return api.NewInternalServerError(err.Error())
