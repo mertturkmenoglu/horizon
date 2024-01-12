@@ -4,7 +4,7 @@ import { GetAuthActivitiesResponse, TPaginatedResponse } from '@/lib/dto';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import Card from './Card';
-import Pagination from './Pagination';
+import Pagination from '@/components/Pagination';
 import { useTranslation } from 'react-i18next';
 
 function AuthActivitiesTab(): React.ReactElement {
@@ -44,9 +44,10 @@ function AuthActivitiesTab(): React.ReactElement {
       )}
 
       <Pagination
+        className="mt-16"
         page={page}
         setPage={setPage}
-        totalPages={query.data?.pagination.totalPages ?? 0}
+        total={query.data?.pagination.totalPages ?? 0}
       />
     </div>
   );
