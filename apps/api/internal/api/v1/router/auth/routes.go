@@ -88,9 +88,8 @@ func ChangePassword(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.ChangePasswordRequest)
 	ua := api.FormatUserAgentString(c)
-	err := changePasswordPreChecks(auth, body)
 
-	if err != nil {
+	if err := changePasswordPreChecks(auth, body); err != nil {
 		record(ActivityPasswordChange, false, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
 		return err
 	}
@@ -119,22 +118,18 @@ func ChangePassword(c echo.Context) error {
 
 	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
 	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
-
 	record(ActivityPasswordChange, true, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
-
 	return c.NoContent(http.StatusOK)
 }
 
 func SendPasswordResetEmail(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetEmailRequest)
 
-	if api.App.Cache.Has(api.App.Cache.FmtKey("passwordReset", body.Email)) {
+	if cacheHasPasswordResetCode(body.Email) {
 		return api.NewTooManyRequestsError(ErrPrevLinkNotExpired)
 	}
 
-	err := sendPasswordResetEmail(body.Email)
-
-	if err != nil {
+	if err := sendPasswordResetEmail(body.Email); err != nil {
 		return api.NewInternalServerError(err.Error())
 	}
 
@@ -143,18 +138,16 @@ func SendPasswordResetEmail(c echo.Context) error {
 
 func ResetPassword(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordResetRequest)
-	cache := api.App.Cache
-	key := cache.FmtKey("passwordReset", body.Email)
-	ccode, cerr := cache.Get(key)
-	ua := api.FormatUserAgentString(c)
-
 	user, err := query.GetUserByEmail(body.Email)
 
-	if err != nil || user == nil {
-		return api.NewBadRequestError(err.Error())
+	if err != nil {
+		return api.NewBadRequestError(err)
 	}
 
-	if cerr != nil || body.Code != ccode {
+	code, err := getResetPasswordCodeFromCache(body.Email)
+	ua := api.FormatUserAgentString(c)
+
+	if err != nil || body.Code != code {
 		record(ActivityPasswordReset, false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError(ErrInvalidCode)
 	}
@@ -172,20 +165,17 @@ func ResetPassword(c echo.Context) error {
 
 	_ = updatePassword(user.AuthId.String(), hashed)
 	record(ActivityPasswordReset, true, c.RealIP(), ua, user.AuthId)
-
 	return c.NoContent(http.StatusOK)
 }
 
 func SendVerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailEmailRequest)
 
-	if api.App.Cache.Has(api.App.Cache.FmtKey("verifyEmail", body.Email)) {
+	if cacheHasVerifyEmailCode(body.Email) {
 		return api.NewTooManyRequestsError(ErrPrevCodeNotExpired)
 	}
 
-	err := sendVerifyEmailEmail(body.Email)
-
-	if err != nil {
+	if err := sendVerifyEmailEmail(body.Email); err != nil {
 		return api.NewInternalServerError(err.Error())
 	}
 
@@ -194,42 +184,35 @@ func SendVerifyEmail(c echo.Context) error {
 
 func VerifyEmail(c echo.Context) error {
 	body := c.Get("body").(dto.VerifyEmailRequest)
-	cache := api.App.Cache
-	key := cache.FmtKey("verifyEmail", body.Email)
-	ccode, cerr := cache.Get(key)
-	ua := api.FormatUserAgentString(c)
-
 	user, err := query.GetUserByEmail(body.Email)
 
-	if err != nil || user == nil {
-		return api.NewBadRequestError(err.Error())
+	if err != nil {
+		return api.NewBadRequestError(err)
 	}
 
-	if cerr != nil || body.Code != ccode {
+	code, err := getVerifyEmailCodeFromCache(body.Email)
+	ua := api.FormatUserAgentString(c)
+
+	if err != nil || body.Code != code {
 		record(ActivityEmailVerification, false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError(ErrInvalidCode)
 	}
 
 	_ = verifyEmail(body.Email)
 	record(ActivityEmailVerification, true, c.RealIP(), ua, user.AuthId)
-
 	return c.NoContent(http.StatusOK)
 }
 
 func CompleteOnboarding(c echo.Context) error {
 	token := c.Get("auth").(jsonwebtoken.Payload)
-
 	_ = completeOnboarding(token.UserId)
-
 	return c.NoContent(http.StatusOK)
 }
 
 func GetPasswordStrength(c echo.Context) error {
 	body := c.Get("body").(dto.PasswordStrengthRequest)
-	strength := password.GetStrength(body.Password)
-
 	return c.JSON(http.StatusOK, h.Response[int]{
-		"data": strength,
+		"data": password.GetStrength(body.Password),
 	})
 }
 
@@ -240,9 +223,8 @@ func GetNewTokens(c echo.Context) error {
 		return api.NewBadRequestError(ErrMissingRefreshToken)
 	}
 
-	cache := api.App.Cache
-	key := cache.FmtKey("refreshToken", refreshTokenCookie.Value)
-	email, err := cache.Get(key)
+	key := api.App.Cache.FmtKey("refreshToken", refreshTokenCookie.Value)
+	email, err := api.App.Cache.Get(key)
 
 	if err != nil {
 		return api.NewBadRequestError(ErrTokenExpired)
@@ -262,7 +244,6 @@ func GetNewTokens(c echo.Context) error {
 
 	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
 	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
-
 	return c.NoContent(http.StatusOK)
 }
 
