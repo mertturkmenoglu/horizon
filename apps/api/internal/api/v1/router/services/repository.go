@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -99,4 +100,121 @@ func getServices(c echo.Context) ([]*models.Service, error) {
 	}
 
 	return services, nil
+}
+
+func getServiceRating(userId string, serviceId string) (*models.ServiceRating, error) {
+	var rating *models.ServiceRating
+
+	res := db.Client.Preload(clause.Associations).First(&rating, "user_id = ? AND service_id = ?", userId, serviceId)
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return nil, api.NewNotFoundError("Cannot found rating")
+		}
+
+		return nil, api.NewInternalServerError(res.Error.Error())
+	}
+
+	return rating, nil
+}
+
+func upsertRate(userId string, serviceId string, rating uint8) error {
+	res := db.Client.Transaction(func(tx *gorm.DB) error {
+		service, err := getServiceById(serviceId)
+
+		if err != nil {
+			return err
+		}
+
+		r, err := getServiceRating(userId, serviceId)
+
+		if err != nil {
+			// Create
+			res := tx.Create(&models.ServiceRating{
+				UserId:    uuid.MustParse(userId),
+				ServiceId: serviceId,
+				Point:     rating,
+			})
+
+			if res.Error != nil {
+				return api.NewInternalServerError("cannot create rating")
+			}
+		} else {
+			// Update
+			res := tx.Model(&models.ServiceRating{}).
+				Where("user_id = ? AND service_id = ?", userId, serviceId).
+				Updates(map[string]interface{}{
+					"point": rating,
+				})
+
+			if res.Error != nil {
+				return api.NewInternalServerError("cannot create rating")
+			}
+		}
+
+		var newPoint uint64 = 0
+		var totalVotes uint64 = 0
+
+		hasAlreadyVoted := err == nil
+
+		if hasAlreadyVoted {
+			newPoint = service.TotalPoints - uint64(r.Point) + uint64(rating)
+			totalVotes = service.TotalVotes
+		} else {
+			newPoint = service.TotalPoints + uint64(rating)
+			totalVotes = service.TotalVotes + 1
+		}
+
+		res := tx.Model(&models.Service{}).
+			Where("id = ?", serviceId).
+			Updates(map[string]interface{}{
+				"total_votes":  totalVotes,
+				"total_points": newPoint,
+			})
+
+		if res.Error != nil {
+			return api.NewInternalServerError("cannot create rating")
+		}
+
+		return nil
+	})
+
+	return res
+}
+
+func deleteRate(userId string, serviceId string) error {
+	res := db.Client.Transaction(func(tx *gorm.DB) error {
+		service, err := getServiceById(serviceId)
+
+		if err != nil {
+			return err
+		}
+
+		rating, err := getServiceRating(userId, serviceId)
+
+		if err != nil {
+			return err
+		}
+
+		res := tx.Where("user_id = ?", userId).Where("service_id = ?", serviceId).Delete(&models.ServiceRating{})
+
+		if res.Error != nil {
+			return api.NewInternalServerError("cannot delete rating")
+		}
+
+		res = tx.Model(&models.Service{}).
+			Where("id = ?", serviceId).
+			Updates(map[string]interface{}{
+				"total_votes":  service.TotalVotes - 1,
+				"total_points": service.TotalPoints - uint64(rating.Point),
+			})
+
+		if res.Error != nil {
+			return api.NewInternalServerError("cannot delete rating")
+		}
+
+		return nil
+	})
+
+	return res
 }

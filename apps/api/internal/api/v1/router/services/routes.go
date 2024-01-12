@@ -1,10 +1,13 @@
 package services
 
 import (
+	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	categories "horizon/internal/category"
 	"horizon/internal/h"
+	"horizon/internal/jsonwebtoken"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -63,9 +66,34 @@ func CreateService(c echo.Context) error {
 }
 
 func CreateRating(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	id := c.Param("id")
+	ratestr := c.Param("rating")
+
+	rate, err := strconv.ParseUint(ratestr, 10, 8)
+
+	if err != nil || rate <= 0 || rate > 5 {
+		return api.NewBadRequestError("Invalid rating")
+	}
+
+	err = upsertRate(auth.UserId, id, uint8(rate))
+
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func DeleteRating(c echo.Context) error {
-	return echo.NewHTTPError(http.StatusNotImplemented)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	id := c.Param("id")
+
+	err := deleteRate(auth.UserId, id)
+
+	if err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusOK)
 }
