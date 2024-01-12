@@ -19,3 +19,7 @@ a,
 button {
   @apply focus:outline-none focus:ring focus:ring-sky-500;
 }
+
+* {
+  font-variant-numeric: lining-nums;
+}
