@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"errors"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db/query"
@@ -20,17 +19,9 @@ import (
 func Login(c echo.Context) error {
 	body := c.Get("body").(dto.LoginRequest)
 	ua := api.FormatUserAgentString(c)
-	auth, user, err := query.GetAuthAndUserByEmail(body.Email)
-	var hashed = ""
+	auth, user, err := loginPreChecks(body)
 
-	if err == nil {
-		hashed = auth.Password
-	}
-
-	matched, hashErr := hash.Verify(body.Password, hashed)
-	err = errors.Join(err, hashErr)
-
-	if err != nil || !matched {
+	if err != nil {
 		if auth != nil {
 			record(ActivityLogin, false, c.RealIP(), ua, auth.Id)
 		}

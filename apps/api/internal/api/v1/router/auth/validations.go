@@ -3,6 +3,7 @@ package auth
 import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
+	"horizon/internal/db/models"
 	"horizon/internal/db/query"
 	"horizon/internal/hash"
 	"horizon/internal/jsonwebtoken"
@@ -101,4 +102,26 @@ func changePasswordPreChecks(auth jsonwebtoken.Payload, body dto.ChangePasswordR
 	}
 
 	return nil
+}
+
+func loginPreChecks(body dto.LoginRequest) (*models.Auth, *models.User, error) {
+	auth, user, err := query.GetAuthAndUserByEmail(body.Email)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var hashed = ""
+
+	if err == nil {
+		hashed = auth.Password
+	}
+
+	matched, err := hash.Verify(body.Password, hashed)
+
+	if err != nil || !matched {
+		return auth, user, api.NewBadRequestError(ErrInvalidEmailOrPassword)
+	}
+
+	return auth, user, nil
 }
