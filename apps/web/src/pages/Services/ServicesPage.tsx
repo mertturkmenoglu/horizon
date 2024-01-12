@@ -1,4 +1,5 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import ServiceCard from '@/components/ServiceCard';
 import Spinner from '@/components/Spinner';
 import MainLayout from '@/layouts/MainLayout';
 import { api } from '@/lib/api';
@@ -42,7 +43,11 @@ function ServicesPage(): React.ReactElement {
         className="mt-8"
       />
       {query.data && (
-        <pre className="mt-16">{JSON.stringify(query.data.data, null, 2)}</pre>
+        <div className="grid grid-cols-5 gap-4">
+          {query.data.data.map((s) => (
+            <ServiceCard service={s} />
+          ))}
+        </div>
       )}
     </MainLayout>
   );
