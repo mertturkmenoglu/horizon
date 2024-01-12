@@ -76,6 +76,8 @@ func mapModelToGetServiceByIdResponse(service *models.Service, visits uint64, to
 		DeliveryTimespan: service.DeliveryTimespan,
 		Status:           service.Status,
 		Visits:           visits,
+		TotalPoints:      service.TotalPoints,
+		TotalVotes:       service.TotalVotes,
 		IsNew:            isNew(service.CreatedAt),
 		IsPopular:        isPopular(visits, totalVisits),
 		Photos:           mapPhotos(service.Photos),
