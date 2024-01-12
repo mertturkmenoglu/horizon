@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"horizon/internal/geo"
+	"horizon/internal/api"
 	"horizon/internal/tasks"
 	"net/http"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func sendLoginAlertEmail(to string, ip string, useragent string) error {
-	location, err := geo.GetFormattedLocationFromIp(ip)
+	location, err := api.App.Ip2Geo.GetFormattedLocationFromIp(ip)
 
 	t, err := tasks.NewTask[tasks.NewLoginAlertEmailPayload](tasks.TypeNewLoginAlertEmail, tasks.NewLoginAlertEmailPayload{
 		Email:     to,
