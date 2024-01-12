@@ -6,6 +6,7 @@ import (
 	"horizon/internal/locale"
 	"horizon/internal/upload"
 
+	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/sony/sonyflake"
 )
 
@@ -16,6 +17,7 @@ type AppModule struct {
 	Cache  *cache.Cache
 	Flake  *sonyflake.Sonyflake
 	Upload *upload.Upload
+	Search *elasticsearch.Client
 }
 
 var App *AppModule
@@ -25,10 +27,20 @@ func Init() {
 		Geo:    geo.NewGeoCoding(0.5),
 		Locale: locale.New(),
 		Cache:  cache.New(),
-		Flake:  nil,
 		Ip2Geo: geo.NewIp2Geo(),
 		Upload: upload.New(),
+		Flake:  nil,
+		Search: nil,
 	}
+
+	esClient, err := elasticsearch.NewDefaultClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	App.Search = esClient
+	createIndices()
 
 	// Initialize Sonyflake
 	flake, err := sonyflake.New(sonyflake.Settings{})
