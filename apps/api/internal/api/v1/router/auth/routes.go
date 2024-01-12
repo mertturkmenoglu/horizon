@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/db"
-	"horizon/internal/db/models"
 	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/hash"
@@ -20,8 +18,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func Login(c echo.Context) error {
@@ -69,35 +65,7 @@ func Register(c echo.Context) error {
 		return err
 	}
 
-	err = db.Client.Transaction(func(tx *gorm.DB) error {
-		auth := models.Auth{
-			Password: hashed,
-		}
-
-		res := tx.Create(&auth)
-
-		if res.Error != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
-		}
-
-		user := models.User{
-			AuthId:              auth.Id,
-			Name:                body.Name,
-			Email:               body.Email,
-			Username:            body.Username,
-			OnboardingCompleted: false,
-			EmailVerified:       false,
-		}
-
-		res = tx.Omit(clause.Associations).Create(&user)
-
-		if res.Error != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, res.Error.Error())
-		}
-
-		// return nil will commit the whole transaction
-		return nil
-	})
+	err = createUser(hashed, body)
 
 	if err != nil {
 		return err
@@ -153,15 +121,11 @@ func ChangePassword(c echo.Context) error {
 		return api.NewInternalServerError("Cannot hash password")
 	}
 
-	db.Client.
-		Model(&models.Auth{}).
-		Where("id = ?", dbAuth.Id).
-		Update("password", newHash)
+	_ = updatePassword(dbAuth.Id.String(), newHash)
 
 	qauth, quser, err := query.GetAuthAndUserByEmail(auth.Email)
 
 	if err != nil {
-
 		return err
 	}
 
@@ -243,11 +207,7 @@ func ResetPassword(c echo.Context) error {
 		return api.NewBadRequestError("Password is too weak.")
 	}
 
-	db.Client.
-		Model(&models.Auth{}).
-		Where("id = ?", user.AuthId).
-		Update("password", hashed)
-
+	_ = updatePassword(user.AuthId.String(), hashed)
 	recordPasswordReset(true, c.RealIP(), ua, user.AuthId)
 
 	return c.NoContent(http.StatusOK)
@@ -304,22 +264,16 @@ func VerifyEmail(c echo.Context) error {
 		return api.NewBadRequestError("Invalid code")
 	}
 
-	db.Client.
-		Model(&models.User{}).
-		Where("email = ?", body.Email).
-		Update("email_verified", true)
-
+	_ = verifyEmail(body.Email)
 	recordEmailVerification(true, c.RealIP(), ua, user.AuthId)
+
 	return c.NoContent(http.StatusOK)
 }
 
 func CompleteOnboarding(c echo.Context) error {
 	token := c.Get("auth").(jsonwebtoken.Payload)
 
-	db.Client.
-		Model(&models.User{}).
-		Where("id = ?", token.UserId).
-		Update("onboarding_completed", true)
+	_ = completeOnboarding(token.UserId)
 
 	return c.NoContent(http.StatusOK)
 }
@@ -367,35 +321,17 @@ func GetNewTokens(c echo.Context) error {
 }
 
 func GetAuthActivities(c echo.Context) error {
-	token := c.Get("auth").(jsonwebtoken.Payload)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
 	params, err := pagination.GetParamsFromContext(c)
 
 	if err != nil {
 		return api.NewBadRequestError(err.Error())
 	}
 
-	var activities []*models.AuthActivity
-	var count int64
+	activities, count, err := getAuthActivities(auth.AuthId, params)
 
-	res := db.Client.
-		Where("auth_id = ?", token.AuthId).
-		Order("created_at DESC").
-		Limit(params.PageSize).
-		Offset(params.Offset).
-		Find(&activities)
-
-	if res.Error != nil {
-		return api.NewBadRequestError()
-	}
-
-	res = db.Client.
-		Table("auth_activities").
-		Where("auth_id = ?", token.AuthId).
-		Count(&count)
-
-	if res.Error != nil {
-		fmt.Println(res.Error)
-		return api.NewBadRequestError()
+	if err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, h.PaginatedResponse[dto.GetAuthActivitiesResponse]{
