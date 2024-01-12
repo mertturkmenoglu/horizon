@@ -7,10 +7,12 @@ import (
 
 	"github.com/adrg/strutil"
 	"github.com/adrg/strutil/metrics"
+	"github.com/spf13/viper"
 )
 
 type GeoCoding struct {
-	Data []GeoLocation
+	Data   []GeoLocation
+	MinSim float64
 }
 
 type GeoLocation struct {
@@ -32,7 +34,19 @@ type SearchResult struct {
 	Entry      GeoLocation `json:"entry"`
 }
 
-const minSimilarity = 0.5
+func NewGeoCoding(minSim float64) *GeoCoding {
+	g := &GeoCoding{
+		MinSim: minSim,
+	}
+
+	err := g.LoadGeocodingDataFromFile(viper.GetString("api.geo.geocode"))
+
+	if err != nil {
+		panic("cannot load geocoding data")
+	}
+
+	return g
+}
 
 func (g *GeoCoding) LoadGeocodingDataFromFile(path string) error {
 	bytes, err := os.ReadFile(path)
@@ -59,7 +73,7 @@ func (g *GeoCoding) SearchAll(term string) []SearchResult {
 			maxSimScore = nameSimScore
 		}
 
-		if maxSimScore >= minSimilarity {
+		if maxSimScore >= g.MinSim {
 			similars = append(similars, SearchResult{
 				Similarity: maxSimScore,
 				Entry:      entry,

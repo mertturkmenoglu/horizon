@@ -2,41 +2,30 @@ package geo
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/ip2location/ip2location-go/v9"
 	"github.com/spf13/viper"
 )
 
-var ip2geo *ip2location.DB
+type Ip2Geo struct {
+	DB *ip2location.DB
+}
 
-// Initialize a singletion ip2location.DB instance
-func New() {
-	if ip2geo == nil {
-		path := viper.GetString("api.geo.ip2locationdb")
-		db, err := ip2location.OpenDB(path)
+func NewIp2Geo() *Ip2Geo {
+	path := viper.GetString("api.geo.ip2locationdb")
+	db, err := ip2location.OpenDB(path)
 
-		if err != nil {
-			log.Fatal("Cannot open ip2location db")
-		}
+	if err != nil {
+		panic("Cannot open ip2location db")
+	}
 
-		ip2geo = db
+	return &Ip2Geo{
+		DB: db,
 	}
 }
 
-// Get ip2location.DB instance.
-// If instance is nil, initialize it first
-func Client() *ip2location.DB {
-	if ip2geo == nil {
-		New()
-	}
-	return ip2geo
-}
-
-// Returns the formatted location as a string.
-// If there's an error, returns "unknown location" as the default string.
-func GetFormattedLocationFromIp(ipaddress string) (string, error) {
-	location, err := Client().Get_all(ipaddress)
+func (g *Ip2Geo) GetFormattedLocationFromIp(ipaddr string) (string, error) {
+	location, err := g.DB.Get_all(ipaddr)
 
 	if err != nil {
 		return "unknown location", err
