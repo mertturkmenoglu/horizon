@@ -16,6 +16,8 @@ export type GetServiceByIdResponse = {
   deliveryTimespan: number;
   status: number;
   visits: number;
+  totalPoints: number;
+  totalVotes: number;
   isNew: boolean;
   isPopular: boolean;
   photos: ServicePhotoDto[];
