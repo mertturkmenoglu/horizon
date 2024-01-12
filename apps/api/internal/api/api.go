@@ -1,51 +1,41 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
+	"horizon/internal/cache"
+	"horizon/internal/geo"
+	"horizon/internal/locale"
+	"horizon/internal/upload"
 
-	"github.com/labstack/echo/v4"
-	"github.com/mileusna/useragent"
+	"github.com/sony/sonyflake"
 )
 
-func NewBadRequestError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusBadRequest, message)
+type AppModule struct {
+	Geo    *geo.GeoCoding
+	Ip2Geo *geo.Ip2Geo
+	Locale *locale.Locale
+	Cache  *cache.Cache
+	Flake  *sonyflake.Sonyflake
+	Upload *upload.Upload
 }
 
-func NewUnauthorizedError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusUnauthorized, message)
-}
+var App *AppModule
 
-func NewNotFoundError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusNotFound, message)
-}
-
-func NewContentTooLargeError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusRequestEntityTooLarge, message)
-}
-
-func NewTooManyRequestsError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusTooManyRequests, message)
-}
-
-func NewInternalServerError(message ...interface{}) *echo.HTTPError {
-	return echo.NewHTTPError(http.StatusInternalServerError, message)
-}
-
-func FormatUserAgentString(c echo.Context) string {
-	ua := useragent.Parse(c.Request().UserAgent())
-	return fmt.Sprintf("%s browser %s OS %s device", ua.Name, ua.OS, ua.Device)
-}
-
-// Extracts the cookie with the name cookieName from the Echo context
-func GetCookieFromReq(c echo.Context, cookieName string) *http.Cookie {
-	cookies := c.Request().Cookies()
-
-	for _, cookie := range cookies {
-		if cookie.Name == cookieName {
-			return cookie
-		}
+func Init() {
+	App = &AppModule{
+		Geo:    geo.NewGeoCoding(0.5),
+		Locale: locale.New(),
+		Cache:  cache.New(),
+		Flake:  nil,
+		Ip2Geo: geo.NewIp2Geo(),
+		Upload: upload.New(),
 	}
 
-	return nil
+	// Initialize Sonyflake
+	flake, err := sonyflake.New(sonyflake.Settings{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	App.Flake = flake
 }
