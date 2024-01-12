@@ -62,5 +62,9 @@
     "title": "Browse Categories",
     "num-services": "{{count}} services",
     "see-all": "See all"
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
   }
 }

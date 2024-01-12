@@ -62,5 +62,9 @@
     "title": "Kategorileri Keşfet",
     "num-services": "{{count}} servis",
     "see-all": "Hepsini gör"
+  },
+  "pagination": {
+    "prev": "Önceki",
+    "next": "Sonraki"
   }
 }
