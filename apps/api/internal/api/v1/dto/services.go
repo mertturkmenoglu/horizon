@@ -56,6 +56,10 @@ type CreateServiceRequest struct {
 	DeliveryTimespan int    `json:"deliveryTimespan" validation:"required,min=0,max=3"`
 }
 
+type BulkCreateServicesRequest struct {
+	Data []CreateServiceRequest `json:"data"`
+}
+
 type UploadServicePhotosRequest struct {
 	Photos []ServicePhotoDto `json:"photos"`
 }
