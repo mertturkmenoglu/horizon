@@ -25,8 +25,17 @@ type Service struct {
 	DeliveryTime     int       `gorm:"not null;default:1"`
 	DeliveryTimespan int       `gorm:"not null;default:0"`
 	Status           int       `gorm:"not null;default:0"`
+	TotalPoints      uint64    `gorm:"not null;default:0"`
+	TotalVotes       uint64    `gorm:"not null;default:0"`
 	Photos           []ServicePhoto
 	Videos           []ServiceVideo
+}
+
+type ServiceRating struct {
+	BaseModel
+	UserId    uuid.UUID `gorm:"not null;index"`
+	ServiceId string    `gorm:"not null;index"`
+	Point     uint8     `gorm:"not null;default:0"`
 }
 
 type ServicePhoto struct {

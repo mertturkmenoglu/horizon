@@ -35,6 +35,7 @@ func AutoMigrate() error {
 		&models.Location{},
 		&models.Service{},
 		&models.ServicePhoto{},
+		&models.ServiceRating{},
 		&models.ServiceVideo{},
 	)
 }
