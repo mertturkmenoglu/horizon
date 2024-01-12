@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -54,7 +55,10 @@ func GetServiceById(c echo.Context) error {
 }
 
 func CreateService(c echo.Context) error {
-	id, err := createService(c)
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	dto := c.Get("body").(dto.CreateServiceRequest)
+
+	id, err := createService(uuid.MustParse(auth.UserId), dto)
 
 	if err != nil {
 		return err
@@ -62,6 +66,26 @@ func CreateService(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, h.Response[any]{
 		"data": id,
+	})
+}
+
+func BulkCreateServices(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	dtos := c.Get("body").(dto.BulkCreateServicesRequest)
+	userId := uuid.MustParse(auth.UserId)
+	ids := make([]string, len(dtos.Data))
+
+	for i, dto := range dtos.Data {
+		id, err := createService(userId, dto)
+		ids[i] = id
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return c.JSON(http.StatusCreated, h.Response[[]string]{
+		"data": ids,
 	})
 }
 
