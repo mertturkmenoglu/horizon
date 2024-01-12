@@ -61,3 +61,11 @@ func CreateService(c echo.Context) error {
 		"data": id,
 	})
 }
+
+func CreateRating(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
+}
+
+func DeleteRating(c echo.Context) error {
+	return echo.NewHTTPError(http.StatusNotImplemented)
+}
