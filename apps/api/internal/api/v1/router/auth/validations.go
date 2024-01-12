@@ -41,12 +41,12 @@ func isValidUsername(str string) bool {
 func registerPreChecks(body dto.RegisterRequest) (string, error) {
 	hashed, err := hash.Hash(body.Password)
 
-	if !isValidUsername(body.Username) {
-		return "", api.NewBadRequestError("Username must include only alphanumeric characters or underscore")
-	}
-
 	if err != nil {
 		return "", api.NewBadRequestError(err.Error())
+	}
+
+	if !isValidUsername(body.Username) {
+		return "", api.NewBadRequestError(ErrUsernameChars)
 	}
 
 	exists, err := query.DoesAuthExist(body.Email)
@@ -56,17 +56,17 @@ func registerPreChecks(body dto.RegisterRequest) (string, error) {
 	}
 
 	if exists {
-		return "", api.NewBadRequestError("Email has already been taken")
+		return "", api.NewBadRequestError(ErrEmailTaken)
 	}
 
 	exists = query.UsernameExists(body.Username)
 
 	if exists {
-		return "", api.NewBadRequestError("Username has already been taken")
+		return "", api.NewBadRequestError(ErrUsernameTaken)
 	}
 
 	if !password.IsStrong(body.Password) {
-		return "", api.NewBadRequestError("Password is too weak.")
+		return "", api.NewBadRequestError(ErrPasswordTooWeak)
 	}
 
 	return hashed, nil

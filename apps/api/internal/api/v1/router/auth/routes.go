@@ -37,7 +37,7 @@ func Login(c echo.Context) error {
 		if auth != nil {
 			record(ActivityLogin, false, c.RealIP(), ua, auth.Id)
 		}
-		return api.NewBadRequestError("Invalid email or password")
+		return api.NewBadRequestError(ErrInvalidEmailOrPassword)
 	}
 
 	tokens, err := createNewTokens(auth, user)
@@ -109,17 +109,17 @@ func ChangePassword(c echo.Context) error {
 	}
 
 	if !matched {
-		return api.NewUnauthorizedError("Current password doesn't match")
+		return api.NewUnauthorizedError(ErrPasswordDontMatch)
 	}
 
 	if !password.IsStrong(body.NewPassword) {
-		return api.NewBadRequestError("Password is too weak.")
+		return api.NewBadRequestError(ErrPasswordTooWeak)
 	}
 
 	newHash, err := hash.Hash(body.NewPassword)
 
 	if err != nil {
-		return api.NewInternalServerError("Cannot hash password")
+		return api.NewInternalServerError(ErrHash)
 	}
 
 	_ = updatePassword(dbAuth.Id.String(), newHash)
@@ -152,7 +152,7 @@ func SendPasswordResetEmail(c echo.Context) error {
 	has := cache.Has(key)
 
 	if has {
-		return api.NewTooManyRequestsError("Previous link hasn't expired")
+		return api.NewTooManyRequestsError(ErrPrevLinkNotExpired)
 	}
 
 	randUuid := uuid.New().String()
@@ -194,7 +194,7 @@ func ResetPassword(c echo.Context) error {
 
 	if cerr != nil || body.Code != ccode {
 		record(ActivityPasswordReset, false, c.RealIP(), ua, user.AuthId)
-		return api.NewBadRequestError("Invalid code")
+		return api.NewBadRequestError(ErrInvalidCode)
 	}
 
 	hashed, err := hash.Hash(body.NewPassword)
@@ -205,7 +205,7 @@ func ResetPassword(c echo.Context) error {
 
 	if !password.IsStrong(body.NewPassword) {
 		record(ActivityPasswordReset, false, c.RealIP(), ua, user.AuthId)
-		return api.NewBadRequestError("Password is too weak.")
+		return api.NewBadRequestError(ErrPasswordTooWeak)
 	}
 
 	_ = updatePassword(user.AuthId.String(), hashed)
@@ -221,7 +221,7 @@ func SendVerifyEmail(c echo.Context) error {
 	has := cache.Has(key)
 
 	if has {
-		return api.NewTooManyRequestsError("Previous code hasn't expired")
+		return api.NewTooManyRequestsError(ErrPrevCodeNotExpired)
 	}
 
 	randUuid := uuid.New().String()
@@ -262,7 +262,7 @@ func VerifyEmail(c echo.Context) error {
 
 	if cerr != nil || body.Code != ccode {
 		record(ActivityEmailVerification, false, c.RealIP(), ua, user.AuthId)
-		return api.NewBadRequestError("Invalid code")
+		return api.NewBadRequestError(ErrInvalidCode)
 	}
 
 	_ = verifyEmail(body.Email)
@@ -292,7 +292,7 @@ func GetNewTokens(c echo.Context) error {
 	refreshTokenCookie := api.GetCookieFromReq(c, "refreshToken")
 
 	if refreshTokenCookie == nil {
-		return api.NewBadRequestError("Missing refresh token")
+		return api.NewBadRequestError(ErrMissingRefreshToken)
 	}
 
 	cache := api.App.Cache
@@ -300,7 +300,7 @@ func GetNewTokens(c echo.Context) error {
 	email, err := cache.Get(key)
 
 	if err != nil {
-		return api.NewBadRequestError("Token expired")
+		return api.NewBadRequestError(ErrTokenExpired)
 	}
 
 	auth, user, err := query.GetAuthAndUserByEmail(email)
@@ -312,7 +312,7 @@ func GetNewTokens(c echo.Context) error {
 	tokens, err := createNewTokens(auth, user)
 
 	if err != nil {
-		return api.NewInternalServerError("Cannot create token")
+		return api.NewInternalServerError(ErrTokenCreation)
 	}
 
 	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
