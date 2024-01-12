@@ -8,7 +8,6 @@ import (
 	"horizon/internal/api/v1/router"
 	"horizon/internal/db"
 	"horizon/internal/tasks"
-	"horizon/internal/upload"
 	"horizon/internal/validation"
 
 	"github.com/go-playground/validator/v10"
@@ -41,20 +40,9 @@ func main() {
 		// TODO: Setup IP extractors for different environments
 		e.IPExtractor = echo.ExtractIPDirect()
 
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: viper.GetString("api.logger.format"),
-		}))
-
+		e.Use(middlewares.Logger())
 		e.Use(middleware.RequestID())
-
-		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-			AllowOrigins:                             middleware.DefaultCORSConfig.AllowOrigins,
-			AllowMethods:                             middleware.DefaultCORSConfig.AllowMethods,
-			AllowHeaders:                             middleware.DefaultCORSConfig.AllowHeaders,
-			AllowCredentials:                         true,
-			UnsafeWildcardOriginWithAllowCredentials: true,
-		}))
-
+		e.Use(middlewares.Cors())
 		e.Use(middleware.BodyDump(middlewares.Dump))
 	}
 
@@ -75,9 +63,6 @@ func main() {
 	defer tasks.Close()
 
 	api.Init()
-
-	// Init upload service
-	upload.New()
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
