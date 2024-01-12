@@ -25,6 +25,8 @@ type GetServiceByIdResponse struct {
 	DeliveryTimespan int               `json:"deliveryTimespan"`
 	Status           int               `json:"status"`
 	Visits           uint64            `json:"visits"`
+	TotalPoints      uint64            `json:"totalPoints"`
+	TotalVotes       uint64            `json:"totalVotes"`
 	IsNew            bool              `json:"isNew"`
 	IsPopular        bool              `json:"isPopular"`
 	Photos           []ServicePhotoDto `json:"photos"`
