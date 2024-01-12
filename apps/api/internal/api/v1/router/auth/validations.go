@@ -5,6 +5,7 @@ import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db/query"
 	"horizon/internal/hash"
+	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"
 )
 
@@ -70,4 +71,34 @@ func registerPreChecks(body dto.RegisterRequest) (string, error) {
 	}
 
 	return hashed, nil
+}
+
+func changePasswordPreChecks(auth jsonwebtoken.Payload, body dto.ChangePasswordRequest) error {
+	dbAuth, err := query.GetAuthByEmail(auth.Email)
+
+	if err != nil {
+		return api.NewInternalServerError()
+	}
+
+	var hashed = ""
+
+	if dbAuth != nil {
+		hashed = dbAuth.Password
+	}
+
+	matched, err := hash.Verify(body.CurrentPassword, hashed)
+
+	if err != nil {
+		return api.NewBadRequestError(err.Error())
+	}
+
+	if !matched {
+		return api.NewUnauthorizedError(ErrPasswordDontMatch)
+	}
+
+	if !password.IsStrong(body.NewPassword) {
+		return api.NewBadRequestError(ErrPasswordTooWeak)
+	}
+
+	return nil
 }

@@ -87,39 +87,22 @@ func Logout(c echo.Context) error {
 func ChangePassword(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	body := c.Get("body").(dto.ChangePasswordRequest)
-	dbAuth, err := query.GetAuthByEmail(auth.Email)
+	ua := api.FormatUserAgentString(c)
+	err := changePasswordPreChecks(auth, body)
 
 	if err != nil {
-		return api.NewInternalServerError()
-	}
-
-	var hashed = ""
-
-	if dbAuth != nil {
-		hashed = dbAuth.Password
-	}
-
-	matched, err := hash.Verify(body.CurrentPassword, hashed)
-
-	if err != nil {
-		return api.NewBadRequestError(err.Error())
-	}
-
-	if !matched {
-		return api.NewUnauthorizedError(ErrPasswordDontMatch)
-	}
-
-	if !password.IsStrong(body.NewPassword) {
-		return api.NewBadRequestError(ErrPasswordTooWeak)
+		record(ActivityPasswordChange, false, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
+		return err
 	}
 
 	newHash, err := hash.Hash(body.NewPassword)
 
 	if err != nil {
+		record(ActivityPasswordChange, false, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
 		return api.NewInternalServerError(ErrHash)
 	}
 
-	_ = updatePassword(dbAuth.Id.String(), newHash)
+	_ = updatePassword(auth.AuthId, newHash)
 
 	qauth, quser, err := query.GetAuthAndUserByEmail(auth.Email)
 
@@ -130,14 +113,14 @@ func ChangePassword(c echo.Context) error {
 	tokens, err := createNewTokens(qauth, quser)
 
 	if err != nil {
+		record(ActivityPasswordChange, false, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
 		return err
 	}
 
 	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
 	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
 
-	ua := api.FormatUserAgentString(c)
-	record(ActivityPasswordChange, true, c.RealIP(), ua, dbAuth.Id)
+	record(ActivityPasswordChange, true, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
 
 	return c.NoContent(http.StatusOK)
 }
