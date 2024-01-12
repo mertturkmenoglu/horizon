@@ -12,10 +12,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/spf13/viper"
 )
 
 func RegisterRoutes(e *echo.Echo) {
 	api := e.Group("/api/v1")
+	env := viper.GetString("env")
 	api.Use(middlewares.GetLocaleFromHeader)
 
 	authRoutes := api.Group("/auth")
@@ -65,6 +67,15 @@ func RegisterRoutes(e *echo.Echo) {
 	servicesRoutes.DELETE("/:id/rate", services.DeleteRating, middlewares.IsAuth)
 	servicesRoutes.POST("/", services.CreateService, middlewares.ParseBody[dto.CreateServiceRequest], middlewares.IsAuth)
 	servicesRoutes.GET("/categories", services.GetServiceCategories)
+
+	if env == "dev" {
+		servicesRoutes.POST(
+			"/bulk",
+			services.BulkCreateServices,
+			middlewares.ParseBody[dto.BulkCreateServicesRequest],
+			middlewares.IsAuth,
+		)
+	}
 
 	locationRoutes := api.Group("/location")
 	locationRoutes.GET("/", location.SearchLocation)
