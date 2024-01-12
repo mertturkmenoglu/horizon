@@ -9,13 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var minioClient *minio.Client
+type Upload struct {
+	Client  *minio.Client
+	Context context.Context
+}
 
-func New() {
-	if minioClient != nil {
-		return
-	}
-
+func New() *Upload {
 	endpoint := viper.GetString("minio.endpoint")
 	id := viper.GetString("minio.user")
 	secret := viper.GetString("minio.password")
@@ -27,14 +26,17 @@ func New() {
 		log.Fatal("Cannot create Minio Client", err.Error())
 	}
 
-	minioClient = client
-	ctx := context.Background()
+	up := &Upload{
+		Client:  client,
+		Context: context.Background(),
+	}
+
 	buckets := viper.GetStringMapString("minio.buckets")
 	location := viper.GetString("minio.location")
 
 	for _, v := range buckets {
-		if exists, _ := minioClient.BucketExists(ctx, v); !exists {
-			err = minioClient.MakeBucket(ctx, v, minio.MakeBucketOptions{
+		if exists, _ := up.Client.BucketExists(up.Context, v); !exists {
+			err = up.Client.MakeBucket(up.Context, v, minio.MakeBucketOptions{
 				Region: location,
 			})
 
@@ -43,11 +45,6 @@ func New() {
 			}
 		}
 	}
-}
 
-func Client() *minio.Client {
-	if minioClient == nil {
-		New()
-	}
-	return minioClient
+	return up
 }

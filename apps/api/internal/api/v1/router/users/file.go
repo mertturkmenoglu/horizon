@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"horizon/internal/api"
-	"horizon/internal/upload"
 	"mime/multipart"
 
 	"github.com/minio/minio-go/v7"
@@ -34,7 +33,7 @@ func putFile(username string, contentType string, src multipart.File) (minio.Upl
 	ctx := context.Background()
 	bucket := viper.GetString("minio.buckets.profile-images")
 
-	return upload.Client().PutObject(ctx, bucket, obj, src, -1, minio.PutObjectOptions{
+	return api.App.Upload.Client.PutObject(ctx, bucket, obj, src, -1, minio.PutObjectOptions{
 		ContentType: contentType,
 	})
 }
