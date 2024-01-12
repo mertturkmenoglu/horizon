@@ -35,7 +35,7 @@ func Login(c echo.Context) error {
 
 	if err != nil || !matched {
 		if auth != nil {
-			recordLogin(false, c.RealIP(), ua, auth.Id)
+			record(ActivityLogin, false, c.RealIP(), ua, auth.Id)
 		}
 		return api.NewBadRequestError("Invalid email or password")
 	}
@@ -48,7 +48,7 @@ func Login(c echo.Context) error {
 
 	c.SetCookie(createCookie("accessToken", tokens.AccessToken, tokens.AccessExp))
 	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
-	recordLogin(true, c.RealIP(), ua, auth.Id)
+	record(ActivityLogin, true, c.RealIP(), ua, auth.Id)
 
 	if viper.GetBool("api.auth.send-login-alert-email") {
 		_ = sendLoginAlertEmail(body.Email, c.RealIP(), ua)
@@ -78,7 +78,8 @@ func Register(c echo.Context) error {
 
 func Logout(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
-	recordLogout(auth.AuthId)
+	ua := api.FormatUserAgentString(c)
+	record(ActivityLogout, true, c.RealIP(), ua, uuid.MustParse(auth.AuthId))
 	cookie := api.GetCookieFromReq(c, "refreshToken")
 	_ = removeRefreshToken(cookie.Value)
 	c.SetCookie(removeCookie("accessToken"))
@@ -139,7 +140,7 @@ func ChangePassword(c echo.Context) error {
 	c.SetCookie(createCookie("refreshToken", tokens.RefreshToken, tokens.RefreshExp))
 
 	ua := api.FormatUserAgentString(c)
-	recordPasswordChange(true, c.RealIP(), ua, dbAuth.Id)
+	record(ActivityPasswordChange, true, c.RealIP(), ua, dbAuth.Id)
 
 	return c.NoContent(http.StatusOK)
 }
@@ -192,7 +193,7 @@ func ResetPassword(c echo.Context) error {
 	}
 
 	if cerr != nil || body.Code != ccode {
-		recordPasswordReset(false, c.RealIP(), ua, user.AuthId)
+		record(ActivityPasswordReset, false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError("Invalid code")
 	}
 
@@ -203,12 +204,12 @@ func ResetPassword(c echo.Context) error {
 	}
 
 	if !password.IsStrong(body.NewPassword) {
-		recordPasswordReset(false, c.RealIP(), ua, user.AuthId)
+		record(ActivityPasswordReset, false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError("Password is too weak.")
 	}
 
 	_ = updatePassword(user.AuthId.String(), hashed)
-	recordPasswordReset(true, c.RealIP(), ua, user.AuthId)
+	record(ActivityPasswordReset, true, c.RealIP(), ua, user.AuthId)
 
 	return c.NoContent(http.StatusOK)
 }
@@ -260,12 +261,12 @@ func VerifyEmail(c echo.Context) error {
 	}
 
 	if cerr != nil || body.Code != ccode {
-		recordEmailVerification(false, c.RealIP(), ua, user.AuthId)
+		record(ActivityEmailVerification, false, c.RealIP(), ua, user.AuthId)
 		return api.NewBadRequestError("Invalid code")
 	}
 
 	_ = verifyEmail(body.Email)
-	recordEmailVerification(true, c.RealIP(), ua, user.AuthId)
+	record(ActivityEmailVerification, true, c.RealIP(), ua, user.AuthId)
 
 	return c.NoContent(http.StatusOK)
 }
