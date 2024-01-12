@@ -1,13 +1,11 @@
 package services
 
 import (
-	"errors"
 	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
-	"horizon/internal/jsonwebtoken"
 	"horizon/internal/pagination"
 
 	"github.com/google/uuid"
@@ -33,12 +31,8 @@ func getServiceById(id string) (*models.Service, error) {
 	return service, nil
 }
 
-func createService(c echo.Context) (string, error) {
-	auth := c.Get("auth").(jsonwebtoken.Payload)
-	dto := c.Get("body").(dto.CreateServiceRequest)
-	newId, flakeErr := api.App.Flake.NextID()
-	userId, uuidErr := uuid.Parse(auth.UserId)
-	err := errors.Join(flakeErr, uuidErr)
+func createService(userId uuid.UUID, dto dto.CreateServiceRequest) (string, error) {
+	newId, err := api.App.Flake.NextID()
 
 	if err != nil {
 		return "", api.NewInternalServerError(err.Error())
