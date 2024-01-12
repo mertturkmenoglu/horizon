@@ -4,6 +4,7 @@ import (
 	"horizon/internal/cache"
 	"horizon/internal/geo"
 	"horizon/internal/locale"
+	"horizon/internal/upload"
 
 	"github.com/sony/sonyflake"
 )
@@ -14,6 +15,7 @@ type AppModule struct {
 	Locale *locale.Locale
 	Cache  *cache.Cache
 	Flake  *sonyflake.Sonyflake
+	Upload *upload.Upload
 }
 
 var App *AppModule
@@ -25,6 +27,7 @@ func Init() {
 		Cache:  cache.New(),
 		Flake:  nil,
 		Ip2Geo: geo.NewIp2Geo(),
+		Upload: upload.New(),
 	}
 
 	// Initialize Sonyflake
