@@ -1,24 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"horizon/internal/api/v1/dto"
-	"os"
-
-	"github.com/icrowley/fake"
+	"flag"
+	"log"
 )
 
 func main() {
-	dtos := make([]dto.RegisterRequest, 1000)
-	for i := 0; i < 1000; i++ {
-		dtos[i] = dto.RegisterRequest{
-			Email:    fake.EmailAddress(),
-			Password: fake.Password(8, 10, true, true, false),
-			Name:     fake.FullName(),
-			Username: fake.UserName(),
-		}
+	f := flag.String("gen", "", "generate data")
+	n := flag.Int("n", 0, "number of fake data")
+	flag.Parse()
+
+	if f == nil || n == nil {
+		log.Fatalln("Give a flag")
 	}
 
-	bytes, _ := json.MarshalIndent(dtos, "", "\t")
-	os.WriteFile("tmp/fake_data.json", bytes, 0644)
+	if *f == "users" {
+		gen_users(*n, "tmp/fake_data.json")
+	}
+
+	if *f == "services" {
+		gen_services(*n, "tmp/fake_services_data.json")
+	}
 }
