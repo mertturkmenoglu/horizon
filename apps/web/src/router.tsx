@@ -4,45 +4,45 @@ import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
 import GuestRoute from './components/AuthGuard/GuestRoute';
 
-const LandingPage = React.lazy(() => import('./pages/LandingPage'));
-const LoginPage = React.lazy(() => import('./pages/LoginPage'));
-const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
-const HomePage = React.lazy(() => import('./pages/HomePage'));
-const PasswordResetRequestPage = React.lazy(
-  () => import('./pages/PasswordResetRequestPage')
-);
 const CategoriesPage = React.lazy(
   () => import('./pages/Services/CategoriesPage')
 );
-const UserPage = React.lazy(() => import('./pages/UserPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
+const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
+const HelpPage = React.lazy(() => import('./pages/HelpPage'));
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const LandingPage = React.lazy(() => import('./pages/LandingPage'));
+const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
-const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
+const MessagesPage = React.lazy(() => import('./pages/MessagesPage'));
+const MyServicesPage = React.lazy(() => import('./pages/MyServices'));
+const NewServicePage = React.lazy(
+  () => import('./pages/Services/NewServicePage')
+);
+const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
+const OverviewPage = React.lazy(() => import('./pages/OverviewPage'));
+const PasswordResetRequestPage = React.lazy(
+  () => import('./pages/PasswordResetRequestPage')
+);
+const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
+const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
+const SearchPage = React.lazy(() => import('./pages/SearchPage'));
 const ServiceDetailPage = React.lazy(
   () => import('./pages/Services/ServiceDetailPage')
 );
-const NewServicePage = React.lazy(
-  () => import('./pages/Services/NewServicePage')
+const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const SettingsOutlet = React.lazy(() => import('./components/Settings/Outlet'));
+const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+const UserPage = React.lazy(() => import('./pages/UserPage'));
+const VerifyEmailRedirect = React.lazy(
+  () => import('./pages/VerifyEmailRedirect')
 );
 const VerifyEmailRequestPage = React.lazy(
   () => import('./pages/VerifyEmailRequestPage')
 );
-const VerifyEmailRedirect = React.lazy(
-  () => import('./pages/VerifyEmailRedirect')
-);
-const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
-const SettingsOutlet = React.lazy(() => import('./components/Settings/Outlet'));
-const ContactPage = React.lazy(() => import('./pages/ContactPage'));
-const MyServicesPage = React.lazy(() => import('./pages/MyServices'));
-const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
-const HelpPage = React.lazy(() => import('./pages/HelpPage'));
-const MessagesPage = React.lazy(() => import('./pages/MessagesPage'));
-const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
-const OverviewPage = React.lazy(() => import('./pages/OverviewPage'));
-const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
-const SearchPage = React.lazy(() => import('./pages/SearchPage'));
-const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
-const TermsPage = React.lazy(() => import('./pages/TermsPage'));
-const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 
 export const router = createBrowserRouter([
   {
