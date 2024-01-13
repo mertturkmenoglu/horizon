@@ -7,7 +7,6 @@ import GuestRoute from './components/AuthGuard/GuestRoute';
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
-const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const PasswordResetRequestPage = React.lazy(
   () => import('./pages/PasswordResetRequestPage')
@@ -43,6 +42,7 @@ const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
 const SearchPage = React.lazy(() => import('./pages/SearchPage'));
 const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 
 export const router = createBrowserRouter([
   {
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         <LandingPage />
       </GuestRoute>
     ),
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: '/login',
