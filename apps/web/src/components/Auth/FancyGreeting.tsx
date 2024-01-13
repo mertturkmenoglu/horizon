@@ -2,6 +2,7 @@ import { cn } from '@/lib/cn';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Logo2 from '../Logo2';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 interface FancyGreetingProps {
   className?: string;
@@ -17,13 +18,13 @@ function FancyGreeting({ className }: FancyGreetingProps): React.ReactElement {
         className
       )}
     >
-      <a
-        href="/"
+      <Link
+        to="/"
         className="absolute left-8 top-8 flex items-center space-x-4 hover:underline"
       >
         <ArrowLeftIcon className="size-6" />
         <span>{t('home')}</span>
-      </a>
+      </Link>
       <img
         src="https://images.unsplash.com/photo-1508385082359-f38ae991e8f2?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt=""

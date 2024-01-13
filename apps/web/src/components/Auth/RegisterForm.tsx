@@ -8,6 +8,7 @@ import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterFormProps {
   className?: string;
@@ -25,6 +26,7 @@ type RegisterFormInput = z.infer<typeof schema>;
 
 function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
   const { t } = useTranslation('auth');
+  const navigate = useNavigate();
   const { register, formState, handleSubmit } = useForm<RegisterFormInput>({
     resolver: zodResolver(schema),
   });
@@ -51,8 +53,7 @@ function RegisterForm({ className }: RegisterFormProps): React.ReactElement {
       toast.success(t('register-success'));
 
       setTimeout(() => {
-        window.location.href = '/login';
-        return;
+        navigate('/login');
       }, 2000);
     } catch (err) {
       if (isApiError(err)) {
