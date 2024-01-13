@@ -2,17 +2,20 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { GeoSearchResult } from '@/lib/dto';
 import { formatLocation } from '@/lib/location';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 type Props = {
   item: GeoSearchResult;
+  setTyped: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function LocationResult({ item }: Props): React.ReactElement {
+function LocationResult({ item, setTyped }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'location' });
   const entry = item.entry;
   const { name, admin, country, lat, long } = entry;
+  const qc = useQueryClient();
 
   const updateLocation = async () => {
     try {
@@ -27,8 +30,13 @@ function LocationResult({ item }: Props): React.ReactElement {
         },
       });
       toast.success(t('update-ok'));
+      qc.invalidateQueries({
+        queryKey: ['auth'],
+      });
     } catch (err) {
       toast.error(t('update-err'));
+    } finally {
+      setTyped(false);
     }
   };
 
