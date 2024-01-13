@@ -25,7 +25,7 @@ function BrowseCategoriesGrid({
         <div>{t('looking-all')}</div>
         <Link
           to="/services/categories"
-          className="text-yellow-500 hover:underline"
+          className="text-sky-600 hover:underline"
         >
           {t('browse-all')}
         </Link>
@@ -35,6 +35,7 @@ function BrowseCategoriesGrid({
           <CategoryCard
             key={category.category}
             category={category.category}
+            img={category.image}
           />
         ))}
       </div>
