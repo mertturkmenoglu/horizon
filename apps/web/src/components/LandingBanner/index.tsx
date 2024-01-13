@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Banner from '../Banner';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function LandingBanner(): React.ReactElement {
   const { t } = useTranslation('landing', { keyPrefix: 'banner' });
@@ -16,13 +17,13 @@ function LandingBanner(): React.ReactElement {
         {t('text')}
       </div>
       <div className="ml-4">
-        <a
-          href="/register"
+        <Link
+          to="/register"
           className="flex items-center text-base font-bold text-midnight"
         >
           {t('cta')}
           <ArrowRightIcon className="ml-1 size-4" />
-        </a>
+        </Link>
       </div>
     </Banner>
   );

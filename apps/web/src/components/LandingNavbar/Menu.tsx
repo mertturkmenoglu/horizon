@@ -25,12 +25,12 @@ function Menu(): React.ReactElement {
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
-                  <a
+                  <Link
                     className={cn(
                       'flex h-full w-full select-none flex-col justify-end',
                       'rounded-md bg-gradient-to-t from-sky-500 to-sky-100 p-6 no-underline outline-none focus:shadow-md'
                     )}
-                    href="/"
+                    to="/"
                   >
                     <Logo className="-ml-2 size-12 fill-sky-600" />
                     <div className="mb-2 mt-4 text-lg font-bold text-white">
@@ -39,7 +39,7 @@ function Menu(): React.ReactElement {
                     <p className="text-sm leading-tight text-white">
                       {t('slogan')}
                     </p>
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
               {[0, 1, 2].map((index) => (

@@ -1,6 +1,7 @@
 import { cn } from '@/lib/cn';
 import CookieButton from './CookieButton';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 interface CookieConsentProps {
   open: boolean;
@@ -35,12 +36,12 @@ function CookieConsent({
           <div className="text-xl font-black text-midnight">{t('title')}</div>
           <div className="max-w-5xl leading-8 text-midnight">
             {t('body')}{' '}
-            <a
-              href="/cookies"
+            <Link
+              to="/cookies"
               className="font-semibold text-blue-500 underline"
             >
               {t('more')}
-            </a>
+            </Link>
           </div>
         </div>
 

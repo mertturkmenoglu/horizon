@@ -8,10 +8,12 @@ import { useOptions } from './useOptions';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 function NewServiceForm({ className }: TProps): React.ReactElement {
   const form = useNewServiceForm();
   const ops = useOptions();
+  const navigate = useNavigate();
   const { errors } = form.formState;
 
   const onSubmit: SubmitHandler<NewServiceFormInput> = async (values) => {
@@ -24,7 +26,7 @@ function NewServiceForm({ className }: TProps): React.ReactElement {
       toast.success('Created successfully. You will be redirected.');
 
       setTimeout(() => {
-        window.location.href = '/services/' + res.data;
+        navigate(`/services/${encodeURIComponent(res.data)}`);
       }, 2000);
     } catch (err) {
       toast.error(JSON.stringify(err));
