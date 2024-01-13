@@ -51,11 +51,7 @@
     "question": "<span>Horizon</span>'ı beğendin mi?",
     "cta": "Bizi bir <span>arkadaşına</span> öner."
   },
-  "not-found": {
-    "not-found": "Bulunamadı",
-    "home": "Ana Sayfaya Git",
-    "help": "Yardım"
-  },
+  "not-found": {},
   "browse-categories": {
     "looking-all": "Tüm kategorileri mi arıyorsunuz?",
     "browse-all": "Hepsini gör",
@@ -66,5 +62,12 @@
   "pagination": {
     "prev": "Önceki",
     "next": "Sonraki"
+  },
+  "error": {
+    "err": "Bir şeyler ters gitti",
+    "error": "Hata",
+    "not-found": "Bulunamadı",
+    "home": "Ana Sayfaya Git",
+    "help": "Yardım"
   }
 }

@@ -51,11 +51,6 @@
     "question": "Enjoying <span>Horizon</span>?",
     "cta": "Refer us to a <span>friend</span>."
   },
-  "not-found": {
-    "not-found": "Not Found",
-    "home": "Go to Home",
-    "help": "Help"
-  },
   "browse-categories": {
     "looking-all": "Looking for all the categories?",
     "browse-all": "Browse all",
@@ -66,5 +61,12 @@
   "pagination": {
     "prev": "Previous",
     "next": "Next"
+  },
+  "error": {
+    "err": "Something went wrong",
+    "error": "Error",
+    "not-found": "Not Found",
+    "home": "Go to Home",
+    "help": "Help"
   }
 }
