@@ -1,6 +1,7 @@
 import { cn } from '@/lib/cn';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   className?: string;
@@ -14,6 +15,7 @@ function RecentSearches({
   setSearches,
 }: Props): React.ReactElement {
   const { t } = useTranslation('appbar', { keyPrefix: 'search' });
+  const navigate = useNavigate();
 
   return (
     <div
@@ -44,6 +46,9 @@ function RecentSearches({
       {searches.map((search, i) => (
         <button
           key={search + i}
+          onClick={() => {
+            navigate(`/search?term=${encodeURIComponent(search)}`);
+          }}
           className={cn(
             'text-neutral-600 hover:bg-neutral-400/10',
             'flex w-full rounded px-6 py-2 text-sm',

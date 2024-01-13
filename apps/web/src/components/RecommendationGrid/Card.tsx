@@ -3,6 +3,7 @@ import { TRecommendation } from './index';
 import Rating from './Rating';
 import Chip from './Chip';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 type CardProps = TProps & {
   item: TRecommendation;
@@ -46,8 +47,8 @@ function Chips({ item, className }: CardProps): React.ReactElement {
 
 function Card({ className, item }: CardProps): React.ReactElement {
   return (
-    <a
-      href={item.url}
+    <Link
+      to={item.url}
       className={cn('group block rounded-md', className)}
     >
       <img
@@ -78,7 +79,7 @@ function Card({ className, item }: CardProps): React.ReactElement {
           <Chips item={item} />
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 

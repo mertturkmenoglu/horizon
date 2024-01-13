@@ -2,6 +2,7 @@ import { cn } from '@/lib/cn';
 import React from 'react';
 import Doodle from './doodle';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 type El = React.ElementRef<'div'>;
 type Props = React.ComponentPropsWithoutRef<'div'>;
@@ -27,8 +28,8 @@ const ReferToFriend = React.forwardRef<El, Props>(
             />
           </div>
 
-          <a
-            href="/referral"
+          <Link
+            to="/referral"
             className="mt-2 rounded-md text-lg font-medium hover:underline hover:decoration-sky-700 hover:decoration-4 hover:underline-offset-8"
           >
             <Trans
@@ -36,7 +37,7 @@ const ReferToFriend = React.forwardRef<El, Props>(
               defaults={t('cta')}
               components={{ span: <span className="text-sky-700" /> }}
             />
-          </a>
+          </Link>
         </div>
       </div>
     );

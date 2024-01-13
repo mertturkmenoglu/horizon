@@ -2,6 +2,7 @@ import { cn } from '@/lib/cn';
 import React from 'react';
 import Card from './Card';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export type TRecommendation = {
   url: string;
@@ -42,13 +43,13 @@ const RecommendationGrid = React.forwardRef<El, Props>(
       >
         <div className="flex items-baseline space-x-4">
           <div className="text-2xl text-midnight">{title.text}</div>
-          <a
-            href={title.href}
+          <Link
+            to={title.href}
             className=" flex items-center space-x-2 font-bold text-midnight underline"
           >
             <span className="sr-only">{title.text}</span>
             <div>{t('more')}</div>
-          </a>
+          </Link>
         </div>
 
         <div className="mt-4 grid grid-cols-1 items-center gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">

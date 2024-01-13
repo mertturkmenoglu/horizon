@@ -3,6 +3,7 @@ import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getServiceImage, getUserImage } from '@/lib/img';
 import Rating from './Rating';
 import Chips from './ChipsContainer';
+import { Link } from 'react-router-dom';
 
 export type Props = React.ComponentPropsWithoutRef<'a'> & {
   service: GetServiceByIdResponse;
@@ -14,8 +15,8 @@ function ServiceCard({
   ...props
 }: Props): React.ReactElement {
   return (
-    <a
-      href={'/services/' + service.id}
+    <Link
+      to={'/services/' + service.id}
       className={cn('group block rounded-md lining-nums', className)}
       {...props}
     >
@@ -52,7 +53,7 @@ function ServiceCard({
           <Chips service={service} />
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
