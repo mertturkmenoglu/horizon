@@ -8,6 +8,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useRecentSearches } from './useRecentSearches';
 import RecentSearches from './RecentSearches';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const schema = z.object({
   term: z.string().min(1).max(128),
@@ -18,9 +20,23 @@ type ServiceSearchInput = z.infer<typeof schema>;
 function ServiceSearch({ className }: TProps): React.ReactElement {
   const { t } = useTranslation('appbar', { keyPrefix: 'search' });
   const [recentSearches, setRecentSearches] = useRecentSearches();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isSearchPage = location.pathname === '/search';
+  const defaultTerm = useMemo(() => {
+    if (!isSearchPage) {
+      return '';
+    }
+
+    return searchParams.get('term') ?? '';
+  }, [isSearchPage, searchParams]);
 
   const { register, handleSubmit } = useForm<ServiceSearchInput>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      term: defaultTerm,
+    },
   });
 
   const onSubmit: SubmitHandler<ServiceSearchInput> = (values) => {
@@ -28,6 +44,7 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
       const newArr = [values.term, ...prev];
       return newArr.slice(0, Math.min(newArr.length, 5));
     });
+    navigate(`/search?term=${encodeURIComponent(values.term)}`);
   };
 
   return (
