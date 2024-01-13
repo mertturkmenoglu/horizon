@@ -18,10 +18,12 @@ export function NavItem({
   const [searchParams] = useSearchParams();
   const tab = searchParams.get('tab') ?? 'account';
   const isCurrentTab = tab === id;
+  const to = id === 'help' ? '/help' : `/settings?tab=${id}`;
+
   return (
     <li className="w-full">
       <Link
-        to={`/settings?tab=${id}`}
+        to={to}
         className={cn(
           'mx-2 flex items-center space-x-2 rounded-md px-4 py-2',
           'transition-all duration-100 ease-out',
