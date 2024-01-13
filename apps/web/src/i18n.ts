@@ -9,7 +9,7 @@ i18n
     fallbackLng: 'en',
     lng: localStorage.getItem('lang') ?? 'en',
     defaultNS: 'common',
-    debug: import.meta.env.DEV,
+    debug: false,
     interpolation: {
       escapeValue: false,
     },
