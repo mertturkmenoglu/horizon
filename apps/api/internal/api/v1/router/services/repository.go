@@ -1,8 +1,7 @@
 package services
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
@@ -67,8 +66,11 @@ func createService(userId uuid.UUID, dto dto.CreateServiceRequest) (string, erro
 
 	srv, _ := getServiceById(idstr)
 	serviceDto := mapModelToGetServiceByIdResponse(srv, 0, 0)
-	serialized, _ := json.Marshal(serviceDto)
-	api.App.Search.Index("service", bytes.NewReader(serialized))
+	api.App.Search.
+		Index("service").
+		Id(idstr).
+		Request(serviceDto).
+		Do(context.TODO())
 
 	return idstr, nil
 }

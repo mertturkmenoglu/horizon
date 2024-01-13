@@ -17,7 +17,7 @@ type AppModule struct {
 	Cache  *cache.Cache
 	Flake  *sonyflake.Sonyflake
 	Upload *upload.Upload
-	Search *elasticsearch.Client
+	Search *elasticsearch.TypedClient
 }
 
 var App *AppModule
@@ -33,7 +33,7 @@ func Init() {
 		Search: nil,
 	}
 
-	esClient, err := elasticsearch.NewDefaultClient()
+	esClient, err := elasticsearch.NewTypedClient(elasticsearch.Config{})
 
 	if err != nil {
 		panic(err.Error())
