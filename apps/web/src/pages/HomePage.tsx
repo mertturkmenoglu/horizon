@@ -29,7 +29,7 @@ function HomePage(): React.ReactElement {
       <BrowseCategoriesGrid className="mt-16" />
 
       <RecommendationGrid
-        className="mt-16"
+        className="mt-8"
         title={{
           text: 'Popular Right Now',
           href: '/',
