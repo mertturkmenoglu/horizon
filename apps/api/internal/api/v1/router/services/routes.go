@@ -121,3 +121,32 @@ func DeleteRating(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+func GetNewServices(c echo.Context) error {
+	newServices, err := getNewServices()
+
+	if err == nil {
+		return c.JSON(http.StatusOK, h.Response[[]dto.GetServiceByIdResponse]{
+			"data": newServices,
+		})
+	}
+
+	services, err := getServices(c)
+
+	if err != nil {
+		return api.NewBadRequestError(err)
+	}
+
+	dtos := make([]dto.GetServiceByIdResponse, len(services))
+	totalVisits := getTotalVisitsCount()
+
+	for i, s := range services {
+		dtos[i] = mapModelToGetServiceByIdResponse(s, getVisitCount(s.Id), totalVisits)
+	}
+
+	_ = setNewServices(dtos)
+
+	return c.JSON(http.StatusOK, h.Response[[]dto.GetServiceByIdResponse]{
+		"data": dtos,
+	})
+}

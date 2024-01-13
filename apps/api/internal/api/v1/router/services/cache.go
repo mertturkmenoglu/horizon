@@ -2,7 +2,9 @@ package services
 
 import (
 	"horizon/internal/api"
+	"horizon/internal/api/v1/dto"
 	"strconv"
+	"time"
 )
 
 func incVisit(id string) {
@@ -42,4 +44,14 @@ func getTotalVisitsCount() uint64 {
 	}
 
 	return count
+}
+
+func setNewServices(dtos []dto.GetServiceByIdResponse) error {
+	return api.App.Cache.SetObj("new-services", dtos, time.Hour*12)
+}
+
+func getNewServices() ([]dto.GetServiceByIdResponse, error) {
+	var services []dto.GetServiceByIdResponse
+	err := api.App.Cache.ReadObj("new-services", &services)
+	return services, err
 }
