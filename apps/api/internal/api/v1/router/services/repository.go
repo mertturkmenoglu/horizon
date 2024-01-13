@@ -67,6 +67,7 @@ func createService(userId uuid.UUID, dto dto.CreateServiceRequest) (string, erro
 	srv, _ := getServiceById(idstr)
 	serviceDto := mapModelToGetServiceByIdResponse(srv, 0, 0)
 	api.App.Search.
+		Client.
 		Index("service").
 		Id(idstr).
 		Request(serviceDto).
