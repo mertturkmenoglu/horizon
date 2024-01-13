@@ -5,6 +5,7 @@ import CategoryNavigation from '../CategoryNavigation';
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
 import Actions from './Actions';
+import { Link } from 'react-router-dom';
 
 interface AppbarProps {
   className?: string;
@@ -26,12 +27,12 @@ function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
 
       <div className="mx-auto mt-4 flex w-full items-start justify-between px-4 2xl:px-0">
         <div className="flex w-full items-start">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="mt-2 rounded-md text-2xl text-midnight"
           >
             <h1>Horizon</h1>
-          </a>
+          </Link>
           <SearchHeader className="hidden md:mx-8 md:block" />
         </div>
 
