@@ -39,6 +39,7 @@ const MessagesPage = React.lazy(() => import('./pages/MessagesPage'));
 const NotificationsPage = React.lazy(() => import('./pages/NotificationsPage'));
 const OverviewPage = React.lazy(() => import('./pages/OverviewPage'));
 const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const SearchPage = React.lazy(() => import('./pages/SearchPage'));
 const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 
@@ -215,5 +216,13 @@ export const router = createBrowserRouter([
   {
     path: '/terms',
     element: <TermsPage />,
+  },
+  {
+    path: '/search',
+    element: (
+      <ProtectedRoute>
+        <SearchPage />
+      </ProtectedRoute>
+    ),
   },
 ]);
