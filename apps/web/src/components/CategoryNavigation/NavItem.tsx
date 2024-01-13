@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { Link } from 'react-router-dom';
 
 type Props = React.ComponentPropsWithoutRef<'li'> & {
   text: string;
@@ -13,7 +14,7 @@ function NavItem({ text, className, ...props }: Props): React.ReactElement {
       )}
       {...props}
     >
-      <a href={`/services/${encodeURIComponent(text)}`}>{text}</a>
+      <Link to={`/services/${encodeURIComponent(text)}`}>{text}</Link>
     </li>
   );
 }

@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Link } from 'react-router-dom';
 
 type AsButton = {
   as: 'button';
@@ -41,7 +42,7 @@ export function DropdownItem(props: DropdownItemProps): React.ReactElement {
   );
 
   if (isLink(props)) {
-    return <a href={props.href}>{component}</a>;
+    return <Link to={props.href}>{component}</Link>;
   }
 
   return (

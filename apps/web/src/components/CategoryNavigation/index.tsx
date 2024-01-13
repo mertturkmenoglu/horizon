@@ -6,6 +6,7 @@ import NavButton from './NavButton';
 import { useCategoryNavigation } from './useCategoryNavigation';
 import { useCategoryData } from '@/hooks/useCategoryData';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export type CategoryNavigationProps = React.ComponentPropsWithoutRef<'nav'>;
 
@@ -156,39 +157,42 @@ function CategoryNavigation({
         )}
       </nav>
 
-      {open && category && (
-        <div
-          className={cn(
-            'mt-2 grid grid-cols-2 gap-8 rounded-md border border-midnight/20 p-4 lg:grid-cols-3'
-          )}
-        >
-          <div className="relative col-span-2 lg:col-span-2">
-            <img
-              src={category.image}
-              className="h-full rounded object-cover lg:aspect-[4] lg:h-auto"
-              alt=""
-            />
-            <a
-              href={`/services/${encodeURIComponent(category.category)}`}
-              className="absolute bottom-2 left-8 ml-2 text-xl font-bold text-neutral-50"
-            >
-              {category.category}
-            </a>
-          </div>
-
-          <div className="col-span-2 mx-auto grid grid-cols-3 gap-4 lg:col-span-1 lg:mx-0">
-            {category.subcategories.map((subcategory) => (
-              <a
-                key={subcategory.id}
-                href={`/services?category=${subcategory.id}`}
-                className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-neutral-600 hover:bg-neutral-400/10"
-              >
-                {subcategory.title}
-              </a>
-            ))}
-          </div>
+      <div
+        className={cn(
+          'mt-2 grid-cols-2 gap-8 rounded-md border border-midnight/20 p-4 lg:grid-cols-3',
+          {
+            hidden: !(open && category),
+            grid: open && category,
+          }
+        )}
+      >
+        <div className="relative col-span-2 lg:col-span-2">
+          <img
+            src={category?.image ?? ''}
+            className="h-full rounded object-cover lg:aspect-[4] lg:h-auto"
+            alt=""
+            loading="eager"
+          />
+          <Link
+            to={`/services/${encodeURIComponent(category?.category ?? '')}`}
+            className="absolute bottom-2 left-8 ml-2 text-xl font-bold text-neutral-50"
+          >
+            {category?.category ?? ''}
+          </Link>
         </div>
-      )}
+
+        <div className="col-span-2 mx-auto grid grid-cols-3 gap-4 lg:col-span-1 lg:mx-0">
+          {category?.subcategories.map((subcategory) => (
+            <Link
+              key={subcategory.id}
+              to={`/services?category=${subcategory.id}`}
+              className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-neutral-600 hover:bg-neutral-400/10"
+            >
+              {subcategory.title}
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

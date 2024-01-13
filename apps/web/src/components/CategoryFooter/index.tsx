@@ -2,6 +2,7 @@ import { useCategoryData } from '@/hooks/useCategoryData';
 import { cn } from '@/lib/cn';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 type El = React.ElementRef<'nav'>;
 type Props = React.ComponentPropsWithoutRef<'nav'>;
@@ -23,21 +24,21 @@ const CategoryFooter = React.forwardRef<El, Props>(
       >
         {categoryData.data.map((category) => (
           <div key={category.category}>
-            <a
-              href={`/categories/${encodeURIComponent(category.category)}`}
+            <Link
+              to={`/categories/${encodeURIComponent(category.category)}`}
               className="line-clamp-1 text-base font-semibold hover:underline"
             >
               {category.category}
-            </a>
+            </Link>
             <ul className="mt-0">
               {category.subcategories.map((subcategory) => (
                 <li key={subcategory.id}>
-                  <a
-                    href={`/categories/${encodeURIComponent(subcategory.id)}`}
+                  <Link
+                    to={`/categories/${encodeURIComponent(subcategory.id)}`}
                     className="text-base text-neutral-500 hover:underline"
                   >
                     {subcategory.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

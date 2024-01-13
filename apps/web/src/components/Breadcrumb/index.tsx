@@ -3,6 +3,7 @@ import { HomeIcon } from '@heroicons/react/24/outline';
 import { Slash } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export type TBreadcrumbItem = {
   text: string;
@@ -25,10 +26,10 @@ const Breadcrumb = React.forwardRef<El, Props>(
       >
         <ul className="flex list-none items-end space-x-2">
           <li>
-            <a href="/home">
+            <Link to="/home">
               <HomeIcon className="size-6 text-midnight" />
               <span className="sr-only">{t('home')}</span>
-            </a>
+            </Link>
           </li>
 
           {items.map((item) => (
@@ -37,12 +38,12 @@ const Breadcrumb = React.forwardRef<El, Props>(
               className="flex items-center space-x-2"
             >
               <Slash className="size-4 -rotate-12" />
-              <a
-                href={item.href}
+              <Link
+                to={item.href}
                 className="hover:underline"
               >
                 {item.text}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
