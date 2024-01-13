@@ -1,8 +1,14 @@
 import { Tabs } from '@/components/Settings/Tabs';
 import MainLayout from '@/layouts/MainLayout';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useParams } from 'react-router-dom';
 
 function SettingsPage(): React.ReactElement {
+  const { tab } = useParams();
+
+  if (tab === undefined) {
+    return <Navigate to="/settings/account" />;
+  }
+
   return (
     <MainLayout>
       <div className="mt-8 grid grid-cols-12">
