@@ -1,11 +1,11 @@
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { tabs } from './mapTabs';
 
-function Outlet(): React.ReactElement {
-  const [searchParams] = useSearchParams();
-  const tab = searchParams.get('tab') ?? 'account';
-  const Component = tabs.find((t) => t.id === tab)?.component ?? <></>;
+function SettingsOutlet(): React.ReactElement {
+  const { tab } = useParams();
+  const tabId = tab ?? 'account';
+  const Component = tabs.find((t) => t.id === tabId)?.component ?? <></>;
   return <>{Component}</>;
 }
 
-export default Outlet;
+export default SettingsOutlet;

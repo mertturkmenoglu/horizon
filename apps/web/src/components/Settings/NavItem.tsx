@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export type TNavItem = {
   id: string;
@@ -15,10 +15,10 @@ export function NavItem({
   icon: Icon,
 }: TNavItem): React.ReactElement {
   const { t } = useTranslation('settings');
-  const [searchParams] = useSearchParams();
-  const tab = searchParams.get('tab') ?? 'account';
+  const params = useParams();
+  const tab = params.tab ?? 'account';
   const isCurrentTab = tab === id;
-  const to = id === 'help' ? '/help' : `/settings?tab=${id}`;
+  const to = id === 'help' ? '/help' : `/settings/${id}`;
 
   return (
     <li className="w-full">

@@ -31,6 +31,7 @@ const VerifyEmailRedirect = React.lazy(
   () => import('./pages/VerifyEmailRedirect')
 );
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const SettingsOutlet = React.lazy(() => import('./components/Settings/Outlet'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const MyServicesPage = React.lazy(() => import('./pages/MyServices'));
 const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
@@ -152,6 +153,16 @@ export const router = createBrowserRouter([
         <SettingsPage />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: ':tab',
+        element: (
+          <ProtectedRoute>
+            <SettingsOutlet />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
   {
     path: '/contact',
