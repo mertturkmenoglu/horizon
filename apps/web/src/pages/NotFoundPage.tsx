@@ -1,6 +1,7 @@
 import Logo from '@/components/Logo';
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function NotFoundPage(): React.ReactElement {
   const { t } = useTranslation('common', { keyPrefix: 'not-found' });
@@ -13,8 +14,8 @@ function NotFoundPage(): React.ReactElement {
         404 - {t('not-found')}
       </div>
 
-      <a
-        href="/"
+      <Link
+        to="/"
         className={cn(
           'h-12 w-[18rem] bg-red-600',
           '-rotate-6 -skew-x-[32deg]',
@@ -28,9 +29,9 @@ function NotFoundPage(): React.ReactElement {
         )}
       >
         {t('home')}
-      </a>
-      <a
-        href="/help"
+      </Link>
+      <Link
+        to="/help"
         className={cn(
           'h-12 w-[18rem] bg-sky-600',
           '-rotate-6 -skew-x-[32deg]',
@@ -44,7 +45,7 @@ function NotFoundPage(): React.ReactElement {
         )}
       >
         {t('help')}
-      </a>
+      </Link>
     </main>
   );
 }

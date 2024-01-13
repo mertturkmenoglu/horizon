@@ -5,6 +5,7 @@ import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -79,8 +80,8 @@ function Content({ user }: Props): React.ReactElement {
         />
 
         <div className="mt-8 space-y-2">
-          <a
-            href="/apply-business"
+          <Link
+            to="/apply-business"
             className="group block font-semibold text-midnight"
           >
             <Trans
@@ -90,9 +91,9 @@ function Content({ user }: Props): React.ReactElement {
                 span: <span className="text-sky-700 group-hover:underline" />,
               }}
             />
-          </a>
-          <a
-            href="/apply-verified"
+          </Link>
+          <Link
+            to="/apply-verified"
             className="group block font-semibold text-midnight"
           >
             <Trans
@@ -102,7 +103,7 @@ function Content({ user }: Props): React.ReactElement {
                 span: <span className="text-sky-700 group-hover:underline" />,
               }}
             />
-          </a>
+          </Link>
         </div>
       </div>
 

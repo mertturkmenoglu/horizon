@@ -8,6 +8,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 const contactSchema = z.object({
@@ -40,13 +41,13 @@ function ContactPage(): React.ReactElement {
   return (
     <main>
       <div className="mx-auto mt-16 max-w-3xl">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="flex w-fit items-center space-x-4 hover:underline"
         >
           <ArrowLeftIcon className="size-5" />
           <span>{t('home')}</span>
-        </a>
+        </Link>
 
         <div className="mt-8 flex w-full flex-col items-center">
           <Logo />

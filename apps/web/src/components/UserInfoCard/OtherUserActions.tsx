@@ -2,6 +2,7 @@ import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
 import { GetUserByUsernameResponse } from '@/lib/dto';
+import { Link } from 'react-router-dom';
 
 type Props = {
   user: GetUserByUsernameResponse;
@@ -19,12 +20,12 @@ function OtherUserActions({ user }: Props): React.ReactElement {
         <EnvelopeIcon className="size-5 text-white" />
         <span>{t('message')}</span>
       </Button>
-      <a
-        href={`/report?u=${user.username}`}
+      <Link
+        to={`/report?u=${user.username}`}
         className="mt-2 block w-full text-center text-sm text-midnight/70 hover:underline"
       >
         {t('block-report')}
-      </a>
+      </Link>
     </>
   );
 }

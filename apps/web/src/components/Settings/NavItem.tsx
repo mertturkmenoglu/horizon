@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 export type TNavItem = {
   id: string;
@@ -20,8 +20,8 @@ export function NavItem({
   const isCurrentTab = tab === id;
   return (
     <li className="w-full">
-      <a
-        href={`/settings?tab=${id}`}
+      <Link
+        to={`/settings?tab=${id}`}
         className={cn(
           'mx-2 flex items-center space-x-2 rounded-md px-4 py-2',
           'transition-all duration-100 ease-out',
@@ -38,7 +38,7 @@ export function NavItem({
           })}
         />
         <span>{t(name)}</span>
-      </a>
+      </Link>
     </li>
   );
 }
