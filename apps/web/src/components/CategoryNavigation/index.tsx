@@ -168,8 +168,12 @@ function CategoryNavigation({
       >
         <div className="relative col-span-2 lg:col-span-2">
           <img
-            src={category?.image ?? ''}
-            className="h-full rounded object-cover lg:aspect-[4] lg:h-auto"
+            src={
+              category?.image !== undefined
+                ? category.image + '?q=80&w=768&auto=format&fit=crop'
+                : ''
+            }
+            className="h-full rounded object-cover lg:aspect-[4] lg:h-auto lg:w-full"
             alt=""
             loading="eager"
           />
