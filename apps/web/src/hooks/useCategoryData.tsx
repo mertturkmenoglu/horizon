@@ -1,16 +1,20 @@
 import { useTranslation } from 'react-i18next';
 
+export type TCategory = {
+  id: number;
+  category: string;
+  image: string;
+  subcategories: TSubcategory[];
+};
+
+export type TSubcategory = {
+  id: number;
+  title: string;
+  image: string;
+};
+
 export type TCategoryData = {
-  data: Array<{
-    id: number;
-    category: string;
-    image: string;
-    subcategories: Array<{
-      id: number;
-      title: string;
-      image: string;
-    }>;
-  }>;
+  data: TCategory[];
 };
 
 export function useCategoryData() {
