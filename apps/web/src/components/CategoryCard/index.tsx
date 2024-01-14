@@ -18,7 +18,7 @@ function CategoryCard({ className, category, img, ...props }: Props) {
       {...props}
     >
       <img
-        src={img}
+        src={img + '?q=80&w=512&auto=format&fit=crop'}
         alt=""
         className="aspect-[2] rounded-t-md object-cover"
       />
