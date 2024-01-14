@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 export type TBreadcrumbItem = {
   text: string;
   href: string;
+  capitalize?: boolean;
 };
 
 type El = React.ElementRef<'nav'>;
@@ -24,7 +25,7 @@ const Breadcrumb = React.forwardRef<El, Props>(
         className={cn('', className)}
         {...props}
       >
-        <ul className="flex list-none items-end space-x-2">
+        <ul className="flex list-none flex-wrap items-end space-x-2">
           <li>
             <Link to="/home">
               <HomeIcon className="size-6 text-midnight" />
@@ -40,7 +41,9 @@ const Breadcrumb = React.forwardRef<El, Props>(
               <Slash className="size-4 -rotate-12" />
               <Link
                 to={item.href}
-                className="hover:underline"
+                className={cn('hover:underline', {
+                  capitalize: item.capitalize,
+                })}
               >
                 {item.text}
               </Link>
