@@ -126,6 +126,7 @@ function CategoryNavigation({
           {categoryData.data.map((item, i) => (
             <NavItem
               text={item.category}
+              id={item.id}
               key={item.category}
               onMouseEnter={() => {
                 categoryChangeTimeout = setTimeout(() => {
@@ -178,7 +179,9 @@ function CategoryNavigation({
             loading="eager"
           />
           <Link
-            to={`/services/${encodeURIComponent(category?.category ?? '')}`}
+            to={`/categories/${encodeURIComponent(
+              category?.category ?? ''
+            )}?id=${category?.id}`}
             className="absolute bottom-2 left-8 ml-2 text-xl font-bold text-neutral-50"
           >
             {category?.category ?? ''}
@@ -189,7 +192,9 @@ function CategoryNavigation({
           {category?.subcategories.map((subcategory) => (
             <Link
               key={subcategory.id}
-              to={`/services?category=${subcategory.id}`}
+              to={`/categories/${encodeURIComponent(subcategory.title)}?id=${
+                subcategory.id
+              }`}
               className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-neutral-600 hover:bg-neutral-400/10"
             >
               {subcategory.title}

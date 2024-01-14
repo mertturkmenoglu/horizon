@@ -1,11 +1,12 @@
 import { cn } from '@/lib/cn';
 import { Link } from 'react-router-dom';
 
-type Props = React.ComponentPropsWithoutRef<'li'> & {
+type Props = Omit<React.ComponentPropsWithoutRef<'li'>, 'id'> & {
   text: string;
+  id: number;
 };
 
-function NavItem({ text, className, ...props }: Props): React.ReactElement {
+function NavItem({ text, className, id, ...props }: Props): React.ReactElement {
   return (
     <li
       className={cn(
@@ -14,7 +15,9 @@ function NavItem({ text, className, ...props }: Props): React.ReactElement {
       )}
       {...props}
     >
-      <Link to={`/services/${encodeURIComponent(text)}`}>{text}</Link>
+      <Link to={`/categories/${encodeURIComponent(text)}?id=${id}`}>
+        {text}
+      </Link>
     </li>
   );
 }
