@@ -33,7 +33,10 @@ function HelpPage(): React.ReactElement {
           className="mt-4"
         >
           {new Array(10).fill(0).map((_, i) => (
-            <AccordionItem value={`item-${i + 1}`}>
+            <AccordionItem
+              value={`item-${i + 1}`}
+              key={i}
+            >
               <AccordionTrigger>{t(`faq.items.${i}.title`)}</AccordionTrigger>
               <AccordionContent>{t(`faq.items.${i}.content`)}</AccordionContent>
             </AccordionItem>

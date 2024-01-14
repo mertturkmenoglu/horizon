@@ -17,6 +17,7 @@ function CategoriesPage(): React.ReactElement {
       <h2 className="my-8 text-3xl">{t('title')}</h2>
       {categories.data.map((c) => (
         <ServiceCategory
+          key={`category-${c.id}`}
           category={c}
           className="mt-8"
         />
