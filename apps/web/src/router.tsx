@@ -197,7 +197,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/help',
-    element: <HelpPage />,
+    element: (
+      <ProtectedRoute>
+        <HelpPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/messages',
