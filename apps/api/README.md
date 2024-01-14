@@ -32,7 +32,11 @@
 ## Available Endpoints
 
 - Server listens at `localhost:3000`
+- Redis client: `localhost:6379`
+- Postgres database: `localhost:5432`
 - Inbucket Web UI: `localhost:10000`
 - Asynqmon Web UI: `localhost:8080`
 - Minio Web UI: `localhost:9000`
 - Jaeger Web UI: `localhost:16686`
+- Elasticsearch: `localhost:9200`
+- Kibana: `localhost:5601`
