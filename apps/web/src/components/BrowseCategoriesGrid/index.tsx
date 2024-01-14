@@ -34,8 +34,8 @@ function BrowseCategoriesGrid({
         {categories.data.map((category) => (
           <CategoryCard
             id={category.id}
-            key={category.category}
-            category={category.category}
+            key={category.title}
+            category={category.title}
             img={category.image}
           />
         ))}

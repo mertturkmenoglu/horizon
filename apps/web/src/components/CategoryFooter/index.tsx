@@ -23,14 +23,14 @@ const CategoryFooter = React.forwardRef<El, Props>(
         {...props}
       >
         {categoryData.data.map((category) => (
-          <div key={category.category}>
+          <div key={category.title}>
             <Link
-              to={`/categories/${encodeURIComponent(category.category)}?id=${
+              to={`/categories/${encodeURIComponent(category.title)}?id=${
                 category.id
               }`}
               className="line-clamp-1 text-base font-semibold hover:underline"
             >
-              {category.category}
+              {category.title}
             </Link>
             <ul className="mt-0">
               {category.subcategories.map((subcategory) => (

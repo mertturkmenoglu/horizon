@@ -125,9 +125,9 @@ function CategoryNavigation({
         >
           {categoryData.data.map((item, i) => (
             <NavItem
-              text={item.category}
+              text={item.title}
               id={item.id}
-              key={item.category}
+              key={item.title}
               onMouseEnter={() => {
                 categoryChangeTimeout = setTimeout(() => {
                   setIndex(i);
@@ -180,11 +180,11 @@ function CategoryNavigation({
           />
           <Link
             to={`/categories/${encodeURIComponent(
-              category?.category ?? ''
+              category?.title ?? ''
             )}?id=${category?.id}`}
             className="absolute bottom-2 left-8 ml-2 text-xl font-bold text-neutral-50"
           >
-            {category?.category ?? ''}
+            {category?.title ?? ''}
           </Link>
         </div>
 

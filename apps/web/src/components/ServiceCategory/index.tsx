@@ -13,7 +13,7 @@ function ServiceCategory({
 }: ServiceCategoryProps): React.ReactElement {
   return (
     <div className={cn('', className)}>
-      <h2 className="text-2xl font-bold">{category.category}</h2>
+      <h2 className="text-2xl font-bold">{category.title}</h2>
       <div className="mt-4 grid grid-cols-4 gap-4">
         {category.subcategories.map((c) => (
           <CategoryCard

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 export type TCategory = {
   id: number;
-  category: string;
+  title: string;
   image: string;
   subcategories: TSubcategory[];
 };
@@ -24,7 +24,7 @@ export function useCategoryData() {
     data: [
       {
         id: 0,
-        category: t('categories:main-categories.0.text'),
+        title: t('categories:main-categories.0.text'),
         image: 'https://images.unsplash.com/photo-1505798577917-a65157d3320a',
         subcategories: [
           {
@@ -67,7 +67,7 @@ export function useCategoryData() {
       },
       {
         id: 1,
-        category: t('categories:main-categories.1.text'),
+        title: t('categories:main-categories.1.text'),
         image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85',
         subcategories: [
           {
@@ -103,7 +103,7 @@ export function useCategoryData() {
       },
       {
         id: 2,
-        category: t('categories:main-categories.2.text'),
+        title: t('categories:main-categories.2.text'),
         image: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597',
         subcategories: [
           {
@@ -138,7 +138,7 @@ export function useCategoryData() {
       },
       {
         id: 3,
-        category: t('categories:main-categories.3.text'),
+        title: t('categories:main-categories.3.text'),
         image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b',
         subcategories: [
           {
@@ -173,7 +173,7 @@ export function useCategoryData() {
       },
       {
         id: 4,
-        category: t('categories:main-categories.4.text'),
+        title: t('categories:main-categories.4.text'),
         image: 'https://images.unsplash.com/photo-1603190287605-e6ade32fa852',
         subcategories: [
           {
@@ -210,7 +210,7 @@ export function useCategoryData() {
       },
       {
         id: 5,
-        category: t('categories:main-categories.5.text'),
+        title: t('categories:main-categories.5.text'),
         image:
           'https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1200',
         subcategories: [
@@ -242,7 +242,7 @@ export function useCategoryData() {
       },
       {
         id: 6,
-        category: t('categories:main-categories.6.text'),
+        title: t('categories:main-categories.6.text'),
         image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9',
         subcategories: [
           {
@@ -272,7 +272,7 @@ export function useCategoryData() {
       },
       {
         id: 7,
-        category: t('categories:main-categories.7.text'),
+        title: t('categories:main-categories.7.text'),
         image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2',
         subcategories: [
           {
@@ -303,7 +303,7 @@ export function useCategoryData() {
       },
       {
         id: 8,
-        category: t('categories:main-categories.8.text'),
+        title: t('categories:main-categories.8.text'),
         image: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
         subcategories: [
           {
@@ -333,7 +333,7 @@ export function useCategoryData() {
       },
       {
         id: 9,
-        category: t('categories:main-categories.9.text'),
+        title: t('categories:main-categories.9.text'),
         image: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735',
         subcategories: [
           {
