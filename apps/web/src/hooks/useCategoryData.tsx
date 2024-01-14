@@ -302,7 +302,7 @@ export function useCategoryData() {
         ],
       },
       {
-        id: 7,
+        id: 8,
         category: t('categories:main-categories.8.text'),
         image: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
         subcategories: [
