@@ -11,16 +11,13 @@ function CategoriesPage(): React.ReactElement {
   return (
     <MainLayout>
       <Breadcrumb
-        items={[
-          { href: '/services/', text: t('services') },
-          { href: '/services/categories', text: t('categories') },
-        ]}
+        items={[{ href: '/categories', text: t('categories') }]}
         className="mt-8"
       />
       <h2 className="my-8 text-3xl">{t('title')}</h2>
       {categories.data.map((c) => (
         <ServiceCategory
-          cat={c}
+          category={c}
           className="mt-8"
         />
       ))}
