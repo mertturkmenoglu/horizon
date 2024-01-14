@@ -5,7 +5,10 @@ import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
 import GuestRoute from './components/AuthGuard/GuestRoute';
 
 const CategoriesPage = React.lazy(
-  () => import('./pages/Services/CategoriesPage')
+  () => import('./pages/Categories/CategoriesPage')
+);
+const CategoryListingPage = React.lazy(
+  () => import('./pages/Categories/CategoryListingPage')
 );
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
@@ -103,10 +106,18 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/services/categories',
+    path: '/categories',
     element: (
       <ProtectedRoute>
         <CategoriesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/categories/:slug',
+    element: (
+      <ProtectedRoute>
+        <CategoryListingPage />
       </ProtectedRoute>
     ),
   },
