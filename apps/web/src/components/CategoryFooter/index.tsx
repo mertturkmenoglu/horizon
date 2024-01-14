@@ -25,7 +25,9 @@ const CategoryFooter = React.forwardRef<El, Props>(
         {categoryData.data.map((category) => (
           <div key={category.category}>
             <Link
-              to={`/categories/${encodeURIComponent(category.category)}`}
+              to={`/categories/${encodeURIComponent(category.category)}?id=${
+                category.id
+              }`}
               className="line-clamp-1 text-base font-semibold hover:underline"
             >
               {category.category}
@@ -34,7 +36,9 @@ const CategoryFooter = React.forwardRef<El, Props>(
               {category.subcategories.map((subcategory) => (
                 <li key={subcategory.id}>
                   <Link
-                    to={`/categories/${encodeURIComponent(subcategory.id)}`}
+                    to={`/categories/${encodeURIComponent(
+                      subcategory.title
+                    )}?id=${subcategory.id}`}
                     className="text-base text-neutral-500 hover:underline"
                   >
                     {subcategory.title}
