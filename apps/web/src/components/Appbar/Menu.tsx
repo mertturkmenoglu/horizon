@@ -65,7 +65,7 @@ function Menu(): React.ReactElement {
 
           <DropdownItem
             as="link"
-            href="/services/categories"
+            href="/services"
             icon={MagnifyingGlassIcon}
             text={t('explore-services')}
           />
