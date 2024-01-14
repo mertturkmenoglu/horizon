@@ -9,7 +9,7 @@ export const timespans = ['Hour', 'Day', 'Week', 'Month'] as const;
 export const schema = z.object({
   title: z.string().min(1).max(64),
   description: z.string().min(1).max(4096),
-  category: z.number().min(1).max(45),
+  category: z.number().min(1).max(54),
   price: z.string().min(1).max(10),
   priceUnit: z.enum(priceUnits),
   priceTimespan: z.number().min(0).max(3),
