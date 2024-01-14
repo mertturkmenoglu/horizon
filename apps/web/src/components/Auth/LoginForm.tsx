@@ -8,7 +8,6 @@ import { api, isApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import Button from '../Button';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   className?: string;
@@ -23,7 +22,6 @@ type LoginFormInput = z.infer<typeof schema>;
 
 function LoginForm({ className }: LoginFormProps): React.ReactElement {
   const { t } = useTranslation('auth');
-  const navigate = useNavigate();
   const { register, formState, handleSubmit } = useForm<LoginFormInput>({
     resolver: zodResolver(schema),
   });
@@ -36,7 +34,10 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
         method: 'POST',
         body: values,
       });
-      navigate('/home');
+      // Instead of client side navigation
+      // Manually setting location makes a full page request
+      // And prevents false redirects
+      window.location.href = '/home';
     } catch (err) {
       if (isApiError(err)) {
         toast.error(err.data.message, { className: 'error' });
