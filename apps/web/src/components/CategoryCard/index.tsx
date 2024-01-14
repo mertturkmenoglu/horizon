@@ -2,14 +2,15 @@ import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-type Props = React.ComponentPropsWithoutRef<'a'> & {
+type Props = Omit<React.ComponentPropsWithoutRef<'a'>, 'id'> & {
   category: string;
   img: string;
+  id: number;
 };
 
-function CategoryCard({ className, category, img, ...props }: Props) {
+function CategoryCard({ className, category, img, id, ...props }: Props) {
   const { t } = useTranslation('common', { keyPrefix: 'browse-categories' });
-  const href = `/categories/${encodeURIComponent(category)}`;
+  const href = `/categories/${encodeURIComponent(category)}?id=${id}`;
 
   return (
     <Link

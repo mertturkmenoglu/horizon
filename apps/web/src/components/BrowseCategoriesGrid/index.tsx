@@ -24,7 +24,7 @@ function BrowseCategoriesGrid({
       <div className="flex space-x-2 text-sm font-medium">
         <div>{t('looking-all')}</div>
         <Link
-          to="/services/categories"
+          to="/categories"
           className="text-sky-600 hover:underline"
         >
           {t('browse-all')}
@@ -33,6 +33,7 @@ function BrowseCategoriesGrid({
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
         {categories.data.map((category) => (
           <CategoryCard
+            id={category.id}
             key={category.category}
             category={category.category}
             img={category.image}
