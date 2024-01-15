@@ -71,7 +71,7 @@ func RegisterRoutes(e *echo.Echo) {
 		servicesRoutes.POST("/", services.CreateService, middlewares.ParseBody[dto.CreateServiceRequest], middlewares.IsAuth)
 		servicesRoutes.GET("/categories", services.GetServiceCategories)
 		servicesRoutes.GET("/new", services.GetNewServices)
-
+		servicesRoutes.GET("/categories-count", services.GetCategoriesServiceCount)
 
 		if env == "dev" {
 			servicesRoutes.POST(
