@@ -6,6 +6,7 @@ import (
 	"horizon/internal/geo"
 	"horizon/internal/locale"
 	"horizon/internal/upload"
+	"os"
 
 	"github.com/sony/sonyflake"
 	"go.uber.org/zap"
@@ -47,7 +48,15 @@ func Init() {
 
 	App.Flake = flake
 
-	logger, err := zap.NewProduction()
+	cfg := zap.NewProductionConfig()
+	cfg.OutputPaths = []string{
+		"horizon.log",
+	}
+	logger, err := cfg.Build()
+	_, err = os.OpenFile("horizon.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
 
 	if err != nil {
 		panic(err.Error())
