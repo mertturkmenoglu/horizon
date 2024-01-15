@@ -241,7 +241,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/terms',
-    element: <TermsPage />,
+    element: (
+      <ProtectedRoute>
+        <TermsPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/search',
