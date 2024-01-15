@@ -47,4 +47,4 @@ api:
     ip2locationdb: "iplocation.BIN"
     geocode: "geocode.json"
 cron:
-  category-service-count: "* * * * *"
+  category-service-count: "*/10 * * * *"
