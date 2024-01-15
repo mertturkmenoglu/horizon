@@ -41,7 +41,7 @@ func main() {
 		// TODO: Setup IP extractors for different environments
 		e.IPExtractor = echo.ExtractIPDirect()
 
-		e.Use(middlewares.Logger())
+		// e.Use(middlewares.Logger())
 		e.Use(middleware.RequestID())
 		e.Use(middlewares.Cors())
 		e.Use(middleware.BodyDump(middlewares.Dump))
@@ -68,6 +68,8 @@ func main() {
 	scheduler := cron.New()
 
 	scheduler.Start()
+
+	e.Use(middlewares.ZapLogger())
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
