@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron/v2"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -17,7 +18,8 @@ func New() gocron.Scheduler {
 		panic(err.Error())
 	}
 
-	_, err = scheduler.NewJob(gocron.CronJob("* * * * *", false), gocron.NewTask(func() {
+	cronstr := viper.GetString("cron.category-service-count")
+	_, err = scheduler.NewJob(gocron.CronJob(cronstr, false), gocron.NewTask(func() {
 		api.App.Logger.Info("Running cron job", zap.String("fn", "category service count"))
 		var result []dto.GetCategoriesServiceCountResponse
 		res := db.Client.Raw("SELECT category, COUNT(*) FROM services GROUP BY category;").Scan(&result)
