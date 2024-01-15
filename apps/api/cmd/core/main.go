@@ -6,6 +6,7 @@ import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router"
+	"horizon/internal/cron"
 	"horizon/internal/db"
 	"horizon/internal/tasks"
 	"horizon/internal/validation"
@@ -63,6 +64,10 @@ func main() {
 	defer tasks.Close()
 
 	api.Init()
+
+	scheduler := cron.New()
+
+	scheduler.Start()
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
