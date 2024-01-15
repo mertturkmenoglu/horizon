@@ -9,6 +9,8 @@ import (
 	"os"
 
 	"github.com/sony/sonyflake"
+	"github.com/spf13/viper"
+	"go.elastic.co/ecszap"
 	"go.uber.org/zap"
 )
 
@@ -48,21 +50,30 @@ func Init() {
 
 	App.Flake = flake
 
-	cfg := zap.NewProductionConfig()
-	cfg.OutputPaths = []string{
-		"horizon.log",
-	}
-	logger, err := cfg.Build()
-	_, err = os.OpenFile("horizon.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
+	loggerType := viper.GetString("api.logger.type")
 
-	if err != nil {
-		panic(err.Error())
+	if loggerType == "file" {
+		cfg := zap.NewProductionConfig()
+		cfg.OutputPaths = []string{
+			"horizon.log",
+		}
+		logger, err := cfg.Build()
+		_, err = os.OpenFile("horizon.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err)
+		}
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		defer logger.Sync()
+
+		App.Logger = logger
+	} else {
+		encoderConfig := ecszap.NewDefaultEncoderConfig()
+		core := ecszap.NewCore(encoderConfig, os.Stdout, zap.DebugLevel)
+		eclogger := zap.New(core, zap.AddCaller())
+		App.Logger = eclogger
 	}
-
-	defer logger.Sync()
-
-	App.Logger = logger
 }
