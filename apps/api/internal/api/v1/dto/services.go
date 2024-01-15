@@ -79,3 +79,8 @@ type ServiceVideoDto struct {
 	Url       string `json:"url"`
 	Alt       string `json:"alt"`
 }
+
+type GetCategoriesServiceCountResponse struct {
+	Category int `json:"category"`
+	Count    int `json:"count"`
+}
