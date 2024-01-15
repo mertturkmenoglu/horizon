@@ -19,7 +19,7 @@ func New() gocron.Scheduler {
 
 	_, err = scheduler.NewJob(gocron.CronJob("* * * * *", false), gocron.NewTask(func() {
 		api.App.Logger.Info("Running cron job", zap.String("fn", "category service count"))
-		var result dto.GetCategoriesServiceCountResponse
+		var result []dto.GetCategoriesServiceCountResponse
 		res := db.Client.Raw("SELECT category, COUNT(*) FROM services GROUP BY category;").Scan(&result)
 
 		if res.Error != nil {
