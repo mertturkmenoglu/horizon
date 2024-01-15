@@ -66,3 +66,8 @@ export type ServiceVideoDto = {
   url: string;
   alt: string;
 };
+
+export type CategoryServiceCountDto = {
+  category: number;
+  count: number;
+};
