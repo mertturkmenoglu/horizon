@@ -8,6 +8,7 @@ import (
 	"horizon/internal/upload"
 
 	"github.com/sony/sonyflake"
+	"go.uber.org/zap"
 )
 
 type AppModule struct {
@@ -18,6 +19,7 @@ type AppModule struct {
 	Flake  *sonyflake.Sonyflake
 	Upload *upload.Upload
 	Search *esearch.Search
+	Logger *zap.Logger
 }
 
 var App *AppModule
@@ -31,6 +33,7 @@ func Init() {
 		Upload: upload.New(),
 		Search: esearch.New(),
 		Flake:  nil,
+		Logger: nil,
 	}
 
 	App.Search.CreateIndices()
@@ -43,4 +46,14 @@ func Init() {
 	}
 
 	App.Flake = flake
+
+	logger, err := zap.NewProduction()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer logger.Sync()
+
+	App.Logger = logger
 }
