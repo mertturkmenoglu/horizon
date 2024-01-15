@@ -1,15 +1,18 @@
 import { cn } from '@/lib/cn';
 import CategoryCard from '../CategoryCard';
 import { TCategory } from '@/hooks/useCategoryData';
+import { CategoryServiceCountDto } from '@/lib/dto/service';
 
 interface ServiceCategoryProps {
   category: TCategory;
   className?: string;
+  counts: CategoryServiceCountDto[];
 }
 
 function ServiceCategory({
   category,
   className,
+  counts,
 }: ServiceCategoryProps): React.ReactElement {
   return (
     <div className={cn('', className)}>
@@ -21,6 +24,7 @@ function ServiceCategory({
             id={c.id}
             key={c.id}
             category={c.title}
+            count={counts.find((r) => r.category === c.id)?.count ?? 0}
           />
         ))}
       </div>

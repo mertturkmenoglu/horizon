@@ -4,6 +4,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CategoryCard from '../CategoryCard';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+import { CategoryServiceCountDto } from '@/lib/dto/service';
+import Spinner from '../Spinner';
+import GenericError from '../GenericError';
 
 type Props = React.ComponentPropsWithoutRef<'div'>;
 
@@ -13,6 +18,16 @@ function BrowseCategoriesGrid({
 }: Props): React.ReactElement {
   const { t } = useTranslation('common', { keyPrefix: 'browse-categories' });
   const categories = useCategoryData();
+  const query = useQuery({
+    queryKey: ['category-service-count'],
+    queryFn: async () => {
+      const res = await api<{ data: CategoryServiceCountDto[] }>(
+        '/services/categories-count'
+      );
+      return res.data;
+    },
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div
@@ -30,16 +45,24 @@ function BrowseCategoriesGrid({
           {t('browse-all')}
         </Link>
       </div>
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-        {categories.data.map((category) => (
-          <CategoryCard
-            id={category.id}
-            key={category.title}
-            category={category.title}
-            img={category.image}
-          />
-        ))}
-      </div>
+
+      {query.isLoading && <Spinner className="" />}
+      {query.isError && <GenericError />}
+      {query.data && (
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+          {categories.data.map((category) => (
+            <CategoryCard
+              id={category.id}
+              key={category.title}
+              category={category.title}
+              img={category.image}
+              count={
+                query.data.find((r) => r.category === category.id)?.count ?? 0
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
