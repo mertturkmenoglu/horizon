@@ -10,6 +10,7 @@ import RecentSearches from './RecentSearches';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
+import localforage from 'localforage';
 
 const schema = z.object({
   term: z.string().min(1).max(128),
@@ -39,11 +40,12 @@ function ServiceSearch({ className }: TProps): React.ReactElement {
     },
   });
 
-  const onSubmit: SubmitHandler<ServiceSearchInput> = (values) => {
-    setRecentSearches((prev) => {
-      const newArr = [values.term, ...prev];
-      return newArr.slice(0, Math.min(newArr.length, 5));
-    });
+  const onSubmit: SubmitHandler<ServiceSearchInput> = async (values) => {
+    const newArr = [values.term, ...recentSearches];
+    const newRecent = newArr.slice(0, Math.min(newArr.length, 5));
+    await localforage.setItem('recentSearches', newRecent);
+
+    setRecentSearches(newRecent);
     navigate(`/search?term=${encodeURIComponent(values.term)}`);
   };
 
