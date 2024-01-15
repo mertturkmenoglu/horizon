@@ -150,3 +150,16 @@ func GetNewServices(c echo.Context) error {
 		"data": dtos,
 	})
 }
+
+func GetCategoriesServiceCount(c echo.Context) error {
+	var result []dto.GetCategoriesServiceCountResponse
+	err := api.App.Cache.ReadObj("category-service-count", &result)
+
+	if err != nil {
+		return api.NewInternalServerError(err)
+	}
+
+	return c.JSON(http.StatusOK, h.Response[[]dto.GetCategoriesServiceCountResponse]{
+		"data": result,
+	})
+}
