@@ -229,7 +229,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/privacy',
-    element: <PrivacyPage />,
+    element: (
+      <ProtectedRoute>
+        <PrivacyPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/schedule',
