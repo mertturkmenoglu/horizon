@@ -8,13 +8,13 @@ import (
 )
 
 func incVisit(id string) {
-	key := "service-visit" + id
+	key := "service-visit:" + id
 	_ = api.App.Cache.IncrBy(key, 1)
 	_ = api.App.Cache.IncrBy("total-service-visits", 1)
 }
 
 func getVisitCount(id string) uint64 {
-	key := "service-visit" + id
+	key := "service-visit:" + id
 	v, err := api.App.Cache.Get(key)
 
 	if err != nil {
