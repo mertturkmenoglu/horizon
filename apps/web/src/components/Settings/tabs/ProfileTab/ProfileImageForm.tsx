@@ -1,17 +1,17 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { useAuth } from '@/hooks/useAuth';
-import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { getUserImage } from '@/lib/img';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
+import { useProfileImageMutation } from './useProfileImageMutation';
 
 function ProfileImageForm({ className }: TProps): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'profile' });
-  const { user, refetch } = useAuth();
+  const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
+  const mutation = useProfileImageMutation();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -21,28 +21,10 @@ function ProfileImageForm({ className }: TProps): React.ReactElement {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!file) {
       return;
     }
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      await api('/users/profile/image', {
-        method: 'PUT',
-        body: formData,
-      });
-
-      toast.success(t('update-ok'));
-
-      if (refetch) {
-        await refetch();
-      }
-    } catch (error) {
-      toast.error(t('update-err'));
-    }
+    mutation.mutate(file);
   };
 
   if (!user) {
