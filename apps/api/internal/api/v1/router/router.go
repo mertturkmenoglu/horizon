@@ -69,6 +69,7 @@ func RegisterRoutes(e *echo.Echo) {
 		servicesRoutes.POST("/:id/rate/:rating", services.CreateRating, middlewares.IsAuth)
 		servicesRoutes.DELETE("/:id/rate", services.DeleteRating, middlewares.IsAuth)
 		servicesRoutes.POST("/", services.CreateService, middlewares.ParseBody[dto.CreateServiceRequest], middlewares.IsAuth)
+		servicesRoutes.POST("/:id/media", services.UploadServiceMedia, middlewares.IsAuth)
 		servicesRoutes.GET("/categories", services.GetServiceCategories)
 		servicesRoutes.GET("/new", services.GetNewServices)
 		servicesRoutes.GET("/categories-count", services.GetCategoriesServiceCount)
