@@ -6,7 +6,7 @@
   "singleQuote": true,
   "jsxSingleQuote": false,
   "tabWidth": 2,
-  "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+  "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["clsx", "cn", "cva"],
   "pluginSearchDirs": false,
   "importOrderSeparation": true,
