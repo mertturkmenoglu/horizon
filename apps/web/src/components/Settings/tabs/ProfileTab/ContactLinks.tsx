@@ -17,6 +17,14 @@ type LinkLineProps = {
   value: string;
 };
 
+type NewLinkProps = {
+  onAdd: () => void;
+  name: string;
+  setName: (s: string) => void;
+  value: string;
+  setValue: (s: string) => void;
+};
+
 function LinkLine({ onClick, name, value }: LinkLineProps): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'profile' });
   return (
@@ -42,6 +50,43 @@ function LinkLine({ onClick, name, value }: LinkLineProps): React.ReactElement {
         <div>{name}</div>
         <div className="text-wrap">{value}</div>
       </div>
+    </div>
+  );
+}
+
+function NewLink({
+  onAdd,
+  name,
+  setName,
+  value,
+  setValue,
+}: NewLinkProps): React.ReactElement {
+  const { t } = useTranslation('settings', { keyPrefix: 'profile' });
+
+  return (
+    <div className="mt-4 flex items-end space-x-2">
+      <Input
+        label={t('link-name')}
+        className="flex-1"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Input
+        label={t('link-value')}
+        className="flex-1"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+
+      <Button
+        appearance="sky"
+        className="h-min w-min p-3"
+        type="button"
+        onClick={onAdd}
+      >
+        <PlusIcon className="size-4 text-white" />
+        <span className="sr-only">{t('add-link')}</span>
+      </Button>
     </div>
   );
 }
@@ -91,30 +136,15 @@ function ContactLinks({
         ))}
         {getValues('links').length === 0 && <div>{t('no-link')}</div>}
       </div>
-      <div className="mt-4 flex items-end space-x-2">
-        <Input
-          label={t('link-name')}
-          className="flex-1"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          label={t('link-value')}
-          className="flex-1"
-          value={value}
-          onChange={(e) => setLinkValue(e.target.value)}
-        />
 
-        <Button
-          appearance="sky"
-          className="h-min w-min p-3"
-          type="button"
-          onClick={onAdd}
-        >
-          <PlusIcon className="size-4 text-white" />
-          <span className="sr-only">{t('add-link')}</span>
-        </Button>
-      </div>
+      <NewLink
+        onAdd={onAdd}
+        name={name}
+        setName={setName}
+        value={value}
+        setValue={setLinkValue}
+      />
+
       <div className="mt-2">
         {formState.errors.links !== undefined && (
           <div className="text-sm font-medium text-red-500">
