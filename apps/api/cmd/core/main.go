@@ -66,7 +66,6 @@ func main() {
 	api.Init()
 
 	scheduler := cron.New()
-
 	scheduler.Start()
 
 	e.Use(middlewares.ZapLogger())
@@ -74,11 +73,7 @@ func main() {
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
 
-	// Get port from Viper and convert it to string
-	iPort := viper.GetInt("port")
-	port := fmt.Sprintf(":%d", iPort)
-
 	// Start the Echo server
 	// If port binding fails, terminate the server.
-	e.Logger.Fatal(e.Start(port))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", viper.GetInt("port"))))
 }
