@@ -1,4 +1,5 @@
 import countryCodes from 'country-codes-list';
+import { Mask } from 'react-text-mask';
 
 export const phoneOptions = countryCodes
   .all()
@@ -30,3 +31,20 @@ export function getDefaultValue(phone: string) {
 
   return undefined;
 }
+
+export const phoneMask: Mask = [
+  '(',
+  /[1-9]/,
+  /\d/,
+  /\d/,
+  ')',
+  ' ',
+  /\d/,
+  /\d/,
+  /\d/,
+  '-',
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+];

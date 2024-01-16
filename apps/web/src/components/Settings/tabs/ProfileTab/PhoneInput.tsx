@@ -3,6 +3,7 @@ import Select from 'react-select';
 import {
   getDefaultValue,
   getPhoneWithoutCallingCode,
+  phoneMask,
   phoneOptions,
 } from './utils';
 import Input from '@/components/Input';
@@ -27,6 +28,16 @@ function PhoneInput({
 }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'profile' });
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    const deniedChars = ['(', ')', ' ', '-'];
+    const filtered = v
+      .split('')
+      .filter((x) => !deniedChars.includes(x))
+      .join('');
+    setValue('phone', filtered);
+  };
+
   return (
     <>
       <Select
@@ -40,35 +51,12 @@ function PhoneInput({
       />
 
       <MaskedInput
-        mask={[
-          '(',
-          /[1-9]/,
-          /\d/,
-          /\d/,
-          ')',
-          ' ',
-          /\d/,
-          /\d/,
-          /\d/,
-          '-',
-          /\d/,
-          /\d/,
-          /\d/,
-          /\d/,
-        ]}
+        mask={phoneMask}
         className="flex-1"
         placeholder={t('phone-placeholder')}
         guide={false}
         {...register('phone')}
-        onChange={(e) => {
-          const v = e.target.value;
-          const deniedChars = ['(', ')', ' ', '-'];
-          const filtered = v
-            .split('')
-            .filter((x) => !deniedChars.includes(x))
-            .join('');
-          setValue('phone', filtered);
-        }}
+        onChange={onChange}
         defaultValue={getPhoneWithoutCallingCode(defaultPhone)}
         render={(ref, props) => (
           <Input
