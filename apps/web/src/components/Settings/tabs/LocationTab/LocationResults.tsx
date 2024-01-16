@@ -2,7 +2,7 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { GeoSearchResult } from '@/lib/dto';
 import { formatLocation } from '@/lib/location';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -17,8 +17,9 @@ function LocationResult({ item, setTyped }: Props): React.ReactElement {
   const { name, admin, country, lat, long } = entry;
   const qc = useQueryClient();
 
-  const updateLocation = async () => {
-    try {
+  const mutation = useMutation({
+    mutationKey: ['settings-location'],
+    mutationFn: async () => {
       await api('/users/profile/location', {
         method: 'PATCH',
         body: {
@@ -29,15 +30,23 @@ function LocationResult({ item, setTyped }: Props): React.ReactElement {
           long,
         },
       });
+    },
+    onSuccess: () => {
       toast.success(t('update-ok'));
       qc.invalidateQueries({
         queryKey: ['auth'],
       });
-    } catch (err) {
+    },
+    onError: () => {
       toast.error(t('update-err'));
-    } finally {
+    },
+    onSettled: () => {
       setTyped(false);
-    }
+    },
+  });
+
+  const updateLocation = async () => {
+    mutation.mutate();
   };
 
   return (
