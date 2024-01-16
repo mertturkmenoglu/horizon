@@ -29,6 +29,7 @@ minio:
   buckets:
     default: default-bucket
     profile-images: profile-images-bucket
+    services: services-bucket
   location: eu-central-1
 api:
   logger:
