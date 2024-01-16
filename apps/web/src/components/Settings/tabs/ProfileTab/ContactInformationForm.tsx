@@ -8,16 +8,11 @@ import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import Select from 'react-select';
-import MaskedInput from 'react-text-mask';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ContactInformationFormInput, useContactForm } from './useContactForm';
-import {
-  getDefaultValue,
-  getPhoneWithoutCallingCode,
-  phoneOptions,
-} from './utils';
+import { getDefaultValue } from './utils';
+import PhoneInput from './PhoneInput';
 
 type Props = TProps & {
   user: GetMeResponse;
@@ -90,58 +85,12 @@ function ContactInformationForm({
         </label>
 
         <div className="mt-1 flex flex-nowrap space-x-2">
-          <Select
-            options={phoneOptions}
-            className="w-36 lining-nums"
-            aria-label={t('phone-country-code')}
-            defaultValue={getDefaultValue(user.contactInformation.phone)}
-            onChange={(newValue) => {
-              setCallCode(newValue?.value ?? '');
-            }}
-          />
-
-          <MaskedInput
-            mask={[
-              '(',
-              /[1-9]/,
-              /\d/,
-              /\d/,
-              ')',
-              ' ',
-              /\d/,
-              /\d/,
-              /\d/,
-              '-',
-              /\d/,
-              /\d/,
-              /\d/,
-              /\d/,
-            ]}
-            className="flex-1"
-            placeholder={t('phone-placeholder')}
-            guide={false}
-            {...register('phone')}
-            onChange={(e) => {
-              const v = e.target.value;
-              const deniedChars = ['(', ')', ' ', '-'];
-              const filtered = v
-                .split('')
-                .filter((x) => !deniedChars.includes(x))
-                .join('');
-              setValue('phone', filtered);
-            }}
-            defaultValue={getPhoneWithoutCallingCode(
-              user.contactInformation.phone
-            )}
-            render={(ref, props) => (
-              <Input
-                label=""
-                className="flex-1"
-                ref={ref as unknown as React.Ref<HTMLInputElement>}
-                error={formState.errors.phone}
-                {...props}
-              />
-            )}
+          <PhoneInput
+            defaultPhone={user.contactInformation.phone}
+            formState={formState}
+            register={register}
+            setCallCode={setCallCode}
+            setValue={setValue}
           />
         </div>
       </div>
