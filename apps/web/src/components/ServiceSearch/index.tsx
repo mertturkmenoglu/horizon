@@ -1,16 +1,16 @@
 import { cn } from '@/lib/cn';
-import Input from '../Input';
-import { z } from 'zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Button from '../Button';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useRecentSearches } from './useRecentSearches';
-import RecentSearches from './RecentSearches';
+import { zodResolver } from '@hookform/resolvers/zod';
+import localforage from 'localforage';
+import { useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { useMemo } from 'react';
-import localforage from 'localforage';
+import { z } from 'zod';
+import Button from '../Button';
+import Input from '../Input';
+import RecentSearches from './RecentSearches';
+import { useRecentSearches } from './useRecentSearches';
 
 const schema = z.object({
   term: z.string().min(1).max(128),

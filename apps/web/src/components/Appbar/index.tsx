@@ -1,11 +1,11 @@
-import Menu from './Menu';
-import Banner from '../Banner';
-import SearchHeader from '../SearchHeader';
-import CategoryNavigation from '../CategoryNavigation';
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
-import Actions from './Actions';
 import { Link } from 'react-router-dom';
+import Banner from '../Banner';
+import CategoryNavigation from '../CategoryNavigation';
+import SearchHeader from '../SearchHeader';
+import Actions from './Actions';
+import Menu from './Menu';
 
 interface AppbarProps {
   className?: string;

@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Banner from '../Banner';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Banner from '../Banner';
 
 function LandingBanner(): React.ReactElement {
   const { t } = useTranslation('landing', { keyPrefix: 'banner' });

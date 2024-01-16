@@ -1,10 +1,10 @@
+import Input from '@/components/Input';
 import { GetMeResponse } from '@/lib/dto';
 import { formatLocation } from '@/lib/location';
 import { useEffect, useMemo, useState } from 'react';
-import { useSearch } from './useSearch';
-import Input from '@/components/Input';
-import SearchResults from './SearchResults';
 import { useTranslation } from 'react-i18next';
+import SearchResults from './SearchResults';
+import { useSearch } from './useSearch';
 
 type Props = {
   user: GetMeResponse;

@@ -11,14 +11,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { TNavItem } from './NavItem';
 import AccountTab from './tabs/AccountTab';
-import ProfileTab from './tabs/ProfileTab';
-import PreferencesTab from './tabs/PreferencesTab';
-import NotificationsTab from './tabs/NotificationsTab';
-import PrivacyTab from './tabs/PrivacyTab';
-import YourDataTab from './tabs/YourDataTab';
-import HelpTab from './tabs/HelpTab';
 import AuthActivities from './tabs/AuthActivitiesTab';
+import HelpTab from './tabs/HelpTab';
 import LocationTab from './tabs/LocationTab';
+import NotificationsTab from './tabs/NotificationsTab';
+import PreferencesTab from './tabs/PreferencesTab';
+import PrivacyTab from './tabs/PrivacyTab';
+import ProfileTab from './tabs/ProfileTab';
+import YourDataTab from './tabs/YourDataTab';
 
 export const tabs = [
   {

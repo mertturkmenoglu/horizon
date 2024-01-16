@@ -1,9 +1,9 @@
 import { cn } from '@/lib/cn';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getServiceImage, getUserImage } from '@/lib/img';
-import Rating from './Rating';
-import Chips from './ChipsContainer';
 import { Link } from 'react-router-dom';
+import Chips from './ChipsContainer';
+import Rating from './Rating';
 
 export type Props = React.ComponentPropsWithoutRef<'a'> & {
   service: GetServiceByIdResponse;

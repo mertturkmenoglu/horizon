@@ -1,6 +1,6 @@
+import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
 import { Props } from '.';
-import { cn } from '@/lib/cn';
 import Chip from './Chip';
 
 const unitToSymbol: Record<string, string> = {

@@ -1,6 +1,6 @@
+import Tooltip from '@/components/Tooltip';
 import { BellIcon, EnvelopeIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
-import Tooltip from '@/components/Tooltip';
 import { Link } from 'react-router-dom';
 
 function Actions(): React.ReactElement {

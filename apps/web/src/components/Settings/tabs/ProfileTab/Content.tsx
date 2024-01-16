@@ -1,8 +1,8 @@
 import { GetMeResponse } from '@/lib/dto';
-import ProfileImageForm from './ProfileImageForm';
-import ProfileForm from './ProfileForm';
-import ContactInformationForm from './ContactInformationForm';
 import { useTranslation } from 'react-i18next';
+import ContactInformationForm from './ContactInformationForm';
+import ProfileForm from './ProfileForm';
+import ProfileImageForm from './ProfileImageForm';
 
 type Props = {
   user: GetMeResponse;

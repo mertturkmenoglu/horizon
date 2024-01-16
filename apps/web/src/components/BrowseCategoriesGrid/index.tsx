@@ -1,14 +1,14 @@
 import { useCategoryData } from '@/hooks/useCategoryData';
+import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
+import { CategoryServiceCountDto } from '@/lib/dto/service';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import CategoryCard from '../CategoryCard';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import { CategoryServiceCountDto } from '@/lib/dto/service';
-import Spinner from '../Spinner';
+import CategoryCard from '../CategoryCard';
 import GenericError from '../GenericError';
+import Spinner from '../Spinner';
 
 type Props = React.ComponentPropsWithoutRef<'div'>;
 

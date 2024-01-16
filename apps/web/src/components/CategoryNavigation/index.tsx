@@ -1,12 +1,12 @@
+import { useCategoryData } from '@/hooks/useCategoryData';
 import { cn } from '@/lib/cn';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import NavItem from './NavItem';
-import NavButton from './NavButton';
-import { useCategoryNavigation } from './useCategoryNavigation';
-import { useCategoryData } from '@/hooks/useCategoryData';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import NavButton from './NavButton';
+import NavItem from './NavItem';
+import { useCategoryNavigation } from './useCategoryNavigation';
 
 export type CategoryNavigationProps = React.ComponentPropsWithoutRef<'nav'>;
 

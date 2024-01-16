@@ -1,11 +1,11 @@
+import Pagination from '@/components/Pagination';
 import Spinner from '@/components/Spinner';
 import { api } from '@/lib/api';
 import { GetAuthActivitiesResponse, TPaginatedResponse } from '@/lib/dto';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import Card from './Card';
-import Pagination from '@/components/Pagination';
 import { useTranslation } from 'react-i18next';
+import Card from './Card';
 
 function AuthActivitiesTab(): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'auth-activity' });

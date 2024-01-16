@@ -1,8 +1,8 @@
 import { cn } from '@/lib/cn';
 import React from 'react';
-import Card from './Card';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Card from './Card';
 
 export type TRecommendation = {
   url: string;

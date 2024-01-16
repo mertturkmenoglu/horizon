@@ -1,8 +1,8 @@
 import { cn } from '@/lib/cn';
 import React from 'react';
-import Doodle from './doodle';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Doodle from './doodle';
 
 type El = React.ElementRef<'div'>;
 type Props = React.ComponentPropsWithoutRef<'div'>;

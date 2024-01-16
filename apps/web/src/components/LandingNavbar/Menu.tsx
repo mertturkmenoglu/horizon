@@ -6,12 +6,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/NavigationMenu';
-import { navigationMenuTriggerStyle } from '../NavigationMenu/triggerStyle';
-import { Link } from 'react-router-dom';
-import ListItem from './ListItem';
-import Logo from '../Logo';
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import Logo from '../Logo';
+import { navigationMenuTriggerStyle } from '../NavigationMenu/triggerStyle';
+import ListItem from './ListItem';
 
 function Menu(): React.ReactElement {
   const { t } = useTranslation('landing', { keyPrefix: 'menu' });

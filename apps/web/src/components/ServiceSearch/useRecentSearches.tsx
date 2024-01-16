@@ -1,6 +1,6 @@
+import localforage from 'localforage';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
-import localforage from 'localforage';
 
 const schema = z.array(z.string().min(1));
 

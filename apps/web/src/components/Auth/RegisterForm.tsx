@@ -1,14 +1,14 @@
-import { cn } from '@/lib/cn';
-import Redirect from './Redirect';
-import { z } from 'zod';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Input from '../Input';
 import { api, isApiError } from '@/lib/api';
-import { toast } from 'sonner';
-import Button from '../Button';
+import { cn } from '@/lib/cn';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import Button from '../Button';
+import Input from '../Input';
+import Redirect from './Redirect';
 
 interface RegisterFormProps {
   className?: string;

@@ -1,5 +1,3 @@
-import React from 'react';
-import Logo from '../Logo';
 import { cn } from '@/lib/cn';
 import {
   BellIcon,
@@ -11,9 +9,11 @@ import {
   MagnifyingGlassIcon,
   SquaresPlusIcon,
 } from '@heroicons/react/24/outline';
+import { Send } from 'lucide-react';
+import React from 'react';
+import Logo from '../Logo';
 import NavItem, { TNavItem } from './NavItem';
 import UserCard from './UserCard';
-import { Send } from 'lucide-react';
 
 export type SideNavigationProps = React.ComponentPropsWithoutRef<'nav'> & {
   collapsed: boolean;

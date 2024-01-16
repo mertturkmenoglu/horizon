@@ -1,9 +1,9 @@
 import { cn } from '@/lib/cn';
-import { TRecommendation } from './index';
-import Rating from './Rating';
-import Chip from './Chip';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Chip from './Chip';
+import Rating from './Rating';
+import { TRecommendation } from './index';
 
 type CardProps = TProps & {
   item: TRecommendation;

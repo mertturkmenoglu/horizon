@@ -1,12 +1,12 @@
 import Button from '@/components/Button';
 import { GetMeResponse } from '@/lib/dto';
+import { isValidLangKey, validLangKeys } from '@/lib/lang';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import Select from 'react-select';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import Select from 'react-select';
-import { isValidLangKey, validLangKeys } from '@/lib/lang';
 
 export type Props = {
   user: GetMeResponse;

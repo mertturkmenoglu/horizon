@@ -1,8 +1,8 @@
 import { cn } from '@/lib/cn';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import Logo2 from '../Logo2';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Logo2 from '../Logo2';
 
 interface FancyGreetingProps {
   className?: string;

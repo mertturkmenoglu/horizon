@@ -1,9 +1,9 @@
+import { cn } from '@/lib/cn';
 import { AuthActivity } from '@/lib/dto';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import Line from './Line';
-import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/cn';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import Line from './Line';
 
 type Props = {
   activity: AuthActivity;

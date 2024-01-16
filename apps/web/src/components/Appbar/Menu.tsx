@@ -1,4 +1,7 @@
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
+import { getUserImage } from '@/lib/img';
+import { logout } from '@/lib/logout';
 import {
   ArrowLeftStartOnRectangleIcon,
   AtSymbolIcon,
@@ -12,11 +15,8 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { DropdownItem } from '../NavDropdownItem';
-import { useAuth } from '@/hooks/useAuth';
-import { getUserImage } from '@/lib/img';
 import { useTranslation } from 'react-i18next';
-import { logout } from '@/lib/logout';
+import { DropdownItem } from '../NavDropdownItem';
 
 function Menu(): React.ReactElement {
   const { user } = useAuth();

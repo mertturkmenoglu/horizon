@@ -1,8 +1,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
-import React, { useMemo } from 'react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { DropdownItem } from '../NavDropdownItem';
+import { getUserImage } from '@/lib/img';
+import { logout } from '@/lib/logout';
 import {
   ArrowLeftStartOnRectangleIcon,
   AtSymbolIcon,
@@ -12,8 +11,9 @@ import {
   ScaleIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import { logout } from '@/lib/logout';
-import { getUserImage } from '@/lib/img';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import React, { useMemo } from 'react';
+import { DropdownItem } from '../NavDropdownItem';
 
 export type UserCardProps = React.ComponentPropsWithoutRef<'div'> & {
   collapsed?: boolean;

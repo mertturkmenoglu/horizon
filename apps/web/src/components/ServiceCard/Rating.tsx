@@ -1,5 +1,5 @@
-import { StarIcon } from '@heroicons/react/24/solid';
 import { cn } from '@/lib/cn';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 type RatingProps = TProps & {
   totalPoints: number;

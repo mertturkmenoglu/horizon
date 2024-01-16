@@ -1,5 +1,4 @@
 import { GetUserByUsernameResponse } from '@/lib/dto';
-import { Info } from './Info';
 import {
   ArrowRightIcon,
   BuildingStorefrontIcon,
@@ -8,6 +7,7 @@ import {
   SquaresPlusIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
+import { Info } from './Info';
 
 type Props = {
   user: GetUserByUsernameResponse;

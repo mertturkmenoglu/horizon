@@ -1,6 +1,6 @@
+import { cn } from '@/lib/cn';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { TRecommendation } from '.';
-import { cn } from '@/lib/cn';
 
 type RatingProps = TProps & {
   rating: TRecommendation['rating'];

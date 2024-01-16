@@ -1,9 +1,9 @@
+import { validLangKeys } from '@/lib/lang';
 import clsx from 'clsx';
 import { Facebook, Github, Linkedin, Twitter } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import NavigationItem from './NavigationItem';
 import SocialIcon from './SocialIcon';
-import { useTranslation } from 'react-i18next';
-import { validLangKeys } from '@/lib/lang';
 
 export interface FooterProps {
   className?: string;

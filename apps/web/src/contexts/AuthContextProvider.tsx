@@ -1,7 +1,7 @@
-import { AuthContext } from './AuthContext';
-import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { GetMeResponse } from '@/lib/dto';
+import { useQuery } from '@tanstack/react-query';
+import { AuthContext } from './AuthContext';
 
 interface AuthContextProviderProps {
   children: React.ReactNode;

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import { cn } from '@/lib/cn';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
-import { cn } from '@/lib/cn';
+import * as React from 'react';
 import { navigationMenuTriggerStyle } from './triggerStyle';
 
 const NavigationMenu = React.forwardRef<
@@ -120,12 +120,5 @@ NavigationMenuIndicator.displayName =
   NavigationMenuPrimitive.Indicator.displayName;
 
 export {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuContent,
-  NavigationMenuTrigger,
-  NavigationMenuLink,
-  NavigationMenuIndicator,
-  NavigationMenuViewport,
+  NavigationMenu, NavigationMenuContent, NavigationMenuIndicator, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport
 };

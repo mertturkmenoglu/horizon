@@ -1,8 +1,8 @@
+import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { getPhoneWithoutCallingCode } from './utils';
-import { GetMeResponse } from '@/lib/dto';
 
 export const schema = z.object({
   email: z.string().email().or(z.string().max(0)),

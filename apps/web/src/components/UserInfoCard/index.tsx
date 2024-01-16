@@ -1,13 +1,13 @@
-import { GetUserByUsernameResponse } from '@/lib/dto';
-import { useUserInfo } from './useUserInfo';
 import { cn } from '@/lib/cn';
+import { GetUserByUsernameResponse } from '@/lib/dto';
 import { useTranslation } from 'react-i18next';
-import ThisUserActions from './ThisUserActions';
 import GeneralActions from './GeneralActions';
+import InfoSection from './InfoSection';
 import OtherUserActions from './OtherUserActions';
 import ShareActions from './ShareActions';
-import InfoSection from './InfoSection';
+import ThisUserActions from './ThisUserActions';
 import Title from './Title';
+import { useUserInfo } from './useUserInfo';
 
 interface UserInfoCardProps {
   user: GetUserByUsernameResponse;

@@ -1,7 +1,7 @@
-import { cn } from '@/lib/cn';
-import CategoryCard from '../CategoryCard';
 import { TCategory } from '@/hooks/useCategoryData';
+import { cn } from '@/lib/cn';
 import { CategoryServiceCountDto } from '@/lib/dto/service';
+import CategoryCard from '../CategoryCard';
 
 interface ServiceCategoryProps {
   category: TCategory;

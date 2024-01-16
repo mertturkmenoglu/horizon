@@ -1,7 +1,7 @@
 import { SearchLocationResponse } from '@/lib/dto';
 import { MapPinIcon } from '@heroicons/react/24/outline';
-import LocationResult from './LocationResults';
 import { useTranslation } from 'react-i18next';
+import LocationResult from './LocationResults';
 
 type Props = {
   items: SearchLocationResponse;

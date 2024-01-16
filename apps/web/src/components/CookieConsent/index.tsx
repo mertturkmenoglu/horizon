@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
-import CookieButton from './CookieButton';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import CookieButton from './CookieButton';
 
 interface CookieConsentProps {
   open: boolean;

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
-import Button from '../Button';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
+import Button from '../Button';
 
 type Props = TProps & {
   page: number;

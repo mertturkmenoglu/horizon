@@ -3,9 +3,9 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Logo from '../Logo';
 
 import React from 'react';
-import Menu from './Menu';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Menu from './Menu';
 
 interface LandingNavbarProps {
   className?: string;

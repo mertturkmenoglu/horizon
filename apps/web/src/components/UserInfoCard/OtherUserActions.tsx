@@ -1,8 +1,8 @@
-import { EnvelopeIcon } from '@heroicons/react/24/outline';
-import Button from '../Button';
-import { useTranslation } from 'react-i18next';
 import { GetUserByUsernameResponse } from '@/lib/dto';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import Button from '../Button';
 
 type Props = {
   user: GetUserByUsernameResponse;

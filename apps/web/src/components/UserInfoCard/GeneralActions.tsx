@@ -1,6 +1,6 @@
 import { AtSymbolIcon } from '@heroicons/react/24/outline';
-import Button from '../Button';
 import { useTranslation } from 'react-i18next';
+import Button from '../Button';
 
 function GeneralActions(): React.ReactElement {
   const { t } = useTranslation('user');

@@ -1,13 +1,13 @@
 import { cn } from '@/lib/cn';
-import React from 'react';
-import Card, { TCard } from './Card';
 import {
   AcademicCapIcon,
   BanknotesIcon,
   CalendarDaysIcon,
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Card, { TCard } from './Card';
 
 type El = React.ElementRef<'div'>;
 type Props = React.ComponentPropsWithoutRef<'div'>;
