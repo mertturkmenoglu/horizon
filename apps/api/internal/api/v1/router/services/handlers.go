@@ -4,6 +4,8 @@ import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	categories "horizon/internal/category"
+	"horizon/internal/db"
+	"horizon/internal/db/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -67,6 +69,93 @@ func CreateService(c echo.Context) error {
 	return c.JSON(http.StatusCreated, h.Response[any]{
 		"data": id,
 	})
+}
+
+func UploadServiceMedia(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	id := c.Param("id")
+
+	if id == "" {
+		return api.NewBadRequestError("service id is required")
+	}
+
+	service, err := getServiceById(id)
+
+	if err != nil {
+		return err
+	}
+
+	if service.User.Id.String() != auth.UserId {
+		return api.NewForbiddenError()
+	}
+
+	form, err := c.MultipartForm()
+
+	if err != nil {
+		return err
+	}
+
+	files := form.File["files"]
+
+	if len(files) > 10 {
+		return api.NewBadRequestError("max media count is exceeded")
+	}
+
+	for _, file := range files {
+		err := checkFile(file)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, file := range files {
+		src, err := file.Open()
+
+		if err != nil {
+			return err
+		}
+
+		defer src.Close()
+
+		ct := file.Header.Get("Content-Type")
+
+		info, err := putFile(ct, src)
+
+		if err != nil {
+			return api.NewInternalServerError(err)
+		}
+
+		isVideo := ct == "video/mp4"
+
+		if isVideo {
+			v := models.ServiceVideo{
+				ServiceId: id,
+				Url: info.Location,
+				Alt: "",
+			}
+
+			res := db.Client.Create(&v)
+
+			if res.Error != nil {
+				return api.NewInternalServerError(res.Error)
+			}
+		} else {
+			p := models.ServicePhoto {
+				ServiceId: id,
+				Url: info.Location,
+				Alt: "",
+			}
+
+			res := db.Client.Create(&p)
+
+			if res.Error != nil {
+				return api.NewInternalServerError(res.Error)
+			}
+		}
+	}
+
+	return c.NoContent(http.StatusCreated)
 }
 
 func BulkCreateServices(c echo.Context) error {
