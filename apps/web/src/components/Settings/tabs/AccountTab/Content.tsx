@@ -3,11 +3,12 @@ import Input from '@/components/Input';
 import { api, isApiError } from '@/lib/api';
 import { GetMeResponse } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import Info from './Info';
 
 type Props = {
   user: GetMeResponse;
@@ -23,10 +24,29 @@ type ChangePasswordFormInput = z.infer<typeof schema>;
 
 function Content({ user }: Props): React.ReactElement {
   const { t } = useTranslation('settings', { keyPrefix: 'account' });
-  const { register, formState, handleSubmit } =
+  const { register, formState, handleSubmit, reset } =
     useForm<ChangePasswordFormInput>({
       resolver: zodResolver(schema),
     });
+
+  const mutation = useMutation({
+    mutationKey: ['settings-account'],
+    mutationFn: async (values: ChangePasswordFormInput) => {
+      await api('/auth/password/change', {
+        method: 'PUT',
+        body: values,
+      });
+    },
+    onSuccess: () => {
+      toast.success(t('password-change-success'));
+      reset();
+    },
+    onError: (err) => {
+      if (isApiError(err)) {
+        toast.error(err.data.message);
+      }
+    },
+  });
 
   const onSubmit: SubmitHandler<ChangePasswordFormInput> = async (values) => {
     if (values.newPassword !== values.confirmPassword) {
@@ -34,20 +54,7 @@ function Content({ user }: Props): React.ReactElement {
       return;
     }
 
-    try {
-      await api('/auth/password/change', {
-        method: 'PUT',
-        body: {
-          currentPassword: values.currentPassword,
-          newPassword: values.newPassword,
-        },
-      });
-      toast.success(t('password-change-success'));
-    } catch (err) {
-      if (isApiError(err)) {
-        toast.error(err.data.message);
-      }
-    }
+    mutation.mutate(values);
   };
 
   return (
@@ -55,57 +62,7 @@ function Content({ user }: Props): React.ReactElement {
       <h2 className="text-2xl font-semibold">{t('title')}</h2>
       <hr className="h-[2px] w-full bg-black" />
 
-      <div className="mt-4 max-w-lg">
-        <Input
-          label={t('account-id')}
-          value={user.id}
-          hint={t('account-id-hint')}
-          disabled
-        />
-
-        <Input
-          label={t('email')}
-          value={user.email}
-          className="mt-4"
-          hint={t('email-hint')}
-          disabled
-        />
-
-        <Input
-          label={t('username')}
-          value={user.username}
-          className="mt-4"
-          hint={t('username-hint')}
-          disabled
-        />
-
-        <div className="mt-8 space-y-2">
-          <Link
-            to="/apply-business"
-            className="group block font-semibold text-midnight"
-          >
-            <Trans
-              i18nKey="apply-business"
-              defaults={t('apply-business')}
-              components={{
-                span: <span className="text-sky-700 group-hover:underline" />,
-              }}
-            />
-          </Link>
-          <Link
-            to="/apply-verified"
-            className="group block font-semibold text-midnight"
-          >
-            <Trans
-              i18nKey="apply-verified"
-              defaults={t('apply-verified')}
-              components={{
-                span: <span className="text-sky-700 group-hover:underline" />,
-              }}
-            />
-          </Link>
-        </div>
-      </div>
+      <Info user={user} />
 
       <h2 className="mt-8 text-2xl font-semibold">
         {t('change-password-title')}
