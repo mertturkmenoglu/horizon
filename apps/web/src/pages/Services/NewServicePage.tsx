@@ -1,5 +1,5 @@
-import MainLayout from '@/layouts/MainLayout';
 import NewServiceForm from '@/components/NewServiceForm';
+import MainLayout from '@/layouts/MainLayout';
 
 function NewServicePage(): React.ReactElement {
   return (

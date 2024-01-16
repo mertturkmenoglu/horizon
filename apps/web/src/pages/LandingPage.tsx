@@ -1,8 +1,8 @@
-import { useAuth } from '@/hooks/useAuth';
-import LandingHero from '../components/LandingHero';
-import LandingNavbar from '../components/LandingNavbar';
 import LandingBanner from '@/components/LandingBanner';
+import LandingHero from '@/components/LandingHero';
+import LandingNavbar from '@/components/LandingNavbar';
 import Spinner from '@/components/Spinner';
+import { useAuth } from '@/hooks/useAuth';
 
 function LandingPage(): React.ReactElement {
   const { isLoading } = useAuth();

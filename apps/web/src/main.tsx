@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import './i18n';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-import { Toaster } from './components/Toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { AuthContextProvider } from './contexts/AuthContextProvider';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
+import { RouterProvider } from 'react-router-dom';
+import { Toaster } from './components/Toaster';
+import { AuthContextProvider } from './contexts/AuthContextProvider';
+import './i18n';
+import './index.css';
+import { router } from './router';
 
 const root = document.getElementById('root');
 const client = new QueryClient();

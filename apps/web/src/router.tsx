@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
 import GuestRoute from './components/AuthGuard/GuestRoute';
+import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
 
 const CategoriesPage = React.lazy(
   () => import('./pages/Categories/CategoriesPage')
