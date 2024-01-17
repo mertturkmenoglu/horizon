@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { TNavItem } from './NavItem';
 import AccountTab from '../../pages/Settings/Account/index';
-import AuthActivities from './tabs/AuthActivitiesTab';
+import AuthActivities from '../../pages/Settings/AuthActivities/index';
 import HelpTab from './tabs/HelpTab';
 import LocationTab from './tabs/LocationTab';
 import NotificationsTab from './tabs/NotificationsTab';
