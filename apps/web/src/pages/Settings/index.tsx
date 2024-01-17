@@ -1,4 +1,4 @@
-import { Tabs } from '@/components/Settings/Tabs';
+import { Tabs } from './components/Tabs';
 import MainLayout from '@/layouts/MainLayout';
 import { Navigate, Outlet, useParams } from 'react-router-dom';
 

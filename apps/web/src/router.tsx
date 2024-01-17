@@ -37,7 +37,9 @@ const ServiceDetailPage = React.lazy(
 );
 const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
 const SettingsPage = React.lazy(() => import('./pages/Settings/index'));
-const SettingsOutlet = React.lazy(() => import('./components/Settings/Outlet'));
+const SettingsOutlet = React.lazy(
+  () => import('./pages/Settings/components/Outlet')
+);
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 const UserPage = React.lazy(() => import('./pages/UserPage'));
 const VerifyEmailRedirect = React.lazy(
