@@ -10,7 +10,7 @@ import {
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { TNavItem } from './NavItem';
-import AccountTab from './tabs/AccountTab';
+import AccountTab from '../../pages/Settings/Account/index';
 import AuthActivities from './tabs/AuthActivitiesTab';
 import HelpTab from './tabs/HelpTab';
 import LocationTab from './tabs/LocationTab';
