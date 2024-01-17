@@ -40,14 +40,16 @@ type ServiceRating struct {
 
 type ServicePhoto struct {
 	BaseModel
-	ServiceId string `gorm:"not null;index"`
-	Url       string `gorm:"not null"`
-	Alt       string `gorm:"not null;size:128"`
+	ServiceId  string `gorm:"not null;index"`
+	StorageKey string `gorm:"not null"`
+	Url        string `gorm:"not null"`
+	Alt        string `gorm:"not null;size:128"`
 }
 
 type ServiceVideo struct {
 	BaseModel
-	ServiceId string `gorm:"not null;index"`
-	Url       string `gorm:"not null"`
-	Alt       string `gorm:"not null;size:128"`
+	ServiceId  string `gorm:"not null;index"`
+	StorageKey string `gorm:"not null"`
+	Url        string `gorm:"not null"`
+	Alt        string `gorm:"not null;size:128"`
 }

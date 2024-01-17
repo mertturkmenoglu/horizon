@@ -130,9 +130,10 @@ func UploadServiceMedia(c echo.Context) error {
 
 		if isVideo {
 			v := models.ServiceVideo{
-				ServiceId: id,
-				Url:       info.Location,
-				Alt:       "",
+				ServiceId:  id,
+				StorageKey: info.Key,
+				Url:        info.Location,
+				Alt:        "",
 			}
 
 			res := db.Client.Create(&v)
@@ -142,9 +143,10 @@ func UploadServiceMedia(c echo.Context) error {
 			}
 		} else {
 			p := models.ServicePhoto{
-				ServiceId: id,
-				Url:       info.Location,
-				Alt:       "",
+				ServiceId:  id,
+				StorageKey: info.Key,
+				Url:        info.Location,
+				Alt:        "",
 			}
 
 			res := db.Client.Create(&p)
