@@ -12,6 +12,7 @@ func mapPhotos(models []models.ServicePhoto) []dto.ServicePhotoDto {
 	for i := 0; i < len(models); i++ {
 		photos[i] = dto.ServicePhotoDto{
 			ServiceId: models[i].ServiceId,
+			Key:       models[i].StorageKey,
 			Url:       models[i].Url,
 			Alt:       models[i].Alt,
 		}
@@ -26,6 +27,7 @@ func mapVideos(models []models.ServiceVideo) []dto.ServiceVideoDto {
 	for i := 0; i < len(models); i++ {
 		videos[i] = dto.ServiceVideoDto{
 			ServiceId: models[i].ServiceId,
+			Key:       models[i].StorageKey,
 			Url:       models[i].Url,
 			Alt:       models[i].Alt,
 		}
