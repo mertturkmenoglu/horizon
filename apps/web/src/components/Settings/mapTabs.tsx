@@ -13,7 +13,7 @@ import { TNavItem } from './NavItem';
 import AccountTab from '../../pages/Settings/Account/index';
 import AuthActivities from '../../pages/Settings/AuthActivities/index';
 import HelpTab from './tabs/HelpTab';
-import LocationTab from './tabs/LocationTab';
+import LocationTab from '../../pages/Settings/Location/index';
 import NotificationsTab from './tabs/NotificationsTab';
 import PreferencesTab from './tabs/PreferencesTab';
 import PrivacyTab from './tabs/PrivacyTab';
