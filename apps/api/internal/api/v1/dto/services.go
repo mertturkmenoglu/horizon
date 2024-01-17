@@ -69,6 +69,7 @@ type UploadServiceVideosRequest struct {
 }
 
 type ServicePhotoDto struct {
+	Id        string `json:"id"`
 	ServiceId string `json:"serviceId"`
 	Key       string `json:"key"`
 	Url       string `json:"url"`
@@ -76,6 +77,7 @@ type ServicePhotoDto struct {
 }
 
 type ServiceVideoDto struct {
+	Id        string `json:"id"`
 	ServiceId string `json:"serviceId"`
 	Key       string `json:"key"`
 	Url       string `json:"url"`
