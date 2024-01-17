@@ -36,7 +36,7 @@ const ServiceDetailPage = React.lazy(
   () => import('./pages/Services/ServiceDetailPage')
 );
 const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
-const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const SettingsPage = React.lazy(() => import('./pages/Settings/index'));
 const SettingsOutlet = React.lazy(() => import('./components/Settings/Outlet'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 const UserPage = React.lazy(() => import('./pages/UserPage'));
