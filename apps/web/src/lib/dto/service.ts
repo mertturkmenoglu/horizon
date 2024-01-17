@@ -56,13 +56,17 @@ export type UploadServiceVideosRequest = {
 };
 
 export type ServicePhotoDto = {
+  id: string;
   serviceId: string;
+  key: string;
   url: string;
   alt: string;
 };
 
 export type ServiceVideoDto = {
+  id: string;
   serviceId: string;
+  key: string;
   url: string;
   alt: string;
 };
