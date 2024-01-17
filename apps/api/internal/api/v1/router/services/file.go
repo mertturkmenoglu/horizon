@@ -50,6 +50,12 @@ func putFile(contentType string, src multipart.File) (*minio.UploadInfo, error) 
 	return &info, err
 }
 
+func removeFile(name string) error {
+	ctx := api.App.Upload.Context
+	bucket := viper.GetString("minio.buckets.services")
+	return api.App.Upload.Client.RemoveObject(ctx, bucket, name, minio.RemoveObjectOptions{})
+}
+
 func getExtensionFromContentType(contentType string) string {
 	if contentType == "image/jpg" {
 		return ".jpg"

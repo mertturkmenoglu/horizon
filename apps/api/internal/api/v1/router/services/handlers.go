@@ -6,6 +6,7 @@ import (
 	categories "horizon/internal/category"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
+	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -158,6 +159,69 @@ func UploadServiceMedia(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusCreated)
+}
+
+func DeleteServiceMedia(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+	id := c.Param("id")
+	mediaId := c.Param("mediaId")
+
+	if id == "" {
+		return api.NewBadRequestError("service id is required")
+	}
+
+	service, err := getServiceById(id)
+
+	if err != nil {
+		return err
+	}
+
+	if service.User.Id.String() != auth.UserId {
+		return api.NewForbiddenError()
+	}
+
+	photo, photoErr := query.FindById[models.ServicePhoto](mediaId)
+	video, videoErr := query.FindById[models.ServiceVideo](mediaId)
+
+	if photoErr != nil && videoErr != nil {
+		return api.NewNotFoundError("Cannot found media with id " + mediaId)
+	}
+
+	if photo != nil && photo.ServiceId != id {
+		return api.NewBadRequestError("Media is not related to the service")
+	}
+
+	if video != nil && video.ServiceId != id {
+		return api.NewBadRequestError("Media is not related to the service")
+	}
+
+	if photo != nil {
+		res := db.Client.Delete(photo)
+
+		if res.Error != nil {
+			return api.NewInternalServerError(res.Error)
+		}
+
+		err := removeFile(photo.StorageKey)
+
+		if err != nil {
+			return api.NewInternalServerError(err)
+		}
+	} else {
+		res := db.Client.Delete(video)
+
+		if res.Error != nil {
+			return api.NewInternalServerError(res.Error)
+		}
+
+		err := removeFile(video.StorageKey)
+
+		if err != nil {
+			return api.NewInternalServerError(err)
+		}
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }
 
 func BulkCreateServices(c echo.Context) error {
