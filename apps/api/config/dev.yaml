@@ -39,7 +39,7 @@ api:
       access-ttl: 480
       refresh-ttl: 20160
     password:
-      min-security: 2
+      min-security: 1
       reset-url: "http://localhost:5173/password/reset/%s?email=%s"
     email:
       verify-url: "http://localhost:5173/verify-email/%s?email=%s"
