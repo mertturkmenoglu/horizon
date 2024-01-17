@@ -17,7 +17,7 @@ import LocationTab from '../../pages/Settings/Location/index';
 import NotificationsTab from './tabs/NotificationsTab';
 import PreferencesTab from '../../pages/Settings/Preferences/index';
 import PrivacyTab from './tabs/PrivacyTab';
-import ProfileTab from './tabs/ProfileTab';
+import ProfileTab from '../../pages/Settings/Profile';
 import YourDataTab from './tabs/YourDataTab';
 
 export const tabs = [
