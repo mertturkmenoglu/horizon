@@ -1,22 +1,13 @@
 import UserInfoCard from '@/components/UserInfoCard';
 import MainLayout from '@/layouts/MainLayout';
 import { GetUserByUsernameResponse } from '@/lib/dto';
-import NoResult from './components/NoResult';
-import ServiceCard from '@/components/ServiceCard';
-import { useTranslation } from 'react-i18next';
-import { useUserServicesQuery } from './hooks/useUserServicesQuery';
+import Services from './components/Services';
 
 type Props = {
   user: GetUserByUsernameResponse;
 };
 
 function UserPage({ user }: Props): React.ReactElement {
-  const { t } = useTranslation('user');
-  const query = useUserServicesQuery(user.username);
-
-  const isNoResult =
-    !query.isLoading && !query.isError && query.data?.data.length === 0;
-
   return (
     <MainLayout>
       <div className="">
@@ -26,23 +17,7 @@ function UserPage({ user }: Props): React.ReactElement {
             className="mt-8"
           />
         </div>
-        {!isNoResult && query.data && (
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold text-midnight">
-              {t('services')}
-            </h2>
-            <div className="grid grid-cols-5 gap-4">
-              {query.data.data.map((s) => (
-                <ServiceCard service={s} />
-              ))}
-            </div>
-          </div>
-        )}
-        {isNoResult && (
-          <div className="mt-8 p-4">
-            <NoResult />
-          </div>
-        )}
+        <Services username={user.username} />
       </div>
     </MainLayout>
   );
