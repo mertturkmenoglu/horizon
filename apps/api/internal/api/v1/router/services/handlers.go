@@ -9,6 +9,7 @@ import (
 	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/pagination"
 	"net/http"
 	"strconv"
 
@@ -54,6 +55,37 @@ func GetServiceById(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, h.Response[dto.GetServiceByIdResponse]{
 		"data": mapModelToGetServiceByIdResponse(service, getVisitCount(id), getTotalVisitsCount()),
+	})
+}
+
+func GetServicesByUsername(c echo.Context) error {
+	username := c.Param("username")
+	params, err := pagination.GetParamsFromContext(c)
+
+	if username == "" {
+		return api.NewBadRequestError("username is required")
+	}
+
+	if err != nil {
+		return api.NewBadRequestError(err.Error())
+	}
+
+	services, totalCount, err := getServicesByUsername(username, params)
+
+	if err != nil {
+		return err
+	}
+
+	dtos := make([]dto.GetServiceByIdResponse, len(services))
+	totalVisits := getTotalVisitsCount()
+
+	for i, s := range services {
+		dtos[i] = mapModelToGetServiceByIdResponse(s, getVisitCount(s.Id), totalVisits)
+	}
+
+	return c.JSON(http.StatusOK, h.PaginatedResponse[[]dto.GetServiceByIdResponse]{
+		Data:       dtos,
+		Pagination: pagination.GetPagination(params, totalCount),
 	})
 }
 

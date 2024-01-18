@@ -222,3 +222,42 @@ func deleteRate(userId string, serviceId string) error {
 
 	return res
 }
+
+func getServicesByUsername(username string, params pagination.Params) ([]*models.Service, int64, error) {
+	var services []*models.Service
+	var count int64
+	var user *models.User
+
+	res := db.Client.First(&user, "username = ?", username)
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return nil, 0, api.NewNotFoundError("Cannot found user with username " + username)
+		}
+
+		return nil, 0, api.NewInternalServerError(res.Error.Error())
+	}
+
+	res = db.Client.
+		Preload(clause.Associations).
+		Order("created_at DESC").
+		Limit(params.PageSize).
+		Offset(params.Offset).
+		Find(&services, "user_id = ?", user.Id)
+
+	if res.Error != nil {
+		if db.IsNotFoundError(res.Error) {
+			return nil, 0, api.NewNotFoundError("Cannot found services")
+		}
+
+		return nil, 0, api.NewInternalServerError(res.Error.Error())
+	}
+
+	res = db.Client.Table("services").Where("user_id = ?", user.Id).Count(&count)
+
+	if res.Error != nil {
+		return nil, 0, api.NewBadRequestError()
+	}
+
+	return services, count, nil
+}
