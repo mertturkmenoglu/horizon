@@ -41,7 +41,7 @@ const SettingsOutlet = React.lazy(
   () => import('./pages/Settings/components/Outlet')
 );
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
-const UserPage = React.lazy(() => import('./pages/UserPage'));
+const UserPage = React.lazy(() => import('./pages/User'));
 const VerifyEmailRedirect = React.lazy(
   () => import('./pages/VerifyEmailRedirect')
 );
