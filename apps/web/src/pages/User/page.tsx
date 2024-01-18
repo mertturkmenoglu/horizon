@@ -1,12 +1,10 @@
 import UserInfoCard from '@/components/UserInfoCard';
 import MainLayout from '@/layouts/MainLayout';
-import { api } from '@/lib/api';
-import { GetUserByUsernameResponse, TPaginatedResponse } from '@/lib/dto';
-import { GetServiceByIdResponse } from '@/lib/dto/service';
-import { useQuery } from '@tanstack/react-query';
+import { GetUserByUsernameResponse } from '@/lib/dto';
 import NoResult from './components/NoResult';
 import ServiceCard from '@/components/ServiceCard';
 import { useTranslation } from 'react-i18next';
+import { useUserServicesQuery } from './hooks/useUserServicesQuery';
 
 type Props = {
   user: GetUserByUsernameResponse;
@@ -14,17 +12,7 @@ type Props = {
 
 function UserPage({ user }: Props): React.ReactElement {
   const { t } = useTranslation('user');
-
-  const query = useQuery({
-    queryKey: ['user-services', user.username],
-    queryFn: async () => {
-      const res = await api<TPaginatedResponse<GetServiceByIdResponse[]>>(
-        `/services/user/${user.username}`
-      );
-      return res;
-    },
-    refetchOnWindowFocus: false,
-  });
+  const query = useUserServicesQuery(user.username);
 
   const isNoResult =
     !query.isLoading && !query.isError && query.data?.data.length === 0;
