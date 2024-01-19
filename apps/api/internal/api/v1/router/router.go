@@ -5,6 +5,7 @@ import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/api/v1/middlewares"
 	"horizon/internal/api/v1/router/auth"
+	"horizon/internal/api/v1/router/favorites"
 	"horizon/internal/api/v1/router/location"
 	"horizon/internal/api/v1/router/search"
 	"horizon/internal/api/v1/router/services"
@@ -84,6 +85,22 @@ func RegisterRoutes(e *echo.Echo) {
 				middlewares.IsAuth,
 			)
 		}
+	}
+
+	favoritesRoutes := api.Group("/favorites")
+	{
+		favoritesRoutes.POST(
+			"/",
+			favorites.CreateFavorite,
+			middlewares.ParseBody[dto.CreateFavoriteRequest],
+			middlewares.IsAuth,
+		)
+
+		favoritesRoutes.DELETE(
+			"/:id",
+			favorites.DeleteFavorite,
+			middlewares.IsAuth,
+		)
 	}
 
 	locationRoutes := api.Group("/location")
