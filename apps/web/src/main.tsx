@@ -9,6 +9,7 @@ import { AuthContextProvider } from './contexts/AuthContextProvider';
 import './i18n';
 import './index.css';
 import { router } from './router';
+import { PageContextProvider } from './contexts/PageContextProvider';
 
 const root = document.getElementById('root');
 const client = new QueryClient();
@@ -22,9 +23,11 @@ ReactDOM.createRoot(root).render(
     <QueryClientProvider client={client}>
       <HelmetProvider>
         <AuthContextProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <RouterProvider router={router} />
-          <Toaster />
+          <PageContextProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <RouterProvider router={router} />
+            <Toaster />
+          </PageContextProvider>
         </AuthContextProvider>
       </HelmetProvider>
     </QueryClientProvider>
