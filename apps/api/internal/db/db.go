@@ -32,6 +32,7 @@ func AutoMigrate() error {
 		&models.AuthActivity{},
 		&models.User{},
 		&models.ContactInformation{},
+		&models.Favorite{},
 		&models.Location{},
 		&models.Service{},
 		&models.ServicePhoto{},
