@@ -24,7 +24,7 @@ func CreateFavorite(c echo.Context) error {
 		Where("user_id = ?", auth.UserId).
 		First(&fav)
 
-	if res.Error == nil || fav != nil {
+	if res.Error == nil {
 		return api.NewBadRequestError("already exists")
 	}
 
@@ -79,4 +79,34 @@ func DeleteFavorite(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusNoContent)
+}
+
+func GetMyFavorites(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
+
+	var favs []*models.Favorite
+
+	res := db.Client.
+		Where("user_id = ?", auth.UserId).
+		Order("created_at DESC").
+		Limit(256).
+		Find(&favs)
+
+	if res.Error != nil {
+		return api.NewInternalServerError(res.Error)
+	}
+
+	dtos := make([]dto.FavoriteDto, len(favs))
+
+	for i, f := range favs {
+		dtos[i] = dto.FavoriteDto{
+			Id:        f.Id.String(),
+			ServiceId: f.ServiceId,
+			UserId:    f.UserId,
+		}
+	}
+
+	return c.JSON(http.StatusOK, h.Response[dto.MyFavoritesResponse]{
+		"data": dtos,
+	})
 }

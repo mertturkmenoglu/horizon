@@ -89,6 +89,11 @@ func RegisterRoutes(e *echo.Echo) {
 
 	favoritesRoutes := api.Group("/favorites")
 	{
+		favoritesRoutes.GET(
+			"/",
+			favorites.GetMyFavorites,
+			middlewares.IsAuth,
+		)
 		favoritesRoutes.POST(
 			"/",
 			favorites.CreateFavorite,

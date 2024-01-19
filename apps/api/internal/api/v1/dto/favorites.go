@@ -1,5 +1,7 @@
 package dto
 
+type MyFavoritesResponse []FavoriteDto
+
 type CreateFavoriteRequest struct {
 	ServiceId string `json:"serviceId"`
 }
