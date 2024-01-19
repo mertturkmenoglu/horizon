@@ -6,8 +6,11 @@ import { api } from '@/lib/api';
 import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getUserImage } from '@/lib/img';
-import { useQuery } from '@tanstack/react-query';
+import { useFavStore } from '@/stores/useFavStore';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 function Container(): React.ReactElement {
   const { id } = useParams();
@@ -84,6 +87,45 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
     },
   ];
 
+  const refetchFavs = useFavStore((s) => s.fetch);
+  const favs = useFavStore((s) => s.favs);
+
+  const fav = useMemo(() => {
+    const f = favs.find((f) => f.serviceId === service.id);
+    return f;
+  }, [favs, service.id]);
+
+  const isFav = !!fav;
+
+  const favMutation = useMutation({
+    mutationKey: ['service', 'favorite', service.id],
+    mutationFn: async () => {
+      if (isFav) {
+        // Delete
+        await api(`/favorites/${fav.id}`, {
+          method: 'DELETE',
+        });
+      } else {
+        // Create
+        await api('/favorites/', {
+          method: 'POST',
+          body: {
+            serviceId: service.id,
+          },
+        });
+      }
+    },
+    onSuccess: () => {
+      toast.success('Success');
+    },
+    onError: () => {
+      toast.error('Failed');
+    },
+    onSettled: async () => {
+      await refetchFavs();
+    },
+  });
+
   return (
     <MainLayout>
       <Breadcrumb
@@ -98,6 +140,14 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             {service.description.replace(/\t/g, '\n')}
           </pre>
         </div>
+
+        <button
+          onClick={() => {
+            favMutation.mutate();
+          }}
+        >
+          {isFav ? 'Del Fav' : 'Add Fav'}
+        </button>
 
         <Link
           to={`/user/${service.user.username}`}
