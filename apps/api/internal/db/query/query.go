@@ -16,7 +16,7 @@ func FindById[T any](id string) (*T, error) {
 
 	if res.Error != nil {
 		if db.IsNotFoundError(res.Error) {
-			return nil, api.NewNotFoundError("Cannot found entity with id", id)
+			return nil, api.NewNotFoundError("Cannot found entity with id " + id)
 		}
 
 		return nil, api.NewInternalServerError(res.Error.Error())
