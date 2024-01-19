@@ -7,6 +7,8 @@ import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getUserImage } from '@/lib/img';
 import { useFavStore } from '@/stores/useFavStore';
+import { BookmarkIcon as FavEmpty } from '@heroicons/react/24/outline';
+import { BookmarkIcon as FavFilled } from '@heroicons/react/24/solid';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -141,30 +143,38 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
           </pre>
         </div>
 
-        <button
-          onClick={() => {
-            favMutation.mutate();
-          }}
-        >
-          {isFav ? 'Del Fav' : 'Add Fav'}
-        </button>
-
-        <Link
-          to={`/user/${service.user.username}`}
-          className="flex flex-col items-end"
-        >
-          <img
-            src={getUserImage(service.user.profileImage)}
-            alt=""
-            className="size-24 rounded-lg"
-          />
-          <div className="mt-4 text-2xl font-medium">{service.user.name}</div>
-          <div className="text-midnight/70">@{service.user.username}</div>
-          <div className="mt-4 text-lg font-bold">
-            {service.price} {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
-            {timespanToText[service.priceTimespan]}
-          </div>
-        </Link>
+        <div className="flex flex-col items-end space-y-4">
+          <Link
+            to={`/user/${service.user.username}`}
+            className="flex flex-col items-end"
+          >
+            <img
+              src={getUserImage(service.user.profileImage)}
+              alt=""
+              className="size-24 rounded-lg"
+            />
+            <div className="mt-4 text-2xl font-medium">{service.user.name}</div>
+            <div className="text-midnight/70">@{service.user.username}</div>
+            <div className="mt-4 text-lg font-bold">
+              {service.price} {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
+              {timespanToText[service.priceTimespan]}
+            </div>
+          </Link>
+          <button
+            onClick={() => {
+              favMutation.mutate();
+            }}
+          >
+            {isFav ? (
+              <>
+                <FavFilled className="size-8 fill-sky-500" />
+                <span className="sr-only">Favorite</span>
+              </>
+            ) : (
+              <FavEmpty className="size-8" />
+            )}
+          </button>
+        </div>
       </div>
 
       <pre className="mt-32 text-wrap">{JSON.stringify(service, null, 2)}</pre>
