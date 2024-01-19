@@ -1,4 +1,5 @@
 import Breadcrumb, { TBreadcrumbItem } from '@/components/Breadcrumb';
+import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import { useCategoryData } from '@/hooks/useCategoryData';
 import MainLayout from '@/layouts/MainLayout';
@@ -7,7 +8,10 @@ import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getUserImage } from '@/lib/img';
 import { useFavStore } from '@/stores/useFavStore';
-import { BookmarkIcon as FavEmpty } from '@heroicons/react/24/outline';
+import {
+  AtSymbolIcon,
+  BookmarkIcon as FavEmpty,
+} from '@heroicons/react/24/outline';
 import { BookmarkIcon as FavFilled } from '@heroicons/react/24/solid';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
@@ -141,6 +145,56 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
           <pre className="mt-8 max-w-4xl text-wrap break-normal font-sans text-lg">
             {service.description.replace(/\t/g, '\n')}
           </pre>
+          <div>
+            <div>Online: {service.isOnline ? 'Yes' : 'No'}</div>
+            <div className="mt-4 text-lg font-bold">
+              Price:
+              {service.price}
+              {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
+              {timespanToText[service.priceTimespan]}
+            </div>
+            <div>Location: {service.location}</div>
+            <div className="mt-4 text-lg font-bold">
+              Delivery:
+              {service.deliveryTime}
+              {timespanToText[service.deliveryTimespan]}
+            </div>
+            <div>
+              Rating: {service.totalPoints} / {service.totalVotes}
+            </div>
+            <div>{service.isNew && <div>New Service</div>}</div>
+            <div>{service.isPopular && <div>Popular</div>}</div>
+          </div>
+
+          <div className="space-y-4">
+            {service.photos.map((p) => (
+              <div key={p.id}>
+                <img
+                  src={p.url}
+                  alt={p.alt}
+                  className="aspect-video w-48"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            {service.videos.map((v) => (
+              <div key={v.id}>
+                <video
+                  width="320"
+                  height="240"
+                  controls
+                >
+                  <source
+                    src={v.url}
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col items-end space-y-4">
@@ -160,24 +214,34 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
               {timespanToText[service.priceTimespan]}
             </div>
           </Link>
+
+          <Button
+            appearance="midnight"
+            className="flex items-center justify-center gap-2"
+          >
+            <AtSymbolIcon className="size-6" />
+            <span>Get in contact</span>
+          </Button>
+
           <button
             onClick={() => {
               favMutation.mutate();
             }}
           >
             {isFav ? (
-              <>
+              <div className="flex items-center gap-2">
                 <FavFilled className="size-8 fill-sky-500" />
-                <span className="sr-only">Favorite</span>
-              </>
+                <span className="">Remove from favorites</span>
+              </div>
             ) : (
-              <FavEmpty className="size-8" />
+              <div className="flex items-center gap-2">
+                <FavEmpty className="size-8" />
+                <span>Add to favorites</span>
+              </div>
             )}
           </button>
         </div>
       </div>
-
-      <pre className="mt-32 text-wrap">{JSON.stringify(service, null, 2)}</pre>
     </MainLayout>
   );
 }
