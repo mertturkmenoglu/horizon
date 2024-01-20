@@ -8,7 +8,7 @@ import (
 
 type Service struct {
 	Id               string    `gorm:"not null;uniqueIndex;autoIncrement:false;default:''"`
-	CreatedAt        time.Time ``
+	CreatedAt        time.Time `gorm:"index:,sort:desc"`
 	UpdatedAt        time.Time `gorm:"default:null"`
 	DeletedAt        time.Time `gorm:"default:null"`
 	User             User      ``

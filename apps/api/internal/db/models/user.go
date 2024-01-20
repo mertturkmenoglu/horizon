@@ -11,7 +11,7 @@ type User struct {
 	Auth                Auth               `json:"-"`
 	Name                string             `json:"name" gorm:"not null;size:64;default:''"`
 	Email               string             `json:"email" gorm:"not null;uniqueIndex;size:256"`
-	Username            string             `json:"username" gorm:"not null;uniqueIndex;size:32"`
+	Username            string             `json:"username" gorm:"not null;uniqueIndex:,sort:desc;size:32"`
 	OnboardingCompleted bool               `json:"onboardingCompleted" gorm:"not null;default:false"`
 	EmailVerified       bool               `json:"emailVerified" gorm:"not null;default:false"`
 	ContactInformation  ContactInformation `json:"contactInformation"`
