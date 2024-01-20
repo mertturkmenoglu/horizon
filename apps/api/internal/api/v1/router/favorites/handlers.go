@@ -44,11 +44,7 @@ func CreateFavorite(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[dto.FavoriteDto]{
-		"data": dto.FavoriteDto{
-			Id:        newFav.Id.String(),
-			ServiceId: newFav.ServiceId,
-			UserId:    newFav.UserId,
-		},
+		"data": mapModelToDto(&newFav),
 	})
 }
 
@@ -81,24 +77,13 @@ func DeleteFavorite(c echo.Context) error {
 
 func GetMyFavorites(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
-
 	favs, err := getMyFavorites(auth.UserId)
 
 	if err != nil {
 		return err
 	}
 
-	dtos := make([]dto.FavoriteDto, len(favs))
-
-	for i, f := range favs {
-		dtos[i] = dto.FavoriteDto{
-			Id:        f.Id.String(),
-			ServiceId: f.ServiceId,
-			UserId:    f.UserId,
-		}
-	}
-
 	return c.JSON(http.StatusOK, h.Response[dto.MyFavoritesResponse]{
-		"data": dtos,
+		"data": mapModeltoDtoArr(favs),
 	})
 }
