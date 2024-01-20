@@ -1,21 +1,17 @@
-import Breadcrumb, { TBreadcrumbItem } from '@/components/Breadcrumb';
+import Breadcrumb from '@/components/Breadcrumb';
 import Button from '@/components/Button';
-import { useCategoryData } from '@/hooks/useCategoryData';
 import MainLayout from '@/layouts/MainLayout';
-import { api } from '@/lib/api';
 import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getUserImage } from '@/lib/img';
-import { useFavStore } from '@/stores/useFavStore';
 import {
   AtSymbolIcon,
   BookmarkIcon as FavEmpty,
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as FavFilled } from '@heroicons/react/24/solid';
-import { useMutation } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
+import { useBreadcrumb } from './hooks/useBreadcrumb';
+import { useFavorites } from './hooks/useFavorites';
 
 type Props = {
   service: GetServiceByIdResponse;
@@ -29,67 +25,8 @@ const timespanToText: Record<number, string> = {
 };
 
 function ServiceDetailPage({ service }: Props): React.ReactElement {
-  const categoryData = useCategoryData();
-  const flattenCategories = categoryData.data
-    .map((c) => [c, c.subcategories].flat())
-    .flat();
-
-  const category =
-    flattenCategories.find((c) => c.id === service.category) ?? null;
-
-  const breadcrumbItems: TBreadcrumbItem[] = [
-    {
-      href: `/categories/${encodeURIComponent(
-        category?.title ?? ''
-      )}?id=${category?.id}`,
-      text: category?.title ?? '',
-      capitalize: true,
-    },
-    {
-      href: '#',
-      text: service.title.toLocaleLowerCase() ?? '',
-      capitalize: true,
-    },
-  ];
-
-  const refetchFavs = useFavStore((s) => s.fetch);
-  const favs = useFavStore((s) => s.favs);
-
-  const fav = useMemo(() => {
-    const f = favs.find((f) => f.serviceId === service.id);
-    return f;
-  }, [favs, service.id]);
-
-  const isFav = !!fav;
-
-  const favMutation = useMutation({
-    mutationKey: ['service', 'favorite', service.id],
-    mutationFn: async () => {
-      if (isFav) {
-        // Delete
-        await api(`/favorites/${fav.id}`, {
-          method: 'DELETE',
-        });
-      } else {
-        // Create
-        await api('/favorites/', {
-          method: 'POST',
-          body: {
-            serviceId: service.id,
-          },
-        });
-      }
-    },
-    onSuccess: () => {
-      toast.success('Success');
-    },
-    onError: () => {
-      toast.error('Failed');
-    },
-    onSettled: async () => {
-      await refetchFavs();
-    },
-  });
+  const breadcrumbItems = useBreadcrumb(service);
+  const { isFavorite, mutation: favMutation } = useFavorites(service);
 
   return (
     <MainLayout>
@@ -187,7 +124,7 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
               favMutation.mutate();
             }}
           >
-            {isFav ? (
+            {isFavorite ? (
               <div className="flex items-center gap-2">
                 <FavFilled className="size-8 fill-sky-500" />
                 <span className="">Remove from favorites</span>
