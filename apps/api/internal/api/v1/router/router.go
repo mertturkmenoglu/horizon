@@ -102,6 +102,7 @@ func RegisterRoutes(e *echo.Echo) {
 			favorites.GetMyFavorites,
 			middlewares.IsAuth,
 		)
+
 		favoritesRoutes.POST(
 			"/",
 			favorites.CreateFavorite,
