@@ -46,7 +46,7 @@ function Footer({ className }: FooterProps): JSX.Element {
           />
 
           <NavigationItem
-            href="/faq"
+            href="/help#faq"
             text={t('faq')}
           />
           <NavigationItem
