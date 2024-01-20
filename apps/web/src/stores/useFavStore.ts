@@ -5,11 +5,15 @@ import { create } from 'zustand';
 
 type FavState = {
   favs: FavoriteDto[];
+  setFavs: (favs: FavoriteDto[]) => void;
   fetch: () => Promise<void>;
 };
 
 export const useFavStore = create<FavState>()((set) => ({
   favs: [],
+  setFavs: (favs: FavoriteDto[]) => {
+    set({ favs });
+  },
   fetch: async () => {
     try {
       const res = await api<TResponse<MyFavoritesResponse>>('/favorites/');
