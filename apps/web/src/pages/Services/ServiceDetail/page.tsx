@@ -10,6 +10,7 @@ import { useBreadcrumb } from './hooks/useBreadcrumb';
 import { useFavorites } from './hooks/useFavorites';
 import FavoriteButton from './components/FavoriteButton';
 import Description from './components/Description';
+import Lightbox from './components/Lightbox';
 
 type Props = {
   service: GetServiceByIdResponse;
@@ -58,35 +59,7 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             <div>{service.isPopular && <div>Popular</div>}</div>
           </div>
 
-          <div className="space-y-4">
-            {service.photos.map((p) => (
-              <div key={p.id}>
-                <img
-                  src={p.url}
-                  alt={p.alt}
-                  className="aspect-video w-48"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="space-y-4">
-            {service.videos.map((v) => (
-              <div key={v.id}>
-                <video
-                  width="320"
-                  height="240"
-                  controls
-                >
-                  <source
-                    src={v.url}
-                    type="video/mp4"
-                  />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            ))}
-          </div>
+          <Lightbox service={service} />
         </div>
 
         <div className="flex flex-col items-end space-y-4">
