@@ -17,6 +17,7 @@ func Init() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
 		Logger:                                   logger.Default.LogMode(logLevel),
+		PrepareStmt:                              true,
 	})
 
 	if err != nil {
