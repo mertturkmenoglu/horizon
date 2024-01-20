@@ -16,6 +16,10 @@ type RegisterRequest struct {
 	Username string `json:"username" validate:"required"`
 }
 
+type BulkRegisterRequest struct {
+	Data []RegisterRequest `json:"data"`
+}
+
 type PasswordStrengthRequest struct {
 	Password string `json:"password" validate:"required"`
 }

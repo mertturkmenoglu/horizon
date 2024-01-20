@@ -14,6 +14,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 func Login(c echo.Context) error {
@@ -255,5 +256,34 @@ func GetAuthActivities(c echo.Context) error {
 	return c.JSON(http.StatusOK, h.PaginatedResponse[dto.GetAuthActivitiesResponse]{
 		Data:       activities,
 		Pagination: pagination.GetPagination(params, count),
+	})
+}
+
+func BulkRegister(c echo.Context) error {
+	body := c.Get("body").(dto.BulkRegisterRequest)
+	errs := make([]error, 0)
+
+	for i, item := range body.Data {
+		hashed, err := registerPreChecks(item)
+
+		if err != nil {
+			errs = append(errs, err)
+		}
+
+		err = createUser(hashed, item)
+
+		if err != nil {
+			errs = append(errs, err)
+		}
+
+		api.App.Logger.Info("bulk register", zap.Int("user create", i))
+	}
+
+	if len(errs) == 0 {
+		return c.NoContent(http.StatusCreated)
+	}
+
+	return c.JSON(http.StatusOK, h.Response[any]{
+		"data": errs,
 	})
 }

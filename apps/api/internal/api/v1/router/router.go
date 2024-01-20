@@ -36,6 +36,14 @@ func RegisterRoutes(e *echo.Echo) {
 		authRoutes.POST("/onboard/complete", auth.CompleteOnboarding, middlewares.IsAuth)
 		authRoutes.POST("/token/refresh", auth.GetNewTokens)
 		authRoutes.GET("/activities", auth.GetAuthActivities, middlewares.IsAuth)
+
+		if env == "dev" {
+			authRoutes.POST(
+				"/bulk-register",
+				auth.BulkRegister,
+				middlewares.ParseBody[dto.BulkRegisterRequest],
+			)
+		}
 	}
 
 	usersRoutes := api.Group("/users")
