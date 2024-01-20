@@ -1,11 +1,9 @@
 package favorites
 
 import (
-	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
 	"horizon/internal/db/models"
-	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"
@@ -15,18 +13,7 @@ import (
 
 func CreateFavorite(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
-	body := c.Get("body").(dto.CreateFavoriteRequest)
-
-	_, err := getFavoriteByServiceIdAndUserId(
-		body.ServiceId,
-		auth.UserId,
-	)
-
-	if err == nil {
-		return api.NewBadRequestError("already exists")
-	}
-
-	service, err := query.FindById[models.Service](body.ServiceId)
+	service, err := createFavoriteValidation(c)
 
 	if err != nil {
 		return err
@@ -49,21 +36,10 @@ func CreateFavorite(c echo.Context) error {
 }
 
 func DeleteFavorite(c echo.Context) error {
-	auth := c.Get("auth").(jsonwebtoken.Payload)
-	id := c.Param("id")
-
-	if id == "" {
-		return api.NewBadRequestError("id is required")
-	}
-
-	favorite, err := query.FindById[models.Favorite](id)
+	favorite, err := deleteFavoriteValidation(c)
 
 	if err != nil {
 		return err
-	}
-
-	if favorite.UserId != auth.UserId {
-		return api.NewForbiddenError()
 	}
 
 	res := db.Client.Delete(favorite)
