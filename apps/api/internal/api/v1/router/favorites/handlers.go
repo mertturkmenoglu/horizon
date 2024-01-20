@@ -30,12 +30,14 @@ func CreateFavorite(c echo.Context) error {
 		return res.Error
 	}
 
+	invalidateCache(auth.UserId)
 	return c.JSON(http.StatusOK, h.Response[dto.FavoriteDto]{
 		"data": mapModelToDto(&newFav),
 	})
 }
 
 func DeleteFavorite(c echo.Context) error {
+	auth := c.Get("auth").(jsonwebtoken.Payload)
 	favorite, err := deleteFavoriteValidation(c)
 
 	if err != nil {
@@ -48,6 +50,7 @@ func DeleteFavorite(c echo.Context) error {
 		return res.Error
 	}
 
+	invalidateCache(auth.UserId)
 	return c.NoContent(http.StatusNoContent)
 }
 

@@ -17,6 +17,12 @@ func getFavoriteByServiceIdAndUserId(serviceId string, userId string) (*models.F
 }
 
 func getMyFavorites(userId string) ([]*models.Favorite, error) {
+	cacheFavs, err := readCache(userId)
+
+	if err == nil {
+		return cacheFavs, nil
+	}
+
 	var favs []*models.Favorite
 
 	res := db.Client.
@@ -24,6 +30,8 @@ func getMyFavorites(userId string) ([]*models.Favorite, error) {
 		Order("created_at DESC").
 		Limit(256).
 		Find(&favs)
+
+	writeCache(userId, favs)
 
 	return favs, res.Error
 }
