@@ -33,7 +33,7 @@ const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
 const SchedulePage = React.lazy(() => import('./pages/SchedulePage'));
 const SearchPage = React.lazy(() => import('./pages/SearchPage'));
 const ServiceDetailPage = React.lazy(
-  () => import('./pages/Services/ServiceDetailPage')
+  () => import('./pages/Services/ServiceDetail')
 );
 const ServicesPage = React.lazy(() => import('./pages/Services/ServicesPage'));
 const SettingsPage = React.lazy(() => import('./pages/Settings/index'));

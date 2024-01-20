@@ -1,6 +1,5 @@
 import Breadcrumb, { TBreadcrumbItem } from '@/components/Breadcrumb';
 import Button from '@/components/Button';
-import Spinner from '@/components/Spinner';
 import { useCategoryData } from '@/hooks/useCategoryData';
 import MainLayout from '@/layouts/MainLayout';
 import { api } from '@/lib/api';
@@ -13,50 +12,10 @@ import {
   BookmarkIcon as FavEmpty,
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as FavFilled } from '@heroicons/react/24/solid';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-
-function Container(): React.ReactElement {
-  const { id } = useParams();
-  const query = useQuery({
-    queryKey: ['service', id],
-    queryFn: async () => {
-      const res = await api<{ data: GetServiceByIdResponse }>(
-        '/services/' + id
-      );
-      return res.data;
-    },
-    enabled: !!id,
-    refetchOnWindowFocus: false,
-    retry: false,
-  });
-
-  if (query.isLoading) {
-    return (
-      <MainLayout>
-        <div className="my-64 flex items-center justify-center">
-          <Spinner className="size-12" />
-        </div>
-      </MainLayout>
-    );
-  }
-
-  if (query.isError) {
-    return (
-      <MainLayout>
-        <div>An error happened</div>
-      </MainLayout>
-    );
-  }
-
-  if (!query.data) {
-    return <></>;
-  }
-
-  return <ServiceDetailPage service={query.data} />;
-}
 
 type Props = {
   service: GetServiceByIdResponse;
@@ -246,4 +205,4 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
   );
 }
 
-export default Container;
+export default ServiceDetailPage;
