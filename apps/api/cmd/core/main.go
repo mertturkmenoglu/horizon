@@ -74,6 +74,9 @@ func main() {
 	scheduler.Start()
 
 	e.Use(middlewares.ZapLogger())
+	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
+		Timeout: 10 * time.Second,
+	}))
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
