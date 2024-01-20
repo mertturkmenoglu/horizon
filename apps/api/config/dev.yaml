@@ -13,6 +13,7 @@ db:
   timezone: Europe/Istanbul
   user: postgres
 env: dev
+debug: false
 email:
   name: Horizon
   from: noreply@gethorizon.com
