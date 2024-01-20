@@ -4,14 +4,12 @@ import MainLayout from '@/layouts/MainLayout';
 import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
 import { getUserImage } from '@/lib/img';
-import {
-  AtSymbolIcon,
-  BookmarkIcon as FavEmpty,
-} from '@heroicons/react/24/outline';
-import { BookmarkIcon as FavFilled } from '@heroicons/react/24/solid';
+import { AtSymbolIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useBreadcrumb } from './hooks/useBreadcrumb';
 import { useFavorites } from './hooks/useFavorites';
+import FavoriteButton from './components/FavoriteButton';
+import Description from './components/Description';
 
 type Props = {
   service: GetServiceByIdResponse;
@@ -38,9 +36,7 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
       <div className="mt-8 flex justify-between">
         <div>
           <h2 className="text-3xl font-bold">{service.title}</h2>
-          <pre className="mt-8 max-w-4xl text-wrap break-normal font-sans text-lg">
-            {service.description.replace(/\t/g, '\n')}
-          </pre>
+          <Description description={service.description} />
           <div>
             <div>Online: {service.isOnline ? 'Yes' : 'No'}</div>
             <div className="mt-4 text-lg font-bold">
@@ -119,23 +115,10 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             <span>Get in contact</span>
           </Button>
 
-          <button
-            onClick={() => {
-              favMutation.mutate();
-            }}
-          >
-            {isFavorite ? (
-              <div className="flex items-center gap-2">
-                <FavFilled className="size-8 fill-sky-500" />
-                <span className="">Remove from favorites</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <FavEmpty className="size-8" />
-                <span>Add to favorites</span>
-              </div>
-            )}
-          </button>
+          <FavoriteButton
+            onClick={() => favMutation.mutate()}
+            isFavorite={isFavorite}
+          />
         </div>
       </div>
     </MainLayout>
