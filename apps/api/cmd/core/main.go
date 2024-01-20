@@ -77,6 +77,7 @@ func main() {
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Timeout: 10 * time.Second,
 	}))
+	e.Use(middleware.Secure())
 
 	// Attach handlers to paths
 	router.RegisterRoutes(e)
