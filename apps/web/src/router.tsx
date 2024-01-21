@@ -11,6 +11,9 @@ const CategoryListingPage = React.lazy(
   () => import('./pages/Categories/CategoryListingPage')
 );
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const ConversationPage = React.lazy(
+  () => import('./pages/Messages/Conversation')
+);
 const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
 const HelpPage = React.lazy(() => import('./pages/HelpPage'));
@@ -18,7 +21,7 @@ const HomePage = React.lazy(() => import('./pages/HomePage'));
 const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
-const MessagesPage = React.lazy(() => import('./pages/MessagesPage'));
+const MessagesPage = React.lazy(() => import('./pages/Messages'));
 const MyServicesPage = React.lazy(() => import('./pages/MyServices'));
 const NewServicePage = React.lazy(
   () => import('./pages/Services/NewServicePage')
@@ -212,6 +215,16 @@ export const router = createBrowserRouter([
         <MessagesPage />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: ':convId',
+        element: (
+          <ProtectedRoute>
+            <ConversationPage />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
   {
     path: '/notifications',
