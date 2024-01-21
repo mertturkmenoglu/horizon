@@ -29,8 +29,8 @@ function Item({ id, user, lastMessage }: Props): React.ReactElement {
     <NavLink
       to={'/messages/' + id}
       className={() =>
-        cn('inline-flex w-full space-x-2 rounded px-1 py-2', {
-          'bg-midnight text-white': paramConvId === id,
+        cn('flex w-full space-x-2 rounded px-1 py-2', {
+          'bg-midnight/80 text-white': paramConvId === id,
           'hover:bg-neutral-400/20': paramConvId !== id,
         })
       }
