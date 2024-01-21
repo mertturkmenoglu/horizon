@@ -2,7 +2,7 @@ package favorites
 
 import (
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 )
 
 func mapModelToDto(fav *models.Favorite) dto.FavoriteDto {

@@ -2,7 +2,7 @@ package favorites
 
 import (
 	"horizon/internal/api"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"time"
 )
 

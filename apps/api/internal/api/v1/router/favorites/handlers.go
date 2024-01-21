@@ -3,7 +3,7 @@ package favorites
 import (
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
 	"net/http"

@@ -3,9 +3,9 @@ package favorites
 import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/db/models"
-	"horizon/internal/db/query"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/models"
+	"horizon/internal/query"
 
 	"github.com/labstack/echo/v4"
 )

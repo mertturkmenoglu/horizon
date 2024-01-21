@@ -2,7 +2,7 @@ package favorites
 
 import (
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 )
 
 func getFavoriteByServiceIdAndUserId(serviceId string, userId string) (*models.Favorite, error) {
