@@ -1,7 +1,6 @@
 package favorites
 
 import (
-	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/db/models"
 	"time"
@@ -12,8 +11,7 @@ func invalidateCache(userId string) {
 }
 
 func writeCache(userId string, favs []*models.Favorite) {
-	err := api.App.Cache.SetObj("favorites:"+userId, favs, 12*time.Hour)
-	fmt.Println(err)
+	api.App.Cache.SetObj("favorites:"+userId, favs, 12*time.Hour)
 }
 
 func readCache(userId string) ([]*models.Favorite, error) {

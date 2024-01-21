@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
@@ -96,7 +95,6 @@ func getAuthActivities(id string, params pagination.Params) ([]*models.AuthActiv
 		Count(&count)
 
 	if res.Error != nil {
-		fmt.Println(res.Error)
 		return nil, 0, api.NewBadRequestError()
 	}
 
