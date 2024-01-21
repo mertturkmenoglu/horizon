@@ -3,7 +3,7 @@ package auth
 import (
 	"horizon/internal/api"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"time"
 
 	"github.com/google/uuid"

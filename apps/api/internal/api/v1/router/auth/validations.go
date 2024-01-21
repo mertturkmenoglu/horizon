@@ -3,8 +3,8 @@ package auth
 import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/db/models"
-	"horizon/internal/db/query"
+	"horizon/internal/models"
+	"horizon/internal/query"
 	"horizon/internal/hash"
 	"horizon/internal/jsonwebtoken"
 	"horizon/internal/password"

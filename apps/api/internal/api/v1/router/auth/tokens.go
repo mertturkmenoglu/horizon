@@ -3,7 +3,7 @@ package auth
 import (
 	"fmt"
 	"horizon/internal/api"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"horizon/internal/jsonwebtoken"
 	"time"
 
