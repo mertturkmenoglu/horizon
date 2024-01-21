@@ -18,14 +18,19 @@ func SearchByTerm(c echo.Context) error {
 		return api.NewBadRequestError("term is required")
 	}
 
+	tr := true
 	res, err := api.App.Search.
 		Client.
 		Search().
 		Index(esearch.IndexService).
 		Request(&search.Request{
 			Query: &types.Query{
-				Match: map[string]types.MatchQuery{
-					"title": {Query: term},
+				Fuzzy: map[string]types.FuzzyQuery{
+					"title": {
+						Value:          term,
+						Fuzziness:      "auto",
+						Transpositions: &tr,
+					},
 				},
 			},
 		}).
