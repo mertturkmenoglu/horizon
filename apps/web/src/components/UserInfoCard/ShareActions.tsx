@@ -48,6 +48,7 @@ function ShareActions({ user }: Props): React.ReactElement {
           href={twitterUrl}
           target="_blank"
           referrerPolicy="no-referrer"
+          rel="noopener noreferrer"
         >
           <TwitterIcon className="size-6 text-white" />
           <span className="sr-only">{t('share.twitter')}</span>
@@ -60,6 +61,7 @@ function ShareActions({ user }: Props): React.ReactElement {
           target="_blank"
           referrerPolicy="no-referrer"
           className="rounded-md bg-midnight p-1.5 hover:bg-opacity-90"
+          rel="noopener noreferrer"
         >
           <LinkedinIcon className="size-6 text-white" />
           <span className="sr-only">{t('share.linkedin')}</span>
