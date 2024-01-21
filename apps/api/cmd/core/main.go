@@ -86,7 +86,7 @@ func main() {
 	go func() {
 		port := fmt.Sprintf(":%d", viper.GetInt("port"))
 		if err := e.Start(port); err != nil && err != http.ErrServerClosed {
-			e.Logger.Fatal("shutting down the server")
+			e.Logger.Fatalf("shutting down the server %v", err.Error())
 		}
 	}()
 
