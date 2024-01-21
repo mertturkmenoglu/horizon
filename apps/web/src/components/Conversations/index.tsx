@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import Item from './Item';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 type Props = TProps & {};
 
@@ -58,20 +59,28 @@ const items = [
   },
 ];
 
-function Convsersations({ className }: Props): React.ReactElement {
+function Conversations({ className }: Props): React.ReactElement {
   return (
     <div className={cn('', className)}>
-      <h2 className="text-xl font-bold">Messages</h2>
-      {items.map((k) => (
-        <Item
-          key={k.id}
-          id={k.id}
-          lastMessage={k.lastMessage}
-          user={k.user}
-        />
-      ))}
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Messages</h2>
+        <button className="rounded-full p-2 hover:bg-neutral-400/20">
+          <EllipsisVerticalIcon className="size-6" />
+        </button>
+      </div>
+
+      <div className="mt-4 block">
+        {items.map((k) => (
+          <Item
+            key={k.id}
+            id={k.id}
+            lastMessage={k.lastMessage}
+            user={k.user}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-export default Convsersations;
+export default Conversations;
