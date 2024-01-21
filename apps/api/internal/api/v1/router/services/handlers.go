@@ -5,11 +5,11 @@ import (
 	"horizon/internal/api/v1/dto"
 	categories "horizon/internal/category"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
-	"horizon/internal/db/query"
 	"horizon/internal/h"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/models"
 	"horizon/internal/pagination"
+	"horizon/internal/query"
 	"net/http"
 	"strconv"
 
@@ -276,7 +276,7 @@ func BulkCreateServices(c echo.Context) error {
 	})
 }
 
-func CreateRating(c echo.Context) error {
+func CreateReview(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	id := c.Param("id")
 	ratestr := c.Param("rating")
@@ -296,7 +296,7 @@ func CreateRating(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func DeleteRating(c echo.Context) error {
+func DeleteReview(c echo.Context) error {
 	auth := c.Get("auth").(jsonwebtoken.Payload)
 	id := c.Param("id")
 

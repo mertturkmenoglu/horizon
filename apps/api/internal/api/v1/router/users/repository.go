@@ -4,7 +4,7 @@ import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm/clause"

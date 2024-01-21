@@ -6,7 +6,7 @@ import (
 	"horizon/internal/api"
 	"horizon/internal/api/v1/dto"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"horizon/internal/pagination"
 
 	"github.com/google/uuid"
@@ -106,8 +106,8 @@ func getServices(c echo.Context) ([]*models.Service, error) {
 	return services, nil
 }
 
-func getServiceRating(userId string, serviceId string) (*models.ServiceRating, error) {
-	var rating *models.ServiceRating
+func getServiceRating(userId string, serviceId string) (*models.ServiceReview, error) {
+	var rating *models.ServiceReview
 
 	res := db.Client.Preload(clause.Associations).First(&rating, "user_id = ? AND service_id = ?", userId, serviceId)
 
@@ -134,7 +134,7 @@ func upsertRate(userId string, serviceId string, rating uint8) error {
 
 		if err != nil {
 			// Create
-			res := tx.Create(&models.ServiceRating{
+			res := tx.Create(&models.ServiceReview{
 				UserId:    uuid.MustParse(userId),
 				ServiceId: serviceId,
 				Point:     rating,
@@ -145,7 +145,7 @@ func upsertRate(userId string, serviceId string, rating uint8) error {
 			}
 		} else {
 			// Update
-			res := tx.Model(&models.ServiceRating{}).
+			res := tx.Model(&models.ServiceReview{}).
 				Where("user_id = ? AND service_id = ?", userId, serviceId).
 				Updates(map[string]interface{}{
 					"point": rating,
@@ -200,7 +200,7 @@ func deleteRate(userId string, serviceId string) error {
 			return err
 		}
 
-		res := tx.Where("user_id = ?", userId).Where("service_id = ?", serviceId).Delete(&models.ServiceRating{})
+		res := tx.Where("user_id = ?", userId).Where("service_id = ?", serviceId).Delete(&models.ServiceReview{})
 
 		if res.Error != nil {
 			return api.NewInternalServerError("cannot delete rating")

@@ -2,7 +2,7 @@ package services
 
 import (
 	"horizon/internal/api/v1/dto"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 	"time"
 )
 
