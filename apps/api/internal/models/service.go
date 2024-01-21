@@ -31,11 +31,12 @@ type Service struct {
 	Videos           []ServiceVideo
 }
 
-type ServiceRating struct {
+type ServiceReview struct {
 	BaseModel
 	UserId    uuid.UUID `gorm:"not null;index"`
 	ServiceId string    `gorm:"not null;index"`
 	Point     uint8     `gorm:"not null;default:0"`
+	Comment   string    `gorm:"not null;size:256"`
 }
 
 type ServicePhoto struct {

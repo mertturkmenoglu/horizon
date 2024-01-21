@@ -1,7 +1,7 @@
 package db
 
 import (
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -37,7 +37,7 @@ func AutoMigrate() error {
 		&models.Location{},
 		&models.Service{},
 		&models.ServicePhoto{},
-		&models.ServiceRating{},
+		&models.ServiceReview{},
 		&models.ServiceVideo{},
 	)
 }

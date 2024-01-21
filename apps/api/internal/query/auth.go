@@ -3,7 +3,7 @@ package query
 import (
 	"errors"
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 )
 
 func DoesAuthExist(email string) (bool, error) {

@@ -2,7 +2,7 @@ package query
 
 import (
 	"horizon/internal/db"
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 )
 
 func GetUserByEmail(email string) (*models.User, error) {
