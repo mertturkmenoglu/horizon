@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"horizon/internal/api"
-	"horizon/internal/db/query"
 	"horizon/internal/jsonwebtoken"
+	"horizon/internal/query"
 
 	"github.com/labstack/echo/v4"
 )

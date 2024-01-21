@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"horizon/internal/db/models"
+	"horizon/internal/models"
 )
 
 type LoginRequest struct {
