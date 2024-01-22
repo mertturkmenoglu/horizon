@@ -20,7 +20,7 @@ function Layout(): React.ReactElement {
   const { convId } = useParams();
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-b border-b-midnight/20 pb-2">
         <div className="flex items-center space-x-4">
           <img
             src={getUserImage(data.user.profileImage)}
@@ -41,7 +41,7 @@ function Layout(): React.ReactElement {
           </button>
         </div>
       </div>
-      <div className="flex-grow overflow-y-auto py-4">
+      <div className="mt-4 flex flex-grow flex-col overflow-y-auto py-4">
         message1 message2 Lorem, ipsum dolor sit amet consectetur adipisicing
         elit. Amet minus porro laudantium, nulla est nemo similique? Harum hic
         vero nulla reprehenderit. Deleniti eos error in ipsum cumque? Harum,
@@ -51,13 +51,13 @@ function Layout(): React.ReactElement {
           <div key={i}>Message {i}</div>
         ))}
       </div>
-      <div className="mt-4 flex items-center space-x-4 p-2">
+      <div className="mt-4 flex items-center space-x-4 border-t border-t-midnight/20 py-2">
         <Input
           label=""
           placeholder="Type a message"
           className="flex-grow"
         />
-        <button className="rounded-full bg-sky-500 p-4">
+        <button className="rounded-full bg-sky-500 p-4 hover:bg-opacity-80">
           <PaperAirplaneIcon className="size-6 -rotate-[32deg] text-white" />
         </button>
       </div>
