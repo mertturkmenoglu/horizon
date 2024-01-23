@@ -36,7 +36,7 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
 
       <div className="mt-8 flex justify-between">
         <div>
-          <h2 className="text-3xl font-bold">{service.title}</h2>
+          <h2 className="text-4xl font-bold">{service.title}</h2>
           <Description description={service.description} />
           <div>
             <div>Online: {service.isOnline ? 'Yes' : 'No'}</div>
@@ -62,10 +62,10 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
           <Lightbox service={service} />
         </div>
 
-        <div className="flex flex-col items-end space-y-4">
+        <div className="flex h-min flex-col items-center space-y-4 bg-neutral-400/10 p-4">
           <Link
             to={`/user/${service.user.username}`}
-            className="flex flex-col items-end"
+            className="flex flex-col items-center"
           >
             <img
               src={getUserImage(service.user.profileImage)}
@@ -74,10 +74,6 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             />
             <div className="mt-4 text-2xl font-medium">{service.user.name}</div>
             <div className="text-midnight/70">@{service.user.username}</div>
-            <div className="mt-4 text-lg font-bold">
-              {service.price} {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
-              {timespanToText[service.priceTimespan]}
-            </div>
           </Link>
 
           <Button
@@ -87,6 +83,11 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             <AtSymbolIcon className="size-6" />
             <span>Get in contact</span>
           </Button>
+
+          <div className="mt-4 text-lg font-bold">
+            {service.price} {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
+            {timespanToText[service.priceTimespan]}
+          </div>
 
           <FavoriteButton
             onClick={() => favMutation.mutate()}
