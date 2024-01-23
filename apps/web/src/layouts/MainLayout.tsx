@@ -2,7 +2,6 @@ import Appbar from '@/components/Appbar';
 import CategoryFooter from '@/components/CategoryFooter';
 import CookieConsent from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
-import Spinner from '@/components/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
 import { useState } from 'react';
@@ -19,19 +18,11 @@ function MainLayout({
   showFooter = true,
   isFullWidth = false,
 }: MainLayoutProps): React.ReactElement {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { user } = useAuth();
   const [showCookieConsent, setShowCookieConsent] = useState(() => {
     const lsValue = window.localStorage.getItem('showCookieConsent');
     return lsValue === null || lsValue === 'true';
   });
-
-  if (!isAuthenticated || isLoading || !user) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <Spinner className="size-12" />
-      </div>
-    );
-  }
 
   if (user && !user.emailVerified) {
     return <Navigate to="/verify-email" />;
