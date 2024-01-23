@@ -216,9 +216,9 @@ export const router = createBrowserRouter([
   {
     path: '/help',
     element: (
-      <ProtectedRoute>
+      <Suspense fallback={<PageSpinner />}>
         <HelpPage />
-      </ProtectedRoute>
+      </Suspense>
     ),
   },
   {
@@ -274,9 +274,9 @@ export const router = createBrowserRouter([
   {
     path: '/terms',
     element: (
-      <ProtectedRoute>
+      <Suspense fallback={<PageSpinner />}>
         <TermsPage />
-      </ProtectedRoute>
+      </Suspense>
     ),
   },
   {
