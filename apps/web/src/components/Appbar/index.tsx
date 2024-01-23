@@ -1,11 +1,13 @@
 import { cn } from '@/lib/cn';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Banner from '../Banner';
 import CategoryNavigation from '../CategoryNavigation';
 import SearchHeader from '../SearchHeader';
 import Actions from './Actions';
 import Menu from './Menu';
+import { useAuth } from '@/hooks/useAuth';
+import Button from '../Button';
 
 interface AppbarProps {
   className?: string;
@@ -13,7 +15,9 @@ interface AppbarProps {
 }
 
 function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
+  const { isAuthenticated, isLoading } = useAuth();
   const { t } = useTranslation('appbar');
+  const navigate = useNavigate();
 
   return (
     <div className={cn('w-full', className)}>
@@ -38,9 +42,26 @@ function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
         </div>
 
         <div className="mt-1.5 flex items-center space-x-2">
-          <Actions />
-
-          <Menu />
+          {isLoading && (
+            <div className="size-8 h-10 w-48 animate-pulse rounded-md bg-neutral-400/20" />
+          )}
+          {!isLoading && isAuthenticated && (
+            <>
+              <Actions />
+              <Menu />
+            </>
+          )}
+          {!isLoading && !isAuthenticated && (
+            <Button
+              appearance="midnight"
+              className="min-w-32"
+              onClick={() => {
+                navigate('/login');
+              }}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
       </div>
 
