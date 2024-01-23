@@ -191,7 +191,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/contact',
-    element: <ContactPage />,
+    element: (
+      <Suspense fallback={<PageSpinner />}>
+        <ContactPage />,
+      </Suspense>
+    ),
   },
   {
     path: '/my-services',
