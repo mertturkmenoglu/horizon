@@ -1,31 +1,21 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import Button from '@/components/Button';
 import MainLayout from '@/layouts/MainLayout';
 import { getCurrencySymbolOrDefault } from '@/lib/currency';
 import { GetServiceByIdResponse } from '@/lib/dto/service';
-import { getUserImage } from '@/lib/img';
-import { AtSymbolIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
 import { useBreadcrumb } from './hooks/useBreadcrumb';
-import { useFavorites } from './hooks/useFavorites';
-import FavoriteButton from './components/FavoriteButton';
 import Description from './components/Description';
 import Lightbox from './components/Lightbox';
+import { useTimespan } from './hooks/useTimespan';
+import UserCard from './components/UserCard';
 
 type Props = {
   service: GetServiceByIdResponse;
 };
 
-const timespanToText: Record<number, string> = {
-  0: 'Hour',
-  1: 'Day',
-  2: 'Week',
-  3: 'Month',
-};
-
 function ServiceDetailPage({ service }: Props): React.ReactElement {
   const breadcrumbItems = useBreadcrumb(service);
-  const { isFavorite, mutation: favMutation } = useFavorites(service);
+  const priceTimespan = useTimespan(service.priceTimespan);
+  const deliveryTimespan = useTimespan(service.deliveryTimespan);
 
   return (
     <MainLayout>
@@ -43,14 +33,13 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             <div className="mt-4 text-lg font-bold">
               Price:
               {service.price}
-              {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
-              {timespanToText[service.priceTimespan]}
+              {getCurrencySymbolOrDefault(service.priceUnit)} / {priceTimespan}
             </div>
             <div>Location: {service.location}</div>
             <div className="mt-4 text-lg font-bold">
               Delivery:
               {service.deliveryTime}
-              {timespanToText[service.deliveryTimespan]}
+              {deliveryTimespan}
             </div>
             <div>
               Rating: {service.totalPoints} / {service.totalVotes}
@@ -62,38 +51,7 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
           <Lightbox service={service} />
         </div>
 
-        <div className="flex h-min flex-col items-center space-y-4 bg-neutral-400/10 p-4">
-          <Link
-            to={`/user/${service.user.username}`}
-            className="flex flex-col items-center"
-          >
-            <img
-              src={getUserImage(service.user.profileImage)}
-              alt=""
-              className="size-24 rounded-lg"
-            />
-            <div className="mt-4 text-2xl font-medium">{service.user.name}</div>
-            <div className="text-midnight/70">@{service.user.username}</div>
-          </Link>
-
-          <Button
-            appearance="midnight"
-            className="flex items-center justify-center gap-2"
-          >
-            <AtSymbolIcon className="size-6" />
-            <span>Get in contact</span>
-          </Button>
-
-          <div className="mt-4 text-lg font-bold">
-            {service.price} {getCurrencySymbolOrDefault(service.priceUnit)} /{' '}
-            {timespanToText[service.priceTimespan]}
-          </div>
-
-          <FavoriteButton
-            onClick={() => favMutation.mutate()}
-            isFavorite={isFavorite}
-          />
-        </div>
+        <UserCard service={service} />
       </div>
     </MainLayout>
   );
