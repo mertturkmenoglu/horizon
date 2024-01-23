@@ -18,33 +18,35 @@ function HelpPage(): React.ReactElement {
         className="mt-8"
       />
 
-      <h2 className="mt-16 text-4xl font-bold text-midnight">{t('title')}</h2>
+      <div className="min-w-md mx-auto flex max-w-2xl flex-col items-center">
+        <h2 className="mt-16 text-4xl font-bold text-midnight">{t('title')}</h2>
 
-      <h3
-        id="faq"
-        className="mt-16 text-xl font-bold"
-      >
-        {t('faq.title')}
-      </h3>
-
-      <div className="max-w-2xl">
-        <Accordion
-          type="multiple"
-          className="mt-4"
+        <h3
+          id="faq"
+          className="mt-16 text-xl font-bold"
         >
-          {new Array(10).fill(0).map((_, i) => (
-            <AccordionItem
-              value={`item-${i + 1}`}
-              key={i}
-            >
-              <AccordionTrigger>{t(`faq.items.${i}.title`)}</AccordionTrigger>
-              <AccordionContent>{t(`faq.items.${i}.content`)}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
+          {t('faq.title')}
+        </h3>
 
-      <div className="grid grid-cols-3"></div>
+        <div className="w-full">
+          <Accordion
+            type="multiple"
+            className="mt-4"
+          >
+            {new Array(10).fill(0).map((_, i) => (
+              <AccordionItem
+                value={`item-${i + 1}`}
+                key={i}
+              >
+                <AccordionTrigger>{t(`faq.items.${i}.title`)}</AccordionTrigger>
+                <AccordionContent>
+                  {t(`faq.items.${i}.content`)}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </div>
     </MainLayout>
   );
 }
