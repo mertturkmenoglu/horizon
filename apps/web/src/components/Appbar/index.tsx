@@ -14,6 +14,7 @@ interface AppbarProps {
 
 function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
   const { t } = useTranslation('appbar');
+
   return (
     <div className={cn('w-full', className)}>
       {!isFullWidth && (
