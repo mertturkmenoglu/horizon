@@ -47,11 +47,13 @@ function ServiceDetailPage({ service }: Props): React.ReactElement {
             <div>{service.isNew && <div>New Service</div>}</div>
             <div>{service.isPopular && <div>Popular</div>}</div>
           </div>
-
-          <Lightbox service={service} />
         </div>
 
         <UserCard service={service} />
+      </div>
+
+      <div className="mt-8 flex items-center justify-center">
+        <Lightbox service={service} />
       </div>
     </MainLayout>
   );
