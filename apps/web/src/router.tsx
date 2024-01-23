@@ -1,8 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import GuestRoute from './components/AuthGuard/GuestRoute';
 import ProtectedRoute from './components/AuthGuard/ProtectedRoute';
+import Spinner from './components/Spinner';
 
 const CategoriesPage = React.lazy(
   () => import('./pages/Categories/CategoriesPage')
@@ -51,6 +52,14 @@ const VerifyEmailRedirect = React.lazy(
 const VerifyEmailRequestPage = React.lazy(
   () => import('./pages/VerifyEmailRequestPage')
 );
+
+function PageSpinner() {
+  return (
+    <div className="flex h-[100vh] w-full items-center justify-center">
+      <Spinner className="size-12" />
+    </div>
+  );
+}
 
 export const router = createBrowserRouter([
   {
@@ -245,9 +254,9 @@ export const router = createBrowserRouter([
   {
     path: '/privacy',
     element: (
-      <ProtectedRoute>
+      <Suspense fallback={<PageSpinner />}>
         <PrivacyPage />
-      </ProtectedRoute>
+      </Suspense>
     ),
   },
   {
