@@ -5,6 +5,7 @@ import RecommendationGrid from '@/components/RecommendationGrid';
 import ReferToFriend from '@/components/ReferToFriend';
 import { useAuth } from '@/hooks/useAuth';
 import MainLayout from '@/layouts/MainLayout';
+import { cn } from '@/lib/cn';
 import { newServices, populerRightNow } from '@/lib/dummydata';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -18,17 +19,25 @@ function HomePage(): React.ReactElement {
       <Helmet>
         <title>{t('page-title')}</title>
       </Helmet>
-      <ReferToFriend className="mt-0" />
+
       {user && (
-        <h2 className="mt-8 text-4xl font-bold">
-          {t('title', { name: user.name })}
-        </h2>
+        <>
+          <ReferToFriend className="mt-0" />
+          <h2 className="mt-8 text-4xl font-bold">
+            {t('title', { name: user.name })}
+          </h2>
+          <div className="mt-2 text-lg font-bold">{t('subtitle')}</div>
+
+          <QuickActions className="mt-8" />
+        </>
       )}
-      <div className="mt-2 text-lg font-bold">{t('subtitle')}</div>
 
-      <QuickActions className="mt-8" />
-
-      <BrowseCategoriesGrid className="mt-16" />
+      <BrowseCategoriesGrid
+        className={cn({
+          'mt-16': !!user,
+          'mt-8': !user,
+        })}
+      />
 
       <RecommendationGrid
         className="mt-8"
