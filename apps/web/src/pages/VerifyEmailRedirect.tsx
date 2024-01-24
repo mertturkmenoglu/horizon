@@ -34,7 +34,7 @@ function VerifyEmailRedirect(): React.ReactElement {
   }, [code, email, setRes]);
 
   if (user && user.emailVerified) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   if (code === undefined || email === null) {
@@ -42,7 +42,7 @@ function VerifyEmailRedirect(): React.ReactElement {
   }
 
   if (res === true) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return <></>;

@@ -39,7 +39,7 @@ function VerifyEmailPage(): React.ReactElement {
   };
 
   if (user && user.emailVerified) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return (
