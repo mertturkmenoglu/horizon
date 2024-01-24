@@ -21,7 +21,7 @@ export type SideNavigationProps = React.ComponentPropsWithoutRef<'nav'> & {
 };
 
 const navItems: TNavItem[] = [
-  { href: '/home', text: 'Home', icon: HomeIcon },
+  { href: '/', text: 'Home', icon: HomeIcon },
   { href: '/my-services', text: 'My Services', icon: SquaresPlusIcon },
   { href: '/explore', text: 'Explore', icon: MagnifyingGlassIcon },
   { href: '/schedule', text: 'My Schedule', icon: CalendarDaysIcon },

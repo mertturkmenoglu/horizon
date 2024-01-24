@@ -37,7 +37,7 @@ function LoginForm({ className }: LoginFormProps): React.ReactElement {
       // Instead of client side navigation
       // Manually setting location makes a full page request
       // And prevents false redirects
-      window.location.href = '/home';
+      window.location.href = '/';
     } catch (err) {
       if (isApiError(err)) {
         toast.error(err.data.message, { className: 'error' });

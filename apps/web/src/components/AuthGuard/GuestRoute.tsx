@@ -13,7 +13,7 @@ function GuestRoute({ children }: GuestRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (!isLoading && isAuthenticated) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
 
   return <Suspense fallback={<></>}>{children}</Suspense>;
