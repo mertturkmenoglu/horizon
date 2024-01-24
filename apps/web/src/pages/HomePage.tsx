@@ -19,9 +19,11 @@ function HomePage(): React.ReactElement {
         <title>{t('page-title')}</title>
       </Helmet>
       <ReferToFriend className="mt-0" />
-      <h2 className="mt-8 text-4xl font-bold">
-        {t('title', { name: user?.name ?? '' })}
-      </h2>
+      {user && (
+        <h2 className="mt-8 text-4xl font-bold">
+          {t('title', { name: user.name })}
+        </h2>
+      )}
       <div className="mt-2 text-lg font-bold">{t('subtitle')}</div>
 
       <QuickActions className="mt-8" />
