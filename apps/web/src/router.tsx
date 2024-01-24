@@ -19,7 +19,6 @@ const ErrorPage = React.lazy(() => import('./pages/ErrorPage'));
 const ExplorePage = React.lazy(() => import('./pages/ExplorePage'));
 const HelpPage = React.lazy(() => import('./pages/HelpPage'));
 const HomePage = React.lazy(() => import('./pages/HomePage'));
-const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const MePage = React.lazy(() => import('./pages/MePage'));
 const MessagesPage = React.lazy(() => import('./pages/Messages'));
@@ -65,9 +64,9 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <GuestRoute>
-        <LandingPage />
-      </GuestRoute>
+      <Suspense fallback={<PageSpinner />}>
+        <HomePage />
+      </Suspense>
     ),
     errorElement: <ErrorPage />,
   },
@@ -85,14 +84,6 @@ export const router = createBrowserRouter([
       <GuestRoute>
         <RegisterPage />
       </GuestRoute>
-    ),
-  },
-  {
-    path: '/home',
-    element: (
-      <ProtectedRoute>
-        <HomePage />
-      </ProtectedRoute>
     ),
   },
   {
