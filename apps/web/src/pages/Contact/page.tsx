@@ -1,25 +1,14 @@
+import { useTranslation } from 'react-i18next';
+import { useContactForm } from './hooks/useContactForm';
 import Button from '@/components/Button';
 import Footer from '@/components/Footer';
 import Input from '@/components/Input';
 import Logo from '@/components/Logo';
 import TextArea from '@/components/TextArea';
 import { cn } from '@/lib/cn';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { ArrowLeftIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { z } from 'zod';
-
-const contactSchema = z.object({
-  fullName: z.string().min(1).max(100),
-  email: z.string().email().min(1).max(100),
-  phoneNumber: z.string().min(1).max(32),
-  subject: z.string().min(1).max(100),
-  message: z.string().min(1).max(5000),
-});
-
-type ContactInput = z.infer<typeof contactSchema>;
+import { useOnSubmit } from './hooks/useOnSubmit';
 
 function ContactPage(): React.ReactElement {
   const { t } = useTranslation('contact');
@@ -28,21 +17,9 @@ function ContactPage(): React.ReactElement {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ContactInput>({
-    resolver: zodResolver(contactSchema),
-  });
+  } = useContactForm();
 
-  const onSubmit = (data: ContactInput) => {
-    const e = encodeURIComponent;
-    const mailToAddress = 'gethorizonapp@gmail.com';
-    const mailBody = `Name: ${e(data.fullName)} \nEmail: ${e(
-      data.email
-    )} \nPhone: ${e(data.phoneNumber)} \nMessage: ${e(data.message)}`;
-    const redirect = `mailto:${e(mailToAddress)}?subject=${e(
-      data.subject
-    )}&body=${e(mailBody)}`;
-    window.location.href = redirect;
-  };
+  const onSubmit = useOnSubmit();
 
   return (
     <main>

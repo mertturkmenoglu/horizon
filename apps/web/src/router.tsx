@@ -11,7 +11,7 @@ const CategoriesPage = React.lazy(
 const CategoryListingPage = React.lazy(
   () => import('./pages/Categories/CategoryListingPage')
 );
-const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const ContactPage = React.lazy(() => import('./pages/Contact'));
 const ConversationPage = React.lazy(
   () => import('./pages/Messages/Conversation')
 );
