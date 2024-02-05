@@ -18,7 +18,7 @@ const Card = React.forwardRef<El, Props>(
         to={href ?? ''}
         className={cn(
           'rounded-md border border-midnight/20 px-4 py-3',
-          'flex items-center shadow',
+          'flex items-center',
           'transition-colors duration-100',
           'hover:border-purple-500 focus:border-none',
           className
