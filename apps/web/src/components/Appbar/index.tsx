@@ -41,7 +41,7 @@ function Appbar({ className, isFullWidth }: AppbarProps): React.ReactElement {
           <SearchHeader className="hidden md:mx-8 md:block" />
         </div>
 
-        <div className="mt-1.5 flex items-center space-x-2">
+        <div className={cn('mt-1 flex items-center space-x-2')}>
           {isLoading && (
             <div className="size-8 h-10 w-48 animate-pulse rounded-md bg-neutral-400/20" />
           )}
