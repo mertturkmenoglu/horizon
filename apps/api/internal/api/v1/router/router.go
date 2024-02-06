@@ -84,6 +84,7 @@ func RegisterRoutes(e *echo.Echo) {
 		servicesRoutes.GET("/new", services.GetNewServices)
 		servicesRoutes.GET("/categories-count", services.GetCategoriesServiceCount)
 		servicesRoutes.GET("/user/:username", services.GetServicesByUsername)
+		servicesRoutes.GET("/category/:id", services.GetServicesByCategory)
 
 		if env == "dev" {
 			servicesRoutes.POST(

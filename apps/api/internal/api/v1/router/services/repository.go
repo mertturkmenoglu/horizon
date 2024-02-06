@@ -106,6 +106,38 @@ func getServices(c echo.Context) ([]*models.Service, error) {
 	return services, nil
 }
 
+func getServicesByCategory(c echo.Context, id int) ([]*models.Service, error) {
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return nil, api.NewBadRequestError(err.Error())
+	}
+
+	var services []*models.Service
+	var count int64
+
+	res := db.Client.Preload(clause.Associations).
+		Order("created_at DESC").
+		Offset(params.Offset).
+		Limit(params.PageSize).
+		Find(&services, "category = ?", id)
+
+	if res.Error != nil {
+		return nil, api.NewBadRequestError()
+	}
+
+	res = db.Client.
+		Table("services").
+		Where("category = ?", id).
+		Count(&count)
+
+	if res.Error != nil {
+		return nil, api.NewBadRequestError()
+	}
+
+	return services, nil
+}
+
 func getServiceRating(userId string, serviceId string) (*models.ServiceReview, error) {
 	var rating *models.ServiceReview
 

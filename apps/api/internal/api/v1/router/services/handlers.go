@@ -42,6 +42,32 @@ func GetServices(c echo.Context) error {
 	})
 }
 
+func GetServicesByCategory(c echo.Context) error {
+	idstr := c.Param("id")
+	id, err := strconv.ParseInt(idstr, 10, 32)
+
+	if err != nil {
+		return api.NewBadRequestError("invalid category id")
+	}
+
+	services ,err := getServicesByCategory(c, int(id))
+
+	if err != nil {
+		return err
+	}
+
+	dtos := make([]dto.GetServiceByIdResponse, len(services))
+	totalVisits := getTotalVisitsCount()
+
+	for i, s := range services {
+		dtos[i] = mapModelToGetServiceByIdResponse(s, getVisitCount(s.Id), totalVisits)
+	}
+
+	return c.JSON(http.StatusOK, h.Response[[]dto.GetServiceByIdResponse]{
+		"data": dtos,
+	})
+}
+
 func GetServiceById(c echo.Context) error {
 	id := c.Param("id")
 
