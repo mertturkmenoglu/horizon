@@ -1,0 +1,37 @@
+port: 5000
+redis:
+  url: redis://localhost:6379/0
+  addr: "127.0.0.1:6379"
+db:
+  host: localhost
+  name: horizon
+  user: postgres
+  password: postgres
+  port: 5432
+  timezone: Europe/Istanbul
+env: dev
+debug: false
+email:
+  name: Horizon
+  from: noreply@gethorizon.com
+smtp:
+  identity: ""
+  username: ""
+  password: ""
+  addr: "localhost:2500"
+  host: localhost
+minio:
+  user: horizon
+  password: horizon
+  endpoint: "localhost:9000"
+  buckets:
+    - default
+    - profile-images
+    - services
+  location: eu-central-1
+  autocreate-buckets: true
+api:
+  logger:
+    type: file
+cron:
+  category-service-count: "*/10 * * * *"
