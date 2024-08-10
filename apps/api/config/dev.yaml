@@ -21,8 +21,8 @@ smtp:
   addr: "localhost:2500"
   host: localhost
 minio:
-  user: horizon
-  password: horizon
+  user: horizondev
+  password: horizondev
   endpoint: "localhost:9000"
   buckets:
     - default
