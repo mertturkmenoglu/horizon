@@ -1,1 +1,0 @@
-HelloPerson = "Hello {{.Name}}"
