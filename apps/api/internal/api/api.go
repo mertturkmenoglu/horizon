@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"horizon/config"
+	"horizon/internal/db"
 	"horizon/internal/logs"
 	"horizon/internal/upload"
 
@@ -17,6 +18,7 @@ type App struct {
 	Upload     *upload.Upload
 	Logger     *zap.Logger
 	Flake      *sonyflake.Sonyflake
+	Db         *db.Db
 }
 
 func New() *App {
@@ -26,6 +28,7 @@ func New() *App {
 		Logger:     logs.New(),
 		Port:       viper.GetInt(config.PORT),
 		PortString: fmt.Sprintf(":%d", viper.GetInt(config.PORT)),
+		Db:         db.NewDb(),
 	}
 
 	flake, err := sonyflake.New(sonyflake.Settings{})
