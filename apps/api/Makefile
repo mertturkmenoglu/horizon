@@ -24,4 +24,9 @@ watch:
 		echo "Air is not installed. Run 'go install github.com/air-verse/air@latest' to install Air";\
 	fi
 
-.PHONY: all build run clean watch
+create-migration:
+	@read -p "Give migration a name: " migrationname; \
+	migrate create -ext sql -dir internal/db/migrations -seq $$migrationname; \
+	echo "Created migration with name $$migrationname. Update sql files."
+
+.PHONY: all build run clean watch create-migration
