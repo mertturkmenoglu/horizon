@@ -4,6 +4,7 @@ import (
 	"context"
 	"horizon/config"
 	"horizon/internal/api"
+	"horizon/internal/db"
 	"horizon/internal/middlewares"
 	"horizon/internal/validation"
 	"net/http"
@@ -40,6 +41,12 @@ func main() {
 		Timeout: 10 * time.Second,
 	}))
 	e.Use(middleware.Secure())
+
+	shouldRunMigrations := os.Getenv("RUN_MIGRATIONS")
+
+	if shouldRunMigrations == "1" {
+		db.RunMigrations()
+	}
 
 	// Start the Echo server
 	go func() {
