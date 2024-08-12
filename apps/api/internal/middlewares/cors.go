@@ -7,7 +7,7 @@ import (
 
 func Cors() echo.MiddlewareFunc {
 	return middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:                             middleware.DefaultCORSConfig.AllowMethods,
+		AllowOrigins:                             middleware.DefaultCORSConfig.AllowOrigins,
 		AllowMethods:                             middleware.DefaultCORSConfig.AllowMethods,
 		AllowHeaders:                             middleware.DefaultCORSConfig.AllowHeaders,
 		AllowCredentials:                         true,
