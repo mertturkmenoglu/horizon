@@ -20,6 +20,7 @@ import (
 
 func main() {
 	config.Bootstrap()
+
 	a := api.New()
 	e := a.RegisterRoutes()
 
