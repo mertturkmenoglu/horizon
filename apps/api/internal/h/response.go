@@ -9,3 +9,9 @@ type PaginatedResponse[T any] struct {
 	Data       T                     `json:"data"`
 	Pagination pagination.Pagination `json:"pagination"`
 }
+
+type AnyResponse map[string]interface{}
+
+type ErrResponse struct {
+	Message string `json:"message"`
+}
