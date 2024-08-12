@@ -16,4 +16,11 @@ const (
 	DB_PASSWORD              = "db.password"
 	DB_PORT                  = "db.port"
 	DB_TIMEZONE              = "db.timezone"
+	GOOGLE_CLIENT_ID         = "api.auth.google.client-id"
+	GOOGLE_CLIENT_SECRET     = "api.auth.google.client-secret"
+	GOOGLE_CALLBACK          = "api.auth.google.callback"
+	GITHUB_CLIENT_ID         = "api.auth.github.client-id"
+	GITHUB_CLIENT_SECRET     = "api.auth.github.client-secret"
+	GITHUB_CALLBACK          = "api.auth.github.callback"
+	AUTH_SIGN_KEY            = "api.auth.sign-key"
 )
