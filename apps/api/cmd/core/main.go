@@ -35,6 +35,9 @@ func main() {
 		e.IPExtractor = echo.ExtractIPDirect()
 		e.Use(middleware.RequestID())
 		e.Use(middlewares.Cors())
+		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: "method=${method}, uri=${uri}, status=${status}, duration=${latency_human}\n",
+		}))
 	}
 
 	e.Use(middlewares.ZapLogger())
