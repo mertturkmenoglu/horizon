@@ -5,17 +5,10 @@ import (
 	"horizon/config"
 	"horizon/internal/api"
 	"horizon/internal/db"
-	"horizon/internal/middlewares"
-	"horizon/internal/validation"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
-
-	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -24,27 +17,7 @@ func main() {
 	a := api.New()
 	e := a.RegisterRoutes()
 
-	e.Validator = &validation.CustomValidator{
-		Validator: validator.New(),
-	}
-
-	e.Use(middleware.Recover())
-	e.Use(middleware.RateLimiterWithConfig(middlewares.GetRateLimiterConfig()))
-
-	if viper.GetString(config.ENV) == "dev" {
-		e.IPExtractor = echo.ExtractIPDirect()
-		e.Use(middleware.RequestID())
-		e.Use(middlewares.Cors())
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: "method=${method}, uri=${uri}, status=${status}, duration=${latency_human}\n",
-		}))
-	}
-
-	e.Use(middlewares.ZapLogger())
-	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
-		Timeout: 10 * time.Second,
-	}))
-	e.Use(middleware.Secure())
+	api.SetupMiddlewares(e)
 
 	shouldRunMigrations := os.Getenv("RUN_MIGRATIONS")
 
@@ -59,6 +32,7 @@ func main() {
 		}
 	}()
 
+	// Graceful shutdown
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
