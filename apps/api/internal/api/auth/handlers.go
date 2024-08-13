@@ -6,6 +6,7 @@ import (
 	"horizon/config"
 	"horizon/internal/h"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -99,9 +100,7 @@ func (m *AuthModule) HandlerGoogleCallback(c echo.Context) error {
 	sess.Values["user_id"] = userInfo.Id
 	sess.Save(c.Request(), c.Response())
 
-	return c.JSON(http.StatusOK, h.AnyResponse{
-		"data": userInfo,
-	})
+	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/")
 }
 
 func (m *AuthModule) HandlerGetMe(c echo.Context) error {
@@ -121,4 +120,25 @@ func (m *AuthModule) HandlerGetMe(c echo.Context) error {
 	return c.JSON(http.StatusOK, h.AnyResponse{
 		"data": userId,
 	})
+}
+
+func (m *AuthModule) HandlerLogout(c echo.Context) error {
+	sess, err := session.Get(SESSION_NAME, c)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	delete(sess.Values, "user_id")
+	sess.Save(c.Request(), c.Response())
+
+	cookie := new(http.Cookie)
+	cookie.Name = SESSION_NAME
+	cookie.Value = ""
+	cookie.Path = "/"
+	cookie.Expires = time.Unix(0, 0)
+	cookie.MaxAge = -1
+	c.SetCookie(cookie)
+
+	return c.NoContent(http.StatusNoContent)
 }
