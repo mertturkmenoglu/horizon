@@ -54,5 +54,7 @@ func (app *App) RegisterRoutes() *echo.Echo {
 
 	e.GET("/api/auth/me", authModule.HandlerGetMe)
 
+	e.POST("/api/auth/logout", authModule.HandlerLogout)
+
 	return e
 }
