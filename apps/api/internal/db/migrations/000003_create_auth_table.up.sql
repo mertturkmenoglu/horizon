@@ -1,7 +1,8 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Enable UUID generation extension
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Enable UUID generation extension
 
 CREATE TABLE IF NOT EXISTS auth (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id uuid UNIQUE NOT NULL,
   email VARCHAR (128) UNIQUE NOT NULL,
   password_hash VARCHAR (255), -- Only required for credentials login
   google_id VARCHAR(64) UNIQUE, -- Only required for Google OAuth login
@@ -20,6 +21,7 @@ CREATE TABLE IF NOT EXISTS auth (
 -- Create indexes
 CREATE INDEX idx_auth_email ON auth(email);
 CREATE INDEX idx_auth_google_id ON auth(google_id);
+CREATE INDEX idx_auth_user_id ON auth(user_id);
 
 -- Trigger to update the updated_at field automatically
 CREATE OR REPLACE FUNCTION update_timestamp()

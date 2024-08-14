@@ -8,3 +8,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Create indexes
 CREATE INDEX idx_users_username ON users(username);
+
+-- Add foreign keys
+ALTER TABLE auth
+ADD CONSTRAINT fk_user
+FOREIGN KEY (user_id) 
+REFERENCES users (id)
+ON DELETE CASCADE;
