@@ -3,22 +3,19 @@ package api
 import (
 	"fmt"
 	"horizon/config"
+	"horizon/internal/api/auth"
 	"horizon/internal/db"
 	"horizon/internal/logs"
 	"horizon/internal/middlewares"
 	"horizon/internal/upload"
-	"horizon/internal/validation"
-	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-type App struct {
+type Service struct {
 	Port       int
 	PortString string
 	Upload     *upload.Upload
@@ -27,8 +24,8 @@ type App struct {
 	Db         *db.Db
 }
 
-func New() *App {
-	apiObj := &App{
+func New() *Service {
+	apiObj := &Service{
 		Upload:     upload.New(),
 		Flake:      nil,
 		Logger:     logs.New(),
@@ -48,27 +45,20 @@ func New() *App {
 	return apiObj
 }
 
-func SetupMiddlewares(e *echo.Echo) {
-	e.Validator = &validation.CustomValidator{
-		Validator: validator.New(),
+func (s *Service) RegisterRoutes() *echo.Echo {
+	e := echo.New()
+	authModule := auth.NewAuthService(s.Db)
+	api := e.Group("/api")
+
+	api.Use(middlewares.GetSessionMiddleware())
+
+	authRoutes := api.Group("/auth")
+	{
+		authRoutes.GET("/google", authModule.HandlerGoogle)
+		authRoutes.GET("/google/callback", authModule.HandlerGoogleCallback)
+		authRoutes.GET("/me", authModule.HandlerGetMe)
+		authRoutes.POST("/logout", authModule.HandlerLogout)
 	}
 
-	e.Use(middleware.Recover())
-	e.Use(middleware.RateLimiterWithConfig(middlewares.GetRateLimiterConfig()))
-
-	if viper.GetString(config.ENV) == "dev" {
-		e.IPExtractor = echo.ExtractIPDirect()
-		e.Use(middleware.RequestID())
-		e.Use(middlewares.Cors())
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: "=> ${time_rfc3339} [${method}] ${uri} (${status}) ${latency_human}\n",
-		}))
-	}
-
-	e.Use(middlewares.ZapLogger())
-	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
-		Timeout: 10 * time.Second,
-	}))
-	e.Use(middleware.Secure())
-
+	return e
 }
