@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id TEXT PRIMARY KEY,
   full_name VARCHAR (128) NOT NULL,
   username VARCHAR (32) UNIQUE NOT NULL,
   gender VARCHAR (32),
