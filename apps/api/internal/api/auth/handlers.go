@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"horizon/config"
+	"horizon/internal/db"
 	"horizon/internal/h"
 	"net/http"
 	"time"
@@ -14,10 +15,17 @@ import (
 	"github.com/spf13/viper"
 )
 
-type AuthModule struct {
+type AuthService struct {
+	Db *db.Db
 }
 
-func (m *AuthModule) HandlerGoogle(c echo.Context) error {
+func NewAuthService(db *db.Db) *AuthService {
+	return &AuthService{
+		Db: db,
+	}
+}
+
+func (s *AuthService) HandlerGoogle(c echo.Context) error {
 	googleConfig := GetGoogleOAuth2Config()
 	state := GenerateStateString()
 	sess, err := session.Get(SESSION_NAME, c)
@@ -34,7 +42,7 @@ func (m *AuthModule) HandlerGoogle(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
-func (m *AuthModule) HandlerGoogleCallback(c echo.Context) error {
+func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
 	googleConfig := GetGoogleOAuth2Config()
 	sess, err := session.Get(SESSION_NAME, c)
 
@@ -103,7 +111,7 @@ func (m *AuthModule) HandlerGoogleCallback(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/")
 }
 
-func (m *AuthModule) HandlerGetMe(c echo.Context) error {
+func (s *AuthService) HandlerGetMe(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
@@ -122,7 +130,7 @@ func (m *AuthModule) HandlerGetMe(c echo.Context) error {
 	})
 }
 
-func (m *AuthModule) HandlerLogout(c echo.Context) error {
+func (s *AuthService) HandlerLogout(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
