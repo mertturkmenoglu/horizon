@@ -3,7 +3,6 @@
 import Logo from '@/app/logo.png';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import GoogleIcon from '@/components/ui/google-icon';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
@@ -16,6 +15,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthLink from '../_components/auth-link';
+import GoogleAuth from '../_components/google-auth';
 
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email(),
@@ -90,6 +90,7 @@ export default function Page() {
             size="icon"
             className="absolute right-0 top-0"
             onClick={() => setShowPassword((prev) => !prev)}
+            type="button"
           >
             {showPassword ? (
               <EyeIcon className="size-4" />
@@ -122,16 +123,7 @@ export default function Page() {
 
         <Separator className="my-4" />
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => {
-            window.location.href = 'http://localhost:5000/api/auth/google';
-          }}
-        >
-          <GoogleIcon className="mr-2 size-5" />
-          Sign in with Google
-        </Button>
+        <GoogleAuth text="Sign in with Google" />
       </form>
     </Card>
   );

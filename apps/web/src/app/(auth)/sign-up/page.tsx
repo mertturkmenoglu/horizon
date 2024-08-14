@@ -122,6 +122,7 @@ export default function Page() {
             size="icon"
             className="absolute right-0 top-0"
             onClick={() => setShowPassword((prev) => !prev)}
+            type="button"
           >
             {showPassword ? (
               <EyeIcon className="size-4" />
