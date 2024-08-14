@@ -1,23 +1,38 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import api from "@/lib/api";
-import { Auth } from "@/lib/auth";
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Auth } from '@/lib/auth';
+import { UserIcon } from 'lucide-react';
+import MenuContent from './menu-content';
 
 type Props = {
   auth: Auth;
 };
 
 export default function Menu({ auth }: Props) {
-  const logout = async () => {
-    await api.post("auth/logout");
-    window.location.reload();
-  };
-
   return (
     <div>
-      <div>Logged In: {JSON.stringify(auth)}</div>
-      <Button onClick={logout}>Logout</Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className="rounded-full"
+            variant="ghost"
+          >
+            <UserIcon className="size-5 text-black" />
+            <span className="hidden sm:ml-2 sm:block">
+              {auth.data.fullName}
+            </span>
+          </Button>
+        </DropdownMenuTrigger>
+        <MenuContent
+          fullName={auth.data.fullName}
+          username={auth.data.username}
+        />
+      </DropdownMenu>
     </div>
   );
 }
