@@ -13,6 +13,7 @@ export default function GoogleAuth({ text }: Props) {
       onClick={() => {
         window.location.href = 'http://localhost:5000/api/auth/google';
       }}
+      type="button"
     >
       <GoogleIcon className="mr-2 size-5" />
       {text}
