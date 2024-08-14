@@ -47,7 +47,7 @@ func New() *Service {
 
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
-	authModule := auth.NewAuthService(s.Db)
+	authModule := auth.NewAuthService(s.Db, s.Flake)
 	api := e.Group("/api")
 
 	api.Use(middlewares.GetSessionMiddleware())
