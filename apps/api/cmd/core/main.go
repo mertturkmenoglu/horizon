@@ -17,7 +17,7 @@ func main() {
 	a := api.New()
 	e := a.RegisterRoutes()
 
-	api.SetupMiddlewares(e)
+	api.InitGlobalMiddlewares(e)
 
 	shouldRunMigrations := os.Getenv("RUN_MIGRATIONS")
 
