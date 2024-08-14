@@ -13,6 +13,7 @@ import (
 
 const createAuth = `-- name: CreateAuth :one
 INSERT INTO auth (
+  user_id,
   email,
   password_hash,
   google_id,
@@ -23,12 +24,14 @@ INSERT INTO auth (
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
-RETURNING id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until
+RETURNING id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until
 `
 
 type CreateAuthParams struct {
+	UserID          pgtype.UUID
 	Email           string
 	PasswordHash    pgtype.Text
 	GoogleID        pgtype.Text
@@ -38,6 +41,7 @@ type CreateAuthParams struct {
 
 func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, error) {
 	row := q.db.QueryRow(ctx, createAuth,
+		arg.UserID,
 		arg.Email,
 		arg.PasswordHash,
 		arg.GoogleID,
@@ -47,6 +51,7 @@ func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, e
 	var i Auth
 	err := row.Scan(
 		&i.ID,
+		&i.UserID,
 		&i.Email,
 		&i.PasswordHash,
 		&i.GoogleID,
@@ -128,7 +133,7 @@ func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
 }
 
 const getAuthByEmail = `-- name: GetAuthByEmail :one
-SELECT id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
+SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
 WHERE email = $1 LIMIT 1
 `
 
@@ -137,6 +142,7 @@ func (q *Queries) GetAuthByEmail(ctx context.Context, email string) (Auth, error
 	var i Auth
 	err := row.Scan(
 		&i.ID,
+		&i.UserID,
 		&i.Email,
 		&i.PasswordHash,
 		&i.GoogleID,
@@ -155,7 +161,7 @@ func (q *Queries) GetAuthByEmail(ctx context.Context, email string) (Auth, error
 }
 
 const getAuthByGoogleId = `-- name: GetAuthByGoogleId :one
-SELECT id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
+SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
 WHERE google_id = $1 LIMIT 1
 `
 
@@ -164,6 +170,7 @@ func (q *Queries) GetAuthByGoogleId(ctx context.Context, googleID pgtype.Text) (
 	var i Auth
 	err := row.Scan(
 		&i.ID,
+		&i.UserID,
 		&i.Email,
 		&i.PasswordHash,
 		&i.GoogleID,

@@ -10,6 +10,7 @@ import (
 
 type Auth struct {
 	ID                   pgtype.UUID
+	UserID               pgtype.UUID
 	Email                string
 	PasswordHash         pgtype.Text
 	GoogleID             pgtype.Text

@@ -39,6 +39,7 @@ WHERE username = $1 LIMIT 1;
 
 -- name: CreateAuth :one
 INSERT INTO auth (
+  user_id,
   email,
   password_hash,
   google_id,
@@ -49,7 +50,8 @@ INSERT INTO auth (
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 RETURNING *;
 
