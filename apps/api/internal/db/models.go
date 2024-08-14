@@ -8,6 +8,23 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Auth struct {
+	ID                   pgtype.UUID
+	Email                string
+	PasswordHash         pgtype.Text
+	GoogleID             pgtype.Text
+	IsEmailVerified      pgtype.Bool
+	IsActive             pgtype.Bool
+	Role                 pgtype.Text
+	LastLogin            pgtype.Timestamptz
+	CreatedAt            pgtype.Timestamptz
+	UpdatedAt            pgtype.Timestamptz
+	PasswordResetToken   pgtype.Text
+	PasswordResetExpires pgtype.Timestamptz
+	LoginAttempts        pgtype.Int4
+	LockoutUntil         pgtype.Timestamptz
+}
+
 type Author struct {
 	ID   int64
 	Name string

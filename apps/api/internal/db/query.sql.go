@@ -42,6 +42,60 @@ func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
 	return err
 }
 
+const getAuthByEmail = `-- name: GetAuthByEmail :one
+SELECT id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
+WHERE email = $1 LIMIT 1
+`
+
+func (q *Queries) GetAuthByEmail(ctx context.Context, email string) (Auth, error) {
+	row := q.db.QueryRow(ctx, getAuthByEmail, email)
+	var i Auth
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+	)
+	return i, err
+}
+
+const getAuthByGoogleId = `-- name: GetAuthByGoogleId :one
+SELECT id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
+WHERE google_id = $1 LIMIT 1
+`
+
+func (q *Queries) GetAuthByGoogleId(ctx context.Context, googleID pgtype.Text) (Auth, error) {
+	row := q.db.QueryRow(ctx, getAuthByGoogleId, googleID)
+	var i Auth
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+	)
+	return i, err
+}
+
 const getAuthor = `-- name: GetAuthor :one
 SELECT id, name, bio FROM authors
 WHERE id = $1 LIMIT 1

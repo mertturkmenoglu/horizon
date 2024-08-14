@@ -24,3 +24,11 @@ RETURNING *;
 -- name: DeleteAuthor :exec
 DELETE FROM authors
 WHERE id = $1;
+
+-- name: GetAuthByEmail :one
+SELECT * FROM auth
+WHERE email = $1 LIMIT 1;
+
+-- name: GetAuthByGoogleId :one
+SELECT * FROM auth
+WHERE google_id = $1 LIMIT 1;
