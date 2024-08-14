@@ -1,9 +1,12 @@
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
+import { GetMeResponseDto } from './dto';
 
-export type Auth = string;
+export type Auth = {
+  data: GetMeResponseDto;
+};
 
 export async function getAuth(): Promise<Auth | null> {
-  const cookieName = "__horizon_auth";
+  const cookieName = '__horizon_auth';
   const sessionCookie = cookies().get(cookieName);
 
   if (!sessionCookie) {
@@ -11,8 +14,8 @@ export async function getAuth(): Promise<Auth | null> {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/auth/me", {
-      credentials: "include",
+    const res = await fetch('http://localhost:5000/api/auth/me', {
+      credentials: 'include',
       headers: {
         Cookie: `${cookieName}=${sessionCookie.value}`,
       },
