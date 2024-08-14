@@ -2,14 +2,13 @@ package auth
 
 import (
 	"context"
-	"encoding/json"
 	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/h"
+	"horizon/internal/hash"
 	"net/http"
 	"time"
 
-	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -26,8 +25,8 @@ func NewAuthService(db *db.Db) *AuthService {
 }
 
 func (s *AuthService) HandlerGoogle(c echo.Context) error {
-	googleConfig := GetGoogleOAuth2Config()
-	state := GenerateStateString()
+	googleConfig := getGoogleOAuth2Config()
+	state := generateStateString()
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
@@ -43,90 +42,44 @@ func (s *AuthService) HandlerGoogle(c echo.Context) error {
 }
 
 func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
-	googleConfig := GetGoogleOAuth2Config()
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	savedState, ok := sess.Values["state"].(string)
-
-	if !ok || savedState == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "Invalid session state",
-		})
-	}
-
-	receivedState := c.QueryParam("state")
-
-	if receivedState != savedState {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "Invalid state parameter",
-		})
-	}
-
-	code := c.QueryParam("code")
-	token, err := googleConfig.Exchange(context.Background(), code)
+	token, err := getOAuthToken(sess, c.QueryParam("state"), c.QueryParam("code"))
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "Failed to exchange token " + err.Error(),
+			Message: err.Error(),
 		})
 	}
 
 	delete(sess.Values, "state")
 	sess.Save(c.Request(), c.Response())
 
-	client := googleConfig.Client(context.Background(), token)
-	res, err := client.Get(GOOGLE_USER_ENDPOINT)
+	userInfo, err := fetchGoogleUser(token)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "Failed to fetch user",
+			Message: err.Error(),
 		})
 	}
 
-	defer res.Body.Close()
-
-	userInfo := GoogleUser{}
-
-	if err := json.NewDecoder(res.Body).Decode(&userInfo); err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "Failed to parse user",
-		})
-	}
-
-	sess.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400 * 7,
-		HttpOnly: true,
-		Secure:   viper.GetString(config.ENV) != "dev",
-		SameSite: http.SameSiteLaxMode,
-	}
-
+	sess.Options = getAuthSessionOptions()
 	sess.Values["user_id"] = userInfo.Id
 	sess.Save(c.Request(), c.Response())
+	redirectUrl := viper.GetString(config.GOOGLE_REDIRECT)
 
-	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/")
+	return c.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
 func (s *AuthService) HandlerGetMe(c echo.Context) error {
-	sess, err := session.Get(SESSION_NAME, c)
-
-	if err != nil {
-		return echo.ErrInternalServerError
-	}
-
-	userId, ok := sess.Values["user_id"].(string)
-	if !ok || userId == "" {
-		return c.JSON(http.StatusUnauthorized, h.ErrResponse{
-			Message: "Invalid session state",
-		})
-	}
+	authId := c.Get("auth_id").(string)
 
 	return c.JSON(http.StatusOK, h.AnyResponse{
-		"data": userId,
+		"data": authId,
 	})
 }
 
@@ -149,4 +102,35 @@ func (s *AuthService) HandlerLogout(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	return c.NoContent(http.StatusNoContent)
+}
+
+func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
+	body := c.Get("body").(LoginRequestDto)
+	dbAuth, err := s.Db.Queries.GetAuthByEmail(context.Background(), body.Email)
+	var hashed = ""
+
+	if err == nil {
+		hashed = dbAuth.PasswordHash.String
+	}
+
+	matched, err := hash.Verify(body.Password, hashed)
+
+	if !matched || err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrInvalidEmailOrPassword.Error(),
+		})
+	}
+
+	sess, err := session.Get(SESSION_NAME, c)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	sess.Options = getAuthSessionOptions()
+	sess.Values["user_id"] = string(dbAuth.ID.Bytes[:])
+	sess.Save(c.Request(), c.Response())
+
+	return c.NoContent(http.StatusOK)
+
 }
