@@ -39,6 +39,7 @@ api:
       client-id: ""
       client-secret: ""
       callback: "http://localhost:5000/api/auth/google/callback"
+      redirect: "http://localhost:3000/"
     github:
       client-id: ""
       client-secret: ""

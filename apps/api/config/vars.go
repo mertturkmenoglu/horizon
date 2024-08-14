@@ -19,6 +19,7 @@ const (
 	GOOGLE_CLIENT_ID         = "api.auth.google.client-id"
 	GOOGLE_CLIENT_SECRET     = "api.auth.google.client-secret"
 	GOOGLE_CALLBACK          = "api.auth.google.callback"
+	GOOGLE_REDIRECT          = "api.auth.google.redirect"
 	GITHUB_CLIENT_ID         = "api.auth.github.client-id"
 	GITHUB_CLIENT_SECRET     = "api.auth.github.client-secret"
 	GITHUB_CALLBACK          = "api.auth.github.callback"
