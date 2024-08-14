@@ -1,28 +1,29 @@
--- name: GetAuthByEmail :one
-SELECT * FROM auth
+-- name: GetUserByEmail :one
+SELECT * FROM users
 WHERE email = $1 LIMIT 1;
 
--- name: GetAuthById :one
-SELECT * FROM auth
+-- name: GetUserById :one
+SELECT * FROM users
 WHERE id = $1 LIMIT 1;
 
--- name: GetAuthByGoogleId :one
-SELECT * FROM auth
+-- name: GetUserByGoogleId :one
+SELECT * FROM users
 WHERE google_id = $1 LIMIT 1;
 
 -- name: GetUserByUsername :one
 SELECT * FROM users
 WHERE username = $1 LIMIT 1;
 
--- name: CreateAuth :one
-INSERT INTO auth (
+-- name: CreateUser :one
+INSERT INTO users (
   id,
-  user_id,
   email,
+  username,
+  full_name,
   password_hash,
   google_id,
   is_email_verified,
-  role
+  profile_image
 ) VALUES (
   $1,
   $2,
@@ -30,20 +31,30 @@ INSERT INTO auth (
   $4,
   $5,
   $6,
-  $7
+  $7,
+  $8
 )
 RETURNING *;
 
--- name: CreateUser :one
-INSERT INTO users (
+-- name: UpdateUserGoogleId :exec
+UPDATE users
+  SET google_id = $2
+WHERE id = $1;
+
+-- name: GetMe :one
+SELECT 
   id,
-  full_name,
+  email,
   username,
-  profile_image
-) VALUES (
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING *;
+  full_name,
+  google_id, 
+  is_email_verified, 
+  is_active, 
+  role, 
+  gender,
+  profile_image,
+  last_login, 
+  created_at, 
+  updated_at 
+FROM users
+WHERE id = $1 LIMIT 1;

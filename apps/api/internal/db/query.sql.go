@@ -11,15 +11,16 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createAuth = `-- name: CreateAuth :one
-INSERT INTO auth (
+const createUser = `-- name: CreateUser :one
+INSERT INTO users (
   id,
-  user_id,
   email,
+  username,
+  full_name,
   password_hash,
   google_id,
   is_email_verified,
-  role
+  profile_image
 ) VALUES (
   $1,
   $2,
@@ -27,178 +28,209 @@ INSERT INTO auth (
   $4,
   $5,
   $6,
-  $7
+  $7,
+  $8
 )
-RETURNING id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until
-`
-
-type CreateAuthParams struct {
-	ID              string
-	UserID          string
-	Email           string
-	PasswordHash    pgtype.Text
-	GoogleID        pgtype.Text
-	IsEmailVerified bool
-	Role            string
-}
-
-func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, error) {
-	row := q.db.QueryRow(ctx, createAuth,
-		arg.ID,
-		arg.UserID,
-		arg.Email,
-		arg.PasswordHash,
-		arg.GoogleID,
-		arg.IsEmailVerified,
-		arg.Role,
-	)
-	var i Auth
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Email,
-		&i.PasswordHash,
-		&i.GoogleID,
-		&i.IsEmailVerified,
-		&i.IsActive,
-		&i.Role,
-		&i.LastLogin,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.PasswordResetToken,
-		&i.PasswordResetExpires,
-		&i.LoginAttempts,
-		&i.LockoutUntil,
-	)
-	return i, err
-}
-
-const createUser = `-- name: CreateUser :one
-INSERT INTO users (
-  id,
-  full_name,
-  username,
-  profile_image
-) VALUES (
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING id, full_name, username, gender, profile_image
+RETURNING id, email, username, full_name, password_hash, google_id, is_email_verified, is_active, role, password_reset_token, password_reset_expires, login_attempts, lockout_until, gender, profile_image, last_login, created_at, updated_at
 `
 
 type CreateUserParams struct {
-	ID           string
-	FullName     string
-	Username     string
-	ProfileImage pgtype.Text
+	ID              string
+	Email           string
+	Username        string
+	FullName        string
+	PasswordHash    pgtype.Text
+	GoogleID        pgtype.Text
+	IsEmailVerified bool
+	ProfileImage    pgtype.Text
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(ctx, createUser,
 		arg.ID,
-		arg.FullName,
+		arg.Email,
 		arg.Username,
+		arg.FullName,
+		arg.PasswordHash,
+		arg.GoogleID,
+		arg.IsEmailVerified,
 		arg.ProfileImage,
 	)
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.FullName,
+		&i.Email,
 		&i.Username,
+		&i.FullName,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
 		&i.Gender,
 		&i.ProfileImage,
-	)
-	return i, err
-}
-
-const getAuthByEmail = `-- name: GetAuthByEmail :one
-SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
-WHERE email = $1 LIMIT 1
-`
-
-func (q *Queries) GetAuthByEmail(ctx context.Context, email string) (Auth, error) {
-	row := q.db.QueryRow(ctx, getAuthByEmail, email)
-	var i Auth
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Email,
-		&i.PasswordHash,
-		&i.GoogleID,
-		&i.IsEmailVerified,
-		&i.IsActive,
-		&i.Role,
 		&i.LastLogin,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.PasswordResetToken,
-		&i.PasswordResetExpires,
-		&i.LoginAttempts,
-		&i.LockoutUntil,
 	)
 	return i, err
 }
 
-const getAuthByGoogleId = `-- name: GetAuthByGoogleId :one
-SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
-WHERE google_id = $1 LIMIT 1
-`
-
-func (q *Queries) GetAuthByGoogleId(ctx context.Context, googleID pgtype.Text) (Auth, error) {
-	row := q.db.QueryRow(ctx, getAuthByGoogleId, googleID)
-	var i Auth
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Email,
-		&i.PasswordHash,
-		&i.GoogleID,
-		&i.IsEmailVerified,
-		&i.IsActive,
-		&i.Role,
-		&i.LastLogin,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.PasswordResetToken,
-		&i.PasswordResetExpires,
-		&i.LoginAttempts,
-		&i.LockoutUntil,
-	)
-	return i, err
-}
-
-const getAuthById = `-- name: GetAuthById :one
-SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
+const getMe = `-- name: GetMe :one
+SELECT 
+  id,
+  email,
+  username,
+  full_name,
+  google_id, 
+  is_email_verified, 
+  is_active, 
+  role, 
+  gender,
+  profile_image,
+  last_login, 
+  created_at, 
+  updated_at 
+FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAuthById(ctx context.Context, id string) (Auth, error) {
-	row := q.db.QueryRow(ctx, getAuthById, id)
-	var i Auth
+type GetMeRow struct {
+	ID              string
+	Email           string
+	Username        string
+	FullName        string
+	GoogleID        pgtype.Text
+	IsEmailVerified bool
+	IsActive        bool
+	Role            string
+	Gender          pgtype.Text
+	ProfileImage    pgtype.Text
+	LastLogin       pgtype.Timestamptz
+	CreatedAt       pgtype.Timestamptz
+	UpdatedAt       pgtype.Timestamptz
+}
+
+func (q *Queries) GetMe(ctx context.Context, id string) (GetMeRow, error) {
+	row := q.db.QueryRow(ctx, getMe, id)
+	var i GetMeRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserID,
 		&i.Email,
+		&i.Username,
+		&i.FullName,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.Gender,
+		&i.ProfileImage,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, email, username, full_name, password_hash, google_id, is_email_verified, is_active, role, password_reset_token, password_reset_expires, login_attempts, lockout_until, gender, profile_image, last_login, created_at, updated_at FROM users
+WHERE email = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.FullName,
 		&i.PasswordHash,
 		&i.GoogleID,
 		&i.IsEmailVerified,
 		&i.IsActive,
 		&i.Role,
-		&i.LastLogin,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 		&i.PasswordResetToken,
 		&i.PasswordResetExpires,
 		&i.LoginAttempts,
 		&i.LockoutUntil,
+		&i.Gender,
+		&i.ProfileImage,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserByGoogleId = `-- name: GetUserByGoogleId :one
+SELECT id, email, username, full_name, password_hash, google_id, is_email_verified, is_active, role, password_reset_token, password_reset_expires, login_attempts, lockout_until, gender, profile_image, last_login, created_at, updated_at FROM users
+WHERE google_id = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByGoogleId(ctx context.Context, googleID pgtype.Text) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByGoogleId, googleID)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.FullName,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+		&i.Gender,
+		&i.ProfileImage,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getUserById = `-- name: GetUserById :one
+SELECT id, email, username, full_name, password_hash, google_id, is_email_verified, is_active, role, password_reset_token, password_reset_expires, login_attempts, lockout_until, gender, profile_image, last_login, created_at, updated_at FROM users
+WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserById(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserById, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.FullName,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+		&i.Gender,
+		&i.ProfileImage,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, full_name, username, gender, profile_image FROM users
+SELECT id, email, username, full_name, password_hash, google_id, is_email_verified, is_active, role, password_reset_token, password_reset_expires, login_attempts, lockout_until, gender, profile_image, last_login, created_at, updated_at FROM users
 WHERE username = $1 LIMIT 1
 `
 
@@ -207,10 +239,39 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.FullName,
+		&i.Email,
 		&i.Username,
+		&i.FullName,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
 		&i.Gender,
 		&i.ProfileImage,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateUserGoogleId = `-- name: UpdateUserGoogleId :exec
+UPDATE users
+  SET google_id = $2
+WHERE id = $1
+`
+
+type UpdateUserGoogleIdParams struct {
+	ID       string
+	GoogleID pgtype.Text
+}
+
+func (q *Queries) UpdateUserGoogleId(ctx context.Context, arg UpdateUserGoogleIdParams) error {
+	_, err := q.db.Exec(ctx, updateUserGoogleId, arg.ID, arg.GoogleID)
+	return err
 }

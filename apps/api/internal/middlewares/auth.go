@@ -24,7 +24,7 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			})
 		}
 
-		c.Set("auth_id", userId)
+		c.Set("user_id", userId)
 		return next(c)
 	}
 }
