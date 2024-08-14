@@ -13,6 +13,7 @@ import (
 
 const createAuth = `-- name: CreateAuth :one
 INSERT INTO auth (
+  id,
   user_id,
   email,
   password_hash,
@@ -25,22 +26,25 @@ INSERT INTO auth (
   $3,
   $4,
   $5,
-  $6
+  $6,
+  $7
 )
 RETURNING id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until
 `
 
 type CreateAuthParams struct {
-	UserID          pgtype.UUID
+	ID              string
+	UserID          string
 	Email           string
 	PasswordHash    pgtype.Text
 	GoogleID        pgtype.Text
-	IsEmailVerified pgtype.Bool
-	Role            pgtype.Text
+	IsEmailVerified bool
+	Role            string
 }
 
 func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, error) {
 	row := q.db.QueryRow(ctx, createAuth,
+		arg.ID,
 		arg.UserID,
 		arg.Email,
 		arg.PasswordHash,
@@ -69,48 +73,35 @@ func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, e
 	return i, err
 }
 
-const createAuthor = `-- name: CreateAuthor :one
-INSERT INTO authors (
-  name, bio
-) VALUES (
-  $1, $2
-)
-RETURNING id, name, bio
-`
-
-type CreateAuthorParams struct {
-	Name string
-	Bio  pgtype.Text
-}
-
-func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Author, error) {
-	row := q.db.QueryRow(ctx, createAuthor, arg.Name, arg.Bio)
-	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
-	return i, err
-}
-
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
+  id,
   full_name,
   username,
   profile_image
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4
 )
 RETURNING id, full_name, username, gender, profile_image
 `
 
 type CreateUserParams struct {
+	ID           string
 	FullName     string
 	Username     string
 	ProfileImage pgtype.Text
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.FullName, arg.Username, arg.ProfileImage)
+	row := q.db.QueryRow(ctx, createUser,
+		arg.ID,
+		arg.FullName,
+		arg.Username,
+		arg.ProfileImage,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -120,16 +111,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.ProfileImage,
 	)
 	return i, err
-}
-
-const deleteAuthor = `-- name: DeleteAuthor :exec
-DELETE FROM authors
-WHERE id = $1
-`
-
-func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
-	_, err := q.db.Exec(ctx, deleteAuthor, id)
-	return err
 }
 
 const getAuthByEmail = `-- name: GetAuthByEmail :one
@@ -188,15 +169,31 @@ func (q *Queries) GetAuthByGoogleId(ctx context.Context, googleID pgtype.Text) (
 	return i, err
 }
 
-const getAuthor = `-- name: GetAuthor :one
-SELECT id, name, bio FROM authors
+const getAuthById = `-- name: GetAuthById :one
+SELECT id, user_id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until FROM auth
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
-	row := q.db.QueryRow(ctx, getAuthor, id)
-	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+func (q *Queries) GetAuthById(ctx context.Context, id string) (Auth, error) {
+	row := q.db.QueryRow(ctx, getAuthById, id)
+	var i Auth
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+	)
 	return i, err
 }
 
@@ -215,51 +212,5 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 		&i.Gender,
 		&i.ProfileImage,
 	)
-	return i, err
-}
-
-const listAuthors = `-- name: ListAuthors :many
-SELECT id, name, bio FROM authors
-ORDER BY name
-`
-
-func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
-	rows, err := q.db.Query(ctx, listAuthors)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Author
-	for rows.Next() {
-		var i Author
-		if err := rows.Scan(&i.ID, &i.Name, &i.Bio); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const updateAuthor = `-- name: UpdateAuthor :one
-UPDATE authors
-  set name = $2,
-  bio = $3
-WHERE id = $1
-RETURNING id, name, bio
-`
-
-type UpdateAuthorParams struct {
-	ID   int64
-	Name string
-	Bio  pgtype.Text
-}
-
-func (q *Queries) UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) (Author, error) {
-	row := q.db.QueryRow(ctx, updateAuthor, arg.ID, arg.Name, arg.Bio)
-	var i Author
-	err := row.Scan(&i.ID, &i.Name, &i.Bio)
 	return i, err
 }

@@ -1,33 +1,10 @@
--- name: GetAuthor :one
-SELECT * FROM authors
-WHERE id = $1 LIMIT 1;
-
--- name: ListAuthors :many
-SELECT * FROM authors
-ORDER BY name;
-
--- name: CreateAuthor :one
-INSERT INTO authors (
-  name, bio
-) VALUES (
-  $1, $2
-)
-RETURNING *;
-
--- name: UpdateAuthor :one
-UPDATE authors
-  set name = $2,
-  bio = $3
-WHERE id = $1
-RETURNING *;
-
--- name: DeleteAuthor :exec
-DELETE FROM authors
-WHERE id = $1;
-
 -- name: GetAuthByEmail :one
 SELECT * FROM auth
 WHERE email = $1 LIMIT 1;
+
+-- name: GetAuthById :one
+SELECT * FROM auth
+WHERE id = $1 LIMIT 1;
 
 -- name: GetAuthByGoogleId :one
 SELECT * FROM auth
@@ -39,6 +16,7 @@ WHERE username = $1 LIMIT 1;
 
 -- name: CreateAuth :one
 INSERT INTO auth (
+  id,
   user_id,
   email,
   password_hash,
@@ -51,18 +29,21 @@ INSERT INTO auth (
   $3,
   $4,
   $5,
-  $6
+  $6,
+  $7
 )
 RETURNING *;
 
 -- name: CreateUser :one
 INSERT INTO users (
+  id,
   full_name,
   username,
   profile_image
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4
 )
 RETURNING *;

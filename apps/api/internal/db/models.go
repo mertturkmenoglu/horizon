@@ -9,14 +9,14 @@ import (
 )
 
 type Auth struct {
-	ID                   pgtype.UUID
-	UserID               pgtype.UUID
+	ID                   string
+	UserID               string
 	Email                string
 	PasswordHash         pgtype.Text
 	GoogleID             pgtype.Text
-	IsEmailVerified      pgtype.Bool
-	IsActive             pgtype.Bool
-	Role                 pgtype.Text
+	IsEmailVerified      bool
+	IsActive             bool
+	Role                 string
 	LastLogin            pgtype.Timestamptz
 	CreatedAt            pgtype.Timestamptz
 	UpdatedAt            pgtype.Timestamptz
@@ -26,14 +26,8 @@ type Auth struct {
 	LockoutUntil         pgtype.Timestamptz
 }
 
-type Author struct {
-	ID   int64
-	Name string
-	Bio  pgtype.Text
-}
-
 type User struct {
-	ID           pgtype.UUID
+	ID           string
 	FullName     string
 	Username     string
 	Gender       pgtype.Text
