@@ -129,7 +129,9 @@ func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 	}
 
 	sess.Options = getAuthSessionOptions()
-	sess.Values["user_id"] = string(dbAuth.ID.Bytes[:])
+	authId, _ := dbAuth.ID.Value()
+
+	sess.Values["user_id"] = authId
 	sess.Save(c.Request(), c.Response())
 
 	return c.NoContent(http.StatusOK)
@@ -204,7 +206,9 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 		})
 	}
 
+	authId, _ := insAuth.ID.Value()
+
 	return c.JSON(http.StatusCreated, h.AnyResponse{
-		"data": string(insAuth.ID.Bytes[:]),
+		"data": authId,
 	})
 }
