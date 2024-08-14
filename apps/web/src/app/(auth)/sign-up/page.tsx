@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import api from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -44,8 +45,14 @@ export default function Page() {
     },
   });
 
-  const onSubmit: SubmitHandler<FormInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
+    const res = await api.post('auth/credentials/register', {
+      json: data,
+    });
+
+    if (res.status === 201) {
+      window.location.href = '/sign-in';
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import api from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -34,8 +35,14 @@ export default function Page() {
     },
   });
 
-  const onSubmit: SubmitHandler<FormInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
+    const res = await api.post('auth/credentials/login', {
+      json: data,
+    });
+
+    if (res.status == 200) {
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -47,7 +54,7 @@ export default function Page() {
       />
       <h2 className="mt-4 text-xl font-bold">Sign in to Horizon</h2>
       <div className="text-sm opacity-70">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <AuthLink
           href="/sign-up"
           text="Sign Up"
