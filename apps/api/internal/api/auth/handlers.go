@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"errors"
 	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/h"
@@ -10,7 +9,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -73,59 +71,10 @@ func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
 		})
 	}
 
-	dbAuth, err := s.Db.Queries.GetAuthByGoogleId(context.Background(), pgtype.Text{String: userInfo.Id, Valid: true})
-	var authId string = ""
+	authId, err := getOrCreateAuthId(s, userInfo)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			// User doesn't exist yet, create user
-			username, err := generateUsernameFromEmail(s.Db, userInfo.Email)
-
-			if err != nil {
-				return echo.ErrInternalServerError
-			}
-
-			// Create user
-			insUser, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
-				ID:           h.GenerateId(s.Flake),
-				FullName:     userInfo.Name,
-				Username:     username,
-				ProfileImage: pgtype.Text{String: userInfo.Picture, Valid: true},
-			})
-
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-					Message: "cannot create user",
-				})
-			}
-
-			// Create auth
-			insAuth, err := s.Db.Queries.CreateAuth(context.Background(), db.CreateAuthParams{
-				ID:              h.GenerateId(s.Flake),
-				Email:           userInfo.Email,
-				PasswordHash:    pgtype.Text{},
-				GoogleID:        pgtype.Text{String: userInfo.Id, Valid: true},
-				IsEmailVerified: false,
-				Role:            "user",
-				UserID:          insUser.ID,
-			})
-
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-					Message: "cannot create user",
-				})
-			}
-
-			authId = insAuth.ID
-		} else {
-			// Another error, return it
-			return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-				Message: err.Error(),
-			})
-		}
-	} else {
-		// We have the user, set authId
-		authId = dbAuth.ID
+		return echo.ErrInternalServerError
 	}
 
 	sess.Options = getAuthSessionOptions()
@@ -137,10 +86,30 @@ func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
 }
 
 func (s *AuthService) HandlerGetMe(c echo.Context) error {
-	authId := c.Get("auth_id").(string)
+	userId := c.Get("user_id").(string)
 
-	return c.JSON(http.StatusOK, h.AnyResponse{
-		"data": authId,
+	me, err := s.Db.Queries.GetMe(context.Background(), userId)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusOK, h.Response[GetMeResponseDto]{
+		"data": GetMeResponseDto{
+			ID:              me.ID,
+			Email:           me.Email,
+			Username:        me.Username,
+			FullName:        me.FullName,
+			GoogleID:        &me.GoogleID.String,
+			IsEmailVerified: me.IsEmailVerified,
+			IsActive:        me.IsActive,
+			Role:            me.Role,
+			Gender:          &me.Gender.String,
+			ProfileImage:    &me.ProfileImage.String,
+			LastLogin:       me.LastLogin.Time,
+			CreatedAt:       me.CreatedAt.Time,
+			UpdatedAt:       me.UpdatedAt.Time,
+		},
 	})
 }
 
@@ -167,11 +136,11 @@ func (s *AuthService) HandlerLogout(c echo.Context) error {
 
 func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 	body := c.Get("body").(LoginRequestDto)
-	dbAuth, err := s.Db.Queries.GetAuthByEmail(context.Background(), body.Email)
+	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
 	var hashed = ""
 
 	if err == nil {
-		hashed = dbAuth.PasswordHash.String
+		hashed = user.PasswordHash.String
 	}
 
 	matched, err := hash.Verify(body.Password, hashed)
@@ -190,7 +159,7 @@ func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 
 	sess.Options = getAuthSessionOptions()
 
-	sess.Values["user_id"] = dbAuth.ID
+	sess.Values["user_id"] = user.ID
 	sess.Save(c.Request(), c.Response())
 
 	return c.NoContent(http.StatusOK)
@@ -201,7 +170,7 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 	body := c.Get("body").(RegisterRequestDto)
 
 	// Check if email is taken
-	dbAuth, err := s.Db.Queries.GetAuthByEmail(context.Background(), body.Email)
+	dbAuth, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
 
 	if err == nil && dbAuth.Email != "" {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
@@ -237,28 +206,15 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 	}
 
 	// Create user
-	insUser, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
-		ID:           h.GenerateId(s.Flake),
-		FullName:     body.FullName,
-		Username:     body.Username,
-		ProfileImage: pgtype.Text{},
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-			Message: "cannot create user",
-		})
-	}
-
-	// Create auth
-	insAuth, err := s.Db.Queries.CreateAuth(context.Background(), db.CreateAuthParams{
+	saved, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
 		ID:              h.GenerateId(s.Flake),
 		Email:           body.Email,
+		FullName:        body.FullName,
+		Username:        body.Username,
+		ProfileImage:    pgtype.Text{},
 		PasswordHash:    pgtype.Text{String: hashed, Valid: true},
 		GoogleID:        pgtype.Text{},
 		IsEmailVerified: false,
-		Role:            "user",
-		UserID:          insUser.ID,
 	})
 
 	if err != nil {
@@ -268,6 +224,6 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, h.AnyResponse{
-		"data": insAuth.ID,
+		"data": saved.ID,
 	})
 }
