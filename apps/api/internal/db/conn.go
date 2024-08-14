@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Db struct {
@@ -13,14 +13,13 @@ type Db struct {
 func NewDb() *Db {
 	ctx := context.Background()
 	dsn := getDsnFromEnv()
-	conn, err := pgx.Connect(ctx, dsn)
+	dbpool, err := pgxpool.New(ctx, dsn)
 
 	if err != nil {
 		panic(err.Error())
 	}
 
-	queries := New(conn)
-
+	queries := New(dbpool)
 	return &Db{
 		Queries: queries,
 	}
