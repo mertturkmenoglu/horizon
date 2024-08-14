@@ -11,6 +11,59 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const createAuth = `-- name: CreateAuth :one
+INSERT INTO auth (
+  email,
+  password_hash,
+  google_id,
+  is_email_verified,
+  role
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5
+)
+RETURNING id, email, password_hash, google_id, is_email_verified, is_active, role, last_login, created_at, updated_at, password_reset_token, password_reset_expires, login_attempts, lockout_until
+`
+
+type CreateAuthParams struct {
+	Email           string
+	PasswordHash    pgtype.Text
+	GoogleID        pgtype.Text
+	IsEmailVerified pgtype.Bool
+	Role            pgtype.Text
+}
+
+func (q *Queries) CreateAuth(ctx context.Context, arg CreateAuthParams) (Auth, error) {
+	row := q.db.QueryRow(ctx, createAuth,
+		arg.Email,
+		arg.PasswordHash,
+		arg.GoogleID,
+		arg.IsEmailVerified,
+		arg.Role,
+	)
+	var i Auth
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.GoogleID,
+		&i.IsEmailVerified,
+		&i.IsActive,
+		&i.Role,
+		&i.LastLogin,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.PasswordResetToken,
+		&i.PasswordResetExpires,
+		&i.LoginAttempts,
+		&i.LockoutUntil,
+	)
+	return i, err
+}
+
 const createAuthor = `-- name: CreateAuthor :one
 INSERT INTO authors (
   name, bio
@@ -29,6 +82,38 @@ func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Aut
 	row := q.db.QueryRow(ctx, createAuthor, arg.Name, arg.Bio)
 	var i Author
 	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+	return i, err
+}
+
+const createUser = `-- name: CreateUser :one
+INSERT INTO users (
+  full_name,
+  username,
+  profile_image
+) VALUES (
+  $1,
+  $2,
+  $3
+)
+RETURNING id, full_name, username, gender, profile_image
+`
+
+type CreateUserParams struct {
+	FullName     string
+	Username     string
+	ProfileImage pgtype.Text
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser, arg.FullName, arg.Username, arg.ProfileImage)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.Username,
+		&i.Gender,
+		&i.ProfileImage,
+	)
 	return i, err
 }
 
@@ -105,6 +190,24 @@ func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
 	row := q.db.QueryRow(ctx, getAuthor, id)
 	var i Author
 	err := row.Scan(&i.ID, &i.Name, &i.Bio)
+	return i, err
+}
+
+const getUserByUsername = `-- name: GetUserByUsername :one
+SELECT id, full_name, username, gender, profile_image FROM users
+WHERE username = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByUsername, username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.Username,
+		&i.Gender,
+		&i.ProfileImage,
+	)
 	return i, err
 }
 

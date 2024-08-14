@@ -30,3 +30,11 @@ type Author struct {
 	Name string
 	Bio  pgtype.Text
 }
+
+type User struct {
+	ID           pgtype.UUID
+	FullName     string
+	Username     string
+	Gender       pgtype.Text
+	ProfileImage pgtype.Text
+}
