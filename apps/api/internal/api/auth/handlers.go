@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/h"
@@ -9,6 +10,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -71,8 +73,63 @@ func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
 		})
 	}
 
+	dbAuth, err := s.Db.Queries.GetAuthByGoogleId(context.Background(), pgtype.Text{String: userInfo.Id, Valid: true})
+	var authId string = ""
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			// User doesn't exist yet, create user
+			username, err := generateUsernameFromEmail(s.Db, userInfo.Email)
+
+			if err != nil {
+				return echo.ErrInternalServerError
+			}
+
+			// Create user
+			insUser, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
+				ID:           h.GenerateId(s.Flake),
+				FullName:     userInfo.Name,
+				Username:     username,
+				ProfileImage: pgtype.Text{String: userInfo.Picture, Valid: true},
+			})
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+					Message: "cannot create user",
+				})
+			}
+
+			// Create auth
+			insAuth, err := s.Db.Queries.CreateAuth(context.Background(), db.CreateAuthParams{
+				ID:              h.GenerateId(s.Flake),
+				Email:           userInfo.Email,
+				PasswordHash:    pgtype.Text{},
+				GoogleID:        pgtype.Text{String: userInfo.Id, Valid: true},
+				IsEmailVerified: false,
+				Role:            "user",
+				UserID:          insUser.ID,
+			})
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+					Message: "cannot create user",
+				})
+			}
+
+			authId = insAuth.ID
+		} else {
+			// Another error, return it
+			return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+				Message: err.Error(),
+			})
+		}
+	} else {
+		// We have the user, set authId
+		authId = dbAuth.ID
+	}
+
 	sess.Options = getAuthSessionOptions()
-	sess.Values["user_id"] = userInfo.Id
+	sess.Values["user_id"] = authId
 	sess.Save(c.Request(), c.Response())
 	redirectUrl := viper.GetString(config.GOOGLE_REDIRECT)
 
