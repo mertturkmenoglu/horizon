@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -133,4 +134,77 @@ func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 
+}
+
+func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
+	body := c.Get("body").(RegisterRequestDto)
+
+	// Check if email is taken
+	dbAuth, err := s.Db.Queries.GetAuthByEmail(context.Background(), body.Email)
+
+	if err == nil && dbAuth.Email != "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrEmailTaken.Error(),
+		})
+	}
+
+	// Check if username is taken
+	dbUser, err := s.Db.Queries.GetUserByUsername(context.Background(), body.Username)
+
+	if err == nil && dbUser.Username != "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrUsernameTaken.Error(),
+		})
+	}
+
+	// Check username characters
+	ok := isValidUsername(body.Username)
+
+	if !ok {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrUsernameChars.Error(),
+		})
+	}
+
+	// Hash password
+	hashed, err := hash.Hash(body.Password)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+			Message: ErrHash.Error(),
+		})
+	}
+
+	// Create user
+	insUser, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
+		FullName:     body.FullName,
+		Username:     body.Username,
+		ProfileImage: pgtype.Text{},
+	})
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+			Message: "cannot create user",
+		})
+	}
+
+	// Create auth
+	insAuth, err := s.Db.Queries.CreateAuth(context.Background(), db.CreateAuthParams{
+		Email:           body.Email,
+		PasswordHash:    pgtype.Text{String: hashed, Valid: true},
+		GoogleID:        pgtype.Text{},
+		IsEmailVerified: pgtype.Bool{Bool: false, Valid: true},
+		Role:            pgtype.Text{String: "user"},
+		UserID:          pgtype.UUID{Bytes: insUser.ID.Bytes, Valid: true},
+	})
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+			Message: "cannot create user",
+		})
+	}
+
+	return c.JSON(http.StatusCreated, h.AnyResponse{
+		"data": string(insAuth.ID.Bytes[:]),
+	})
 }
