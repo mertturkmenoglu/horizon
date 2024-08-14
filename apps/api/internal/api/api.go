@@ -56,8 +56,9 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	{
 		authRoutes.GET("/google", authModule.HandlerGoogle)
 		authRoutes.GET("/google/callback", authModule.HandlerGoogleCallback)
-		authRoutes.GET("/me", authModule.HandlerGetMe)
+		authRoutes.GET("/me", authModule.HandlerGetMe, middlewares.IsAuth)
 		authRoutes.POST("/logout", authModule.HandlerLogout)
+		authRoutes.POST("/credentials/login", authModule.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
 	}
 
 	return e
