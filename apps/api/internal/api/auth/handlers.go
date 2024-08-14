@@ -12,16 +12,19 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 )
 
 type AuthService struct {
-	Db *db.Db
+	Db    *db.Db
+	Flake *sonyflake.Sonyflake
 }
 
-func NewAuthService(db *db.Db) *AuthService {
+func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake) *AuthService {
 	return &AuthService{
-		Db: db,
+		Db:    db,
+		Flake: flake,
 	}
 }
 
@@ -129,9 +132,8 @@ func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 	}
 
 	sess.Options = getAuthSessionOptions()
-	authId, _ := dbAuth.ID.Value()
 
-	sess.Values["user_id"] = authId
+	sess.Values["user_id"] = dbAuth.ID
 	sess.Save(c.Request(), c.Response())
 
 	return c.NoContent(http.StatusOK)
@@ -179,6 +181,7 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 
 	// Create user
 	insUser, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
+		ID:           h.GenerateId(s.Flake),
 		FullName:     body.FullName,
 		Username:     body.Username,
 		ProfileImage: pgtype.Text{},
@@ -192,12 +195,13 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 
 	// Create auth
 	insAuth, err := s.Db.Queries.CreateAuth(context.Background(), db.CreateAuthParams{
+		ID:              h.GenerateId(s.Flake),
 		Email:           body.Email,
 		PasswordHash:    pgtype.Text{String: hashed, Valid: true},
 		GoogleID:        pgtype.Text{},
-		IsEmailVerified: pgtype.Bool{Bool: false, Valid: true},
-		Role:            pgtype.Text{String: "user"},
-		UserID:          pgtype.UUID{Bytes: insUser.ID.Bytes, Valid: true},
+		IsEmailVerified: false,
+		Role:            "user",
+		UserID:          insUser.ID,
 	})
 
 	if err != nil {
@@ -206,9 +210,7 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 		})
 	}
 
-	authId, _ := insAuth.ID.Value()
-
 	return c.JSON(http.StatusCreated, h.AnyResponse{
-		"data": authId,
+		"data": insAuth.ID,
 	})
 }
