@@ -24,4 +24,6 @@ const (
 	GITHUB_CLIENT_SECRET     = "api.auth.github.client-secret"
 	GITHUB_CALLBACK          = "api.auth.github.callback"
 	AUTH_SIGN_KEY            = "api.auth.sign-key"
+	SEARCH_SERVER_URL        = "api.search.server-url"
+	SEARCH_API_KEY           = "api.search.api-key"
 )
