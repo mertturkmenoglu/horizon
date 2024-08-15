@@ -22,11 +22,11 @@ export default function QuickActionCard({
         'border-midnight/20 rounded-md border px-4 py-3',
         'flex items-center',
         'transition-colors duration-100',
-        'hover:border-purple-500 focus:border-none',
+        'hover:border-sky-500 focus:border-none',
         className
       )}
     >
-      <Icon className="size-10 rounded-lg bg-purple-200 p-1 text-purple-500" />
+      <Icon className="size-10 rounded-lg bg-sky-100 p-1 text-sky-500" />
       <span className="ml-4 line-clamp-1 text-sm">{text}</span>
     </Link>
   );
