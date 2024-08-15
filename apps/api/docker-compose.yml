@@ -32,3 +32,9 @@ services:
     volumes:
       - ./typesense-data:/data
     command: "--data-dir /data --api-key=horizon --enable-cors"
+
+  typesense-dashboard:
+    restart: always
+    ports:
+      - 3006:80
+    image: ghcr.io/bfritscher/typesense-dashboard:latest
