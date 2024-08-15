@@ -7,11 +7,13 @@ import (
 	"horizon/internal/db"
 	"horizon/internal/logs"
 	"horizon/internal/middlewares"
+	"horizon/internal/search"
 	"horizon/internal/upload"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
+	"github.com/typesense/typesense-go/v2/typesense"
 	"go.uber.org/zap"
 )
 
@@ -22,6 +24,7 @@ type Service struct {
 	Logger     *zap.Logger
 	Flake      *sonyflake.Sonyflake
 	Db         *db.Db
+	Search     *typesense.Client
 }
 
 func New() *Service {
@@ -32,6 +35,7 @@ func New() *Service {
 		Port:       viper.GetInt(config.PORT),
 		PortString: fmt.Sprintf(":%d", viper.GetInt(config.PORT)),
 		Db:         db.NewDb(),
+		Search:     search.New(),
 	}
 
 	flake, err := sonyflake.New(sonyflake.Settings{})
