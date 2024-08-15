@@ -63,7 +63,7 @@ export default function MenuContent({ fullName, username }: Props) {
           asChild
           className="cursor-pointer"
         >
-          <Link href="/services">My Services</Link>
+          <Link href="/services">Services</Link>
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
