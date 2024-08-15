@@ -24,6 +24,12 @@ watch:
 		echo "Air is not installed. Run 'go install github.com/air-verse/air@latest' to install Air";\
 	fi
 
+read-location:
+	@go run cmd/read-location/main.go
+
+sqlc-generate:
+	@sqlc generate
+
 create-migration:
 	@read -p "Give migration a name: " migrationname; \
 	migrate create -ext sql -dir internal/db/migrations -seq $$migrationname; \
