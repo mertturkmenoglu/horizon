@@ -8,9 +8,14 @@ type Props = {
 
 export default function ReferToFriend({ className }: Props) {
   return (
-    <div className={cn('flex max-w-3xl items-center', className)}>
+    <div
+      className={cn(
+        'flex max-w-3xl flex-col items-center gap-8 md:flex-row md:gap-16 lg:gap-32',
+        className
+      )}
+    >
       <Doodle className="size-[256px] text-sky-500" />
-      <div className="ml-32 flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         <div className="text-4xl font-semibold">
           Enjoying <span className="text-sky-500">Horizon</span>?
         </div>
