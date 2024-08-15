@@ -1,4 +1,4 @@
-import Logo from '@/app/logo.png';
+import Logo from '@/app/icon.png';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import clsx from 'clsx';

@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from '@/app/logo.png';
+import Logo from '@/app/icon.png';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
