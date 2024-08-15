@@ -3,10 +3,10 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR (128) UNIQUE NOT NULL,
   username VARCHAR (32) UNIQUE NOT NULL,
   full_name VARCHAR (128) NOT NULL,
-  password_hash VARCHAR (255), -- Only required for credentials login
-  google_id VARCHAR(64) UNIQUE, -- Only required for Google OAuth login
+  password_hash VARCHAR (255),
+  google_id VARCHAR(64) UNIQUE,
   is_email_verified BOOLEAN DEFAULT FALSE NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE NOT NULL, -- Soft delete or deactivation
+  is_active BOOLEAN DEFAULT TRUE NOT NULL,
   role VARCHAR(32) DEFAULT 'user' NOT NULL,
   password_reset_token VARCHAR(255),
   password_reset_expires TIMESTAMPTZ,
@@ -19,22 +19,13 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
-
 -- Create indexes
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_username ON users(username);
-CREATE INDEX idx_users_google_id ON users(google_id);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
--- Trigger to update the updated_at field automatically
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-   NEW.updated_at = NOW();
-   RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 
-CREATE TRIGGER update_users_timestamp
-BEFORE UPDATE ON users
-FOR EACH ROW
-EXECUTE FUNCTION update_timestamp();
+CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
+
+CREATE TRIGGER update_users_timestamp BEFORE
+UPDATE
+  ON users FOR EACH ROW EXECUTE FUNCTION update_timestamp();
