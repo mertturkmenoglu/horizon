@@ -5,8 +5,129 @@
 package db
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type Priceunit string
+
+const (
+	PriceunitUSD Priceunit = "USD"
+	PriceunitEUR Priceunit = "EUR"
+	PriceunitJPY Priceunit = "JPY"
+	PriceunitGBP Priceunit = "GBP"
+	PriceunitAUD Priceunit = "AUD"
+	PriceunitCAD Priceunit = "CAD"
+	PriceunitCHF Priceunit = "CHF"
+	PriceunitINR Priceunit = "INR"
+	PriceunitBRL Priceunit = "BRL"
+	PriceunitCZK Priceunit = "CZK"
+	PriceunitTRY Priceunit = "TRY"
+)
+
+func (e *Priceunit) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Priceunit(s)
+	case string:
+		*e = Priceunit(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Priceunit: %T", src)
+	}
+	return nil
+}
+
+type NullPriceunit struct {
+	Priceunit Priceunit
+	Valid     bool // Valid is true if Priceunit is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPriceunit) Scan(value interface{}) error {
+	if value == nil {
+		ns.Priceunit, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Priceunit.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPriceunit) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Priceunit), nil
+}
+
+type Worktimespan string
+
+const (
+	WorktimespanHOURLY  Worktimespan = "HOURLY"
+	WorktimespanDAILY   Worktimespan = "DAILY"
+	WorktimespanWEEKLY  Worktimespan = "WEEKLY"
+	WorktimespanMONTHLY Worktimespan = "MONTHLY"
+	WorktimespanYEARLY  Worktimespan = "YEARLY"
+)
+
+func (e *Worktimespan) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Worktimespan(s)
+	case string:
+		*e = Worktimespan(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Worktimespan: %T", src)
+	}
+	return nil
+}
+
+type NullWorktimespan struct {
+	Worktimespan Worktimespan
+	Valid        bool // Valid is true if Worktimespan is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullWorktimespan) Scan(value interface{}) error {
+	if value == nil {
+		ns.Worktimespan, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Worktimespan.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullWorktimespan) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Worktimespan), nil
+}
+
+type Hservice struct {
+	ID               string
+	UserID           string
+	Title            string
+	Slug             string
+	Description      string
+	Category         int32
+	Price            float64
+	PriceUnit        Priceunit
+	PriceTimespan    Worktimespan
+	IsOnline         bool
+	Url              pgtype.Text
+	Location         string
+	DeliveryTime     int32
+	DeliveryTimespan Worktimespan
+	TotalPoints      int64
+	TotalVotes       int32
+	Media            []byte
+	CreatedAt        pgtype.Timestamptz
+	UpdatedAt        pgtype.Timestamptz
+}
 
 type User struct {
 	ID                   string

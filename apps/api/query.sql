@@ -58,3 +58,47 @@ SELECT
   updated_at 
 FROM users
 WHERE id = $1 LIMIT 1;
+
+-- name: CreateHService :one
+INSERT INTO hservices (
+  id,
+  user_id,
+  title,
+  slug,
+  description,
+  category,
+  price,
+  price_unit,
+  price_timespan,
+  is_online,
+  url,
+  location,
+  delivery_time,
+  delivery_timespan,
+  total_points,
+  total_votes,
+  media,
+  created_at,
+  updated_at
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6,
+  $7,
+  $8,
+  $9,
+  $10,
+  $11,
+  $12,
+  $13,
+  $14,
+  $15,
+  $16,
+  $17,
+  $18,
+  $19
+)
+RETURNING *;

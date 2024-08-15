@@ -11,6 +11,120 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const createHService = `-- name: CreateHService :one
+INSERT INTO hservices (
+  id,
+  user_id,
+  title,
+  slug,
+  description,
+  category,
+  price,
+  price_unit,
+  price_timespan,
+  is_online,
+  url,
+  location,
+  delivery_time,
+  delivery_timespan,
+  total_points,
+  total_votes,
+  media,
+  created_at,
+  updated_at
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6,
+  $7,
+  $8,
+  $9,
+  $10,
+  $11,
+  $12,
+  $13,
+  $14,
+  $15,
+  $16,
+  $17,
+  $18,
+  $19
+)
+RETURNING id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at
+`
+
+type CreateHServiceParams struct {
+	ID               string
+	UserID           string
+	Title            string
+	Slug             string
+	Description      string
+	Category         int32
+	Price            float64
+	PriceUnit        Priceunit
+	PriceTimespan    Worktimespan
+	IsOnline         bool
+	Url              pgtype.Text
+	Location         string
+	DeliveryTime     int32
+	DeliveryTimespan Worktimespan
+	TotalPoints      int64
+	TotalVotes       int32
+	Media            []byte
+	CreatedAt        pgtype.Timestamptz
+	UpdatedAt        pgtype.Timestamptz
+}
+
+func (q *Queries) CreateHService(ctx context.Context, arg CreateHServiceParams) (Hservice, error) {
+	row := q.db.QueryRow(ctx, createHService,
+		arg.ID,
+		arg.UserID,
+		arg.Title,
+		arg.Slug,
+		arg.Description,
+		arg.Category,
+		arg.Price,
+		arg.PriceUnit,
+		arg.PriceTimespan,
+		arg.IsOnline,
+		arg.Url,
+		arg.Location,
+		arg.DeliveryTime,
+		arg.DeliveryTimespan,
+		arg.TotalPoints,
+		arg.TotalVotes,
+		arg.Media,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+	)
+	var i Hservice
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Title,
+		&i.Slug,
+		&i.Description,
+		&i.Category,
+		&i.Price,
+		&i.PriceUnit,
+		&i.PriceTimespan,
+		&i.IsOnline,
+		&i.Url,
+		&i.Location,
+		&i.DeliveryTime,
+		&i.DeliveryTimespan,
+		&i.TotalPoints,
+		&i.TotalVotes,
+		&i.Media,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
   id,
