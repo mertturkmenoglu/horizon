@@ -28,7 +28,7 @@ export default function MenuContent({ fullName, username }: Props) {
           asChild
           className="cursor-pointer"
         >
-          <Link href={`/user/${username}`}>Profile</Link>
+          <Link href={`/u/${username}`}>Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           asChild
