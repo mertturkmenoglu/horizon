@@ -1,3 +1,4 @@
+import CategoryNavigation from '@/components/blocks/category-navigation';
 import FeaturesCarousel from '@/components/blocks/features-carousel';
 import QuickActions from '@/components/blocks/quick-actions';
 import ReferToFriend from '@/components/blocks/refer-to-friend';
@@ -9,9 +10,11 @@ export default async function Page() {
 
   return (
     <main className="container">
+      <div className="py-4"></div>
+      <CategoryNavigation />
       {isSignedIn && (
         <>
-          <ReferToFriend className="mt-0" />
+          <ReferToFriend className="mx-auto mt-0" />
           <h2 className="mt-8 text-4xl font-bold">Hey {auth.data.fullName}</h2>
           <div className="mt-2 text-lg font-semibold">How can we help you?</div>
 
