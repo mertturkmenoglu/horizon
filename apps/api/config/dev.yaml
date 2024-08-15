@@ -27,7 +27,8 @@ minio:
   buckets:
     - default
     - profile-images
-    - services
+    - hservices
+    - reviews
   location: eu-central-1
   autocreate-buckets: true
 api:
