@@ -2,6 +2,7 @@ package upload
 
 import (
 	"context"
+	"fmt"
 	"horizon/config"
 	"log"
 
@@ -38,18 +39,37 @@ func New() *Upload {
 	autocreateBuckets := viper.GetBool(config.MINIO_AUTOCREATE_BUCKETS)
 
 	if autocreateBuckets {
-		for _, v := range buckets {
-			if exists, _ := up.Client.BucketExists(up.Context, v); !exists {
-				err = up.Client.MakeBucket(up.Context, v, minio.MakeBucketOptions{
+		for _, bucketName := range buckets {
+			if exists, _ := up.Client.BucketExists(up.Context, bucketName); !exists {
+				err = up.Client.MakeBucket(up.Context, bucketName, minio.MakeBucketOptions{
 					Region: location,
 				})
 
 				if err != nil {
-					log.Fatal("cannot create bucket", v)
+					log.Fatal("cannot create bucket", bucketName)
+				} else {
+					fmt.Println("Bucket created", bucketName)
+				}
+
+				policy := `{
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": "*",
+							"Action": "s3:GetObject",
+							"Resource": "arn:aws:s3:::` + bucketName + `/*"
+						}
+					]
+				}`
+
+				err := up.Client.SetBucketPolicy(context.Background(), bucketName, policy)
+
+				if err != nil {
+					fmt.Println("Cannot set bucket policy", bucketName, err.Error())
 				}
 			}
 		}
-
 	}
 
 	return up
