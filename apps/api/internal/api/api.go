@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"horizon/config"
 	"horizon/internal/api/auth"
+	"horizon/internal/api/uploads"
 	"horizon/internal/db"
 	"horizon/internal/logs"
 	"horizon/internal/middlewares"
@@ -51,7 +52,10 @@ func New() *Service {
 
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
+
 	authModule := auth.NewAuthService(s.Db, s.Flake)
+	uploadsModule := uploads.NewUploadsService(s.Upload)
+
 	api := e.Group("/api")
 
 	api.Use(middlewares.GetSessionMiddleware())
@@ -64,6 +68,11 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		authRoutes.POST("/logout", authModule.HandlerLogout)
 		authRoutes.POST("/credentials/login", authModule.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
 		authRoutes.POST("/credentials/register", authModule.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
+	}
+
+	uploadsRoutes := api.Group("/uploads")
+	{
+		uploadsRoutes.GET("/new-url", uploadsModule.HandlerGetNewUrl, middlewares.IsAuth)
 	}
 
 	return e
