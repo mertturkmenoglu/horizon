@@ -25,7 +25,7 @@ func NewHServicesService(database *db.Db, flake *sonyflake.Sonyflake) *HServices
 	}
 }
 
-func (s *HServicesService) HanderCreateHService(c echo.Context) error {
+func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
 	dto := c.Get("body").(CreateHServiceRequestDto)
 	userId := c.Get("user_id").(string)
 
