@@ -1,5 +1,6 @@
 import Footer from '@/components/blocks/footer';
 import Header from '@/components/blocks/header';
+import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import AuthContextProvider from '@/providers/auth';
 import QClientProvider from '@/providers/query-provider';
@@ -36,6 +37,7 @@ export default function RootLayout({
             <Header />
             <main>{children}</main>
             <ReactQueryDevtools />
+            <Toaster />
             <Footer />
           </AuthContextProvider>
         </QClientProvider>
