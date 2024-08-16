@@ -8,17 +8,17 @@ import (
 	"horizon/internal/api/hservices"
 	"horizon/internal/db"
 	"horizon/internal/hash"
-	"log"
-	"slices"
 	"strconv"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/gosimple/slug"
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/pterm/pterm"
 )
 
 var database *db.Db
+var logger *pterm.Logger
 
 func GetDb() *db.Db {
 	if database == nil {
@@ -28,35 +28,29 @@ func GetDb() *db.Db {
 }
 
 func main() {
+	// Load .env variables and other configurations
 	config.Bootstrap()
 
-	validGenTypes := []string{"user", "hservice"}
-	fmt.Println("> What do you want to generate?", validGenTypes)
-
-	var genType string
-	fmt.Scanln(&genType)
-
-	if !slices.Contains(validGenTypes, genType) {
-		log.Fatal("Invalid generation type. Terminating.")
-	}
-
-	fmt.Println("> How many do you want to generate? (Between 1 and 10 000)")
-	var sCount string
-	fmt.Scanln(&sCount)
+	logger = pterm.DefaultLogger.WithLevel(pterm.LogLevelTrace)
+	genType, _ := pterm.DefaultInteractiveSelect.WithOptions(genOptions).Show()
+	sCount, _ := pterm.DefaultInteractiveTextInput.Show("How many do you want to generate? (Between 1 and 10 000)")
 	count, err := strconv.ParseInt(sCount, 10, 32)
 
 	if err != nil || count < 1 || count > 10_000 {
-		log.Fatal("Invalid count. Terminating.")
+		logger.Error("Invalid count. Terminating.", logger.Args("count", count))
+		return
 	}
 
-	fmt.Printf("Generating %d number of %s data\n", count, genType)
+	logger.Info("Generating data", logger.Args("count", count, "type", genType))
+
 	err = generateAndInsert(genType, int(count))
 
 	if err != nil {
-		log.Fatal("Encountered error. Terminating.", err.Error())
+		logger.Fatal("Encountered error. Terminating", logger.Args("error", err.Error()))
+		return
 	}
 
-	fmt.Println("Completed")
+	logger.Info("Completed successfully")
 }
 
 func generateAndInsert(genType string, count int) error {
@@ -66,7 +60,7 @@ func generateAndInsert(genType string, count int) error {
 	case "hservice":
 		return handleHService(count)
 	default:
-		log.Fatal("Invalid generation type. Terminating.")
+		logger.Error("Invalid generating type.")
 		return nil
 	}
 }
@@ -74,14 +68,14 @@ func generateAndInsert(genType string, count int) error {
 func handleUser(count int) error {
 	ctx := context.Background()
 	d := GetDb()
+	h, err := hash.Hash("LoremIpsum!1")
+
+	if err != nil {
+		return err
+	}
 
 	for i := 0; i < count; i++ {
-		log.Println("Generating user", i+1)
-		h, err := hash.Hash("LoremIpsum!1")
-
-		if err != nil {
-			return err
-		}
+		logger.Debug("Generating user", logger.Args("i", i))
 
 		_, err = d.Queries.CreateUser(ctx, db.CreateUserParams{
 			ID:              gofakeit.UUID(),
@@ -106,12 +100,14 @@ func handleHService(count int) error {
 	ctx := context.Background()
 	d := GetDb()
 
-	fmt.Println("> We need a user id. Enter a valid user ID that is in your database: ")
-	var userId string
-	fmt.Scanln(&userId)
+	userId, err := pterm.DefaultInteractiveTextInput.Show("We need a user id. Enter a valid user ID that is in your database")
+
+	if err != nil {
+		return err
+	}
 
 	for i := 0; i < count; i++ {
-		log.Println("Generating hservice", i+1)
+		logger.Debug("Generating hservice", logger.Args("i", i))
 
 		title := gofakeit.ProductName()
 		slugVal := slug.Make(title)
@@ -202,6 +198,8 @@ var imageUrls = []string{
 	"https://imgur.com/SnP70MO",
 	"https://imgur.com/mWzmPRv",
 }
+
+var genOptions = []string{"user", "hservice"}
 
 func GetRandomImageUrl() string {
 	return fmt.Sprintf("https://loremflickr.com/960/720?lock=%d", gofakeit.IntRange(1, 1000))
