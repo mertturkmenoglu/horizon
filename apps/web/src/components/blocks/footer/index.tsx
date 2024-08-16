@@ -28,8 +28,8 @@ export default function Footer({ className }: Props) {
           />
 
           <Item
-            href="/faq"
-            text="FAQ"
+            href="/help"
+            text="Help"
           />
 
           <Item
