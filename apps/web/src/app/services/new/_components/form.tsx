@@ -55,6 +55,9 @@ export default function NewServiceForm() {
 
   const form = useForm<FormInput>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      category: 1,
+    },
   });
 
   const createHService = useCreateHService();
@@ -124,7 +127,10 @@ export default function NewServiceForm() {
       {/* Category */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="category">Category</Label>
-        <Select {...form.register('category')}>
+        <Select
+          value={'' + form.getValues('category')}
+          onValueChange={(v) => form.setValue('category', +v)}
+        >
           <SelectTrigger id="category">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
@@ -144,6 +150,7 @@ export default function NewServiceForm() {
             ))}
           </SelectContent>
         </Select>
+        <InputError error={form.formState.errors.category} />
       </div>
 
       {/* Price */}
@@ -154,7 +161,8 @@ export default function NewServiceForm() {
           id="price"
           placeholder="Price"
           autoComplete="off"
-          {...form.register('price')}
+          value={form.getValues('price')}
+          onChange={(e) => form.setValue('price', e.target.valueAsNumber)}
         />
         <InputError error={form.formState.errors.price} />
       </div>
@@ -162,7 +170,10 @@ export default function NewServiceForm() {
       {/* Price Unit */}
       <div>
         <Label htmlFor="price-unit">Price Unit</Label>
-        <Select {...form.register('priceUnit')}>
+        <Select
+          value={form.getValues('priceUnit')}
+          onValueChange={(v) => form.setValue('priceUnit', v as any)}
+        >
           <SelectTrigger id="price-unit">
             <SelectValue placeholder="Select a price unit" />
           </SelectTrigger>
@@ -177,12 +188,16 @@ export default function NewServiceForm() {
             ))}
           </SelectContent>
         </Select>
+        <InputError error={form.formState.errors.priceUnit} />
       </div>
 
       {/* Price Timespan */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="price-timespan">Price Timespan</Label>
-        <Select {...form.register('priceTimespan')}>
+        <Select
+          value={form.getValues('priceTimespan')}
+          onValueChange={(v) => form.setValue('priceTimespan', v as any)}
+        >
           <SelectTrigger
             id="price-timespan"
             className="max-w-md"
@@ -201,6 +216,7 @@ export default function NewServiceForm() {
             ))}
           </SelectContent>
         </Select>
+        <InputError error={form.formState.errors.priceTimespan} />
       </div>
 
       {/* Is Online */}
@@ -218,6 +234,7 @@ export default function NewServiceForm() {
             Indicates if this service is provided online.
           </p>
         </div>
+        <InputError error={form.formState.errors.isOnline} />
       </div>
 
       {/* URL */}
@@ -254,7 +271,10 @@ export default function NewServiceForm() {
           id="delivery-time"
           placeholder="Delivery time"
           autoComplete="off"
-          {...form.register('deliveryTime')}
+          value={form.getValues('deliveryTime')}
+          onChange={(e) =>
+            form.setValue('deliveryTime', e.target.valueAsNumber)
+          }
         />
         <InputError error={form.formState.errors.deliveryTime} />
       </div>
@@ -262,7 +282,10 @@ export default function NewServiceForm() {
       {/* Delivery Timespan */}
       <div className="">
         <Label htmlFor="delivery-timespan">Delivery Timespan</Label>
-        <Select {...form.register('deliveryTimespan')}>
+        <Select
+          value={form.getValues('deliveryTimespan')}
+          onValueChange={(v) => form.setValue('deliveryTimespan', v as any)}
+        >
           <SelectTrigger
             id="delivery-timespan"
             className="max-w-md"
@@ -283,6 +306,7 @@ export default function NewServiceForm() {
         </Select>
       </div>
 
+      {/* File Upload */}
       <div className="col-span-2">
         <Dnd
           capi={collapsibleApi}
