@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	validTimespans  = []string{"HOURLY", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"}
-	validPriceUnits = []string{
+	ValidTimespans  = []string{"HOURLY", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"}
+	ValidPriceUnits = []string{
 		"USD",
 		"EUR",
 		"JPY",
@@ -23,11 +23,11 @@ var (
 )
 
 func isValidTimespan(s string) bool {
-	return slices.Contains(validTimespans, s)
+	return slices.Contains(ValidTimespans, s)
 }
 
 func isValidPriceUnit(s string) bool {
-	return slices.Contains(validPriceUnits, s)
+	return slices.Contains(ValidPriceUnits, s)
 }
 
 func isValidMedia(s string) bool {
