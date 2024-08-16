@@ -1,5 +1,6 @@
 'use client';
 
+import Dnd from '@/components/blocks/file-upload-dnd';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -15,11 +16,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { uploadImages } from '@/lib/api';
 import { categories } from '@/lib/categories';
+import { getDims, mapImagesToMedia } from '@/lib/image-utils';
 import { PriceUnitsArr, WorkTimespanArr } from '@/lib/monetary';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useCreateHService } from './use-create-hservice';
+import { useUpload } from './use-upload';
 
 const schema = z.object({
   title: z
@@ -44,12 +50,44 @@ const schema = z.object({
 type FormInput = z.infer<typeof schema>;
 
 export default function NewServiceForm() {
+  const [fileError, setFileError] = useState<string[]>([]);
+  const [collapsibleApi, fileUploadApi] = useUpload();
+
   const form = useForm<FormInput>({
     resolver: zodResolver(schema),
   });
 
+  const createHService = useCreateHService();
+
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
-    console.log(data);
+    setFileError([]);
+
+    if (fileUploadApi.acceptedFiles.length === 0) {
+      setFileError(['Please upload at least one image']);
+      return;
+    }
+
+    const res = await uploadImages(fileUploadApi.acceptedFiles, 'hservices');
+
+    if (res.length !== fileUploadApi.acceptedFiles.length) {
+      setFileError((prev) => [...prev, 'Failed to upload one or more file(s)']);
+      return;
+    }
+
+    const dims = await getDims(fileUploadApi.acceptedFiles);
+
+    if (dims.length !== fileUploadApi.acceptedFiles.length) {
+      setFileError((prev) => [
+        ...prev,
+        'Failed to get dimensions for one or more file(s)',
+      ]);
+      return;
+    }
+
+    createHService.mutate({
+      ...data,
+      media: mapImagesToMedia(res, fileUploadApi.acceptedFiles, dims),
+    });
   };
 
   return (
@@ -57,6 +95,7 @@ export default function NewServiceForm() {
       onSubmit={form.handleSubmit(onSubmit)}
       className="mx-auto my-8 grid max-w-3xl grid-cols-1 gap-8 lg:grid-cols-2"
     >
+      {/* Title */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="title">Title</Label>
         <Input
@@ -69,6 +108,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.title} />
       </div>
 
+      {/* Description */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="description">Description</Label>
         <Textarea
@@ -81,6 +121,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.description} />
       </div>
 
+      {/* Category */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="category">Category</Label>
         <Select {...form.register('category')}>
@@ -105,6 +146,7 @@ export default function NewServiceForm() {
         </Select>
       </div>
 
+      {/* Price */}
       <div>
         <Label htmlFor="price">Price</Label>
         <Input
@@ -117,6 +159,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.price} />
       </div>
 
+      {/* Price Unit */}
       <div>
         <Label htmlFor="price-unit">Price Unit</Label>
         <Select {...form.register('priceUnit')}>
@@ -136,6 +179,7 @@ export default function NewServiceForm() {
         </Select>
       </div>
 
+      {/* Price Timespan */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="price-timespan">Price Timespan</Label>
         <Select {...form.register('priceTimespan')}>
@@ -159,6 +203,7 @@ export default function NewServiceForm() {
         </Select>
       </div>
 
+      {/* Is Online */}
       <div className="flex gap-4">
         <Checkbox
           {...form.register('isOnline')}
@@ -175,6 +220,7 @@ export default function NewServiceForm() {
         </div>
       </div>
 
+      {/* URL */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="url">URL</Label>
         <Input
@@ -187,6 +233,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.url} />
       </div>
 
+      {/* Location */}
       <div className="col-span-1 lg:col-span-2">
         <Label htmlFor="location">Location</Label>
         <Input
@@ -199,6 +246,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.location} />
       </div>
 
+      {/* Delivery Time */}
       <div>
         <Label htmlFor="delivery-time">Delivery Time</Label>
         <Input
@@ -211,6 +259,7 @@ export default function NewServiceForm() {
         <InputError error={form.formState.errors.deliveryTime} />
       </div>
 
+      {/* Delivery Timespan */}
       <div className="">
         <Label htmlFor="delivery-timespan">Delivery Timespan</Label>
         <Select {...form.register('deliveryTimespan')}>
@@ -234,8 +283,28 @@ export default function NewServiceForm() {
         </Select>
       </div>
 
+      <div className="col-span-2">
+        <Dnd
+          capi={collapsibleApi}
+          fapi={fileUploadApi}
+        />
+
+        {fileError.length > 0 && (
+          <div>
+            {fileError.map((error, i) => (
+              <div
+                key={i}
+                className="text-destructive"
+              >
+                {error}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="col-span-1 flex flex-col items-end lg:col-span-2">
-        <div className="bg-red-500 py-4"></div>
+        <div className="py-4"></div>
         <Button>Create new service</Button>
       </div>
     </form>
