@@ -13,3 +13,5 @@ export type GetMeResponseDto = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type UploadImageType = 'hservices' | 'profile' | 'reviews';
