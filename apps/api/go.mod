@@ -3,7 +3,10 @@ module horizon
 go 1.22.5
 
 require (
+	github.com/brianvoe/gofakeit/v7 v7.0.4
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.3.0
+	github.com/gosimple/slug v1.14.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo-contrib v0.17.1
@@ -11,6 +14,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.74
 	github.com/sony/sonyflake v1.2.0
 	github.com/spf13/viper v1.19.0
+	github.com/typesense/typesense-go/v2 v2.0.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.26.0
 	golang.org/x/oauth2 v0.22.0
@@ -26,10 +30,8 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gosimple/slug v1.14.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -48,7 +50,6 @@ require (
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/rs/xid v1.5.0 // indirect
 	github.com/sony/gobreaker v0.5.0 // indirect
-	github.com/typesense/typesense-go/v2 v2.0.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/net v0.28.0 // indirect
