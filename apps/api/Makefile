@@ -27,6 +27,9 @@ watch:
 read-location:
 	@go run cmd/read-location/main.go
 
+generate-fake-data:
+	@go run cmd/fake/main.go
+
 sqlc-generate:
 	@sqlc generate
 
@@ -35,4 +38,4 @@ create-migration:
 	migrate create -ext sql -dir internal/db/migrations -seq $$migrationname; \
 	echo "Created migration with name $$migrationname. Update sql files."
 
-.PHONY: all build run clean watch create-migration
+.PHONY: all build run clean watch read-location generate-fake-data sqlc-generate create-migration
