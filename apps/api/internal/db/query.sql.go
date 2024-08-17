@@ -369,6 +369,39 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getHServiceById = `-- name: GetHServiceById :one
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+WHERE id = $1
+LIMIT 1
+`
+
+func (q *Queries) GetHServiceById(ctx context.Context, id string) (Hservice, error) {
+	row := q.db.QueryRow(ctx, getHServiceById, id)
+	var i Hservice
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Title,
+		&i.Slug,
+		&i.Description,
+		&i.Category,
+		&i.Price,
+		&i.PriceUnit,
+		&i.PriceTimespan,
+		&i.IsOnline,
+		&i.Url,
+		&i.Location,
+		&i.DeliveryTime,
+		&i.DeliveryTimespan,
+		&i.TotalPoints,
+		&i.TotalVotes,
+		&i.Media,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getMe = `-- name: GetMe :one
 SELECT 
   id,

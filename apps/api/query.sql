@@ -175,3 +175,8 @@ LIMIT $3;
 -- name: CountMyHServices :one
 SELECT COUNT(*) FROM hservices
 WHERE user_id = $1;
+
+-- name: GetHServiceById :one
+SELECT * FROM hservices
+WHERE id = $1
+LIMIT 1;
