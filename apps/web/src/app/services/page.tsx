@@ -23,7 +23,7 @@ export default async function Page() {
         </Button>
       </div>
       <Separator />
-      <MyHServices />
+      <MyHServices className="my-16" />
     </div>
   );
 }
