@@ -48,7 +48,21 @@ export type HServiceResponseDto = {
   deliveryTimespan: string;
   totalPoints: number;
   totalVotes: number;
-  media: Record<string, any>;
+  media: MediaResponseDto;
   createdAt: string | null;
   updatedAt: string | null;
+};
+
+export type MediaResponseDto = {
+  data: Media[];
+};
+
+export type Media = {
+  type: 'image' | 'video';
+  url: string;
+  thumbnail: string;
+  alt: string;
+  caption: string | null;
+  width: number;
+  height: number;
 };
