@@ -135,3 +135,35 @@ func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
 		Pagination: paginationData,
 	})
 }
+
+func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
+	id := c.Param("id")
+
+	if id == "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: "id is required",
+		})
+	}
+
+	dbResult, err := s.Db.Queries.GetHServiceById(context.Background(), id)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "not found",
+			})
+		} else {
+			return echo.ErrInternalServerError
+		}
+	}
+
+	res, err := mapHServicetoHServiceDto(dbResult)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusOK, h.Response[HServiceResponseDto]{
+		"data": res,
+	})
+}

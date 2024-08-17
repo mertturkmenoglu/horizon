@@ -84,6 +84,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	{
 		hservicesRoutes.POST("/", hservicesModule.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
 		hservicesRoutes.GET("/", hservicesModule.HandlerGetMyHServices, middlewares.IsAuth)
+		hservicesRoutes.GET("/:id", hservicesModule.HandlerGetHServiceById)
 	}
 
 	return e
