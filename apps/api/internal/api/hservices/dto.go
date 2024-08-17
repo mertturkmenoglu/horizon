@@ -17,7 +17,7 @@ type CreateHServiceRequestDto struct {
 	Media            string  `json:"media"`
 }
 
-type GetMyHServicesResponseDto struct {
+type HServiceResponseDto struct {
 	ID               string             `json:"id"`
 	UserID           string             `json:"userId"`
 	Title            string             `json:"title"`
