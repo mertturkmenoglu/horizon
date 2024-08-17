@@ -59,7 +59,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	authModule := auth.NewAuthService(s.Db, s.Flake, s.Logger)
 	uploadsModule := uploads.NewUploadsService(s.Upload)
-	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake)
+	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake, s.Logger)
 
 	api := e.Group("/api")
 
