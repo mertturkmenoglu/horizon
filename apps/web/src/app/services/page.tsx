@@ -1,10 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { getAuth } from '@/lib/auth';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import MyHServices from './_components/my-hservices';
 
 export default async function Page() {
+  const auth = await getAuth();
+
+  if (auth === null) {
+    redirect('/sign-in');
+  }
+
   return (
     <div className="container my-16">
       <div className="flex justify-between">
