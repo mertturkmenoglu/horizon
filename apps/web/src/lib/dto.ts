@@ -66,3 +66,12 @@ export type Media = {
   width: number;
   height: number;
 };
+
+export type GetUserProfileByUsernameResponseDto = {
+  id: string;
+  username: string;
+  fullName: string;
+  gender: string | null;
+  profileImage: string | null;
+  createdAt: string | null;
+};
