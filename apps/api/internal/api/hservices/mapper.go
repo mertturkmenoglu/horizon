@@ -5,16 +5,16 @@ import (
 	"horizon/internal/db"
 )
 
-func mapHServicetoHServiceDto(v db.Hservice) (GetMyHServicesResponseDto, error) {
+func mapHServicetoHServiceDto(v db.Hservice) (HServiceResponseDto, error) {
 	var media map[string]any
 
 	err := json.Unmarshal(v.Media, &media)
 
 	if err != nil {
-		return GetMyHServicesResponseDto{}, err
+		return HServiceResponseDto{}, err
 	}
 
-	return GetMyHServicesResponseDto{
+	return HServiceResponseDto{
 		ID:               v.ID,
 		UserID:           v.UserID,
 		Title:            v.Title,
