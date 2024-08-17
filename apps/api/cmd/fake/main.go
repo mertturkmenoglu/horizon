@@ -130,7 +130,11 @@ func handleHService(count int) error {
 			allMedia = append(allMedia, media)
 		}
 
-		mediaBytes, err := json.Marshal(allMedia)
+		mediaData := map[string]any{
+			"data": allMedia,
+		}
+
+		mediaBytes, err := json.Marshal(mediaData)
 
 		if err != nil {
 			return err
