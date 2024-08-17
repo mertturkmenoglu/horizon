@@ -2,12 +2,15 @@ package hservices
 
 import (
 	"context"
+	"errors"
 	"horizon/internal/db"
 	"horizon/internal/h"
+	"horizon/internal/pagination"
 	"net/http"
 	"time"
 
 	"github.com/gosimple/slug"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 	"github.com/pterm/pterm"
@@ -82,5 +85,63 @@ func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, h.AnyResponse{
 		"data": saved,
+	})
+}
+
+func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
+	userId := c.Get("user_id").(string)
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: err.Error(),
+		})
+	}
+
+	hservices, err := s.Db.Queries.GetMyHServices(context.Background(), db.GetMyHServicesParams{
+		UserID: userId,
+		Offset: int32(params.Offset),
+		Limit:  int32(params.PageSize),
+	})
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "Not found",
+			})
+		} else {
+			return echo.ErrInternalServerError
+		}
+	}
+
+	count, err := s.Db.Queries.CountMyHServices(context.Background(), userId)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "Not found",
+			})
+		} else {
+			return echo.ErrInternalServerError
+		}
+	}
+
+	paginationData := pagination.GetPagination(params, count)
+
+	res := make([]GetMyHServicesResponseDto, 0)
+
+	for _, hservice := range hservices {
+		dto, err := mapHServicetoHServiceDto(hservice)
+
+		if err != nil {
+			return echo.ErrInternalServerError
+		}
+
+		res = append(res, dto)
+	}
+
+	return c.JSON(http.StatusOK, h.PaginatedResponse[[]GetMyHServicesResponseDto]{
+		Data:       res,
+		Pagination: paginationData,
 	})
 }
