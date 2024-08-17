@@ -636,6 +636,42 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	return i, err
 }
 
+const getUserProfileByUsername = `-- name: GetUserProfileByUsername :one
+SELECT
+  id,
+  username,
+  full_name,
+  gender,
+  profile_image,
+  created_at
+FROM users
+WHERE username = $1
+LIMIT 1
+`
+
+type GetUserProfileByUsernameRow struct {
+	ID           string
+	Username     string
+	FullName     string
+	Gender       pgtype.Text
+	ProfileImage pgtype.Text
+	CreatedAt    pgtype.Timestamptz
+}
+
+func (q *Queries) GetUserProfileByUsername(ctx context.Context, username string) (GetUserProfileByUsernameRow, error) {
+	row := q.db.QueryRow(ctx, getUserProfileByUsername, username)
+	var i GetUserProfileByUsernameRow
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.FullName,
+		&i.Gender,
+		&i.ProfileImage,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const updateUserGoogleId = `-- name: UpdateUserGoogleId :exec
 UPDATE users
   SET google_id = $2

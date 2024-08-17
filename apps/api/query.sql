@@ -180,3 +180,15 @@ WHERE user_id = $1;
 SELECT * FROM hservices
 WHERE id = $1
 LIMIT 1;
+
+-- name: GetUserProfileByUsername :one
+SELECT
+  id,
+  username,
+  full_name,
+  gender,
+  profile_image,
+  created_at
+FROM users
+WHERE username = $1
+LIMIT 1;
