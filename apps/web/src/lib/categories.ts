@@ -105,3 +105,15 @@ export const categories: ServiceCategory[] = [
     ],
   },
 ];
+
+export function getCategoryTitle(id: number): string {
+  for (const category of categories) {
+    for (const subcategory of category.subcategories) {
+      if (subcategory.id === id) {
+        return subcategory.title;
+      }
+    }
+  }
+
+  return '';
+}
