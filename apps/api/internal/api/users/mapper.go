@@ -6,7 +6,7 @@ func mapGetUserProfileByUsernameRowToDto(v db.GetUserProfileByUsernameRow) GetUs
 	return GetUserProfileByUsernameResponseDto{
 		ID:           v.ID,
 		Username:     v.Username,
-		FullName:     v.Username,
+		FullName:     v.FullName,
 		Gender:       v.Gender,
 		ProfileImage: v.ProfileImage,
 		CreatedAt:    v.CreatedAt,
