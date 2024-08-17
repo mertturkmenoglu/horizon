@@ -15,3 +15,40 @@ export type GetMeResponseDto = {
 };
 
 export type UploadImageType = 'hservices' | 'profile' | 'reviews';
+
+export type CreateHServiceRequestDto = {
+  title: string;
+  description: string;
+  category: number;
+  price: number;
+  priceUnit: string;
+  priceTimespan: string;
+  isOnline: boolean;
+  url: string;
+  location: string;
+  deliveryTime: number;
+  deliveryTimespan: string;
+  media: string;
+};
+
+export type HServiceResponseDto = {
+  id: string;
+  userId: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: number;
+  price: number;
+  priceUnit: string;
+  priceTimespan: string;
+  isOnline: boolean;
+  url: string | null;
+  location: string;
+  deliveryTime: number;
+  deliveryTimespan: string;
+  totalPoints: number;
+  totalVotes: number;
+  media: Record<string, any>;
+  createdAt: string | null;
+  updatedAt: string | null;
+};
