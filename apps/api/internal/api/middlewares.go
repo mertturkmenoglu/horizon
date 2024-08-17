@@ -32,4 +32,5 @@ func InitGlobalMiddlewares(e *echo.Echo) {
 		Timeout: 10 * time.Second,
 	}))
 	e.Use(middleware.Secure())
+	e.Use(middleware.BodyLimit("2MB"))
 }
