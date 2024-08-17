@@ -1,8 +1,8 @@
-import AppMessage from '@/components/blocks/app-message';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import MyHServices from './_components/my-hservices';
 
 export default async function Page() {
   return (
@@ -23,11 +23,7 @@ export default async function Page() {
         </Button>
       </div>
       <Separator />
-      <AppMessage
-        className="my-16"
-        emptyMessage="Services Page"
-        showBackButton={false}
-      />
+      <MyHServices />
     </div>
   );
 }
