@@ -13,6 +13,7 @@ import (
 	"horizon/internal/upload"
 
 	"github.com/labstack/echo/v4"
+	"github.com/pterm/pterm"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 	"github.com/typesense/typesense-go/v2/typesense"
@@ -23,21 +24,23 @@ type Service struct {
 	Port       int
 	PortString string
 	Upload     *upload.Upload
-	Logger     *zap.Logger
+	ZapLogger  *zap.Logger
 	Flake      *sonyflake.Sonyflake
 	Db         *db.Db
 	Search     *typesense.Client
+	Logger     *pterm.Logger
 }
 
 func New() *Service {
 	apiObj := &Service{
 		Upload:     upload.New(),
 		Flake:      nil,
-		Logger:     logs.New(),
+		ZapLogger:  logs.New(),
 		Port:       viper.GetInt(config.PORT),
 		PortString: fmt.Sprintf(":%d", viper.GetInt(config.PORT)),
 		Db:         db.NewDb(),
 		Search:     search.New(),
+		Logger:     logs.NewPTermLogger(),
 	}
 
 	flake, err := sonyflake.New(sonyflake.Settings{})
@@ -54,7 +57,7 @@ func New() *Service {
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
 
-	authModule := auth.NewAuthService(s.Db, s.Flake)
+	authModule := auth.NewAuthService(s.Db, s.Flake, s.Logger)
 	uploadsModule := uploads.NewUploadsService(s.Upload)
 	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake)
 
