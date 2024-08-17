@@ -7,9 +7,14 @@ export default function Error({
 }: {
   error: Error & { digest?: string };
 }) {
+  const isNotFound = error.message.includes('404');
   return (
     <div className="my-32">
-      <AppMessage errorMessage={error.message} />
+      {isNotFound ? (
+        <AppMessage errorMessage="Not Found" />
+      ) : (
+        <AppMessage errorMessage={error.message} />
+      )}
     </div>
   );
 }
