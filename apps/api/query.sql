@@ -164,3 +164,14 @@ INSERT INTO states (
   $9
 )
 RETURNING *;
+
+-- name: GetMyHServices :many
+SELECT * FROM hservices
+WHERE user_id = $1
+ORDER BY created_at DESC
+OFFSET $2
+LIMIT $3;
+
+-- name: CountMyHServices :one
+SELECT COUNT(*) FROM hservices
+WHERE user_id = $1;

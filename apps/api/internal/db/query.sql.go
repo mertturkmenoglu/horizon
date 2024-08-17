@@ -11,6 +11,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countMyHServices = `-- name: CountMyHServices :one
+SELECT COUNT(*) FROM hservices
+WHERE user_id = $1
+`
+
+func (q *Queries) CountMyHServices(ctx context.Context, userID string) (int64, error) {
+	row := q.db.QueryRow(ctx, countMyHServices, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createCountry = `-- name: CreateCountry :one
 INSERT INTO countries (
   id,
@@ -411,6 +423,60 @@ func (q *Queries) GetMe(ctx context.Context, id string) (GetMeRow, error) {
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const getMyHServices = `-- name: GetMyHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+WHERE user_id = $1
+ORDER BY created_at DESC
+OFFSET $2
+LIMIT $3
+`
+
+type GetMyHServicesParams struct {
+	UserID string
+	Offset int32
+	Limit  int32
+}
+
+func (q *Queries) GetMyHServices(ctx context.Context, arg GetMyHServicesParams) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, getMyHServices, arg.UserID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
