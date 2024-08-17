@@ -1,4 +1,5 @@
 import api from '@/lib/api';
+import { getAuthCookie } from '@/lib/auth';
 import { HServiceResponseDto } from '@/lib/dto';
 
 type Props = {
@@ -9,7 +10,11 @@ type Props = {
 
 async function getServiceById(id: string): Promise<HServiceResponseDto> {
   const res = await api
-    .get(`hservices/${id}`)
+    .get(`hservices/${id}`, {
+      headers: {
+        ...getAuthCookie(),
+      },
+    })
     .json<{ data: HServiceResponseDto }>();
   return res.data;
 }
