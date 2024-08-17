@@ -89,7 +89,9 @@ export default function NewServiceForm() {
 
     createHService.mutate({
       ...data,
-      media: mapImagesToMedia(res, fileUploadApi.acceptedFiles, dims),
+      media: JSON.stringify({
+        data: mapImagesToMedia(res, fileUploadApi.acceptedFiles, dims),
+      }),
     });
   };
 
