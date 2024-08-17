@@ -68,7 +68,7 @@ export default function MyHServices({ className }: Props) {
       {query.data.data.map((hservice) => (
         <Link
           key={hservice.id}
-          href={`/service/${hservice.id}`}
+          href={`/services/${hservice.id}`}
           className="block"
         >
           <HServiceCard hservice={hservice} />
