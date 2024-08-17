@@ -5,8 +5,9 @@ export type Auth = {
   data: GetMeResponseDto;
 };
 
+const cookieName = '__horizon_auth';
+
 export async function getAuth(): Promise<Auth | null> {
-  const cookieName = '__horizon_auth';
   const sessionCookie = cookies().get(cookieName);
 
   if (!sessionCookie) {
@@ -30,4 +31,11 @@ export async function getAuth(): Promise<Auth | null> {
   } catch (e) {
     return null;
   }
+}
+
+export function getAuthCookie() {
+  const v = cookies().get(cookieName)?.value ?? '';
+  return {
+    Cookie: `${cookieName}=${v}`,
+  };
 }
