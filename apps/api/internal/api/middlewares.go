@@ -24,9 +24,7 @@ func InitGlobalMiddlewares(e *echo.Echo) {
 		e.IPExtractor = echo.ExtractIPDirect()
 		e.Use(middleware.RequestID())
 		e.Use(middlewares.Cors())
-		e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: "=> ${time_rfc3339} [${method}] ${uri} (${status}) ${latency_human}\n",
-		}))
+		e.Use(middlewares.PTermLogger)
 	}
 
 	e.Use(middlewares.ZapLogger())
