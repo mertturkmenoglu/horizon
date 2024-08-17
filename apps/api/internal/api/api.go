@@ -91,7 +91,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	usersRoutes := api.Group("/users")
 	{
-		usersRoutes.GET("/:username", usersModule.HandlerGetUserByUsername)
+		usersRoutes.GET("/:username", usersModule.HandlerGetUserProfileByUsername)
 	}
 
 	return e
