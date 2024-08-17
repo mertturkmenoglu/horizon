@@ -12,19 +12,22 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/pterm/pterm"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 )
 
 type AuthService struct {
-	Db    *db.Db
-	Flake *sonyflake.Sonyflake
+	Db     *db.Db
+	Flake  *sonyflake.Sonyflake
+	Logger *pterm.Logger
 }
 
-func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake) *AuthService {
+func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger) *AuthService {
 	return &AuthService{
-		Db:    db,
-		Flake: flake,
+		Db:     db,
+		Flake:  flake,
+		Logger: logger,
 	}
 }
 
@@ -91,6 +94,7 @@ func (s *AuthService) HandlerGetMe(c echo.Context) error {
 	me, err := s.Db.Queries.GetMe(context.Background(), userId)
 
 	if err != nil {
+		s.Logger.WithCaller(true).Debug("GetMe query failed", s.Logger.Args("err", err.Error()))
 		return echo.ErrInternalServerError
 	}
 
