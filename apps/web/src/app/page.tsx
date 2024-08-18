@@ -11,6 +11,9 @@ import Search from './_components/search';
 import SignedInCta from './_components/signed-in-cta';
 import SignedOutCta from './_components/signed-out-cta';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Page() {
   const auth = await getAuth();
   const isSignedIn = auth !== null;
