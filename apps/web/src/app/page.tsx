@@ -20,9 +20,8 @@ export default async function Page() {
 
   return (
     <main className="container">
+      <CategoryNavigation className="mt-12" />
       <Search />
-      <div className="py-4"></div>
-      <CategoryNavigation />
 
       <OverlayBanner
         image="https://images.unsplash.com/photo-1464219995203-d9e0a71964d6?q=80&w=2670&auto=format&fit=crop"
