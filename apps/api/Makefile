@@ -33,6 +33,9 @@ generate-fake-data:
 sqlc-generate:
 	@sqlc generate
 
+search-sync:
+	@go run cmd/search-sync/main.go
+
 create-migration:
 	@read -p "Give migration a name: " migrationname; \
 	migrate create -ext sql -dir internal/db/migrations -seq $$migrationname; \
