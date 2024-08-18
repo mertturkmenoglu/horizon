@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getAuth } from '@/lib/auth';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Search from './_components/search';
 import SignedInCta from './_components/signed-in-cta';
 import SignedOutCta from './_components/signed-out-cta';
 
@@ -16,6 +17,7 @@ export default async function Page() {
 
   return (
     <main className="container">
+      <Search />
       <div className="py-4"></div>
       <CategoryNavigation />
 
