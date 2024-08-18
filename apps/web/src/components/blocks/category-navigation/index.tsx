@@ -18,7 +18,7 @@ export default function CategoryNavigation() {
   const [index, setIndex] = useState(0);
   const category = useMemo(() => {
     return categories.at(index)!;
-  }, [index, categories]);
+  }, [index]);
 
   const img = data.find((v) => v.category === category.category)?.img ?? null;
 
