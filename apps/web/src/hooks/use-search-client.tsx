@@ -3,7 +3,7 @@ import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 export function useSearchClient() {
   const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     server: {
-      apiKey: 'horizon' ?? '',
+      apiKey: process.env.NEXT_PUBLIC_TYPESENSE_API_KEY ?? '',
       nodes: [
         {
           host: 'localhost',
