@@ -11,6 +11,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countAllHServices = `-- name: CountAllHServices :one
+SELECT COUNT(*) FROM hservices
+`
+
+func (q *Queries) CountAllHServices(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countAllHServices)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countMyHServices = `-- name: CountMyHServices :one
 SELECT COUNT(*) FROM hservices
 WHERE user_id = $1
@@ -670,6 +681,58 @@ func (q *Queries) GetUserProfileByUsername(ctx context.Context, username string)
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const listHServices = `-- name: ListHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+ORDER BY created_at ASC
+OFFSET $1
+LIMIT $2
+`
+
+type ListHServicesParams struct {
+	Offset int32
+	Limit  int32
+}
+
+func (q *Queries) ListHServices(ctx context.Context, arg ListHServicesParams) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, listHServices, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateUserGoogleId = `-- name: UpdateUserGoogleId :exec

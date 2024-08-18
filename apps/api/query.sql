@@ -192,3 +192,12 @@ SELECT
 FROM users
 WHERE username = $1
 LIMIT 1;
+
+-- name: CountAllHServices :one
+SELECT COUNT(*) FROM hservices;
+
+-- name: ListHServices :many
+SELECT * FROM hservices
+ORDER BY created_at ASC
+OFFSET $1
+LIMIT $2;
