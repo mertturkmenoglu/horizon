@@ -4,13 +4,12 @@ import (
 	"context"
 	"log"
 	"strings"
-
-	"github.com/typesense/typesense-go/v2/typesense"
+	"time"
 )
 
-func createSchemas(client *typesense.Client) {
+func (s *Search) CreateSchemas() {
 	for _, schema := range schemas {
-		_, err := client.Collections().Create(context.Background(), schema)
+		_, err := s.Client.Collections().Create(context.Background(), schema)
 
 		if err != nil {
 			// We don't care if the schema already exists
@@ -21,4 +20,30 @@ func createSchemas(client *typesense.Client) {
 			}
 		}
 	}
+}
+
+func (s *Search) UpsertHService(v UpsertHServiceDto) (map[string]interface{}, error) {
+	return s.Client.Collection("HService").Documents().Upsert(context.Background(), v)
+}
+
+type UpsertHServiceDto struct {
+	ID               string         `json:"id"`
+	UserID           string         `json:"userId"`
+	Title            string         `json:"title"`
+	Slug             string         `json:"slug"`
+	Description      string         `json:"description"`
+	Category         int32          `json:"category"`
+	Price            float64        `json:"price"`
+	PriceUnit        string         `json:"priceUnit"`
+	PriceTimespan    string         `json:"priceTimespan"`
+	IsOnline         bool           `json:"isOnline"`
+	Url              *string        `json:"url"`
+	Location         string         `json:"location"`
+	DeliveryTime     int32          `json:"deliveryTime"`
+	DeliveryTimespan string         `json:"deliveryTimespan"`
+	TotalPoints      int64          `json:"totalPoints"`
+	TotalVotes       int32          `json:"totalVotes"`
+	Media            map[string]any `json:"media"`
+	CreatedAt        time.Time      `json:"createdAt"`
+	UpdatedAt        time.Time      `json:"updatedAt"`
 }
