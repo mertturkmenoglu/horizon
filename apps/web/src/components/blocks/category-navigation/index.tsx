@@ -13,7 +13,11 @@ const TIMEOUT_DURATION = 250;
 let timeout: NodeJS.Timeout | null = null;
 let categoryChangeTimeout: NodeJS.Timeout | null = null;
 
-export default function CategoryNavigation() {
+type Props = {
+  className?: string;
+};
+
+export default function CategoryNavigation({ className }: Props) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const category = useMemo(() => {
@@ -46,6 +50,7 @@ export default function CategoryNavigation() {
           setOpen(true);
         }, TIMEOUT_DURATION);
       }}
+      className={cn(className)}
     >
       <ScrollArea>
         <ul className="flex items-center justify-center space-x-4">
