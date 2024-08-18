@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 import { GetMeResponseDto } from './dto';
 
 export type Auth = {
@@ -7,7 +8,7 @@ export type Auth = {
 
 const cookieName = '__horizon_auth';
 
-export async function getAuth(): Promise<Auth | null> {
+export const getAuth = cache(async () => {
   const sessionCookie = cookies().get(cookieName);
 
   if (!sessionCookie) {
@@ -31,7 +32,7 @@ export async function getAuth(): Promise<Auth | null> {
   } catch (e) {
     return null;
   }
-}
+});
 
 export function getAuthCookie() {
   const v = cookies().get(cookieName)?.value ?? '';
