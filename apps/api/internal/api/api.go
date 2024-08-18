@@ -17,7 +17,6 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
-	"github.com/typesense/typesense-go/v2/typesense"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +27,7 @@ type Service struct {
 	ZapLogger  *zap.Logger
 	Flake      *sonyflake.Sonyflake
 	Db         *db.Db
-	Search     *typesense.Client
+	Search     *search.Search
 	Logger     *pterm.Logger
 }
 
