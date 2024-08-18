@@ -7,7 +7,11 @@ import (
 	"github.com/typesense/typesense-go/v2/typesense"
 )
 
-func New() *typesense.Client {
+type Search struct {
+	Client *typesense.Client
+}
+
+func New() *Search {
 	serverUrl := viper.GetString(config.SEARCH_SERVER_URL)
 	apiKey := viper.GetString(config.SEARCH_API_KEY)
 	client := typesense.NewClient(
@@ -15,7 +19,11 @@ func New() *typesense.Client {
 		typesense.WithAPIKey(apiKey),
 	)
 
-	createSchemas(client)
+	search := Search{
+		Client: client,
+	}
 
-	return client
+	search.CreateSchemas()
+
+	return &search
 }
