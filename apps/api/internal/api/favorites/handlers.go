@@ -8,9 +8,7 @@ import (
 	"horizon/internal/pagination"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 )
 
@@ -118,18 +116,17 @@ func (s *FavoritesService) HandlerGetFavorites(c echo.Context) error {
 
 func (s *FavoritesService) HandlerGetIsFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
-	favoriteId := c.Param("id")
-	parsed, _ := uuid.Parse(favoriteId)
+	hserviceId := c.Param("hservice_id")
 
-	if favoriteId == "" {
+	if hserviceId == "" {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
+			Message: "hservice_id is required",
 		})
 	}
 
 	_, err := s.Db.Queries.IsFavorite(context.Background(), db.IsFavoriteParams{
-		ID:     pgtype.UUID{Bytes: [16]byte(parsed), Valid: true},
-		UserID: userId,
+		HserviceID: hserviceId,
+		UserID:     userId,
 	})
 
 	if err != nil {
