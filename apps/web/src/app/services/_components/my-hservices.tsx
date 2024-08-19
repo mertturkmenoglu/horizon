@@ -3,7 +3,7 @@
 import AppMessage from '@/components/blocks/app-message';
 import { Skeleton } from '@/components/ui/skeleton';
 import api from '@/lib/api';
-import { HServiceResponseDto } from '@/lib/dto';
+import { HServiceWithoutUserResponseDto } from '@/lib/dto';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ export default function MyHServices({ className }: Props) {
     queryFn: async () => {
       const res = await api
         .get('hservices/?page=1&pageSize=25')
-        .json<{ data: HServiceResponseDto[] }>();
+        .json<{ data: HServiceWithoutUserResponseDto[] }>();
       return res;
     },
   });

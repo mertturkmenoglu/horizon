@@ -5,12 +5,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getCategoryTitle } from '@/lib/categories';
-import { HServiceResponseDto } from '@/lib/dto';
+import { HServiceWithoutUserResponseDto } from '@/lib/dto';
 import { cn } from '@/lib/utils';
 
 type Props = {
   className?: string;
-  hservice: HServiceResponseDto;
+  hservice: HServiceWithoutUserResponseDto;
 };
 
 export default function HServiceCard({ className, hservice }: Props) {
