@@ -105,3 +105,10 @@ export type GetNewUploadUrlResponseDto = {
   Key: string;
   Url: string;
 };
+
+export type GetHomeAggregationsResponseDto = {
+  new: HServiceResponseDto[];
+  popular: HServiceResponseDto[];
+  featured: HServiceResponseDto[];
+  favorites: HServiceResponseDto[];
+};
