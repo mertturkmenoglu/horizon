@@ -117,7 +117,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	bookmarksRoutes := api.Group("/bookmarks")
 	{
 		bookmarksRoutes.POST("/", bookmarksModule.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
-		bookmarksRoutes.DELETE("/:id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
+		bookmarksRoutes.DELETE("/:hservice_id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
 		bookmarksRoutes.GET("/", bookmarksModule.HandlerGetBookmarks, middlewares.IsAuth)
 		bookmarksRoutes.GET("/:id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
 	}
@@ -125,7 +125,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	favoritesRoutes := api.Group("/favorites")
 	{
 		favoritesRoutes.POST("/", favoritesModule.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
-		favoritesRoutes.DELETE("/:id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
+		favoritesRoutes.DELETE("/:hservice_id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
 		favoritesRoutes.GET("/:id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/username/:username", favoritesModule.HandlerGetFavoritesByUsername)
