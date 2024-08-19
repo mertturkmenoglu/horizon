@@ -48,7 +48,7 @@ func mapRowToDto(v Row) (HServiceResponseDto, error) {
 			ProfileImage: profileImage,
 			CreatedAt:    v.User.CreatedAt.Time,
 		},
-		Title:            v.Hservice.ID,
+		Title:            v.Hservice.Title,
 		Slug:             v.Hservice.Slug,
 		Description:      v.Hservice.Description,
 		Category:         v.Hservice.Category,
