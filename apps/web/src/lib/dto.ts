@@ -112,3 +112,8 @@ export type GetHomeAggregationsResponseDto = {
   featured: HServiceResponseDto[];
   favorites: HServiceResponseDto[];
 };
+
+export type HServiceMetadataDto = {
+  isFavorite: boolean;
+  isBookmarked: boolean;
+};
