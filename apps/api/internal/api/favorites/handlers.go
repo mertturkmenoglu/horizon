@@ -39,18 +39,17 @@ func (s *FavoritesService) HandlerCreateFavorite(c echo.Context) error {
 
 func (s *FavoritesService) HandlerDeleteFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
-	favoriteId := c.Param("id")
-	parsed, _ := uuid.Parse(favoriteId)
+	hserviceId := c.Param("hservice_id")
 
-	if favoriteId == "" {
+	if hserviceId == "" {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
+			Message: "hservice_id is required",
 		})
 	}
 
-	err := s.Db.Queries.DeleteFavoriteById(context.Background(), db.DeleteFavoriteByIdParams{
-		ID:     pgtype.UUID{Bytes: [16]byte(parsed), Valid: true},
-		UserID: userId,
+	err := s.Db.Queries.DeleteFavoriteByHServiceId(context.Background(), db.DeleteFavoriteByHServiceIdParams{
+		UserID:     userId,
+		HserviceID: hserviceId,
 	})
 
 	if err != nil {

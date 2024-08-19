@@ -39,18 +39,17 @@ func (s *BookmarksService) HandlerCreateBookmark(c echo.Context) error {
 
 func (s *BookmarksService) HandlerDeleteBookmark(c echo.Context) error {
 	userId := c.Get("user_id").(string)
-	bookmarkId := c.Param("id")
-	parsed, _ := uuid.Parse(bookmarkId)
+	hserviceId := c.Param("hservice_id")
 
-	if bookmarkId == "" {
+	if hserviceId == "" {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
+			Message: "hservice_id is required",
 		})
 	}
 
-	err := s.Db.Queries.DeleteBookmarkById(context.Background(), db.DeleteBookmarkByIdParams{
-		ID:     pgtype.UUID{Bytes: [16]byte(parsed), Valid: true},
-		UserID: userId,
+	err := s.Db.Queries.DeleteBookmarkByHServiceId(context.Background(), db.DeleteBookmarkByHServiceIdParams{
+		UserID:     userId,
+		HserviceID: hserviceId,
 	})
 
 	if err != nil {
