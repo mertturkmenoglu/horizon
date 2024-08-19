@@ -207,25 +207,25 @@ LIMIT $2;
 -- name: GetFavoriteHServices :many
 SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_points -- TODO: Replace with total_favorites later
+ORDER BY total_points DESC -- TODO: Replace with total_favorites later
 LIMIT 25;
 
 -- name: GetFeaturedHServices :many
 SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_points
+ORDER BY total_points DESC
 LIMIT 25;
 
 -- name: GetPopularHServices :many
 SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_votes
+ORDER BY total_votes DESC
 LIMIT 25;
 
 -- name: GetNewHServices :many
 SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY hservices.created_at
+ORDER BY hservices.created_at DESC
 LIMIT 25;
 
 -- name: CreateBookmark :one

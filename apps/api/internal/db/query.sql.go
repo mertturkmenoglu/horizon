@@ -653,7 +653,7 @@ func (q *Queries) GetFavoriteById(ctx context.Context, id pgtype.UUID) (GetFavor
 const getFavoriteHServices = `-- name: GetFavoriteHServices :many
 SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_points -- TODO: Replace with total_favorites later
+ORDER BY total_points DESC -- TODO: Replace with total_favorites later
 LIMIT 25
 `
 
@@ -851,7 +851,7 @@ func (q *Queries) GetFavoritesByUsername(ctx context.Context, arg GetFavoritesBy
 const getFeaturedHServices = `-- name: GetFeaturedHServices :many
 SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_points
+ORDER BY total_points DESC
 LIMIT 25
 `
 
@@ -1088,7 +1088,7 @@ func (q *Queries) GetMyHServices(ctx context.Context, arg GetMyHServicesParams) 
 const getNewHServices = `-- name: GetNewHServices :many
 SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY hservices.created_at
+ORDER BY hservices.created_at DESC
 LIMIT 25
 `
 
@@ -1158,7 +1158,7 @@ func (q *Queries) GetNewHServices(ctx context.Context) ([]GetNewHServicesRow, er
 const getPopularHServices = `-- name: GetPopularHServices :many
 SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_votes
+ORDER BY total_votes DESC
 LIMIT 25
 `
 
