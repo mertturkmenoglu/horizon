@@ -30,7 +30,7 @@ export default function CustomSearchBox({
       <form
         action=""
         role="search"
-        className="flex gap-2 sm:gap-4 lg:gap-8"
+        className="relative flex gap-2 sm:gap-4 lg:gap-8"
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
@@ -72,10 +72,14 @@ export default function CustomSearchBox({
           onChange={(e) => {
             setQuery(e.currentTarget.value);
           }}
-          autoFocus
+          className="h-10 rounded-full"
         />
 
-        <Button type="submit">
+        <Button
+          type="submit"
+          size="lg"
+          className="absolute right-0 rounded-l-none rounded-r-full px-4"
+        >
           <span className="hidden sm:block">Search</span>
           <SearchIcon className="ml-0 size-4 sm:ml-2" />
         </Button>
