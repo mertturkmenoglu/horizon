@@ -6,12 +6,14 @@ type Props = {
 };
 
 export default function GoogleAuth({ text }: Props) {
+  const baseUrl = process.env.NEXT_PUBLIC_API ?? '';
+
   return (
     <Button
       variant="outline"
       className="w-full"
       onClick={() => {
-        window.location.href = 'http://localhost:5000/api/auth/google';
+        window.location.href = baseUrl + '/auth/google';
       }}
       type="button"
     >
