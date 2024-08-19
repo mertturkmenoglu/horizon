@@ -100,3 +100,10 @@ CREATE TABLE IF NOT EXISTS bookmarks (
   hservice_id TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS favorites (
+  id uuid PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  hservice_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);

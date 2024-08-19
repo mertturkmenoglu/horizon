@@ -256,3 +256,38 @@ WHERE bookmarks.id = $1;
 -- name: IsBookmarked :one
 SELECT id FROM bookmarks
 WHERE id = $1 AND user_id = $2;
+
+-- name: CreateFavorite :one
+INSERT INTO favorites (
+  user_id,
+  hservice_id
+) VALUES (
+  $1,
+  $2
+)
+RETURNING *;
+
+-- name: DeleteFavoriteById :exec
+DELETE FROM favorites
+WHERE id = $1 AND user_id = $2;
+
+-- name: GetFavoritesByUserId :many
+SELECT sqlc.embed(favorites), sqlc.embed(hservices) FROM favorites
+JOIN hservices ON hservices.id = favorites.hservice_id
+WHERE favorites.user_id = $1
+ORDER BY favorites.created_at DESC
+OFFSET $2
+LIMIT $3;
+
+-- name: CountUserFavorites :one
+SELECT COUNT(*) FROM favorites
+WHERE user_id = $1;
+
+-- name: GetFavoriteById :one
+SELECT sqlc.embed(favorites), sqlc.embed(hservices) FROM favorites
+JOIN hservices ON hservices.id = favorites.hservice_id
+WHERE favorites.id = $1;
+
+-- name: IsFavorite :one
+SELECT id FROM favorites
+WHERE id = $1 AND user_id = $2;

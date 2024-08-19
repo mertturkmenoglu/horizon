@@ -133,6 +133,13 @@ type Country struct {
 	Longitude      float64
 }
 
+type Favorite struct {
+	ID         pgtype.UUID
+	UserID     string
+	HserviceID string
+	CreatedAt  pgtype.Timestamptz
+}
+
 type Hservice struct {
 	ID               string
 	UserID           string

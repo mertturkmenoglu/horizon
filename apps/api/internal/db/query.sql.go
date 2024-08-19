@@ -46,6 +46,18 @@ func (q *Queries) CountUserBookmarks(ctx context.Context, userID string) (int64,
 	return count, err
 }
 
+const countUserFavorites = `-- name: CountUserFavorites :one
+SELECT COUNT(*) FROM favorites
+WHERE user_id = $1
+`
+
+func (q *Queries) CountUserFavorites(ctx context.Context, userID string) (int64, error) {
+	row := q.db.QueryRow(ctx, countUserFavorites, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createBookmark = `-- name: CreateBookmark :one
 INSERT INTO bookmarks (
   user_id,
@@ -169,6 +181,34 @@ func (q *Queries) CreateCountry(ctx context.Context, arg CreateCountryParams) (C
 		&i.Timezones,
 		&i.Latitude,
 		&i.Longitude,
+	)
+	return i, err
+}
+
+const createFavorite = `-- name: CreateFavorite :one
+INSERT INTO favorites (
+  user_id,
+  hservice_id
+) VALUES (
+  $1,
+  $2
+)
+RETURNING id, user_id, hservice_id, created_at
+`
+
+type CreateFavoriteParams struct {
+	UserID     string
+	HserviceID string
+}
+
+func (q *Queries) CreateFavorite(ctx context.Context, arg CreateFavoriteParams) (Favorite, error) {
+	row := q.db.QueryRow(ctx, createFavorite, arg.UserID, arg.HserviceID)
+	var i Favorite
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.HserviceID,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -435,6 +475,21 @@ func (q *Queries) DeleteBookmarkById(ctx context.Context, arg DeleteBookmarkById
 	return err
 }
 
+const deleteFavoriteById = `-- name: DeleteFavoriteById :exec
+DELETE FROM favorites
+WHERE id = $1 AND user_id = $2
+`
+
+type DeleteFavoriteByIdParams struct {
+	ID     pgtype.UUID
+	UserID string
+}
+
+func (q *Queries) DeleteFavoriteById(ctx context.Context, arg DeleteFavoriteByIdParams) error {
+	_, err := q.db.Exec(ctx, deleteFavoriteById, arg.ID, arg.UserID)
+	return err
+}
+
 const getBookmarkById = `-- name: GetBookmarkById :one
 SELECT bookmarks.id, bookmarks.user_id, bookmarks.hservice_id, bookmarks.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM bookmarks
 JOIN hservices ON hservices.id = bookmarks.hservice_id
@@ -541,6 +596,48 @@ func (q *Queries) GetBookmarksByUserId(ctx context.Context, arg GetBookmarksByUs
 	return items, nil
 }
 
+const getFavoriteById = `-- name: GetFavoriteById :one
+SELECT favorites.id, favorites.user_id, favorites.hservice_id, favorites.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM favorites
+JOIN hservices ON hservices.id = favorites.hservice_id
+WHERE favorites.id = $1
+`
+
+type GetFavoriteByIdRow struct {
+	Favorite Favorite
+	Hservice Hservice
+}
+
+func (q *Queries) GetFavoriteById(ctx context.Context, id pgtype.UUID) (GetFavoriteByIdRow, error) {
+	row := q.db.QueryRow(ctx, getFavoriteById, id)
+	var i GetFavoriteByIdRow
+	err := row.Scan(
+		&i.Favorite.ID,
+		&i.Favorite.UserID,
+		&i.Favorite.HserviceID,
+		&i.Favorite.CreatedAt,
+		&i.Hservice.ID,
+		&i.Hservice.UserID,
+		&i.Hservice.Title,
+		&i.Hservice.Slug,
+		&i.Hservice.Description,
+		&i.Hservice.Category,
+		&i.Hservice.Price,
+		&i.Hservice.PriceUnit,
+		&i.Hservice.PriceTimespan,
+		&i.Hservice.IsOnline,
+		&i.Hservice.Url,
+		&i.Hservice.Location,
+		&i.Hservice.DeliveryTime,
+		&i.Hservice.DeliveryTimespan,
+		&i.Hservice.TotalPoints,
+		&i.Hservice.TotalVotes,
+		&i.Hservice.Media,
+		&i.Hservice.CreatedAt,
+		&i.Hservice.UpdatedAt,
+	)
+	return i, err
+}
+
 const getFavoriteHServices = `-- name: GetFavoriteHServices :many
 SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
 ORDER BY total_points -- TODO: Replace with total_favorites later
@@ -576,6 +673,70 @@ func (q *Queries) GetFavoriteHServices(ctx context.Context) ([]Hservice, error) 
 			&i.Media,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFavoritesByUserId = `-- name: GetFavoritesByUserId :many
+SELECT favorites.id, favorites.user_id, favorites.hservice_id, favorites.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM favorites
+JOIN hservices ON hservices.id = favorites.hservice_id
+WHERE favorites.user_id = $1
+ORDER BY favorites.created_at DESC
+OFFSET $2
+LIMIT $3
+`
+
+type GetFavoritesByUserIdParams struct {
+	UserID string
+	Offset int32
+	Limit  int32
+}
+
+type GetFavoritesByUserIdRow struct {
+	Favorite Favorite
+	Hservice Hservice
+}
+
+func (q *Queries) GetFavoritesByUserId(ctx context.Context, arg GetFavoritesByUserIdParams) ([]GetFavoritesByUserIdRow, error) {
+	rows, err := q.db.Query(ctx, getFavoritesByUserId, arg.UserID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetFavoritesByUserIdRow
+	for rows.Next() {
+		var i GetFavoritesByUserIdRow
+		if err := rows.Scan(
+			&i.Favorite.ID,
+			&i.Favorite.UserID,
+			&i.Favorite.HserviceID,
+			&i.Favorite.CreatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -1040,6 +1201,23 @@ type IsBookmarkedParams struct {
 
 func (q *Queries) IsBookmarked(ctx context.Context, arg IsBookmarkedParams) (pgtype.UUID, error) {
 	row := q.db.QueryRow(ctx, isBookmarked, arg.ID, arg.UserID)
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const isFavorite = `-- name: IsFavorite :one
+SELECT id FROM favorites
+WHERE id = $1 AND user_id = $2
+`
+
+type IsFavoriteParams struct {
+	ID     pgtype.UUID
+	UserID string
+}
+
+func (q *Queries) IsFavorite(ctx context.Context, arg IsFavoriteParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, isFavorite, arg.ID, arg.UserID)
 	var id pgtype.UUID
 	err := row.Scan(&id)
 	return id, err
