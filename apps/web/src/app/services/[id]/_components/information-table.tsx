@@ -1,6 +1,7 @@
 import FormattedRating from '@/components/blocks/formatted-rating';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { HServiceResponseDto } from '@/lib/dto';
+import { formatDeliveryTimespan, formatPriceTimespan } from '@/lib/timespan';
 
 type Props = {
   hservice: HServiceResponseDto;
@@ -28,13 +29,9 @@ export default function InformationTable({ hservice }: Props) {
         <TableRow>
           <TableCell className="px-0 font-medium">Price</TableCell>
           <TableCell className="text-right">
-            {hservice.price} {hservice.priceUnit}
+            {hservice.price} {hservice.priceUnit}{' '}
+            {formatPriceTimespan(hservice.priceTimespan)}
           </TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell className="px-0 font-medium">Price Timespan</TableCell>
-          <TableCell className="text-right">{hservice.priceTimespan}</TableCell>
         </TableRow>
 
         <TableRow>
@@ -68,7 +65,10 @@ export default function InformationTable({ hservice }: Props) {
         <TableRow>
           <TableCell className="px-0 font-medium">Delivery</TableCell>
           <TableCell className="text-right">
-            {hservice.deliveryTime} {hservice.deliveryTimespan}
+            {formatDeliveryTimespan(
+              hservice.deliveryTimespan,
+              hservice.deliveryTime
+            )}
           </TableCell>
         </TableRow>
       </TableBody>
