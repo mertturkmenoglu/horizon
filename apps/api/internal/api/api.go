@@ -5,6 +5,7 @@ import (
 	"horizon/config"
 	"horizon/internal/api/aggregations"
 	"horizon/internal/api/auth"
+	"horizon/internal/api/bookmarks"
 	"horizon/internal/api/health"
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/uploads"
@@ -68,6 +69,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	usersModule := users.NewUsersService(s.Db, s.Flake, s.Logger)
 	aggregationsModule := aggregations.NewAggregationsService(s.Db, s.Logger, s.Cache)
 	healthModule := health.NewHealthService()
+	bookmarksModule := bookmarks.NewBookmarksService(s.Db, s.Flake, s.Cache, s.Logger)
 
 	api := e.Group("/api")
 
@@ -108,6 +110,14 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	healthRoutes := api.Group("/health")
 	{
 		healthRoutes.GET("/", healthModule.HandlerGetHealth)
+	}
+
+	bookmarksRoutes := api.Group("/bookmarks")
+	{
+		bookmarksRoutes.POST("/", bookmarksModule.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
+		bookmarksRoutes.DELETE("/:id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
+		bookmarksRoutes.GET("/", bookmarksModule.HandlerGetBookmarks, middlewares.IsAuth)
+		bookmarksRoutes.GET("/:id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
 	}
 
 	return e
