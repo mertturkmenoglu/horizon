@@ -96,7 +96,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	{
 		hservicesRoutes.POST("/", hservicesModule.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
 		hservicesRoutes.GET("/", hservicesModule.HandlerGetMyHServices, middlewares.IsAuth)
-		hservicesRoutes.GET("/:id", hservicesModule.HandlerGetHServiceById)
+		hservicesRoutes.GET("/:id", hservicesModule.HandlerGetHServiceById, middlewares.WithAuth)
 	}
 
 	usersRoutes := api.Group("/users")
@@ -119,7 +119,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		bookmarksRoutes.POST("/", bookmarksModule.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
 		bookmarksRoutes.DELETE("/:hservice_id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
 		bookmarksRoutes.GET("/", bookmarksModule.HandlerGetBookmarks, middlewares.IsAuth)
-		bookmarksRoutes.GET("/:id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
+		bookmarksRoutes.GET("/:hservice_id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
 	}
 
 	favoritesRoutes := api.Group("/favorites")
@@ -127,7 +127,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		favoritesRoutes.POST("/", favoritesModule.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
 		favoritesRoutes.DELETE("/:hservice_id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
-		favoritesRoutes.GET("/:id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
+		favoritesRoutes.GET("/:hservice_id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/username/:username", favoritesModule.HandlerGetFavoritesByUsername)
 	}
 
