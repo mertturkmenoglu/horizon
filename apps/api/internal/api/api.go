@@ -3,10 +3,12 @@ package api
 import (
 	"fmt"
 	"horizon/config"
+	"horizon/internal/api/aggregations"
 	"horizon/internal/api/auth"
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/uploads"
 	"horizon/internal/api/users"
+	"horizon/internal/cache"
 	"horizon/internal/db"
 	"horizon/internal/logs"
 	"horizon/internal/middlewares"
@@ -29,6 +31,7 @@ type Service struct {
 	Db         *db.Db
 	Search     *search.Search
 	Logger     *pterm.Logger
+	Cache      *cache.Cache
 }
 
 func New() *Service {
@@ -41,6 +44,7 @@ func New() *Service {
 		Db:         db.NewDb(),
 		Search:     search.New(),
 		Logger:     logs.NewPTermLogger(),
+		Cache:      cache.New(),
 	}
 
 	flake, err := sonyflake.New(sonyflake.Settings{})
@@ -61,6 +65,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	uploadsModule := uploads.NewUploadsService(s.Upload)
 	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake, s.Logger)
 	usersModule := users.NewUsersService(s.Db, s.Flake, s.Logger)
+	aggregationsModule := aggregations.NewAggregationsService(s.Db, s.Logger, s.Cache)
 
 	api := e.Group("/api")
 
@@ -91,6 +96,11 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	usersRoutes := api.Group("/users")
 	{
 		usersRoutes.GET("/:username", usersModule.HandlerGetUserProfileByUsername)
+	}
+
+	aggregationsRoutes := api.Group("/aggregations")
+	{
+		aggregationsRoutes.GET("/home", aggregationsModule.HandlerGetHomeAggregations)
 	}
 
 	return e
