@@ -1,7 +1,17 @@
 name: horizon
 
 services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    networks:
+      - redisnet
+    ports:
+      - "6379:6379"
+
   postgres:
+    container_name: postgres
     image: postgres
     restart: always
     ports:
@@ -12,10 +22,10 @@ services:
       POSTGRES_DB: horizon
 
   minio:
+    container_name: minio
     ports:
       - 9000:9000
       - 9001:9001
-    container_name: minio
     volumes:
       - ./minio/data:/data
     environment:
@@ -25,6 +35,7 @@ services:
     command: server /data --console-address ":9001"
 
   typesense:
+    container_name: typesense
     image: typesense/typesense:26.0
     restart: on-failure
     ports:
@@ -34,7 +45,11 @@ services:
     command: "--data-dir /data --api-key=horizon --enable-cors"
 
   typesense-dashboard:
+    container_name: typesense-dashboard
     restart: always
     ports:
       - 3006:80
     image: ghcr.io/bfritscher/typesense-dashboard:latest
+
+networks:
+  redisnet:
