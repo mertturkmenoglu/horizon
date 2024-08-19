@@ -37,7 +37,7 @@ export default function RootLayout({
             <Header />
             <main>{children}</main>
             <ReactQueryDevtools />
-            <Toaster />
+            <Toaster richColors />
             <Footer />
           </AuthContextProvider>
         </QClientProvider>
