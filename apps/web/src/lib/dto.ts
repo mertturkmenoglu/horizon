@@ -31,7 +31,32 @@ export type CreateHServiceRequestDto = {
   media: string;
 };
 
+export type UserDto = GetUserProfileByUsernameResponseDto;
+
 export type HServiceResponseDto = {
+  id: string;
+  user: UserDto;
+  userId: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: number;
+  price: number;
+  priceUnit: string;
+  priceTimespan: string;
+  isOnline: boolean;
+  url: string | null;
+  location: string;
+  deliveryTime: number;
+  deliveryTimespan: string;
+  totalPoints: number;
+  totalVotes: number;
+  media: MediaResponseDto;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type HServiceWithoutUserResponseDto = {
   id: string;
   userId: string;
   title: string;
@@ -49,8 +74,8 @@ export type HServiceResponseDto = {
   totalPoints: number;
   totalVotes: number;
   media: MediaResponseDto;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type MediaResponseDto = {
