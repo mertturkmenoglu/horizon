@@ -74,7 +74,7 @@ func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[HServiceWithoutUserResponseDto]{
-		"data": res,
+		Data: res,
 	})
 }
 
@@ -167,6 +167,6 @@ func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[HServiceResponseDto]{
-		"data": res,
+		Data: res,
 	})
 }

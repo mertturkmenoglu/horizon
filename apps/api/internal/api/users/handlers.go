@@ -34,6 +34,6 @@ func (s *UsersService) HandlerGetUserProfileByUsername(c echo.Context) error {
 	res := mapGetUserProfileByUsernameRowToDto(dbResult)
 
 	return c.JSON(http.StatusOK, h.Response[GetUserProfileByUsernameResponseDto]{
-		"data": res,
+		Data: res,
 	})
 }

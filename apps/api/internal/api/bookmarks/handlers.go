@@ -31,7 +31,7 @@ func (s *BookmarksService) HandlerCreateBookmark(c echo.Context) error {
 	idstr, _ := id.(string)
 
 	return c.JSON(http.StatusCreated, h.Response[CreateBookmarkResponseDto]{
-		"data": CreateBookmarkResponseDto{
+		Data: CreateBookmarkResponseDto{
 			ID: idstr,
 		},
 	})
@@ -133,12 +133,12 @@ func (s *BookmarksService) HandlerGetIsBookmarked(c echo.Context) error {
 	})
 
 	if err != nil {
-		return c.JSON(http.StatusOK, h.AnyResponse{
-			"data": false,
+		return c.JSON(http.StatusOK, h.Response[bool]{
+			Data: false,
 		})
 	}
 
-	return c.JSON(http.StatusOK, h.AnyResponse{
-		"data": true,
+	return c.JSON(http.StatusOK, h.Response[bool]{
+		Data: true,
 	})
 }

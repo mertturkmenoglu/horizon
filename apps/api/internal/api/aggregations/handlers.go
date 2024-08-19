@@ -16,7 +16,7 @@ func (s *AggregationsService) HandlerGetHomeAggregations(c echo.Context) error {
 
 	if err == nil {
 		return c.JSON(http.StatusOK, h.Response[GetHomeAggregationsResponseDto]{
-			"data": cacheRes,
+			Data: cacheRes,
 		})
 	}
 
@@ -52,6 +52,6 @@ func (s *AggregationsService) HandlerGetHomeAggregations(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[GetHomeAggregationsResponseDto]{
-		"data": res,
+		Data: res,
 	})
 }

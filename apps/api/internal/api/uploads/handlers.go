@@ -93,6 +93,6 @@ func (s *UploadsService) HandlerGetNewUrl(c echo.Context) error {
 	fmt.Println(cacheKey)
 
 	return c.JSON(http.StatusCreated, h.Response[[]UploadObj]{
-		"data": data,
+		Data: data,
 	})
 }

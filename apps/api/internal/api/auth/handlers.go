@@ -99,7 +99,7 @@ func (s *AuthService) HandlerGetMe(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, h.Response[GetMeResponseDto]{
-		"data": GetMeResponseDto{
+		Data: GetMeResponseDto{
 			ID:              me.ID,
 			Email:           me.Email,
 			Username:        me.Username,
