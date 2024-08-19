@@ -34,6 +34,46 @@ func (q *Queries) CountMyHServices(ctx context.Context, userID string) (int64, e
 	return count, err
 }
 
+const countUserBookmarks = `-- name: CountUserBookmarks :one
+SELECT COUNT(*) FROM bookmarks
+WHERE user_id = $1
+`
+
+func (q *Queries) CountUserBookmarks(ctx context.Context, userID string) (int64, error) {
+	row := q.db.QueryRow(ctx, countUserBookmarks, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const createBookmark = `-- name: CreateBookmark :one
+INSERT INTO bookmarks (
+  user_id,
+  hservice_id
+) VALUES (
+  $1,
+  $2
+)
+RETURNING id, user_id, hservice_id, created_at
+`
+
+type CreateBookmarkParams struct {
+	UserID     string
+	HserviceID string
+}
+
+func (q *Queries) CreateBookmark(ctx context.Context, arg CreateBookmarkParams) (Bookmark, error) {
+	row := q.db.QueryRow(ctx, createBookmark, arg.UserID, arg.HserviceID)
+	var i Bookmark
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.HserviceID,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createCountry = `-- name: CreateCountry :one
 INSERT INTO countries (
   id,
@@ -378,6 +418,127 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const deleteBookmarkById = `-- name: DeleteBookmarkById :exec
+DELETE FROM bookmarks
+WHERE id = $1 AND user_id = $2
+`
+
+type DeleteBookmarkByIdParams struct {
+	ID     pgtype.UUID
+	UserID string
+}
+
+func (q *Queries) DeleteBookmarkById(ctx context.Context, arg DeleteBookmarkByIdParams) error {
+	_, err := q.db.Exec(ctx, deleteBookmarkById, arg.ID, arg.UserID)
+	return err
+}
+
+const getBookmarkById = `-- name: GetBookmarkById :one
+SELECT bookmarks.id, bookmarks.user_id, bookmarks.hservice_id, bookmarks.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM bookmarks
+JOIN hservices ON hservices.id = bookmarks.hservice_id
+WHERE bookmarks.id = $1
+`
+
+type GetBookmarkByIdRow struct {
+	Bookmark Bookmark
+	Hservice Hservice
+}
+
+func (q *Queries) GetBookmarkById(ctx context.Context, id pgtype.UUID) (GetBookmarkByIdRow, error) {
+	row := q.db.QueryRow(ctx, getBookmarkById, id)
+	var i GetBookmarkByIdRow
+	err := row.Scan(
+		&i.Bookmark.ID,
+		&i.Bookmark.UserID,
+		&i.Bookmark.HserviceID,
+		&i.Bookmark.CreatedAt,
+		&i.Hservice.ID,
+		&i.Hservice.UserID,
+		&i.Hservice.Title,
+		&i.Hservice.Slug,
+		&i.Hservice.Description,
+		&i.Hservice.Category,
+		&i.Hservice.Price,
+		&i.Hservice.PriceUnit,
+		&i.Hservice.PriceTimespan,
+		&i.Hservice.IsOnline,
+		&i.Hservice.Url,
+		&i.Hservice.Location,
+		&i.Hservice.DeliveryTime,
+		&i.Hservice.DeliveryTimespan,
+		&i.Hservice.TotalPoints,
+		&i.Hservice.TotalVotes,
+		&i.Hservice.Media,
+		&i.Hservice.CreatedAt,
+		&i.Hservice.UpdatedAt,
+	)
+	return i, err
+}
+
+const getBookmarksByUserId = `-- name: GetBookmarksByUserId :many
+SELECT bookmarks.id, bookmarks.user_id, bookmarks.hservice_id, bookmarks.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM bookmarks
+JOIN hservices ON hservices.id = bookmarks.hservice_id
+WHERE bookmarks.user_id = $1
+ORDER BY bookmarks.created_at DESC
+OFFSET $2
+LIMIT $3
+`
+
+type GetBookmarksByUserIdParams struct {
+	UserID string
+	Offset int32
+	Limit  int32
+}
+
+type GetBookmarksByUserIdRow struct {
+	Bookmark Bookmark
+	Hservice Hservice
+}
+
+func (q *Queries) GetBookmarksByUserId(ctx context.Context, arg GetBookmarksByUserIdParams) ([]GetBookmarksByUserIdRow, error) {
+	rows, err := q.db.Query(ctx, getBookmarksByUserId, arg.UserID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetBookmarksByUserIdRow
+	for rows.Next() {
+		var i GetBookmarksByUserIdRow
+		if err := rows.Scan(
+			&i.Bookmark.ID,
+			&i.Bookmark.UserID,
+			&i.Bookmark.HserviceID,
+			&i.Bookmark.CreatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getFavoriteHServices = `-- name: GetFavoriteHServices :many
@@ -865,6 +1026,23 @@ func (q *Queries) GetUserProfileByUsername(ctx context.Context, username string)
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const isBookmarked = `-- name: IsBookmarked :one
+SELECT id FROM bookmarks
+WHERE id = $1 AND user_id = $2
+`
+
+type IsBookmarkedParams struct {
+	ID     pgtype.UUID
+	UserID string
+}
+
+func (q *Queries) IsBookmarked(ctx context.Context, arg IsBookmarkedParams) (pgtype.UUID, error) {
+	row := q.db.QueryRow(ctx, isBookmarked, arg.ID, arg.UserID)
+	var id pgtype.UUID
+	err := row.Scan(&id)
+	return id, err
 }
 
 const listHServices = `-- name: ListHServices :many

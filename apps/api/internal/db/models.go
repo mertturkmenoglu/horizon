@@ -107,6 +107,13 @@ func (ns NullWorktimespan) Value() (driver.Value, error) {
 	return string(ns.Worktimespan), nil
 }
 
+type Bookmark struct {
+	ID         pgtype.UUID
+	UserID     string
+	HserviceID string
+	CreatedAt  pgtype.Timestamptz
+}
+
 type Country struct {
 	ID             int32
 	Name           string
