@@ -137,6 +137,7 @@ func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
 }
 
 func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
+	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 
 	if id == "" {
@@ -166,7 +167,29 @@ func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusOK, h.Response[HServiceResponseDto]{
+	var isFavorite = false
+	var isBookmarked = false
+
+	if userId != "" {
+		favId, _ := s.Db.Queries.IsFavorite(context.Background(), db.IsFavoriteParams{
+			HserviceID: id,
+			UserID:     userId,
+		})
+
+		bookmarkId, _ := s.Db.Queries.IsBookmarked(context.Background(), db.IsBookmarkedParams{
+			HserviceID: id,
+			UserID:     userId,
+		})
+
+		isFavorite = favId.Valid
+		isBookmarked = bookmarkId.Valid
+	}
+
+	return c.JSON(http.StatusOK, h.MetadataResponse[HServiceResponseDto, HServiceMetadataDto]{
 		Data: res,
+		Meta: HServiceMetadataDto{
+			IsFavorite:   isFavorite,
+			IsBookmarked: isBookmarked,
+		},
 	})
 }
