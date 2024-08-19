@@ -8,24 +8,22 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { AuthContext } from '@/providers/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Heart } from 'lucide-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
   isFavorite: boolean;
   hserviceId: string;
-  isSignedIn: boolean;
 };
 
-export default function FavoriteButton({
-  isFavorite,
-  hserviceId,
-  isSignedIn,
-}: Props) {
+export default function FavoriteButton({ isFavorite, hserviceId }: Props) {
   const [fav, setFav] = useState(isFavorite);
   const qc = useQueryClient();
+  const { isLoading, user } = useContext(AuthContext);
+  const isSignedIn = !isLoading && user !== null;
 
   const mutation = useMutation({
     mutationKey: ['favorites', hserviceId],

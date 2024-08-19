@@ -15,16 +15,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { AuthContext } from '@/providers/auth';
 import { useQuery } from '@tanstack/react-query';
 import { EllipsisVertical, FlagIcon, Plus, Share2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'sonner';
 import AddToListButton from './add-to-list-button';
 
 type Props = {
   hserviceId: string;
-  isSignedIn: boolean;
 };
 
 async function handleShareClick() {
@@ -32,8 +32,11 @@ async function handleShareClick() {
   toast.success('Link copied to clipboard!');
 }
 
-export default function Menu({ hserviceId, isSignedIn }: Props) {
+export default function Menu({ hserviceId }: Props) {
   const [listId, setListId] = useState<string | null>(null);
+  const { isLoading, user } = useContext(AuthContext);
+  const isSignedIn = !isLoading && user !== null;
+
   const query = useQuery({
     queryKey: ['my-lists-info', hserviceId],
     queryFn: async () => {

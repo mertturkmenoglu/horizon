@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { AuthContext } from '@/providers/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useContext } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
@@ -11,6 +13,8 @@ type Props = {
 
 export default function AddToListButton({ hserviceId, listId }: Props) {
   const qc = useQueryClient();
+  const { isLoading, user } = useContext(AuthContext);
+  const isSignedIn = !isLoading && user !== null;
 
   const mutation = useMutation({
     mutationKey: ['add-to-list'],
