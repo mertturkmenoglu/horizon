@@ -75,3 +75,8 @@ export type GetUserProfileByUsernameResponseDto = {
   profileImage: string | null;
   createdAt: string | null;
 };
+
+export type GetNewUploadUrlResponseDto = {
+  Key: string;
+  Url: string;
+};
