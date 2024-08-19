@@ -58,6 +58,18 @@ func (q *Queries) CountUserFavorites(ctx context.Context, userID string) (int64,
 	return count, err
 }
 
+const countUserFavoritesByUsername = `-- name: CountUserFavoritesByUsername :one
+SELECT COUNT(*) FROM favorites
+WHERE user_id = (SELECT id FROM users WHERE username = $1)
+`
+
+func (q *Queries) CountUserFavoritesByUsername(ctx context.Context, username string) (int64, error) {
+	row := q.db.QueryRow(ctx, countUserFavoritesByUsername, username)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createBookmark = `-- name: CreateBookmark :one
 INSERT INTO bookmarks (
   user_id,
@@ -713,6 +725,70 @@ func (q *Queries) GetFavoritesByUserId(ctx context.Context, arg GetFavoritesByUs
 	var items []GetFavoritesByUserIdRow
 	for rows.Next() {
 		var i GetFavoritesByUserIdRow
+		if err := rows.Scan(
+			&i.Favorite.ID,
+			&i.Favorite.UserID,
+			&i.Favorite.HserviceID,
+			&i.Favorite.CreatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFavoritesByUsername = `-- name: GetFavoritesByUsername :many
+SELECT favorites.id, favorites.user_id, favorites.hservice_id, favorites.created_at, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at FROM favorites
+JOIN hservices ON hservices.id = favorites.hservice_id
+WHERE favorites.user_id = (SELECT id FROM users WHERE users.username = $1)
+ORDER BY favorites.created_at DESC
+OFFSET $2
+LIMIT $3
+`
+
+type GetFavoritesByUsernameParams struct {
+	Username string
+	Offset   int32
+	Limit    int32
+}
+
+type GetFavoritesByUsernameRow struct {
+	Favorite Favorite
+	Hservice Hservice
+}
+
+func (q *Queries) GetFavoritesByUsername(ctx context.Context, arg GetFavoritesByUsernameParams) ([]GetFavoritesByUsernameRow, error) {
+	rows, err := q.db.Query(ctx, getFavoritesByUsername, arg.Username, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetFavoritesByUsernameRow
+	for rows.Next() {
+		var i GetFavoritesByUsernameRow
 		if err := rows.Scan(
 			&i.Favorite.ID,
 			&i.Favorite.UserID,
