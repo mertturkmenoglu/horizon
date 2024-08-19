@@ -5,7 +5,14 @@ package h
 import "horizon/internal/pagination"
 
 // Utility type to wrap arbitrary JSON responses
-type Response[T any] map[string]T
+type Response[T any] struct {
+	Data T `json:"data"`
+}
+
+type MetadataResponse[T any, M any] struct {
+	Data T `json:"data"`
+	Meta M `json:"metadata"`
+}
 
 // A PaginatedResponse is similar to [horizon/internal/h/Response] type but it is used for
 // returning paginated data.
