@@ -72,3 +72,8 @@ type HServiceWithoutUserResponseDto struct {
 	CreatedAt        time.Time      `json:"createdAt"`
 	UpdatedAt        time.Time      `json:"updatedAt"`
 }
+
+type HServiceMetadataDto struct {
+	IsFavorite   bool `json:"isFavorite"`
+	IsBookmarked bool `json:"isBookmarked"`
+}
