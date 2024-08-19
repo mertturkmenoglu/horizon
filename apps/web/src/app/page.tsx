@@ -30,15 +30,8 @@ export default async function Page() {
 
   return (
     <main className="container">
-      <CategoryNavigation className="mt-12" />
       <Search />
-
-      <OverlayBanner
-        image="https://images.unsplash.com/photo-1464219995203-d9e0a71964d6?q=80&w=2670&auto=format&fit=crop"
-        alt="Horizon Banner Image"
-        message="Your Service. Your Choice. Your Horizon."
-        className="my-8"
-      />
+      <CategoryNavigation className="mx-auto mt-12 max-w-4xl" />
 
       {isSignedIn ? (
         <SignedInCta fullName={auth.data.fullName} />
