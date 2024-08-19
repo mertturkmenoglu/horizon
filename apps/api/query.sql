@@ -232,9 +232,9 @@ INSERT INTO bookmarks (
 )
 RETURNING *;
 
--- name: DeleteBookmarkById :exec
+-- name: DeleteBookmarkByHServiceId :exec
 DELETE FROM bookmarks
-WHERE id = $1 AND user_id = $2;
+WHERE hservice_id = $1 AND user_id = $2;
 
 -- name: GetBookmarksByUserId :many
 SELECT sqlc.embed(bookmarks), sqlc.embed(hservices) FROM bookmarks
@@ -267,9 +267,9 @@ INSERT INTO favorites (
 )
 RETURNING *;
 
--- name: DeleteFavoriteById :exec
+-- name: DeleteFavoriteByHServiceId :exec
 DELETE FROM favorites
-WHERE id = $1 AND user_id = $2;
+WHERE hservice_id = $1 AND user_id = $2;
 
 -- name: GetFavoritesByUserId :many
 SELECT sqlc.embed(favorites), sqlc.embed(hservices) FROM favorites

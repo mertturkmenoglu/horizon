@@ -472,33 +472,33 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
-const deleteBookmarkById = `-- name: DeleteBookmarkById :exec
+const deleteBookmarkByHServiceId = `-- name: DeleteBookmarkByHServiceId :exec
 DELETE FROM bookmarks
-WHERE id = $1 AND user_id = $2
+WHERE hservice_id = $1 AND user_id = $2
 `
 
-type DeleteBookmarkByIdParams struct {
-	ID     pgtype.UUID
-	UserID string
+type DeleteBookmarkByHServiceIdParams struct {
+	HserviceID string
+	UserID     string
 }
 
-func (q *Queries) DeleteBookmarkById(ctx context.Context, arg DeleteBookmarkByIdParams) error {
-	_, err := q.db.Exec(ctx, deleteBookmarkById, arg.ID, arg.UserID)
+func (q *Queries) DeleteBookmarkByHServiceId(ctx context.Context, arg DeleteBookmarkByHServiceIdParams) error {
+	_, err := q.db.Exec(ctx, deleteBookmarkByHServiceId, arg.HserviceID, arg.UserID)
 	return err
 }
 
-const deleteFavoriteById = `-- name: DeleteFavoriteById :exec
+const deleteFavoriteByHServiceId = `-- name: DeleteFavoriteByHServiceId :exec
 DELETE FROM favorites
-WHERE id = $1 AND user_id = $2
+WHERE hservice_id = $1 AND user_id = $2
 `
 
-type DeleteFavoriteByIdParams struct {
-	ID     pgtype.UUID
-	UserID string
+type DeleteFavoriteByHServiceIdParams struct {
+	HserviceID string
+	UserID     string
 }
 
-func (q *Queries) DeleteFavoriteById(ctx context.Context, arg DeleteFavoriteByIdParams) error {
-	_, err := q.db.Exec(ctx, deleteFavoriteById, arg.ID, arg.UserID)
+func (q *Queries) DeleteFavoriteByHServiceId(ctx context.Context, arg DeleteFavoriteByHServiceIdParams) error {
+	_, err := q.db.Exec(ctx, deleteFavoriteByHServiceId, arg.HserviceID, arg.UserID)
 	return err
 }
 
