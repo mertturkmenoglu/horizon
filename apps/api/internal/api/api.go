@@ -6,6 +6,7 @@ import (
 	"horizon/internal/api/aggregations"
 	"horizon/internal/api/auth"
 	"horizon/internal/api/bookmarks"
+	"horizon/internal/api/favorites"
 	"horizon/internal/api/health"
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/uploads"
@@ -70,6 +71,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	aggregationsModule := aggregations.NewAggregationsService(s.Db, s.Logger, s.Cache)
 	healthModule := health.NewHealthService()
 	bookmarksModule := bookmarks.NewBookmarksService(s.Db, s.Flake, s.Cache, s.Logger)
+	favoritesModule := favorites.NewFavoritesService(s.Db, s.Flake, s.Logger, s.Cache)
 
 	api := e.Group("/api")
 
@@ -118,6 +120,14 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		bookmarksRoutes.DELETE("/:id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
 		bookmarksRoutes.GET("/", bookmarksModule.HandlerGetBookmarks, middlewares.IsAuth)
 		bookmarksRoutes.GET("/:id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
+	}
+
+	favoritesRoutes := api.Group("/favorites")
+	{
+		favoritesRoutes.POST("/", favoritesModule.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
+		favoritesRoutes.DELETE("/:id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
+		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
+		favoritesRoutes.GET("/:id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
 	}
 
 	return e
