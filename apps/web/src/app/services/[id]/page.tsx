@@ -1,7 +1,7 @@
 import CollapsibleText from '@/components/blocks/collapsible-text';
 import { Separator } from '@/components/ui/separator';
 import api from '@/lib/api';
-import { getAuth, getAuthCookie } from '@/lib/auth';
+import { getAuthCookie } from '@/lib/auth';
 import { getCategoryTitle } from '@/lib/categories';
 import { HServiceResponseDto } from '@/lib/dto';
 import BookmarkButton from './_components/bookmark-button';
@@ -34,8 +34,6 @@ async function getServiceById(id: string): Promise<HServiceResponseDto> {
 export default async function Page({ params: { id } }: Props) {
   const hservice = await getServiceById(id);
   const categoryTitle = getCategoryTitle(hservice.category);
-  const auth = await getAuth();
-  const isSignedIn = auth !== null;
 
   return (
     <div className="container mx-auto mt-8 md:mt-16">
@@ -57,20 +55,15 @@ export default async function Page({ params: { id } }: Props) {
             <div className="flex items-center">
               <FavoriteButton
                 isFavorite={false}
-                isSignedIn={isSignedIn}
                 hserviceId={id}
               />
 
               <BookmarkButton
                 isBookmarked={false}
-                isSignedIn={isSignedIn}
                 hserviceId={id}
               />
 
-              <Menu
-                hserviceId={id}
-                isSignedIn={isSignedIn}
-              />
+              <Menu hserviceId={id} />
             </div>
           </div>
 
@@ -92,15 +85,3 @@ export default async function Page({ params: { id } }: Props) {
     </div>
   );
 }
-
-//////////////////////////////////////
-
-// import CollapsibleText from '@/components/blocks/CollapsibleText';
-// import BookmarkButton from './_components/bookmark-button';
-// import Breadcrumb from './_components/breadcrumb';
-// import Carousel from './_components/carousel';
-// import FavoriteButton from './_components/favorite-button';
-// import InformationTable from './_components/info/table';
-// import LocationMap from './_components/location-map';
-// import Menu from './_components/menu';
-// import Reviews from './_components/reviews';
