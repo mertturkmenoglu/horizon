@@ -93,38 +93,58 @@ func syncHServices() error {
 
 			var url *string = nil
 
-			if v.Url.Valid {
-				url = &v.Url.String
+			if v.Hservice.Url.Valid {
+				url = &v.Hservice.Url.String
 			}
 
 			var media map[string]any
 
-			err := json.Unmarshal(v.Media, &media)
+			err := json.Unmarshal(v.Hservice.Media, &media)
 
 			if err != nil {
 				return err
 			}
 
+			var gender *string = nil
+
+			if v.User.Gender.Valid {
+				gender = &v.User.Gender.String
+			}
+
+			var profileImage *string = nil
+
+			if v.User.ProfileImage.Valid {
+				profileImage = &v.User.ProfileImage.String
+			}
+
 			_, err = s.UpsertHService(search.UpsertHServiceDto{
-				ID:               v.ID,
-				UserID:           v.UserID,
-				Title:            v.Title,
-				Slug:             v.Slug,
-				Description:      v.Description,
-				Category:         v.Category,
-				Price:            v.Price,
-				PriceUnit:        string(v.PriceUnit),
-				PriceTimespan:    string(v.PriceTimespan),
-				IsOnline:         v.IsOnline,
+				ID:     v.Hservice.ID,
+				UserID: v.Hservice.UserID,
+				User: search.UserDto{
+					ID:           v.User.ID,
+					Username:     v.User.Username,
+					FullName:     v.User.FullName,
+					Gender:       gender,
+					ProfileImage: profileImage,
+					CreatedAt:    v.User.CreatedAt.Time,
+				},
+				Title:            v.Hservice.Title,
+				Slug:             v.Hservice.Slug,
+				Description:      v.Hservice.Description,
+				Category:         v.Hservice.Category,
+				Price:            v.Hservice.Price,
+				PriceUnit:        string(v.Hservice.PriceUnit),
+				PriceTimespan:    string(v.Hservice.PriceTimespan),
+				IsOnline:         v.Hservice.IsOnline,
 				Url:              url,
-				Location:         v.Location,
-				DeliveryTime:     v.DeliveryTime,
-				DeliveryTimespan: string(v.DeliveryTimespan),
-				TotalPoints:      v.TotalPoints,
-				TotalVotes:       v.TotalVotes,
+				Location:         v.Hservice.Location,
+				DeliveryTime:     v.Hservice.DeliveryTime,
+				DeliveryTimespan: string(v.Hservice.DeliveryTimespan),
+				TotalPoints:      v.Hservice.TotalPoints,
+				TotalVotes:       v.Hservice.TotalVotes,
 				Media:            media,
-				CreatedAt:        v.CreatedAt.Time,
-				UpdatedAt:        v.UpdatedAt.Time,
+				CreatedAt:        v.Hservice.CreatedAt.Time,
+				UpdatedAt:        v.Hservice.UpdatedAt.Time,
 			})
 
 			if err != nil {
