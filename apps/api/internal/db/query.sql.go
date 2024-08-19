@@ -1388,16 +1388,16 @@ func (q *Queries) GetUserProfileByUsername(ctx context.Context, username string)
 
 const isBookmarked = `-- name: IsBookmarked :one
 SELECT id FROM bookmarks
-WHERE id = $1 AND user_id = $2
+WHERE hservice_id = $1 AND user_id = $2
 `
 
 type IsBookmarkedParams struct {
-	ID     pgtype.UUID
-	UserID string
+	HserviceID string
+	UserID     string
 }
 
 func (q *Queries) IsBookmarked(ctx context.Context, arg IsBookmarkedParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, isBookmarked, arg.ID, arg.UserID)
+	row := q.db.QueryRow(ctx, isBookmarked, arg.HserviceID, arg.UserID)
 	var id pgtype.UUID
 	err := row.Scan(&id)
 	return id, err
@@ -1405,16 +1405,16 @@ func (q *Queries) IsBookmarked(ctx context.Context, arg IsBookmarkedParams) (pgt
 
 const isFavorite = `-- name: IsFavorite :one
 SELECT id FROM favorites
-WHERE id = $1 AND user_id = $2
+WHERE hservice_id = $1 AND user_id = $2
 `
 
 type IsFavoriteParams struct {
-	ID     pgtype.UUID
-	UserID string
+	HserviceID string
+	UserID     string
 }
 
 func (q *Queries) IsFavorite(ctx context.Context, arg IsFavoriteParams) (pgtype.UUID, error) {
-	row := q.db.QueryRow(ctx, isFavorite, arg.ID, arg.UserID)
+	row := q.db.QueryRow(ctx, isFavorite, arg.HserviceID, arg.UserID)
 	var id pgtype.UUID
 	err := row.Scan(&id)
 	return id, err

@@ -262,7 +262,7 @@ WHERE bookmarks.id = $1;
 
 -- name: IsBookmarked :one
 SELECT id FROM bookmarks
-WHERE id = $1 AND user_id = $2;
+WHERE hservice_id = $1 AND user_id = $2;
 
 -- name: CreateFavorite :one
 INSERT INTO favorites (
@@ -297,7 +297,7 @@ WHERE favorites.id = $1;
 
 -- name: IsFavorite :one
 SELECT id FROM favorites
-WHERE id = $1 AND user_id = $2;
+WHERE hservice_id = $1 AND user_id = $2;
 
 -- name: GetFavoritesByUsername :many
 SELECT sqlc.embed(favorites), sqlc.embed(hservices) FROM favorites
