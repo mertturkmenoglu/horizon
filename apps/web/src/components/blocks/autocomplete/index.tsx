@@ -40,6 +40,12 @@ export function Autocomplete(props: UseAutocompleteProps) {
               image={hit.media.data[0].url}
               name={hit.title}
               categoryName={getCategoryTitle(hit.category)}
+              user={{
+                id: hit.user.id,
+                fullName: hit.user.fullName,
+                username: hit.user.username,
+                profileImage: hit.user.profileImage,
+              }}
             />
           ))}
 
