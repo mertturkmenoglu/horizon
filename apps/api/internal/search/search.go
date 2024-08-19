@@ -26,9 +26,19 @@ func (s *Search) UpsertHService(v UpsertHServiceDto) (map[string]interface{}, er
 	return s.Client.Collection("HService").Documents().Upsert(context.Background(), v)
 }
 
+type UserDto struct {
+	ID           string    `json:"id"`
+	Username     string    `json:"username"`
+	FullName     string    `json:"fullName"`
+	Gender       *string   `json:"gender"`
+	ProfileImage *string   `json:"profileImage"`
+	CreatedAt    time.Time `json:"createdAt"`
+}
+
 type UpsertHServiceDto struct {
 	ID               string         `json:"id"`
 	UserID           string         `json:"userId"`
+	User             UserDto        `json:"user"`
 	Title            string         `json:"title"`
 	Slug             string         `json:"slug"`
 	Description      string         `json:"description"`
