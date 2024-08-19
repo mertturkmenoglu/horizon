@@ -4,9 +4,12 @@ import FeaturesCarousel from '@/components/blocks/features-carousel';
 import OverlayBanner from '@/components/blocks/overlay-banner';
 import VerticalBanner from '@/components/blocks/vertical-banner';
 import { Button } from '@/components/ui/button';
+import api from '@/lib/api';
 import { getAuth } from '@/lib/auth';
+import { GetHomeAggregationsResponseDto } from '@/lib/dto';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import HServicesGrid from './_components/hservices-grid';
 import Search from './_components/search';
 import SignedInCta from './_components/signed-in-cta';
 import SignedOutCta from './_components/signed-out-cta';
@@ -14,8 +17,15 @@ import SignedOutCta from './_components/signed-out-cta';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+async function getHomeAggregations() {
+  const res = await api.get('aggregations/home');
+  const data = await res.json<{ data: GetHomeAggregationsResponseDto }>();
+  return data.data;
+}
+
 export default async function Page() {
   const auth = await getAuth();
+  const homeAggregations = await getHomeAggregations();
   const isSignedIn = auth !== null;
 
   return (
@@ -36,11 +46,17 @@ export default async function Page() {
         <SignedOutCta />
       )}
 
-      {/* BrowseCategoriesGrid */}
-      {/* Recommendation Grid - Popular */}
-      {/* Recommendation Grid - New */}
+      <HServicesGrid
+        data={homeAggregations['featured']}
+        dataKey={'featured'}
+      />
 
       <FeaturesCarousel className="mx-auto mt-16 max-w-5xl" />
+
+      <HServicesGrid
+        data={homeAggregations['popular']}
+        dataKey={'popular'}
+      />
 
       <OverlayBanner
         image="https://images.unsplash.com/photo-1607388510015-c632e99da586?q=80&w=2574&auto=format&fit=crop"
@@ -58,6 +74,11 @@ export default async function Page() {
         }
         className="my-8"
         imgClassName="aspect-[3]"
+      />
+
+      <HServicesGrid
+        data={homeAggregations['new']}
+        dataKey={'new'}
       />
 
       <VerticalBanner
@@ -88,6 +109,11 @@ export default async function Page() {
             </div>
           </>
         }
+      />
+
+      <HServicesGrid
+        data={homeAggregations['favorites']}
+        dataKey={'favorites'}
       />
 
       <ActionBanner
