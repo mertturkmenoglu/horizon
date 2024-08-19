@@ -5,6 +5,7 @@ import (
 	"horizon/config"
 	"horizon/internal/api/aggregations"
 	"horizon/internal/api/auth"
+	"horizon/internal/api/health"
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/uploads"
 	"horizon/internal/api/users"
@@ -66,6 +67,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake, s.Logger)
 	usersModule := users.NewUsersService(s.Db, s.Flake, s.Logger)
 	aggregationsModule := aggregations.NewAggregationsService(s.Db, s.Logger, s.Cache)
+	healthModule := health.NewHealthService()
 
 	api := e.Group("/api")
 
@@ -101,6 +103,11 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	aggregationsRoutes := api.Group("/aggregations")
 	{
 		aggregationsRoutes.GET("/home", aggregationsModule.HandlerGetHomeAggregations)
+	}
+
+	healthRoutes := api.Group("/health")
+	{
+		healthRoutes.GET("/", healthModule.HandlerGetHealth)
 	}
 
 	return e
