@@ -67,7 +67,14 @@ export default function MenuContent({ fullName, username }: Props) {
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem disabled>Help</DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link
+          href={`/help`}
+          className="cursor-pointer"
+        >
+          Help
+        </Link>
+      </DropdownMenuItem>
       <DropdownMenuItem
         asChild
         className="cursor-pointer"
