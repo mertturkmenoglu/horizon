@@ -201,3 +201,23 @@ SELECT * FROM hservices
 ORDER BY created_at ASC
 OFFSET $1
 LIMIT $2;
+
+-- name: GetFavoriteHServices :many
+SELECT * FROM hservices
+ORDER BY total_points -- TODO: Replace with total_favorites later
+LIMIT 25;
+
+-- name: GetFeaturedHServices :many
+SELECT * FROM hservices
+ORDER BY total_points
+LIMIT 25;
+
+-- name: GetPopularHServices :many
+SELECT * FROM hservices
+ORDER BY total_votes
+LIMIT 25;
+
+-- name: GetNewHServices :many
+SELECT * FROM hservices
+ORDER BY created_at
+LIMIT 25;

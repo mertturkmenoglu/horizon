@@ -380,6 +380,98 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getFavoriteHServices = `-- name: GetFavoriteHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+ORDER BY total_points -- TODO: Replace with total_favorites later
+LIMIT 25
+`
+
+func (q *Queries) GetFavoriteHServices(ctx context.Context) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, getFavoriteHServices)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFeaturedHServices = `-- name: GetFeaturedHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+ORDER BY total_points
+LIMIT 25
+`
+
+func (q *Queries) GetFeaturedHServices(ctx context.Context) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, getFeaturedHServices)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getHServiceById = `-- name: GetHServiceById :one
 SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
 WHERE id = $1
@@ -485,6 +577,98 @@ type GetMyHServicesParams struct {
 
 func (q *Queries) GetMyHServices(ctx context.Context, arg GetMyHServicesParams) ([]Hservice, error) {
 	rows, err := q.db.Query(ctx, getMyHServices, arg.UserID, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getNewHServices = `-- name: GetNewHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+ORDER BY created_at
+LIMIT 25
+`
+
+func (q *Queries) GetNewHServices(ctx context.Context) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, getNewHServices)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hservice
+	for rows.Next() {
+		var i Hservice
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Slug,
+			&i.Description,
+			&i.Category,
+			&i.Price,
+			&i.PriceUnit,
+			&i.PriceTimespan,
+			&i.IsOnline,
+			&i.Url,
+			&i.Location,
+			&i.DeliveryTime,
+			&i.DeliveryTimespan,
+			&i.TotalPoints,
+			&i.TotalVotes,
+			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPopularHServices = `-- name: GetPopularHServices :many
+SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+ORDER BY total_votes
+LIMIT 25
+`
+
+func (q *Queries) GetPopularHServices(ctx context.Context) ([]Hservice, error) {
+	rows, err := q.db.Query(ctx, getPopularHServices)
 	if err != nil {
 		return nil, err
 	}
