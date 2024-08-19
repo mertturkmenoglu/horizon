@@ -7,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import api from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { AuthContext } from '@/providers/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,7 +29,15 @@ export default function FavoriteButton({ isFavorite, hserviceId }: Props) {
   const mutation = useMutation({
     mutationKey: ['favorites', hserviceId],
     mutationFn: async () => {
-      // TODO: Implement later
+      if (fav) {
+        await api.delete(`favorites/${hserviceId}`);
+      } else {
+        await api.post(`favorites/`, {
+          json: {
+            hserviceId,
+          },
+        });
+      }
     },
     onSuccess: async () => {
       const prev = fav;
