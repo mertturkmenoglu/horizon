@@ -143,3 +143,65 @@ func (s *FavoritesService) HandlerGetIsFavorite(c echo.Context) error {
 		"data": true,
 	})
 }
+
+func (s *FavoritesService) HandlerGetFavoritesByUsername(c echo.Context) error {
+	username := c.Param("username")
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: err.Error(),
+		})
+	}
+
+	if username == "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: "username is required",
+		})
+	}
+
+	favorites, err := s.Db.Queries.GetFavoritesByUsername(context.Background(), db.GetFavoritesByUsernameParams{
+		Username: username,
+		Offset:   int32(params.Offset),
+		Limit:    int32(params.PageSize),
+	})
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "not found",
+			})
+		}
+		return echo.ErrInternalServerError
+	}
+
+	count, err := s.Db.Queries.CountUserFavoritesByUsername(context.Background(), username)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "not found",
+			})
+		}
+		return echo.ErrInternalServerError
+	}
+
+	paginationData := pagination.GetPagination(params, count)
+
+	res := make([]FavoritesResponseDto, 0)
+
+	for _, favorite := range favorites {
+		dto, err := mapFavoriteToFavoriteDtoByUsername(favorite)
+
+		if err != nil {
+			return echo.ErrInternalServerError
+		}
+
+		res = append(res, dto)
+	}
+
+	return c.JSON(http.StatusOK, h.PaginatedResponse[[]FavoritesResponseDto]{
+		Data:       res,
+		Pagination: paginationData,
+	})
+}

@@ -128,6 +128,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		favoritesRoutes.DELETE("/:id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
 		favoritesRoutes.GET("/:id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
+		favoritesRoutes.GET("/username/:username", favoritesModule.HandlerGetFavoritesByUsername)
 	}
 
 	return e
