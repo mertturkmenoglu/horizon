@@ -29,10 +29,10 @@ func (s *AggregationsService) HandlerGetHomeAggregations(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	resNew, errNew := mapHServicesToHServiceDtos(dbNew)
-	resPopular, errPopular := mapHServicesToHServiceDtos(dbPopular)
-	resFeatured, errFeatured := mapHServicesToHServiceDtos(dbFeatured)
-	resFavorites, errFavorites := mapHServicesToHServiceDtos(dbFavorites)
+	resNew, errNew := mapNewHServicesToDtos(dbNew)
+	resPopular, errPopular := mapPopularHServicesToDtos(dbPopular)
+	resFeatured, errFeatured := mapFeaturedHServicesToDtos(dbFeatured)
+	resFavorites, errFavorites := mapFavoriteHServicesToDtos(dbFavorites)
 
 	if errNew != nil || errPopular != nil || errFeatured != nil || errFavorites != nil {
 		return echo.ErrInternalServerError
