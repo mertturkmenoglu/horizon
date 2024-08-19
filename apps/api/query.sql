@@ -213,7 +213,8 @@ LIMIT 25;
 -- name: GetFeaturedHServices :many
 SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
-ORDER BY total_points DESC
+WHERE total_votes != 0
+ORDER BY total_points / total_votes DESC, total_votes DESC
 LIMIT 25;
 
 -- name: GetPopularHServices :many
