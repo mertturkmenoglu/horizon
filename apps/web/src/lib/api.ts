@@ -1,9 +1,9 @@
 import ky from 'ky';
-import { UploadImageType } from './dto';
+import { GetNewUploadUrlResponseDto, UploadImageType } from './dto';
 
 const api = ky.create({
   credentials: 'include',
-  prefixUrl: 'http://localhost:5000/api',
+  prefixUrl: process.env.NEXT_PUBLIC_API ?? '',
 });
 
 export default api;
@@ -17,7 +17,7 @@ export async function uploadImages(
     const file = files[i];
     const res = await api
       .get(`uploads/new-url?type=${type}&count=1&mime=${file.type}`)
-      .json<{ data: Array<{ Key: string; Url: string }> }>();
+      .json<{ data: GetNewUploadUrlResponseDto[] }>();
     const url = res.data[0].Url;
 
     try {
