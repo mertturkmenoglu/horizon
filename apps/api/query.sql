@@ -177,8 +177,9 @@ SELECT COUNT(*) FROM hservices
 WHERE user_id = $1;
 
 -- name: GetHServiceById :one
-SELECT * FROM hservices
-WHERE id = $1
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
+WHERE hservices.id = $1
 LIMIT 1;
 
 -- name: GetUserProfileByUsername :one
@@ -197,29 +198,34 @@ LIMIT 1;
 SELECT COUNT(*) FROM hservices;
 
 -- name: ListHServices :many
-SELECT * FROM hservices
-ORDER BY created_at ASC
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
+ORDER BY hservices.created_at ASC
 OFFSET $1
 LIMIT $2;
 
 -- name: GetFavoriteHServices :many
-SELECT * FROM hservices
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_points -- TODO: Replace with total_favorites later
 LIMIT 25;
 
 -- name: GetFeaturedHServices :many
-SELECT * FROM hservices
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_points
 LIMIT 25;
 
 -- name: GetPopularHServices :many
-SELECT * FROM hservices
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_votes
 LIMIT 25;
 
 -- name: GetNewHServices :many
-SELECT * FROM hservices
-ORDER BY created_at
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
+ORDER BY hservices.created_at
 LIMIT 25;
 
 -- name: CreateBookmark :one

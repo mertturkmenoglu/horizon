@@ -651,40 +651,64 @@ func (q *Queries) GetFavoriteById(ctx context.Context, id pgtype.UUID) (GetFavor
 }
 
 const getFavoriteHServices = `-- name: GetFavoriteHServices :many
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_points -- TODO: Replace with total_favorites later
 LIMIT 25
 `
 
-func (q *Queries) GetFavoriteHServices(ctx context.Context) ([]Hservice, error) {
+type GetFavoriteHServicesRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetFavoriteHServices(ctx context.Context) ([]GetFavoriteHServicesRow, error) {
 	rows, err := q.db.Query(ctx, getFavoriteHServices)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hservice
+	var items []GetFavoriteHServicesRow
 	for rows.Next() {
-		var i Hservice
+		var i GetFavoriteHServicesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.Title,
-			&i.Slug,
-			&i.Description,
-			&i.Category,
-			&i.Price,
-			&i.PriceUnit,
-			&i.PriceTimespan,
-			&i.IsOnline,
-			&i.Url,
-			&i.Location,
-			&i.DeliveryTime,
-			&i.DeliveryTimespan,
-			&i.TotalPoints,
-			&i.TotalVotes,
-			&i.Media,
-			&i.CreatedAt,
-			&i.UpdatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -825,40 +849,64 @@ func (q *Queries) GetFavoritesByUsername(ctx context.Context, arg GetFavoritesBy
 }
 
 const getFeaturedHServices = `-- name: GetFeaturedHServices :many
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_points
 LIMIT 25
 `
 
-func (q *Queries) GetFeaturedHServices(ctx context.Context) ([]Hservice, error) {
+type GetFeaturedHServicesRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetFeaturedHServices(ctx context.Context) ([]GetFeaturedHServicesRow, error) {
 	rows, err := q.db.Query(ctx, getFeaturedHServices)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hservice
+	var items []GetFeaturedHServicesRow
 	for rows.Next() {
-		var i Hservice
+		var i GetFeaturedHServicesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.Title,
-			&i.Slug,
-			&i.Description,
-			&i.Category,
-			&i.Price,
-			&i.PriceUnit,
-			&i.PriceTimespan,
-			&i.IsOnline,
-			&i.Url,
-			&i.Location,
-			&i.DeliveryTime,
-			&i.DeliveryTimespan,
-			&i.TotalPoints,
-			&i.TotalVotes,
-			&i.Media,
-			&i.CreatedAt,
-			&i.UpdatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -871,34 +919,58 @@ func (q *Queries) GetFeaturedHServices(ctx context.Context) ([]Hservice, error) 
 }
 
 const getHServiceById = `-- name: GetHServiceById :one
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
-WHERE id = $1
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
+WHERE hservices.id = $1
 LIMIT 1
 `
 
-func (q *Queries) GetHServiceById(ctx context.Context, id string) (Hservice, error) {
+type GetHServiceByIdRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetHServiceById(ctx context.Context, id string) (GetHServiceByIdRow, error) {
 	row := q.db.QueryRow(ctx, getHServiceById, id)
-	var i Hservice
+	var i GetHServiceByIdRow
 	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Title,
-		&i.Slug,
-		&i.Description,
-		&i.Category,
-		&i.Price,
-		&i.PriceUnit,
-		&i.PriceTimespan,
-		&i.IsOnline,
-		&i.Url,
-		&i.Location,
-		&i.DeliveryTime,
-		&i.DeliveryTimespan,
-		&i.TotalPoints,
-		&i.TotalVotes,
-		&i.Media,
-		&i.CreatedAt,
-		&i.UpdatedAt,
+		&i.Hservice.ID,
+		&i.Hservice.UserID,
+		&i.Hservice.Title,
+		&i.Hservice.Slug,
+		&i.Hservice.Description,
+		&i.Hservice.Category,
+		&i.Hservice.Price,
+		&i.Hservice.PriceUnit,
+		&i.Hservice.PriceTimespan,
+		&i.Hservice.IsOnline,
+		&i.Hservice.Url,
+		&i.Hservice.Location,
+		&i.Hservice.DeliveryTime,
+		&i.Hservice.DeliveryTimespan,
+		&i.Hservice.TotalPoints,
+		&i.Hservice.TotalVotes,
+		&i.Hservice.Media,
+		&i.Hservice.CreatedAt,
+		&i.Hservice.UpdatedAt,
+		&i.User.ID,
+		&i.User.Email,
+		&i.User.Username,
+		&i.User.FullName,
+		&i.User.PasswordHash,
+		&i.User.GoogleID,
+		&i.User.IsEmailVerified,
+		&i.User.IsActive,
+		&i.User.Role,
+		&i.User.PasswordResetToken,
+		&i.User.PasswordResetExpires,
+		&i.User.LoginAttempts,
+		&i.User.LockoutUntil,
+		&i.User.Gender,
+		&i.User.ProfileImage,
+		&i.User.LastLogin,
+		&i.User.CreatedAt,
+		&i.User.UpdatedAt,
 	)
 	return i, err
 }
@@ -1014,40 +1086,64 @@ func (q *Queries) GetMyHServices(ctx context.Context, arg GetMyHServicesParams) 
 }
 
 const getNewHServices = `-- name: GetNewHServices :many
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
-ORDER BY created_at
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
+ORDER BY hservices.created_at
 LIMIT 25
 `
 
-func (q *Queries) GetNewHServices(ctx context.Context) ([]Hservice, error) {
+type GetNewHServicesRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetNewHServices(ctx context.Context) ([]GetNewHServicesRow, error) {
 	rows, err := q.db.Query(ctx, getNewHServices)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hservice
+	var items []GetNewHServicesRow
 	for rows.Next() {
-		var i Hservice
+		var i GetNewHServicesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.Title,
-			&i.Slug,
-			&i.Description,
-			&i.Category,
-			&i.Price,
-			&i.PriceUnit,
-			&i.PriceTimespan,
-			&i.IsOnline,
-			&i.Url,
-			&i.Location,
-			&i.DeliveryTime,
-			&i.DeliveryTimespan,
-			&i.TotalPoints,
-			&i.TotalVotes,
-			&i.Media,
-			&i.CreatedAt,
-			&i.UpdatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -1060,40 +1156,64 @@ func (q *Queries) GetNewHServices(ctx context.Context) ([]Hservice, error) {
 }
 
 const getPopularHServices = `-- name: GetPopularHServices :many
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
 ORDER BY total_votes
 LIMIT 25
 `
 
-func (q *Queries) GetPopularHServices(ctx context.Context) ([]Hservice, error) {
+type GetPopularHServicesRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetPopularHServices(ctx context.Context) ([]GetPopularHServicesRow, error) {
 	rows, err := q.db.Query(ctx, getPopularHServices)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hservice
+	var items []GetPopularHServicesRow
 	for rows.Next() {
-		var i Hservice
+		var i GetPopularHServicesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.Title,
-			&i.Slug,
-			&i.Description,
-			&i.Category,
-			&i.Price,
-			&i.PriceUnit,
-			&i.PriceTimespan,
-			&i.IsOnline,
-			&i.Url,
-			&i.Location,
-			&i.DeliveryTime,
-			&i.DeliveryTimespan,
-			&i.TotalPoints,
-			&i.TotalVotes,
-			&i.Media,
-			&i.CreatedAt,
-			&i.UpdatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -1300,8 +1420,9 @@ func (q *Queries) IsFavorite(ctx context.Context, arg IsFavoriteParams) (pgtype.
 }
 
 const listHServices = `-- name: ListHServices :many
-SELECT id, user_id, title, slug, description, category, price, price_unit, price_timespan, is_online, url, location, delivery_time, delivery_timespan, total_points, total_votes, media, created_at, updated_at FROM hservices
-ORDER BY created_at ASC
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
+ORDER BY hservices.created_at ASC
 OFFSET $1
 LIMIT $2
 `
@@ -1311,35 +1432,58 @@ type ListHServicesParams struct {
 	Limit  int32
 }
 
-func (q *Queries) ListHServices(ctx context.Context, arg ListHServicesParams) ([]Hservice, error) {
+type ListHServicesRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) ListHServices(ctx context.Context, arg ListHServicesParams) ([]ListHServicesRow, error) {
 	rows, err := q.db.Query(ctx, listHServices, arg.Offset, arg.Limit)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hservice
+	var items []ListHServicesRow
 	for rows.Next() {
-		var i Hservice
+		var i ListHServicesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.UserID,
-			&i.Title,
-			&i.Slug,
-			&i.Description,
-			&i.Category,
-			&i.Price,
-			&i.PriceUnit,
-			&i.PriceTimespan,
-			&i.IsOnline,
-			&i.Url,
-			&i.Location,
-			&i.DeliveryTime,
-			&i.DeliveryTimespan,
-			&i.TotalPoints,
-			&i.TotalVotes,
-			&i.Media,
-			&i.CreatedAt,
-			&i.UpdatedAt,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
