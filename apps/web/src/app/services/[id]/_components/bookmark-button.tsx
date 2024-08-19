@@ -7,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import api from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { AuthContext } from '@/providers/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -19,10 +20,7 @@ type Props = {
   hserviceId: string;
 };
 
-export default function BookmarkButton({
-  isBookmarked,
-  hserviceId,
-}: Props) {
+export default function BookmarkButton({ isBookmarked, hserviceId }: Props) {
   const [booked, setBooked] = useState(isBookmarked);
   const qc = useQueryClient();
   const { isLoading, user } = useContext(AuthContext);
@@ -31,7 +29,15 @@ export default function BookmarkButton({
   const mutation = useMutation({
     mutationKey: ['bookmark', hserviceId],
     mutationFn: async () => {
-      // TODO: Implement later
+      if (booked) {
+        await api.delete(`bookmarks/${hserviceId}`);
+      } else {
+        await api.post('bookmarks/', {
+          json: {
+            hserviceId,
+          },
+        });
+      }
     },
     onSuccess: async () => {
       const prev = booked;
