@@ -1,9 +1,11 @@
 import CollapsibleText from '@/components/blocks/collapsible-text';
+import UserImage from '@/components/blocks/user-image';
 import { Separator } from '@/components/ui/separator';
 import api from '@/lib/api';
 import { getAuthCookie } from '@/lib/auth';
 import { getCategoryTitle } from '@/lib/categories';
 import { HServiceMetadataDto, HServiceResponseDto } from '@/lib/dto';
+import Link from 'next/link';
 import BookmarkButton from './_components/bookmark-button';
 import Breadcrumb from './_components/breadcrumb';
 import Carousel from './_components/carousel';
@@ -73,6 +75,14 @@ export default async function Page({ params: { id } }: Props) {
           </div>
 
           <p className="mt-2 text-sm text-primary">{categoryTitle}</p>
+          <Link
+            href={`/u/${data.user.username}`}
+            className="mt-4 flex items-center gap-2"
+          >
+            <UserImage src={data.user.profileImage} />
+            <div>{data.user.fullName}</div>
+          </Link>
+
           <CollapsibleText text={data.description} />
           <h2 className="mt-8 text-lg font-bold">Information</h2>
           <InformationTable hservice={data} />
