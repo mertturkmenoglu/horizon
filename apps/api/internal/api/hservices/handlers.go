@@ -67,13 +67,13 @@ func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
 		})
 	}
 
-	res, err := mapHServicetoHServiceDto(saved)
+	res, err := mapHServiceToWithoutUserDto(saved)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusOK, h.Response[HServiceResponseDto]{
+	return c.JSON(http.StatusOK, h.Response[HServiceWithoutUserResponseDto]{
 		"data": res,
 	})
 }
@@ -118,10 +118,10 @@ func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
 
 	paginationData := pagination.GetPagination(params, count)
 
-	res := make([]HServiceResponseDto, 0)
+	res := make([]HServiceWithoutUserResponseDto, 0)
 
 	for _, hservice := range hservices {
-		dto, err := mapHServicetoHServiceDto(hservice)
+		dto, err := mapHServiceToWithoutUserDto(hservice)
 
 		if err != nil {
 			return echo.ErrInternalServerError
@@ -130,7 +130,7 @@ func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
 		res = append(res, dto)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]HServiceResponseDto]{
+	return c.JSON(http.StatusOK, h.PaginatedResponse[[]HServiceWithoutUserResponseDto]{
 		Data:       res,
 		Pagination: paginationData,
 	})
@@ -157,7 +157,10 @@ func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
 		}
 	}
 
-	res, err := mapHServicetoHServiceDto(dbResult)
+	res, err := mapRowToDto(Row{
+		Hservice: dbResult.Hservice,
+		User:     dbResult.User,
+	})
 
 	if err != nil {
 		return echo.ErrInternalServerError
