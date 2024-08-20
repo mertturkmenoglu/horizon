@@ -6,6 +6,7 @@ import (
 	"horizon/internal/db"
 	"horizon/internal/h"
 	"horizon/internal/hash"
+	"horizon/internal/tasks"
 	"net/http"
 	"time"
 
@@ -21,13 +22,15 @@ type AuthService struct {
 	Db     *db.Db
 	Flake  *sonyflake.Sonyflake
 	Logger *pterm.Logger
+	Tasks  *tasks.Tasks
 }
 
-func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger) *AuthService {
+func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, tasks *tasks.Tasks) *AuthService {
 	return &AuthService{
 		Db:     db,
 		Flake:  flake,
 		Logger: logger,
+		Tasks:  tasks,
 	}
 }
 
@@ -226,6 +229,11 @@ func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
 			Message: "cannot create user",
 		})
 	}
+
+	s.Tasks.CreateAndEnqueue(tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
+		Email: body.Email,
+		Name:  body.FullName,
+	})
 
 	return c.JSON(http.StatusCreated, h.AnyResponse{
 		"data": saved.ID,
