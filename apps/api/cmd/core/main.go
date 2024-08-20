@@ -25,6 +25,9 @@ func main() {
 		db.RunMigrations()
 	}
 
+	go a.Tasks.Run()
+	defer a.Tasks.Close()
+
 	// Start the Echo server
 	go func() {
 		if err := e.Start(a.PortString); err != nil && err != http.ErrServerClosed {
