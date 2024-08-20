@@ -13,9 +13,11 @@ import (
 	"horizon/internal/api/users"
 	"horizon/internal/cache"
 	"horizon/internal/db"
+	"horizon/internal/email"
 	"horizon/internal/logs"
 	"horizon/internal/middlewares"
 	"horizon/internal/search"
+	"horizon/internal/tasks"
 	"horizon/internal/upload"
 
 	"github.com/labstack/echo/v4"
@@ -35,6 +37,8 @@ type Service struct {
 	Search     *search.Search
 	Logger     *pterm.Logger
 	Cache      *cache.Cache
+	Email      *email.EmailService
+	Tasks      *tasks.Tasks
 }
 
 func New() *Service {
@@ -48,6 +52,8 @@ func New() *Service {
 		Search:     search.New(),
 		Logger:     logs.NewPTermLogger(),
 		Cache:      cache.New(),
+		Email:      email.New(),
+		Tasks:      nil,
 	}
 
 	flake, err := sonyflake.New(sonyflake.Settings{})
@@ -57,6 +63,7 @@ func New() *Service {
 	}
 
 	apiObj.Flake = flake
+	apiObj.Tasks = tasks.New(apiObj.Email)
 
 	return apiObj
 }
@@ -64,7 +71,7 @@ func New() *Service {
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
 
-	authModule := auth.NewAuthService(s.Db, s.Flake, s.Logger)
+	authModule := auth.NewAuthService(s.Db, s.Flake, s.Logger, s.Tasks)
 	uploadsModule := uploads.NewUploadsService(s.Upload)
 	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake, s.Logger)
 	usersModule := users.NewUsersService(s.Db, s.Flake, s.Logger)
