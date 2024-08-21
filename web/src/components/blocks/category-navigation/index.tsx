@@ -53,7 +53,7 @@ export default function CategoryNavigation({ className }: Props) {
       className={cn(className)}
     >
       <ScrollArea>
-        <ul className="flex items-center justify-center space-x-4">
+        <ul className="flex items-center justify-evenly space-x-4">
           {data.map((item, i) => (
             <Item
               {...item}
@@ -82,18 +82,15 @@ export default function CategoryNavigation({ className }: Props) {
       </ScrollArea>
 
       <div
-        className={cn(
-          'mt-2 grid-cols-2 gap-8 rounded-md border p-4 lg:grid-cols-3',
-          {
-            hidden: !(open && category),
-            grid: open && category,
-          }
-        )}
+        className={cn('mt-2 grid-cols-5 gap-8 rounded-md border p-4', {
+          hidden: !(open && category),
+          grid: open && category,
+        })}
       >
-        <div className="relative col-span-2 lg:col-span-2">
+        <div className="relative col-span-5 bg-red-500 lg:col-span-2">
           <img
             src={img ? img + '?q=80&w=768&auto=format&fit=crop' : ''}
-            className="h-full rounded object-cover lg:aspect-[2] lg:h-auto lg:w-full"
+            className="h-full w-auto rounded object-cover lg:aspect-[2] lg:h-auto lg:w-full"
             alt=""
             loading="eager"
           />
@@ -101,20 +98,20 @@ export default function CategoryNavigation({ className }: Props) {
             href={`/categories/${encodeURIComponent(
               category.category
             )}?id=${category.category}`}
-            className="absolute bottom-2 left-8 ml-2 rounded-md bg-sky-100 px-2 py-1 text-xl font-bold text-sky-500"
+            className="absolute bottom-2 left-4 right-4 ml-2 rounded-md bg-sky-100 px-2 py-1 text-center text-base font-medium text-sky-500"
           >
             {category.category}
           </Link>
         </div>
 
-        <div className="col-span-2 mx-auto grid grid-cols-3 gap-4 lg:col-span-1 lg:mx-0">
+        <div className="col-span-5 grid grid-cols-3 gap-4 lg:col-span-3 lg:mx-0">
           {category.subcategories.map((subcategory) => (
             <Link
               key={subcategory.id}
               href={`/categories/${encodeURIComponent(subcategory.title)}?id=${
                 subcategory.id
               }`}
-              className="flex aspect-square items-center justify-center rounded px-2 py-2 text-center text-sm text-muted-foreground hover:bg-muted"
+              className="flex items-center justify-center rounded px-2 py-2 text-center text-sm text-muted-foreground hover:bg-muted"
             >
               {subcategory.title}
             </Link>

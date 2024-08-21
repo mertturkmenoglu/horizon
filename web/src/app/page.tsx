@@ -31,7 +31,7 @@ export default async function Page() {
   return (
     <main className="container">
       <Search />
-      <CategoryNavigation className="mx-auto mt-12 max-w-4xl" />
+      <CategoryNavigation className="mx-auto mt-12 w-full" />
 
       {isSignedIn ? (
         <SignedInCta fullName={auth.data.fullName} />
