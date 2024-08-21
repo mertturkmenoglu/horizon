@@ -19,26 +19,44 @@ func generateUsernameFromEmail(db *db.Db, email string) (string, error) {
 	_, err := db.Queries.GetUserByUsername(context.Background(), validLocalPart)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			// No user, we can use this username
-			return validLocalPart, nil
-		} else {
+		if !errors.Is(err, pgx.ErrNoRows) {
 			// Something else happened. Abort.
 			return "", err
 		}
-	} else {
-		// There's already a user with this username.
-		// Append random string at the end of validLocalPart.
-		// What happens if there is a user with that username though?
-		// Well, Jesus take the wheel, this app works on prayers.
-		var base = validLocalPart
 
-		if len(validLocalPart) > 24 {
-			base = validLocalPart[0:24]
+		if !isValidUsername(validLocalPart) {
+			// Username is not valid
+			return "", ErrUsernameChars
 		}
 
-		return base + h.RandStringRunes(8), nil
+		// Username is valid and there is no user
+		// with this username.
+		// We can use this username.
+		return validLocalPart, nil
 	}
+
+	// There's already a user with this username.
+	// Append random string at the end of validLocalPart.
+	var base = validLocalPart
+
+	if len(validLocalPart) > 24 {
+		base = validLocalPart[0:24]
+	}
+
+	newStr := base + h.RandStringRunes(8)
+
+	if !isValidUsername(newStr) {
+		// Username is not valid
+		return "", ErrUsernameChars
+	}
+
+	_, err = db.Queries.GetUserByUsername(context.Background(), newStr)
+
+	if err != nil {
+		return "", ErrUsernameTaken
+	}
+
+	return newStr, nil
 }
 
 func cleanEmailLocalPart(localPart string) string {
