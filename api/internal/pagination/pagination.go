@@ -10,6 +10,10 @@ func GetParamsFromContext(c echo.Context) (Params, error) {
 	page := c.QueryParam("page")
 	size := c.QueryParam("pageSize")
 
+	return getParamsFromValues(page, size)
+}
+
+func getParamsFromValues(page, size string) (Params, error) {
 	if page == "" {
 		page = "1"
 	}
@@ -25,10 +29,12 @@ func GetParamsFromContext(c echo.Context) (Params, error) {
 		return Params{}, ErrInvalidPaginationParams
 	}
 
-	ok := isize > 0 && isize < 100 && (isize%25 == 0 || isize%10 == 0)
+	if !isValidSize(int(isize)) {
+		return Params{}, ErrInvalidSizeParam
+	}
 
-	if !ok {
-		return Params{}, ErrInvalidPaginationParams
+	if !isValidPage(int(ipage)) {
+		return Params{}, ErrInvalidPageParam
 	}
 
 	params := Params{
