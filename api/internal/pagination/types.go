@@ -1,11 +1,5 @@
 package pagination
 
-import "errors"
-
-var (
-	ErrInvalidPaginationParams = errors.New("invalid pagination params")
-)
-
 type Params struct {
 	Page     int
 	PageSize int
