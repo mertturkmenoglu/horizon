@@ -3,16 +3,21 @@ name: horizon
 services:
   redis:
     container_name: redis
-    image: redis:alpine
+    image: redis:7.4.0-alpine
     restart: always
     networks:
       - redisnet
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:16.4-alpine
     restart: always
     ports:
       - "5432:5432"
@@ -20,6 +25,13 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: horizon
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   minio:
     container_name: minio
@@ -43,6 +55,8 @@ services:
     volumes:
       - ./typesense-data:/data
     command: "--data-dir /data --api-key=horizon --enable-cors"
+    networks:
+      - searchnet
 
   typesense-dashboard:
     container_name: typesense-dashboard
@@ -50,6 +64,12 @@ services:
     ports:
       - 3006:80
     image: ghcr.io/bfritscher/typesense-dashboard:latest
+    networks:
+      - searchnet
 
 networks:
   redisnet:
+  searchnet:
+
+volumes:
+  pg_data:
