@@ -2,7 +2,6 @@ package upload
 
 import (
 	"context"
-	"fmt"
 	"horizon/config"
 	"log"
 
@@ -34,24 +33,39 @@ func New() *Upload {
 		Context: context.Background(),
 	}
 
-	buckets := viper.GetStringSlice(config.MINIO_BUCKETS)
-	location := viper.GetString(config.MINIO_LOCATION)
 	autocreateBuckets := viper.GetBool(config.MINIO_AUTOCREATE_BUCKETS)
 
 	if autocreateBuckets {
-		for _, bucketName := range buckets {
-			if exists, _ := up.Client.BucketExists(up.Context, bucketName); !exists {
-				err = up.Client.MakeBucket(up.Context, bucketName, minio.MakeBucketOptions{
-					Region: location,
+		_, err = up.autocreateBuckets()
+
+		if err != nil {
+			log.Fatal("cannot create buckets", err.Error())
+		}
+	}
+
+	return up
+}
+
+func (up *Upload) autocreateBuckets() ([]*minio.BucketInfo, error) {
+	buckets := viper.GetStringSlice(config.MINIO_BUCKETS)
+	location := viper.GetString(config.MINIO_LOCATION)
+	bucketInfo := make([]*minio.BucketInfo, 0)
+
+	for _, bucketName := range buckets {
+		if exists, _ := up.Client.BucketExists(up.Context, bucketName); !exists {
+			err := up.Client.MakeBucket(up.Context, bucketName, minio.MakeBucketOptions{
+				Region: location,
+			})
+
+			if err != nil {
+				return nil, err
+			} else {
+				bucketInfo = append(bucketInfo, &minio.BucketInfo{
+					Name: bucketName,
 				})
+			}
 
-				if err != nil {
-					log.Fatal("cannot create bucket", bucketName)
-				} else {
-					fmt.Println("Bucket created", bucketName)
-				}
-
-				policy := `{
+			policy := `{
 					"Version": "2012-10-17",
 					"Statement": [
 						{
@@ -63,14 +77,13 @@ func New() *Upload {
 					]
 				}`
 
-				err := up.Client.SetBucketPolicy(context.Background(), bucketName, policy)
+			err = up.Client.SetBucketPolicy(context.Background(), bucketName, policy)
 
-				if err != nil {
-					fmt.Println("Cannot set bucket policy", bucketName, err.Error())
-				}
+			if err != nil {
+				return nil, err
 			}
 		}
 	}
 
-	return up
+	return bucketInfo, nil
 }
