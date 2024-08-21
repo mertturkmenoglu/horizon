@@ -18,7 +18,12 @@ import (
 
 func (s *AuthService) HandlerGoogle(c echo.Context) error {
 	googleConfig := getGoogleOAuth2Config()
-	state := generateStateString()
+	state, err := generateStateString()
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {

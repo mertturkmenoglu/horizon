@@ -2,13 +2,13 @@ package auth
 
 import (
 	"context"
-	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/h"
+	"horizon/internal/random"
 
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5"
@@ -38,15 +38,14 @@ func getGoogleOAuth2Config() *oauth2.Config {
 	}
 }
 
-func generateStateString() string {
-	b := make([]byte, 16)
-	_, err := rand.Read(b)
+func generateStateString() (string, error) {
+	bytes, err := random.GenerateBytes(16)
 
 	if err != nil {
-		return "horizon"
+		return "", err
 	}
 
-	return base64.URLEncoding.EncodeToString(b)
+	return base64.URLEncoding.EncodeToString(bytes), nil
 }
 
 func fetchGoogleUser(token *oauth2.Token) (*GoogleUser, error) {

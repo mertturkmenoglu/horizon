@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"horizon/internal/db"
-	"horizon/internal/h"
+	"horizon/internal/random"
 	"strings"
 
 	"github.com/jackc/pgx/v5"
@@ -43,7 +43,7 @@ func generateUsernameFromEmail(db *db.Db, email string) (string, error) {
 		base = validLocalPart[0:24]
 	}
 
-	newStr := base + h.RandStringRunes(8)
+	newStr := base + random.GenerateLetterString(8)
 
 	if !isValidUsername(newStr) {
 		// Username is not valid
