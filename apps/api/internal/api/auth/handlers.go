@@ -13,26 +13,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/pterm/pterm"
-	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
 )
-
-type AuthService struct {
-	Db     *db.Db
-	Flake  *sonyflake.Sonyflake
-	Logger *pterm.Logger
-	Tasks  *tasks.Tasks
-}
-
-func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, tasks *tasks.Tasks) *AuthService {
-	return &AuthService{
-		Db:     db,
-		Flake:  flake,
-		Logger: logger,
-		Tasks:  tasks,
-	}
-}
 
 func (s *AuthService) HandlerGoogle(c echo.Context) error {
 	googleConfig := getGoogleOAuth2Config()
