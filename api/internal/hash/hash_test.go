@@ -3,7 +3,7 @@ package hash
 import (
 	"bytes"
 	"encoding/base64"
-	"horizon/internal/h"
+	"horizon/internal/random"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ var (
 
 func TestShouldHashAndVerifyRandomPassword(t *testing.T) {
 	expected := true
-	randomPassword := h.RandStringRunes(10)
+	randomPassword := random.GenerateLetterString(10)
 	hashed, err := Hash(randomPassword)
 
 	if err != nil {

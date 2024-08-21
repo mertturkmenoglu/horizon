@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"horizon/internal/random"
 	"strings"
 
 	"golang.org/x/crypto/argon2"
@@ -26,7 +27,7 @@ var (
 
 // Produces argon2 hash of the given string s.
 func Hash(s string) (string, error) {
-	salt, err := GenerateRandomBytes(saltLength)
+	salt, err := random.GenerateBytes(saltLength)
 
 	if err != nil {
 		return "", err
