@@ -4,3 +4,4 @@ tmp/
 *.log
 typesense-data/
 data/*.csv
+*.out
