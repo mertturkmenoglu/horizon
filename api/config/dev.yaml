@@ -32,6 +32,7 @@ minio:
   location: eu-central-1
   autocreate-buckets: true
 api:
+  url: "http://localhost:5000"
   logger:
     type: file
   auth:
@@ -55,3 +56,5 @@ api:
     presigned-url-exp-min: 15
 cron:
   category-service-count: "*/10 * * * *"
+web:
+  url: "http://localhost:3000"

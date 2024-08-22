@@ -31,4 +31,6 @@ const (
 	AUTH_SESSION_PATH            = "api.auth.session.path"
 	AUTH_SESSION_MAX_AGE         = "api.auth.session.max-age"
 	UPLOAD_PRESIGNED_URL_EXP_MIN = "api.upload.presigned-url-exp-min"
+	WEB_URL                      = "web.url"
+	API_URL                      = "api.url"
 )
