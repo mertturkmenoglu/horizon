@@ -1,9 +1,9 @@
-import AppMessage from '@/components/blocks/app-message';
 import { Separator } from '@/components/ui/separator';
 import api from '@/lib/api';
 import { getAuthCookie } from '@/lib/auth';
 import { GetUserProfileByUsernameResponseDto } from '@/lib/dto';
 import Header from './_components/header';
+import HServicesList from './_components/hservices-list';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -32,10 +32,7 @@ export default async function Page({ params: { username } }: Props) {
     <div className="container my-16">
       <Header user={user} />
       <Separator className="my-4" />
-      <AppMessage
-        emptyMessage="Nothing here"
-        className="my-16"
-      />
+      <HServicesList username={username} />
     </div>
   );
 }
