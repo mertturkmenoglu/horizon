@@ -93,3 +93,15 @@ SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
 JOIN users ON users.id = hservices.user_id
 ORDER BY hservices.created_at DESC
 LIMIT 25;
+
+-- name: GetHServicesByUsername :many
+SELECT sqlc.embed(hservices), sqlc.embed(users) FROM hservices
+JOIN users ON users.id = hservices.user_id
+WHERE hservices.user_id = (SELECT id FROM users WHERE users.username = $1 LIMIT 1)
+ORDER BY hservices.created_at DESC
+OFFSET $2
+LIMIT $3;
+
+-- name: CountHServicesByUsername :one
+SELECT COUNT(*) FROM hservices
+WHERE user_id = (SELECT id FROM users WHERE users.username = $1 LIMIT 1);

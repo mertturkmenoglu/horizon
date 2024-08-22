@@ -22,6 +22,18 @@ func (q *Queries) CountAllHServices(ctx context.Context) (int64, error) {
 	return count, err
 }
 
+const countHServicesByUsername = `-- name: CountHServicesByUsername :one
+SELECT COUNT(*) FROM hservices
+WHERE user_id = (SELECT id FROM users WHERE users.username = $1 LIMIT 1)
+`
+
+func (q *Queries) CountHServicesByUsername(ctx context.Context, username string) (int64, error) {
+	row := q.db.QueryRow(ctx, countHServicesByUsername, username)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countMyHServices = `-- name: CountMyHServices :one
 SELECT COUNT(*) FROM hservices
 WHERE user_id = $1
@@ -344,6 +356,84 @@ func (q *Queries) GetHServiceById(ctx context.Context, id string) (GetHServiceBy
 		&i.User.UpdatedAt,
 	)
 	return i, err
+}
+
+const getHServicesByUsername = `-- name: GetHServicesByUsername :many
+SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
+JOIN users ON users.id = hservices.user_id
+WHERE hservices.user_id = (SELECT id FROM users WHERE users.username = $1 LIMIT 1)
+ORDER BY hservices.created_at DESC
+OFFSET $2
+LIMIT $3
+`
+
+type GetHServicesByUsernameParams struct {
+	Username string
+	Offset   int32
+	Limit    int32
+}
+
+type GetHServicesByUsernameRow struct {
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetHServicesByUsername(ctx context.Context, arg GetHServicesByUsernameParams) ([]GetHServicesByUsernameRow, error) {
+	rows, err := q.db.Query(ctx, getHServicesByUsername, arg.Username, arg.Offset, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetHServicesByUsernameRow
+	for rows.Next() {
+		var i GetHServicesByUsernameRow
+		if err := rows.Scan(
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getMyHServices = `-- name: GetMyHServices :many
