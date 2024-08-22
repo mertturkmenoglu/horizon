@@ -15,7 +15,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
+func (s *Module) HandlerCreateHService(c echo.Context) error {
 	dto := c.Get("body").(CreateHServiceRequestDto)
 	userId := c.Get("user_id").(string)
 
@@ -78,7 +78,7 @@ func (s *HServicesService) HandlerCreateHService(c echo.Context) error {
 	})
 }
 
-func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
+func (s *Module) HandlerGetMyHServices(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
 
@@ -136,7 +136,7 @@ func (s *HServicesService) HandlerGetMyHServices(c echo.Context) error {
 	})
 }
 
-func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
+func (s *Module) HandlerGetHServiceById(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 
@@ -194,7 +194,7 @@ func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
 	})
 }
 
-func (s *HServicesService) HandlerGetHServicesByUsername(c echo.Context) error {
+func (s *Module) HandlerGetHServicesByUsername(c echo.Context) error {
 	username := c.Param("username")
 	params, err := pagination.GetParamsFromContext(c)
 

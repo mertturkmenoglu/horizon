@@ -7,14 +7,14 @@ import (
 	"github.com/sony/sonyflake"
 )
 
-type UsersService struct {
+type Module struct {
 	Db     *db.Db
 	Flake  *sonyflake.Sonyflake
 	Logger *pterm.Logger
 }
 
-func NewUsersService(database *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger) *UsersService {
-	return &UsersService{
+func New(database *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger) *Module {
+	return &Module{
 		Db:     database,
 		Flake:  flake,
 		Logger: logger,

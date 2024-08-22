@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *UploadsService) HandlerGetNewUrl(c echo.Context) error {
+func (s *Module) HandlerGetNewUrl(c echo.Context) error {
 	qType := c.QueryParam("type")
 	qCount := c.QueryParam("count")
 	qMime := c.QueryParam("mime")

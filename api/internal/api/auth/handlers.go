@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func (s *AuthService) HandlerGoogle(c echo.Context) error {
+func (s *Module) HandlerGoogle(c echo.Context) error {
 	googleConfig := getGoogleOAuth2Config()
 	state, err := generateStateString()
 
@@ -38,7 +38,7 @@ func (s *AuthService) HandlerGoogle(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
-func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
+func (s *Module) HandlerGoogleCallback(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
@@ -78,7 +78,7 @@ func (s *AuthService) HandlerGoogleCallback(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
-func (s *AuthService) HandlerGetMe(c echo.Context) error {
+func (s *Module) HandlerGetMe(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 
 	me, err := s.Db.Queries.GetMe(context.Background(), userId)
@@ -107,7 +107,7 @@ func (s *AuthService) HandlerGetMe(c echo.Context) error {
 	})
 }
 
-func (s *AuthService) HandlerLogout(c echo.Context) error {
+func (s *Module) HandlerLogout(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
@@ -128,7 +128,7 @@ func (s *AuthService) HandlerLogout(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
+func (s *Module) HandlerCredentialsLogin(c echo.Context) error {
 	body := c.Get("body").(LoginRequestDto)
 	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
 	var hashed = ""
@@ -160,7 +160,7 @@ func (s *AuthService) HandlerCredentialsLogin(c echo.Context) error {
 
 }
 
-func (s *AuthService) HandlerCredentialsRegister(c echo.Context) error {
+func (s *Module) HandlerCredentialsRegister(c echo.Context) error {
 	body := c.Get("body").(RegisterRequestDto)
 
 	// Check if email is taken

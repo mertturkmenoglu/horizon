@@ -2,12 +2,12 @@ package uploads
 
 import "horizon/internal/upload"
 
-type UploadsService struct {
+type Module struct {
 	Upload *upload.Upload
 }
 
-func NewUploadsService(upload *upload.Upload) *UploadsService {
-	return &UploadsService{
+func New(upload *upload.Upload) *Module {
+	return &Module{
 		Upload: upload,
 	}
 }

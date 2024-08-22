@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *BookmarksService) HandlerCreateBookmark(c echo.Context) error {
+func (s *Module) HandlerCreateBookmark(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateBookmarkRequestDto)
 
@@ -35,7 +35,7 @@ func (s *BookmarksService) HandlerCreateBookmark(c echo.Context) error {
 	})
 }
 
-func (s *BookmarksService) HandlerDeleteBookmark(c echo.Context) error {
+func (s *Module) HandlerDeleteBookmark(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
@@ -57,7 +57,7 @@ func (s *BookmarksService) HandlerDeleteBookmark(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *BookmarksService) HandlerGetBookmarks(c echo.Context) error {
+func (s *Module) HandlerGetBookmarks(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
 
@@ -114,7 +114,7 @@ func (s *BookmarksService) HandlerGetBookmarks(c echo.Context) error {
 
 }
 
-func (s *BookmarksService) HandlerGetIsBookmarked(c echo.Context) error {
+func (s *Module) HandlerGetIsBookmarked(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 

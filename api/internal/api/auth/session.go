@@ -10,8 +10,8 @@ import (
 
 func getAuthSessionOptions() *sessions.Options {
 	return &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400 * 7,
+		Path:     viper.GetString(config.AUTH_SESSION_PATH),
+		MaxAge:   viper.GetInt(config.AUTH_SESSION_MAX_AGE),
 		HttpOnly: true,
 		Secure:   viper.GetString(config.ENV) != "dev",
 		SameSite: http.SameSiteLaxMode,

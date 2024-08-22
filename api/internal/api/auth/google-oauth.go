@@ -28,6 +28,8 @@ type GoogleUser struct {
 	Picture       string `json:"picture"`
 }
 
+// getGoogleOAuth2Config returns the Google OAuth2 configuration.
+// It reads the client ID, client secret, redirect url from Viper.
 func getGoogleOAuth2Config() *oauth2.Config {
 	return &oauth2.Config{
 		ClientID:     viper.GetString(config.GOOGLE_CLIENT_ID),
@@ -38,6 +40,9 @@ func getGoogleOAuth2Config() *oauth2.Config {
 	}
 }
 
+// state is used for additional OAuth2 security.
+// It generates a random string of 16 bytes.
+// It then encodes it to base64 URL encoding.
 func generateStateString() (string, error) {
 	bytes, err := random.GenerateBytes(16)
 
@@ -48,6 +53,8 @@ func generateStateString() (string, error) {
 	return base64.URLEncoding.EncodeToString(bytes), nil
 }
 
+// fetchGoogleUser fetches the user information from Google.
+// Valid tokens must be obtained before calling this function.
 func fetchGoogleUser(token *oauth2.Token) (*GoogleUser, error) {
 	googleConfig := getGoogleOAuth2Config()
 	client := googleConfig.Client(context.Background(), token)
@@ -80,6 +87,7 @@ func getOAuthToken(sess *sessions.Session, receivedState string, code string) (*
 		return nil, ErrInvalidStateParameter
 	}
 
+	// Exchange the code for a token
 	token, err := googleConfig.Exchange(context.Background(), code)
 
 	if err != nil {
@@ -89,7 +97,7 @@ func getOAuthToken(sess *sessions.Session, receivedState string, code string) (*
 	return token, nil
 }
 
-func getOrCreateAuthId(s *AuthService, user *GoogleUser) (string, error) {
+func getOrCreateAuthId(s *Module, user *GoogleUser) (string, error) {
 	dbAuth, err := s.Db.Queries.GetUserByGoogleId(
 		context.Background(),
 		pgtype.Text{String: user.Id, Valid: true},

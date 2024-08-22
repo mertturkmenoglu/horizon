@@ -8,15 +8,15 @@ import (
 	"github.com/sony/sonyflake"
 )
 
-type BookmarksService struct {
+type Module struct {
 	Db     *db.Db
 	Flake  *sonyflake.Sonyflake
 	Cache  *cache.Cache
 	Logger *pterm.Logger
 }
 
-func NewBookmarksService(database *db.Db, flake *sonyflake.Sonyflake, cache *cache.Cache, logger *pterm.Logger) *BookmarksService {
-	return &BookmarksService{
+func New(database *db.Db, flake *sonyflake.Sonyflake, cache *cache.Cache, logger *pterm.Logger) *Module {
+	return &Module{
 		Db:     database,
 		Flake:  flake,
 		Cache:  cache,

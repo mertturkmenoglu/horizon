@@ -8,15 +8,15 @@ import (
 	"github.com/sony/sonyflake"
 )
 
-type FavoritesService struct {
+type Module struct {
 	Db     *db.Db
 	Flake  *sonyflake.Sonyflake
 	Logger *pterm.Logger
 	Cache  *cache.Cache
 }
 
-func NewFavoritesService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, cache *cache.Cache) *FavoritesService {
-	return &FavoritesService{
+func New(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, cache *cache.Cache) *Module {
+	return &Module{
 		Db:     db,
 		Flake:  flake,
 		Logger: logger,

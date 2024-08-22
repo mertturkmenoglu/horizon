@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *ListsService) HandlerGetMyLists(c echo.Context) error {
+func (s *Module) HandlerGetMyLists(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 
 	dbResult, err := s.Db.Queries.GetMyLists(context.Background(), userId)
@@ -34,7 +34,7 @@ func (s *ListsService) HandlerGetMyLists(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerGetUsersLists(c echo.Context) error {
+func (s *Module) HandlerGetUsersLists(c echo.Context) error {
 	username := c.Param("username")
 
 	if username == "" {
@@ -62,7 +62,7 @@ func (s *ListsService) HandlerGetUsersLists(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerGetItemListInfo(c echo.Context) error {
+func (s *Module) HandlerGetItemListInfo(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
@@ -100,7 +100,7 @@ func (s *ListsService) HandlerGetItemListInfo(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerGetListById(c echo.Context) error {
+func (s *Module) HandlerGetListById(c echo.Context) error {
 	id := c.Param("id")
 
 	if id == "" {
@@ -140,7 +140,7 @@ func (s *ListsService) HandlerGetListById(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerCreateList(c echo.Context) error {
+func (s *Module) HandlerCreateList(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateListRequestDto)
 
@@ -169,7 +169,7 @@ func (s *ListsService) HandlerCreateList(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerCreateListItem(c echo.Context) error {
+func (s *Module) HandlerCreateListItem(c echo.Context) error {
 	dto := c.Get("body").(CreateListItemRequestDto)
 
 	dbListItemCount, _ := s.Db.Queries.GetListItemCount(context.Background(), dto.ListId)
@@ -198,7 +198,7 @@ func (s *ListsService) HandlerCreateListItem(c echo.Context) error {
 	})
 }
 
-func (s *ListsService) HandlerDeleteList(c echo.Context) error {
+func (s *Module) HandlerDeleteList(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 
@@ -220,7 +220,7 @@ func (s *ListsService) HandlerDeleteList(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *ListsService) HandlerDeleteListItem(c echo.Context) error {
+func (s *Module) HandlerDeleteListItem(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 

@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *FavoritesService) HandlerCreateFavorite(c echo.Context) error {
+func (s *Module) HandlerCreateFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateFavoriteRequestDto)
 
@@ -35,7 +35,7 @@ func (s *FavoritesService) HandlerCreateFavorite(c echo.Context) error {
 	})
 }
 
-func (s *FavoritesService) HandlerDeleteFavorite(c echo.Context) error {
+func (s *Module) HandlerDeleteFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
@@ -57,7 +57,7 @@ func (s *FavoritesService) HandlerDeleteFavorite(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *FavoritesService) HandlerGetFavorites(c echo.Context) error {
+func (s *Module) HandlerGetFavorites(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
 
@@ -114,7 +114,7 @@ func (s *FavoritesService) HandlerGetFavorites(c echo.Context) error {
 
 }
 
-func (s *FavoritesService) HandlerGetIsFavorite(c echo.Context) error {
+func (s *Module) HandlerGetIsFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
@@ -140,7 +140,7 @@ func (s *FavoritesService) HandlerGetIsFavorite(c echo.Context) error {
 	})
 }
 
-func (s *FavoritesService) HandlerGetFavoritesByUsername(c echo.Context) error {
+func (s *Module) HandlerGetFavoritesByUsername(c echo.Context) error {
 	username := c.Param("username")
 	params, err := pagination.GetParamsFromContext(c)
 

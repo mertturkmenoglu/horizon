@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *UsersService) HandlerGetUserProfileByUsername(c echo.Context) error {
+func (s *Module) HandlerGetUserProfileByUsername(c echo.Context) error {
 	username := c.Param("username")
 
 	if username == "" {

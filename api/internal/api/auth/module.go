@@ -8,15 +8,15 @@ import (
 	"github.com/sony/sonyflake"
 )
 
-type AuthService struct {
+type Module struct {
 	Db     *db.Db
 	Flake  *sonyflake.Sonyflake
 	Logger *pterm.Logger
 	Tasks  *tasks.Tasks
 }
 
-func NewAuthService(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, tasks *tasks.Tasks) *AuthService {
-	return &AuthService{
+func New(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, tasks *tasks.Tasks) *Module {
+	return &Module{
 		Db:     db,
 		Flake:  flake,
 		Logger: logger,

@@ -6,13 +6,13 @@ import (
 	"github.com/sony/sonyflake"
 )
 
-type ListsService struct {
+type Module struct {
 	Db    *db.Db
 	Flake *sonyflake.Sonyflake
 }
 
-func NewListsService(db *db.Db, flake *sonyflake.Sonyflake) *ListsService {
-	return &ListsService{
+func New(db *db.Db, flake *sonyflake.Sonyflake) *Module {
+	return &Module{
 		Db:    db,
 		Flake: flake,
 	}

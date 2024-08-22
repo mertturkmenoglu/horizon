@@ -7,14 +7,14 @@ import (
 	"github.com/pterm/pterm"
 )
 
-type AggregationsService struct {
+type Module struct {
 	Db     *db.Db
 	Logger *pterm.Logger
 	Cache  *cache.Cache
 }
 
-func NewAggregationsService(database *db.Db, logger *pterm.Logger, cache *cache.Cache) *AggregationsService {
-	return &AggregationsService{
+func New(database *db.Db, logger *pterm.Logger, cache *cache.Cache) *Module {
+	return &Module{
 		Db:     database,
 		Logger: logger,
 		Cache:  cache,

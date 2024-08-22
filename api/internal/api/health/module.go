@@ -1,7 +1,7 @@
 package health
 
-type HealthService struct{}
+type Module struct{}
 
-func NewHealthService() *HealthService {
-	return &HealthService{}
+func New() *Module {
+	return &Module{}
 }

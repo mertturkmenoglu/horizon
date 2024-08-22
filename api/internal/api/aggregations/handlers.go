@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *AggregationsService) HandlerGetHomeAggregations(c echo.Context) error {
+func (s *Module) HandlerGetHomeAggregations(c echo.Context) error {
 	// First check if the cache is available
 	var cacheRes GetHomeAggregationsResponseDto
 
