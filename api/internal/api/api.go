@@ -9,6 +9,7 @@ import (
 	"horizon/internal/api/favorites"
 	"horizon/internal/api/health"
 	"horizon/internal/api/hservices"
+	"horizon/internal/api/lists"
 	"horizon/internal/api/uploads"
 	"horizon/internal/api/users"
 	"horizon/internal/cache"
@@ -79,6 +80,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	healthModule := health.NewHealthService()
 	bookmarksModule := bookmarks.NewBookmarksService(s.Db, s.Flake, s.Cache, s.Logger)
 	favoritesModule := favorites.NewFavoritesService(s.Db, s.Flake, s.Logger, s.Cache)
+	listsModule := lists.NewListsService(s.Db, s.Flake)
 
 	api := e.Group("/api")
 
@@ -136,6 +138,18 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
 		favoritesRoutes.GET("/:hservice_id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/username/:username", favoritesModule.HandlerGetFavoritesByUsername)
+	}
+
+	listsRoutes := api.Group("/lists")
+	{
+		listsRoutes.GET("/", listsModule.HandlerGetMyLists, middlewares.IsAuth)
+		listsRoutes.GET("/user/:username", listsModule.HandlerGetUsersLists)
+		listsRoutes.GET("/info/:hservice_id", listsModule.HandlerGetItemListInfo, middlewares.IsAuth)
+		listsRoutes.GET("/:id", listsModule.HandlerGetListById)
+		listsRoutes.POST("/", listsModule.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
+		listsRoutes.POST("/:id/items", listsModule.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
+		listsRoutes.DELETE("/:id", listsModule.HandlerDeleteList, middlewares.IsAuth)
+		listsRoutes.DELETE("/:id/items/:itemId", listsModule.HandlerDeleteListItem, middlewares.IsAuth)
 	}
 
 	return e
