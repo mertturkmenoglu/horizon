@@ -12,7 +12,6 @@ require (
 	github.com/labstack/echo-contrib v0.17.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/minio/minio-go/v7 v7.0.74
-	github.com/prometheus/client_golang v1.19.0
 	github.com/pterm/pterm v0.12.79
 	github.com/sony/sonyflake v1.2.0
 	github.com/spf13/viper v1.19.0
@@ -60,6 +59,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/oapi-codegen/runtime v1.1.1 // indirect
+	github.com/prometheus/client_golang v1.19.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.53.0 // indirect
 	github.com/prometheus/procfs v0.13.0 // indirect
