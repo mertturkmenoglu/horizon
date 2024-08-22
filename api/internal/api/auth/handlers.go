@@ -2,10 +2,13 @@ package auth
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 	"horizon/config"
 	"horizon/internal/db"
 	"horizon/internal/h"
 	"horizon/internal/hash"
+	"horizon/internal/random"
 	"horizon/internal/tasks"
 	"net/http"
 	"time"
@@ -225,4 +228,118 @@ func (s *Module) HandlerCredentialsRegister(c echo.Context) error {
 	return c.JSON(http.StatusCreated, h.AnyResponse{
 		"data": saved.ID,
 	})
+}
+
+func (s *Module) HandlerSendVerificationEmail(c echo.Context) error {
+	body := c.Get("body").(SendVerificationEmailRequestDto)
+	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrInvalidEmail.Error(),
+		})
+	}
+
+	if user.IsEmailVerified {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrEmailAlreadyVerified.Error(),
+		})
+	}
+
+	codeBytes, err := random.GenerateBytes(32)
+	code := base64.URLEncoding.EncodeToString(codeBytes)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	key := fmt.Sprintf("verify-email:%s", code)
+	s.Cache.Set(key, body.Email, time.Minute*15)
+
+	url := fmt.Sprintf("%s/api/auth/verify-email/verify?code=%s", viper.GetString(config.API_URL), code)
+
+	_, err = s.Tasks.CreateAndEnqueue(tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
+		Email: body.Email,
+		Url:   url,
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (s *Module) HandlerVerifyEmail(c echo.Context) error {
+	code := c.QueryParam("code")
+
+	if code == "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrMalformedOrMissingVerifyCode.Error(),
+		})
+	}
+
+	key := fmt.Sprintf("verify-email:%s", code)
+
+	if !s.Cache.Has(key) {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrInvalidOrExpiredVerifyCode.Error(),
+		})
+	}
+
+	email, err := s.Cache.Get(key)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	user, err := s.Db.Queries.GetUserByEmail(context.Background(), email)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	if user.IsEmailVerified {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrEmailAlreadyVerified.Error(),
+		})
+	}
+
+	err = s.Db.Queries.UpdateUserIsEmailVerified(context.Background(), user.ID)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (s *Module) HandlerSendForgotPasswordEmail(c echo.Context) error {
+	body := c.Get("body").(SendForgotPasswordEmailRequestDto)
+	_, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	codeBytes, err := random.GenerateBytes(32)
+	code := base64.URLEncoding.EncodeToString(codeBytes)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	key := fmt.Sprintf("forgot-password:%s", code)
+	s.Cache.Set(key, body.Email, time.Minute*15)
+
+	_, err = s.Tasks.CreateAndEnqueue(tasks.TypeForgotPasswordEmail, tasks.ForgotPasswordEmailPayload{
+		Email: body.Email,
+		Code:  code,
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.NoContent(http.StatusOK)
 }

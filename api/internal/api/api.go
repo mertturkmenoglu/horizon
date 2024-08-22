@@ -87,8 +87,9 @@ func New() *Service {
 // RegisterRoutes registers all the routes for the application.
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
+
 	m := Modules{
-		Auth:         auth.New(s.Db, s.Flake, s.Logger, s.Tasks),
+		Auth:         auth.New(s.Db, s.Flake, s.Logger, s.Tasks, s.Cache),
 		Uploads:      uploads.New(s.Upload),
 		HServices:    hservices.New(s.Db, s.Flake, s.Logger),
 		Users:        users.New(s.Db, s.Flake, s.Logger),
@@ -111,6 +112,8 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		authRoutes.POST("/logout", m.Auth.HandlerLogout)
 		authRoutes.POST("/credentials/login", m.Auth.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
 		authRoutes.POST("/credentials/register", m.Auth.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
+		authRoutes.POST("/verify-email/send", m.Auth.HandlerSendVerificationEmail, middlewares.ParseBody[auth.SendVerificationEmailRequestDto])
+		authRoutes.GET("/verify-email/verify", m.Auth.HandlerVerifyEmail)
 	}
 
 	uploadsRoutes := api.Group("/uploads")
