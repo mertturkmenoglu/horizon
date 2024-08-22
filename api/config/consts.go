@@ -28,4 +28,6 @@ const (
 	SEARCH_API_KEY           = "api.search.api-key"
 	REDIS_URL                = "redis.url"
 	REDIS_ADDR               = "redis.addr"
+	AUTH_SESSION_PATH        = "api.auth.session.path"
+	AUTH_SESSION_MAX_AGE     = "api.auth.session.max-age"
 )

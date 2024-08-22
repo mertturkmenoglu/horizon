@@ -36,6 +36,9 @@ api:
     type: file
   auth:
     sign-key: horizon
+    session:
+      path: "/"
+      max-age: 604800
     google:
       client-id: ""
       client-secret: ""
