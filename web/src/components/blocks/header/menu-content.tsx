@@ -34,12 +34,6 @@ export default function MenuContent({ fullName, username }: Props) {
           asChild
           className="cursor-pointer"
         >
-          <Link href="/notifications">Notifications</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          asChild
-          className="cursor-pointer"
-        >
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
       </DropdownMenuGroup>
