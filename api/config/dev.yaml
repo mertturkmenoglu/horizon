@@ -51,5 +51,7 @@ api:
   search:
     server-url: "http://localhost:8108"
     api-key: horizon
+  upload:
+    presigned-url-exp-min: 15
 cron:
   category-service-count: "*/10 * * * *"
