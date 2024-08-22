@@ -339,6 +339,77 @@ func (q *Queries) CreateHService(ctx context.Context, arg CreateHServiceParams) 
 	return i, err
 }
 
+const createList = `-- name: CreateList :one
+INSERT INTO lists (
+  id,
+  title,
+  user_id
+) VALUES (
+  $1,
+  $2,
+  $3
+)
+RETURNING id, title, user_id, created_at, updated_at
+`
+
+type CreateListParams struct {
+	ID     string
+	Title  string
+	UserID string
+}
+
+func (q *Queries) CreateList(ctx context.Context, arg CreateListParams) (List, error) {
+	row := q.db.QueryRow(ctx, createList, arg.ID, arg.Title, arg.UserID)
+	var i List
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.UserID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const createListItem = `-- name: CreateListItem :one
+INSERT INTO list_items (
+  id,
+  list_id,
+  hservice_id,
+  item_order
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4
+)
+RETURNING id, list_id, hservice_id, item_order
+`
+
+type CreateListItemParams struct {
+	ID         string
+	ListID     string
+	HserviceID string
+	ItemOrder  int32
+}
+
+func (q *Queries) CreateListItem(ctx context.Context, arg CreateListItemParams) (ListItem, error) {
+	row := q.db.QueryRow(ctx, createListItem,
+		arg.ID,
+		arg.ListID,
+		arg.HserviceID,
+		arg.ItemOrder,
+	)
+	var i ListItem
+	err := row.Scan(
+		&i.ID,
+		&i.ListID,
+		&i.HserviceID,
+		&i.ItemOrder,
+	)
+	return i, err
+}
+
 const createState = `-- name: CreateState :one
 INSERT INTO states (
   id,
@@ -499,6 +570,36 @@ type DeleteFavoriteByHServiceIdParams struct {
 
 func (q *Queries) DeleteFavoriteByHServiceId(ctx context.Context, arg DeleteFavoriteByHServiceIdParams) error {
 	_, err := q.db.Exec(ctx, deleteFavoriteByHServiceId, arg.HserviceID, arg.UserID)
+	return err
+}
+
+const deleteListById = `-- name: DeleteListById :exec
+DELETE FROM lists
+WHERE id = $1 AND user_id = $2
+`
+
+type DeleteListByIdParams struct {
+	ID     string
+	UserID string
+}
+
+func (q *Queries) DeleteListById(ctx context.Context, arg DeleteListByIdParams) error {
+	_, err := q.db.Exec(ctx, deleteListById, arg.ID, arg.UserID)
+	return err
+}
+
+const deleteListItemById = `-- name: DeleteListItemById :exec
+DELETE FROM list_items
+WHERE list_items.id = $1 AND list_id IN (SELECT lists.id FROM lists WHERE user_id = $2)
+`
+
+type DeleteListItemByIdParams struct {
+	ID     string
+	UserID string
+}
+
+func (q *Queries) DeleteListItemById(ctx context.Context, arg DeleteListItemByIdParams) error {
+	_, err := q.db.Exec(ctx, deleteListItemById, arg.ID, arg.UserID)
 	return err
 }
 
@@ -976,6 +1077,170 @@ func (q *Queries) GetHServiceById(ctx context.Context, id string) (GetHServiceBy
 	return i, err
 }
 
+const getListById = `-- name: GetListById :one
+SELECT lists.id, lists.title, lists.user_id, lists.created_at, lists.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM lists
+JOIN users ON users.id = lists.user_id
+WHERE lists.id = $1
+`
+
+type GetListByIdRow struct {
+	List List
+	User User
+}
+
+func (q *Queries) GetListById(ctx context.Context, id string) (GetListByIdRow, error) {
+	row := q.db.QueryRow(ctx, getListById, id)
+	var i GetListByIdRow
+	err := row.Scan(
+		&i.List.ID,
+		&i.List.Title,
+		&i.List.UserID,
+		&i.List.CreatedAt,
+		&i.List.UpdatedAt,
+		&i.User.ID,
+		&i.User.Email,
+		&i.User.Username,
+		&i.User.FullName,
+		&i.User.PasswordHash,
+		&i.User.GoogleID,
+		&i.User.IsEmailVerified,
+		&i.User.IsActive,
+		&i.User.Role,
+		&i.User.PasswordResetToken,
+		&i.User.PasswordResetExpires,
+		&i.User.LoginAttempts,
+		&i.User.LockoutUntil,
+		&i.User.Gender,
+		&i.User.ProfileImage,
+		&i.User.LastLogin,
+		&i.User.CreatedAt,
+		&i.User.UpdatedAt,
+	)
+	return i, err
+}
+
+const getListItemCount = `-- name: GetListItemCount :one
+SELECT COUNT(*) FROM list_items
+WHERE list_id = $1
+`
+
+func (q *Queries) GetListItemCount(ctx context.Context, listID string) (int64, error) {
+	row := q.db.QueryRow(ctx, getListItemCount, listID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const getListItemsByListId = `-- name: GetListItemsByListId :many
+SELECT list_items.id, list_items.list_id, list_items.hservice_id, list_items.item_order, hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, hservice_users.id, hservice_users.email, hservice_users.username, hservice_users.full_name, hservice_users.password_hash, hservice_users.google_id, hservice_users.is_email_verified, hservice_users.is_active, hservice_users.role, hservice_users.password_reset_token, hservice_users.password_reset_expires, hservice_users.login_attempts, hservice_users.lockout_until, hservice_users.gender, hservice_users.profile_image, hservice_users.last_login, hservice_users.created_at, hservice_users.updated_at FROM list_items
+LEFT JOIN hservices ON hservices.id = list_items.hservice_id
+LEFT JOIN users AS hservice_users ON hservice_users.id = hservices.user_id
+WHERE list_items.list_id = $1
+`
+
+type GetListItemsByListIdRow struct {
+	ListItem ListItem
+	Hservice Hservice
+	User     User
+}
+
+func (q *Queries) GetListItemsByListId(ctx context.Context, listID string) ([]GetListItemsByListIdRow, error) {
+	rows, err := q.db.Query(ctx, getListItemsByListId, listID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetListItemsByListIdRow
+	for rows.Next() {
+		var i GetListItemsByListIdRow
+		if err := rows.Scan(
+			&i.ListItem.ID,
+			&i.ListItem.ListID,
+			&i.ListItem.HserviceID,
+			&i.ListItem.ItemOrder,
+			&i.Hservice.ID,
+			&i.Hservice.UserID,
+			&i.Hservice.Title,
+			&i.Hservice.Slug,
+			&i.Hservice.Description,
+			&i.Hservice.Category,
+			&i.Hservice.Price,
+			&i.Hservice.PriceUnit,
+			&i.Hservice.PriceTimespan,
+			&i.Hservice.IsOnline,
+			&i.Hservice.Url,
+			&i.Hservice.Location,
+			&i.Hservice.DeliveryTime,
+			&i.Hservice.DeliveryTimespan,
+			&i.Hservice.TotalPoints,
+			&i.Hservice.TotalVotes,
+			&i.Hservice.Media,
+			&i.Hservice.CreatedAt,
+			&i.Hservice.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getListItemsInfo = `-- name: GetListItemsInfo :many
+SELECT id, list_id, hservice_id, item_order FROM list_items
+WHERE hservice_id = $1 AND list_id IN (SELECT id FROM lists WHERE user_id = $2)
+`
+
+type GetListItemsInfoParams struct {
+	HserviceID string
+	UserID     string
+}
+
+func (q *Queries) GetListItemsInfo(ctx context.Context, arg GetListItemsInfoParams) ([]ListItem, error) {
+	rows, err := q.db.Query(ctx, getListItemsInfo, arg.HserviceID, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListItem
+	for rows.Next() {
+		var i ListItem
+		if err := rows.Scan(
+			&i.ID,
+			&i.ListID,
+			&i.HserviceID,
+			&i.ItemOrder,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMe = `-- name: GetMe :one
 SELECT 
   id,
@@ -1073,6 +1338,37 @@ func (q *Queries) GetMyHServices(ctx context.Context, arg GetMyHServicesParams) 
 			&i.TotalPoints,
 			&i.TotalVotes,
 			&i.Media,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMyLists = `-- name: GetMyLists :many
+SELECT id, title, user_id, created_at, updated_at FROM lists
+WHERE user_id = $1
+`
+
+func (q *Queries) GetMyLists(ctx context.Context, userID string) ([]List, error) {
+	rows, err := q.db.Query(ctx, getMyLists, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []List
+	for rows.Next() {
+		var i List
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.UserID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -1350,6 +1646,18 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	return i, err
 }
 
+const getUserListCount = `-- name: GetUserListCount :one
+SELECT COUNT(*) FROM lists
+WHERE user_id = $1
+`
+
+func (q *Queries) GetUserListCount(ctx context.Context, userID string) (int64, error) {
+	row := q.db.QueryRow(ctx, getUserListCount, userID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getUserProfileByUsername = `-- name: GetUserProfileByUsername :one
 SELECT
   id,
@@ -1384,6 +1692,62 @@ func (q *Queries) GetUserProfileByUsername(ctx context.Context, username string)
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const getUsersLists = `-- name: GetUsersLists :many
+SELECT lists.id, lists.title, lists.user_id, lists.created_at, lists.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM lists
+JOIN users ON users.id = lists.user_id
+WHERE lists.user_id = $1
+ORDER BY lists.created_at DESC
+`
+
+type GetUsersListsRow struct {
+	List List
+	User User
+}
+
+func (q *Queries) GetUsersLists(ctx context.Context, userID string) ([]GetUsersListsRow, error) {
+	rows, err := q.db.Query(ctx, getUsersLists, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUsersListsRow
+	for rows.Next() {
+		var i GetUsersListsRow
+		if err := rows.Scan(
+			&i.List.ID,
+			&i.List.Title,
+			&i.List.UserID,
+			&i.List.CreatedAt,
+			&i.List.UpdatedAt,
+			&i.User.ID,
+			&i.User.Email,
+			&i.User.Username,
+			&i.User.FullName,
+			&i.User.PasswordHash,
+			&i.User.GoogleID,
+			&i.User.IsEmailVerified,
+			&i.User.IsActive,
+			&i.User.Role,
+			&i.User.PasswordResetToken,
+			&i.User.PasswordResetExpires,
+			&i.User.LoginAttempts,
+			&i.User.LockoutUntil,
+			&i.User.Gender,
+			&i.User.ProfileImage,
+			&i.User.LastLogin,
+			&i.User.CreatedAt,
+			&i.User.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const isBookmarked = `-- name: IsBookmarked :one

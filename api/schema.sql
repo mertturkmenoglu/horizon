@@ -107,3 +107,18 @@ CREATE TABLE IF NOT EXISTS favorites (
   hservice_id TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS lists (
+  id TEXT PRIMARY KEY,
+  title VARCHAR(128) NOT NULL,
+  user_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS list_items (
+  id TEXT PRIMARY KEY,
+  list_id TEXT NOT NULL,
+  hservice_id TEXT NOT NULL,
+  item_order INT NOT NULL
+);

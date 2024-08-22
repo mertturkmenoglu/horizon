@@ -162,6 +162,21 @@ type Hservice struct {
 	UpdatedAt        pgtype.Timestamptz
 }
 
+type List struct {
+	ID        string
+	Title     string
+	UserID    string
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
+
+type ListItem struct {
+	ID         string
+	ListID     string
+	HserviceID string
+	ItemOrder  int32
+}
+
 type State struct {
 	ID          int32
 	Name        string
