@@ -146,7 +146,7 @@ func (s *Module) HandlerCreateList(c echo.Context) error {
 
 	dbListCount, _ := s.Db.Queries.GetUserListCount(context.Background(), userId)
 
-	if dbListCount >= MaxListPerUser {
+	if !isUserAllowedToCreateList(int(dbListCount)) {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
 			Message: fmt.Sprintf("You can only have up to %d lists", MaxListPerUser),
 		})
@@ -174,7 +174,7 @@ func (s *Module) HandlerCreateListItem(c echo.Context) error {
 
 	dbListItemCount, _ := s.Db.Queries.GetListItemCount(context.Background(), dto.ListId)
 
-	if dbListItemCount >= MaxListItemCount {
+	if !isUserAllowedToCreateListItem(int(dbListItemCount)) {
 		return c.JSON(http.StatusBadRequest, h.ErrResponse{
 			Message: fmt.Sprintf("You can only have up to %d items in a list", MaxListItemCount),
 		})
