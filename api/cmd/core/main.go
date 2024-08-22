@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/labstack/echo-contrib/echoprometheus"
 )
 
 func main() {
@@ -27,6 +29,9 @@ func main() {
 
 	go a.Tasks.Run()
 	defer a.Tasks.Close()
+
+	e.Use(echoprometheus.NewMiddleware("horizon")) // adds middleware to gather metrics
+	e.GET("/metrics", echoprometheus.NewHandler()) // adds route to serve gathered metrics
 
 	// Start the Echo server
 	go func() {
