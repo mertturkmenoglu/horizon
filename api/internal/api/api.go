@@ -28,6 +28,8 @@ import (
 	"go.uber.org/zap"
 )
 
+// Service struct is the main definition of all the different dependencies
+// that are needed to run the application.
 type Service struct {
 	Port       int
 	PortString string
@@ -42,6 +44,19 @@ type Service struct {
 	Tasks      *tasks.Tasks
 }
 
+type Modules struct {
+	Auth         *auth.Module
+	Uploads      *uploads.Module
+	HServices    *hservices.Module
+	Users        *users.Module
+	Aggregations *aggregations.Module
+	Health       *health.Module
+	Bookmarks    *bookmarks.Module
+	Favorites    *favorites.Module
+	Lists        *lists.Module
+}
+
+// New returns a new Service instance.
 func New() *Service {
 	apiObj := &Service{
 		Upload:     upload.New(),
@@ -69,18 +84,20 @@ func New() *Service {
 	return apiObj
 }
 
+// RegisterRoutes registers all the routes for the application.
 func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
-
-	authModule := auth.NewAuthService(s.Db, s.Flake, s.Logger, s.Tasks)
-	uploadsModule := uploads.NewUploadsService(s.Upload)
-	hservicesModule := hservices.NewHServicesService(s.Db, s.Flake, s.Logger)
-	usersModule := users.NewUsersService(s.Db, s.Flake, s.Logger)
-	aggregationsModule := aggregations.NewAggregationsService(s.Db, s.Logger, s.Cache)
-	healthModule := health.NewHealthService()
-	bookmarksModule := bookmarks.NewBookmarksService(s.Db, s.Flake, s.Cache, s.Logger)
-	favoritesModule := favorites.NewFavoritesService(s.Db, s.Flake, s.Logger, s.Cache)
-	listsModule := lists.NewListsService(s.Db, s.Flake)
+	m := Modules{
+		Auth:         auth.New(s.Db, s.Flake, s.Logger, s.Tasks),
+		Uploads:      uploads.New(s.Upload),
+		HServices:    hservices.New(s.Db, s.Flake, s.Logger),
+		Users:        users.New(s.Db, s.Flake, s.Logger),
+		Aggregations: aggregations.New(s.Db, s.Logger, s.Cache),
+		Health:       health.New(),
+		Bookmarks:    bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
+		Favorites:    favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
+		Lists:        lists.New(s.Db, s.Flake),
+	}
 
 	api := e.Group("/api")
 
@@ -88,69 +105,69 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	authRoutes := api.Group("/auth")
 	{
-		authRoutes.GET("/google", authModule.HandlerGoogle)
-		authRoutes.GET("/google/callback", authModule.HandlerGoogleCallback)
-		authRoutes.GET("/me", authModule.HandlerGetMe, middlewares.IsAuth)
-		authRoutes.POST("/logout", authModule.HandlerLogout)
-		authRoutes.POST("/credentials/login", authModule.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
-		authRoutes.POST("/credentials/register", authModule.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
+		authRoutes.GET("/google", m.Auth.HandlerGoogle)
+		authRoutes.GET("/google/callback", m.Auth.HandlerGoogleCallback)
+		authRoutes.GET("/me", m.Auth.HandlerGetMe, middlewares.IsAuth)
+		authRoutes.POST("/logout", m.Auth.HandlerLogout)
+		authRoutes.POST("/credentials/login", m.Auth.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
+		authRoutes.POST("/credentials/register", m.Auth.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
 	}
 
 	uploadsRoutes := api.Group("/uploads")
 	{
-		uploadsRoutes.GET("/new-url", uploadsModule.HandlerGetNewUrl, middlewares.IsAuth)
+		uploadsRoutes.GET("/new-url", m.Uploads.HandlerGetNewUrl, middlewares.IsAuth)
 	}
 
 	hservicesRoutes := api.Group("/hservices")
 	{
-		hservicesRoutes.POST("/", hservicesModule.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
-		hservicesRoutes.GET("/", hservicesModule.HandlerGetMyHServices, middlewares.IsAuth)
-		hservicesRoutes.GET("/:id", hservicesModule.HandlerGetHServiceById, middlewares.WithAuth)
-		hservicesRoutes.GET("/user/:username", hservicesModule.HandlerGetHServicesByUsername)
+		hservicesRoutes.POST("/", m.HServices.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
+		hservicesRoutes.GET("/", m.HServices.HandlerGetMyHServices, middlewares.IsAuth)
+		hservicesRoutes.GET("/:id", m.HServices.HandlerGetHServiceById, middlewares.WithAuth)
+		hservicesRoutes.GET("/user/:username", m.HServices.HandlerGetHServicesByUsername)
 	}
 
 	usersRoutes := api.Group("/users")
 	{
-		usersRoutes.GET("/:username", usersModule.HandlerGetUserProfileByUsername)
+		usersRoutes.GET("/:username", m.Users.HandlerGetUserProfileByUsername)
 	}
 
 	aggregationsRoutes := api.Group("/aggregations")
 	{
-		aggregationsRoutes.GET("/home", aggregationsModule.HandlerGetHomeAggregations)
+		aggregationsRoutes.GET("/home", m.Aggregations.HandlerGetHomeAggregations)
 	}
 
 	healthRoutes := api.Group("/health")
 	{
-		healthRoutes.GET("/", healthModule.HandlerGetHealth)
+		healthRoutes.GET("/", m.Health.HandlerGetHealth)
 	}
 
 	bookmarksRoutes := api.Group("/bookmarks")
 	{
-		bookmarksRoutes.POST("/", bookmarksModule.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
-		bookmarksRoutes.DELETE("/:hservice_id", bookmarksModule.HandlerDeleteBookmark, middlewares.IsAuth)
-		bookmarksRoutes.GET("/", bookmarksModule.HandlerGetBookmarks, middlewares.IsAuth)
-		bookmarksRoutes.GET("/:hservice_id", bookmarksModule.HandlerGetIsBookmarked, middlewares.IsAuth)
+		bookmarksRoutes.POST("/", m.Bookmarks.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
+		bookmarksRoutes.DELETE("/:hservice_id", m.Bookmarks.HandlerDeleteBookmark, middlewares.IsAuth)
+		bookmarksRoutes.GET("/", m.Bookmarks.HandlerGetBookmarks, middlewares.IsAuth)
+		bookmarksRoutes.GET("/:hservice_id", m.Bookmarks.HandlerGetIsBookmarked, middlewares.IsAuth)
 	}
 
 	favoritesRoutes := api.Group("/favorites")
 	{
-		favoritesRoutes.POST("/", favoritesModule.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
-		favoritesRoutes.DELETE("/:hservice_id", favoritesModule.HandlerDeleteFavorite, middlewares.IsAuth)
-		favoritesRoutes.GET("/", favoritesModule.HandlerGetFavorites, middlewares.IsAuth)
-		favoritesRoutes.GET("/:hservice_id", favoritesModule.HandlerGetIsFavorite, middlewares.IsAuth)
-		favoritesRoutes.GET("/username/:username", favoritesModule.HandlerGetFavoritesByUsername)
+		favoritesRoutes.POST("/", m.Favorites.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
+		favoritesRoutes.DELETE("/:hservice_id", m.Favorites.HandlerDeleteFavorite, middlewares.IsAuth)
+		favoritesRoutes.GET("/", m.Favorites.HandlerGetFavorites, middlewares.IsAuth)
+		favoritesRoutes.GET("/:hservice_id", m.Favorites.HandlerGetIsFavorite, middlewares.IsAuth)
+		favoritesRoutes.GET("/username/:username", m.Favorites.HandlerGetFavoritesByUsername)
 	}
 
 	listsRoutes := api.Group("/lists")
 	{
-		listsRoutes.GET("/", listsModule.HandlerGetMyLists, middlewares.IsAuth)
-		listsRoutes.GET("/user/:username", listsModule.HandlerGetUsersLists)
-		listsRoutes.GET("/info/:hservice_id", listsModule.HandlerGetItemListInfo, middlewares.IsAuth)
-		listsRoutes.GET("/:id", listsModule.HandlerGetListById)
-		listsRoutes.POST("/", listsModule.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
-		listsRoutes.POST("/:id/items", listsModule.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
-		listsRoutes.DELETE("/:id", listsModule.HandlerDeleteList, middlewares.IsAuth)
-		listsRoutes.DELETE("/:id/items/:itemId", listsModule.HandlerDeleteListItem, middlewares.IsAuth)
+		listsRoutes.GET("/", m.Lists.HandlerGetMyLists, middlewares.IsAuth)
+		listsRoutes.GET("/user/:username", m.Lists.HandlerGetUsersLists)
+		listsRoutes.GET("/info/:hservice_id", m.Lists.HandlerGetItemListInfo, middlewares.IsAuth)
+		listsRoutes.GET("/:id", m.Lists.HandlerGetListById)
+		listsRoutes.POST("/", m.Lists.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
+		listsRoutes.POST("/:id/items", m.Lists.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
+		listsRoutes.DELETE("/:id", m.Lists.HandlerDeleteList, middlewares.IsAuth)
+		listsRoutes.DELETE("/:id/items/:itemId", m.Lists.HandlerDeleteListItem, middlewares.IsAuth)
 	}
 
 	return e
