@@ -29,3 +29,11 @@ type GetMeResponseDto struct {
 	CreatedAt       time.Time `json:"createdAt"`
 	UpdatedAt       time.Time `json:"updatedAt"`
 }
+
+type SendVerificationEmailRequestDto struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+type SendForgotPasswordEmailRequestDto struct {
+	Email string `json:"email" validate:"required,email"`
+}
