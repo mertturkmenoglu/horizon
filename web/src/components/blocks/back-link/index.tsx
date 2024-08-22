@@ -18,6 +18,7 @@ export default function BackLink({ href, className, text = 'Go back' }: Props) {
       <Button
         variant="link"
         className="px-0"
+        asChild
       >
         <div className="flex items-center gap-2">
           <ArrowLeft className="size-4" />
