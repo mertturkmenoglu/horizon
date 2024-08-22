@@ -311,3 +311,14 @@ func (q *Queries) UpdateUserGoogleId(ctx context.Context, arg UpdateUserGoogleId
 	_, err := q.db.Exec(ctx, updateUserGoogleId, arg.ID, arg.GoogleID)
 	return err
 }
+
+const updateUserIsEmailVerified = `-- name: UpdateUserIsEmailVerified :exec
+UPDATE users
+  SET is_email_verified = true
+WHERE id = $1
+`
+
+func (q *Queries) UpdateUserIsEmailVerified(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, updateUserIsEmailVerified, id)
+	return err
+}

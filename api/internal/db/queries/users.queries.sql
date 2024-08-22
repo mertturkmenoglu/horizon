@@ -70,3 +70,8 @@ SELECT
 FROM users
 WHERE username = $1
 LIMIT 1;
+
+-- name: UpdateUserIsEmailVerified :exec
+UPDATE users
+  SET is_email_verified = true
+WHERE id = $1;
