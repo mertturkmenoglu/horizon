@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Menu from './menu';
 import SignInButton from './sign-in-button';
+import SignedInLinks from './signed-in';
 
 type Props = React.HTMLAttributes<HTMLElement>;
 
@@ -35,7 +36,12 @@ export default async function Header({ className, ...props }: Props) {
 
       {!isSignedIn && <SignInButton />}
 
-      {isSignedIn && <Menu auth={auth} />}
+      {isSignedIn && (
+        <div className="flex items-center gap-2">
+          <SignedInLinks />
+          <Menu auth={auth} />
+        </div>
+      )}
     </header>
   );
 }
