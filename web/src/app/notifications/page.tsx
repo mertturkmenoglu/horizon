@@ -2,7 +2,7 @@ import AppMessage from '@/components/blocks/app-message';
 
 export default async function Page() {
   return (
-    <div>
+    <div className="container">
       <AppMessage
         className="my-16"
         emptyMessage="Notifications Page"
