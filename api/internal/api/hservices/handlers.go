@@ -193,3 +193,70 @@ func (s *HServicesService) HandlerGetHServiceById(c echo.Context) error {
 		},
 	})
 }
+
+func (s *HServicesService) HandlerGetHServicesByUsername(c echo.Context) error {
+	username := c.Param("username")
+	params, err := pagination.GetParamsFromContext(c)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: err.Error(),
+		})
+	}
+
+	if username == "" {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: "username is required",
+		})
+	}
+
+	hservices, err := s.Db.Queries.GetHServicesByUsername(context.Background(), db.GetHServicesByUsernameParams{
+		Username: username,
+		Offset:   int32(params.Offset),
+		Limit:    int32(params.PageSize),
+	})
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "not found",
+			})
+		} else {
+			return echo.ErrInternalServerError
+		}
+	}
+
+	count, err := s.Db.Queries.CountHServicesByUsername(context.Background(), username)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, h.ErrResponse{
+				Message: "not found",
+			})
+		} else {
+			return echo.ErrInternalServerError
+		}
+	}
+
+	paginationData := pagination.GetPagination(params, count)
+
+	res := make([]HServiceResponseDto, 0)
+
+	for _, hservice := range hservices {
+		dto, err := mapRowToDto(Row{
+			Hservice: hservice.Hservice,
+			User:     hservice.User,
+		})
+
+		if err != nil {
+			return echo.ErrInternalServerError
+		}
+
+		res = append(res, dto)
+	}
+
+	return c.JSON(http.StatusOK, h.PaginatedResponse[[]HServiceResponseDto]{
+		Data:       res,
+		Pagination: paginationData,
+	})
+}
