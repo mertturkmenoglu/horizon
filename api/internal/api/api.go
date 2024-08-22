@@ -10,6 +10,7 @@ import (
 	"horizon/internal/api/health"
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/lists"
+	"horizon/internal/api/notifications"
 	"horizon/internal/api/uploads"
 	"horizon/internal/api/users"
 	"horizon/internal/cache"
@@ -45,15 +46,16 @@ type Service struct {
 }
 
 type Modules struct {
-	Auth         *auth.Module
-	Uploads      *uploads.Module
-	HServices    *hservices.Module
-	Users        *users.Module
-	Aggregations *aggregations.Module
-	Health       *health.Module
-	Bookmarks    *bookmarks.Module
-	Favorites    *favorites.Module
-	Lists        *lists.Module
+	Auth          *auth.Module
+	Uploads       *uploads.Module
+	HServices     *hservices.Module
+	Users         *users.Module
+	Aggregations  *aggregations.Module
+	Health        *health.Module
+	Bookmarks     *bookmarks.Module
+	Favorites     *favorites.Module
+	Lists         *lists.Module
+	Notifications *notifications.Module
 }
 
 // New returns a new Service instance.
@@ -89,15 +91,16 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
 
 	m := Modules{
-		Auth:         auth.New(s.Db, s.Flake, s.Logger, s.Tasks, s.Cache),
-		Uploads:      uploads.New(s.Upload),
-		HServices:    hservices.New(s.Db, s.Flake, s.Logger),
-		Users:        users.New(s.Db, s.Flake, s.Logger),
-		Aggregations: aggregations.New(s.Db, s.Logger, s.Cache),
-		Health:       health.New(),
-		Bookmarks:    bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
-		Favorites:    favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
-		Lists:        lists.New(s.Db, s.Flake),
+		Auth:          auth.New(s.Db, s.Flake, s.Logger, s.Tasks, s.Cache),
+		Uploads:       uploads.New(s.Upload),
+		HServices:     hservices.New(s.Db, s.Flake, s.Logger),
+		Users:         users.New(s.Db, s.Flake, s.Logger),
+		Aggregations:  aggregations.New(s.Db, s.Logger, s.Cache),
+		Health:        health.New(),
+		Bookmarks:     bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
+		Favorites:     favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
+		Lists:         lists.New(s.Db, s.Flake),
+		Notifications: notifications.New(),
 	}
 
 	api := e.Group("/api")
@@ -171,6 +174,18 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		listsRoutes.POST("/:id/items", m.Lists.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
 		listsRoutes.DELETE("/:id", m.Lists.HandlerDeleteList, middlewares.IsAuth)
 		listsRoutes.DELETE("/:id/items/:itemId", m.Lists.HandlerDeleteListItem, middlewares.IsAuth)
+	}
+
+	notificationsRoutes := api.Group("/notifications")
+	{
+		notificationsRoutes.GET("/", m.Notifications.HandlerGetAll, middlewares.IsAuth)
+		notificationsRoutes.GET("/unread", m.Notifications.HandlerGetUnread, middlewares.IsAuth)
+		notificationsRoutes.POST("/read", m.Notifications.HandlerReadAll, middlewares.IsAuth)
+		notificationsRoutes.POST("/read/:id", m.Notifications.HandlerReadOne, middlewares.IsAuth)
+		notificationsRoutes.POST("/unread", m.Notifications.HandlerUnreadAll, middlewares.IsAuth)
+		notificationsRoutes.POST("/unread/:id", m.Notifications.HandlerUnreadOne, middlewares.IsAuth)
+		notificationsRoutes.DELETE("/", m.Notifications.HandlerDeleteAll, middlewares.IsAuth)
+		notificationsRoutes.DELETE("/read", m.Notifications.HandlerDeleteRead, middlewares.IsAuth)
 	}
 
 	return e
