@@ -177,6 +177,14 @@ type ListItem struct {
 	ItemOrder  int32
 }
 
+type Session struct {
+	ID          string
+	UserID      string
+	SessionData pgtype.Text
+	CreatedAt   pgtype.Timestamptz
+	ExpiresAt   pgtype.Timestamptz
+}
+
 type State struct {
 	ID          int32
 	Name        string

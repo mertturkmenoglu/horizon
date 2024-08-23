@@ -122,3 +122,11 @@ CREATE TABLE IF NOT EXISTS list_items (
   hservice_id TEXT NOT NULL,
   item_order INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id VARCHAR(255) PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  session_data TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL
+);
