@@ -127,3 +127,20 @@ export type ResetPasswordRequestDto = {
   code: string;
   newPassword: string;
 };
+
+export type BookmarksResponseItemDto = {
+  id: string;
+  userId: string;
+  hserviceId: string;
+  createdAt: string;
+  hservice: HServiceWithoutUserResponseDto;
+};
+
+export type Pagination = {
+  page: number;
+  pageSize: number;
+  totalRecords: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+};
