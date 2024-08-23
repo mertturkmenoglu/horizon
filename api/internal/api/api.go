@@ -117,6 +117,8 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		authRoutes.POST("/credentials/register", m.Auth.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
 		authRoutes.POST("/verify-email/send", m.Auth.HandlerSendVerificationEmail, middlewares.ParseBody[auth.SendVerificationEmailRequestDto])
 		authRoutes.GET("/verify-email/verify", m.Auth.HandlerVerifyEmail)
+		authRoutes.POST("/forgot-password/send", m.Auth.HandlerSendForgotPasswordEmail, middlewares.ParseBody[auth.SendForgotPasswordEmailRequestDto])
+		authRoutes.POST("/forgot-password/reset", m.Auth.HandlerResetPassword, middlewares.ParseBody[auth.ResetPasswordRequestDto])
 	}
 
 	uploadsRoutes := api.Group("/uploads")
