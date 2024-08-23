@@ -8,6 +8,7 @@ import (
 
 type Db struct {
 	Queries *Queries
+	Pool    *pgxpool.Pool
 }
 
 func NewDb() *Db {
@@ -22,5 +23,6 @@ func NewDb() *Db {
 	queries := New(dbpool)
 	return &Db{
 		Queries: queries,
+		Pool:    dbpool,
 	}
 }
