@@ -22,6 +22,7 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
       const res = await api.get('auth/me');
       return res.json<Auth>();
     },
+    retry: false,
   });
 
   return (
