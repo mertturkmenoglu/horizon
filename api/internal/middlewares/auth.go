@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"horizon/internal/api/auth"
+	"horizon/internal/cookies"
 	"horizon/internal/db"
 	"horizon/internal/h"
 	"net/http"
@@ -45,6 +46,8 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		userId, sessionId, ok := getValuesFromSession(sess)
 
 		if !ok || sessionId == "" || userId == "" {
+			cookies.DeleteSessionCookie(c)
+
 			return c.JSON(http.StatusUnauthorized, h.ErrResponse{
 				Message: errInvalidSession.Error(),
 			})
@@ -53,6 +56,8 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		s, err := GetDb().Queries.GetSessionById(context.Background(), sessionId)
 
 		if err != nil {
+			cookies.DeleteSessionCookie(c)
+
 			return c.JSON(http.StatusUnauthorized, h.ErrResponse{
 				Message: errInvalidSession.Error(),
 			})
@@ -60,6 +65,8 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Check if the session belongs to the user
 		if s.Session.UserID != userId {
+			cookies.DeleteSessionCookie(c)
+
 			return c.JSON(http.StatusUnauthorized, h.ErrResponse{
 				Message: errInvalidSession.Error(),
 			})
@@ -67,6 +74,8 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Check if the session is expired
 		if s.Session.ExpiresAt.Time.Before(time.Now()) {
+			cookies.DeleteSessionCookie(c)
+
 			return c.JSON(http.StatusUnauthorized, h.ErrResponse{
 				Message: errSessionExpired.Error(),
 			})
@@ -89,20 +98,14 @@ func WithAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		sess, err := session.Get(auth.SESSION_NAME, c)
 
 		if err != nil {
-			c.Set("user_id", "")
-			c.Set("session_id", "")
-			c.Set("session_data", "")
-			c.Set("user", db.User{})
+			setContextValuesEmpty(c)
 			return next(c)
 		}
 
 		userId, sessionId, ok := getValuesFromSession(sess)
 
 		if !ok || userId == "" || sessionId == "" {
-			c.Set("user_id", "")
-			c.Set("session_id", "")
-			c.Set("session_data", "")
-			c.Set("user", db.User{})
+			setContextValuesEmpty(c)
 			return next(c)
 		}
 
@@ -110,10 +113,7 @@ func WithAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		ok = err == nil && s.Session.UserID == userId && s.Session.ExpiresAt.Time.After(time.Now())
 
 		if !ok {
-			c.Set("user_id", "")
-			c.Set("session_id", "")
-			c.Set("session_data", "")
-			c.Set("user", db.User{})
+			setContextValuesEmpty(c)
 			return next(c)
 		}
 
@@ -131,4 +131,11 @@ func getValuesFromSession(sess *sessions.Session) (userId string, sessionId stri
 	sessionId, sessionOk := sess.Values["session_id"].(string)
 	ok = userOk && sessionOk
 	return userId, sessionId, ok
+}
+
+func setContextValuesEmpty(c echo.Context) {
+	c.Set("user_id", "")
+	c.Set("session_id", "")
+	c.Set("session_data", "")
+	c.Set("user", db.User{})
 }
