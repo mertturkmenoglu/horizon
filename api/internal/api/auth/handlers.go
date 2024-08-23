@@ -358,7 +358,7 @@ func (s *Module) HandlerSendForgotPasswordEmail(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	codeBytes, err := random.GenerateBytes(32)
+	codeBytes, err := random.GenerateBytes(6)
 	code := base64.URLEncoding.EncodeToString(codeBytes)
 
 	if err != nil {
@@ -372,6 +372,57 @@ func (s *Module) HandlerSendForgotPasswordEmail(c echo.Context) error {
 		Email: body.Email,
 		Code:  code,
 	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (s *Module) HandlerResetPassword(c echo.Context) error {
+	body := c.Get("body").(ResetPasswordRequestDto)
+	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrInvalidEmail.Error(),
+		})
+	}
+
+	key := fmt.Sprintf("forgot-password:%s", body.Code)
+	cacheVal, err := s.Cache.Get(key)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrPasswordResetCodeExpiredOrInvalid.Error(),
+		})
+	}
+
+	if cacheVal != body.Email {
+		return c.JSON(http.StatusBadRequest, h.ErrResponse{
+			Message: ErrPasswordResetCodeExpiredOrInvalid.Error(),
+		})
+	}
+
+	hashed, err := hash.Hash(body.NewPassword)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
+			Message: ErrHash.Error(),
+		})
+	}
+
+	err = s.Db.Queries.UpdateUserPassword(context.Background(), db.UpdateUserPasswordParams{
+		ID:           user.ID,
+		PasswordHash: pgtype.Text{String: hashed, Valid: true},
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	err = s.Cache.Del(key)
 
 	if err != nil {
 		return echo.ErrInternalServerError
