@@ -28,7 +28,7 @@ read-location:
 	@go run cmd/read-location/main.go
 
 generate-fake-data:
-	@go run cmd/fake/main.go
+	@go run cmd/fake/*.go
 
 sqlc-generate:
 	@sqlc generate
