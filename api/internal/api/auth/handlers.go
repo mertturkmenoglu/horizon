@@ -18,6 +18,7 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
+	"golang.org/x/oauth2"
 )
 
 func (s *Module) HandlerGoogle(c echo.Context) error {
@@ -38,7 +39,7 @@ func (s *Module) HandlerGoogle(c echo.Context) error {
 
 	sess.Save(c.Request(), c.Response())
 
-	url := googleConfig.AuthCodeURL(state)
+	url := googleConfig.AuthCodeURL(state, oauth2.ApprovalForce)
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
