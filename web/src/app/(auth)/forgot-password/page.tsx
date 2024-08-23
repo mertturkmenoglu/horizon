@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import InputInfo from '@/components/ui/input-info';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -31,16 +32,16 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
-    // const res = await api.post('auth/credentials/login', {
-    //   json: data,
-    // });
+    const res = await api.post('auth/forgot-password/send', {
+      json: {
+        email: data.email,
+      },
+    });
 
-    // if (res.status == 200) {
-    //   window.location.href = '/';
-    // }
-    console.log({ data });
-    window.sessionStorage.setItem('forgot-password-email', data.email);
-    router.push('/forgot-password/reset');
+    if (res.status == 200 || res.status == 204) {
+      window.sessionStorage.setItem('forgot-password-email', data.email);
+      router.push('/forgot-password/reset');
+    }
   };
 
   return (

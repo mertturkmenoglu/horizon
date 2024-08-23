@@ -6,17 +6,23 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
+import { ResetPasswordRequestDto } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import AuthLink from '../../_components/auth-link';
 
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email(),
-  code: z.string().length(6, { message: 'Invalid code' }),
+  code: z
+    .string()
+    .min(1, { message: 'Invalid code' })
+    .max(16, { message: 'Invalid code' }),
   newPassword: z
     .string()
     .min(6, { message: 'Password should be longer than 6 characters' })
@@ -36,14 +42,25 @@ export default function Page() {
   });
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
-    // const res = await api.post('auth/credentials/login', {
-    //   json: data,
-    // });
+    const dto: ResetPasswordRequestDto = {
+      email: data.email,
+      code: data.code,
+      newPassword: data.newPassword,
+    };
+    const res = await api.post('auth/forgot-password/reset', {
+      json: dto,
+    });
 
-    // if (res.status == 200) {
-    //   window.location.href = '/';
-    // }
-    console.log({ data });
+    if (res.status == 200 || res.status == 204) {
+      toast.success(
+        'Your password has been reset successfully. Redirecting...'
+      );
+      setTimeout(() => {
+        window.location.href = '/sign-in';
+      }, 3000);
+    } else {
+      toast.error('Something went wrong. Cannot reset your password.');
+    }
   };
 
   return (
