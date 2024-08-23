@@ -37,3 +37,9 @@ type SendVerificationEmailRequestDto struct {
 type SendForgotPasswordEmailRequestDto struct {
 	Email string `json:"email" validate:"required,email"`
 }
+
+type ResetPasswordRequestDto struct {
+	Email       string `json:"email" validate:"required,email"`
+	Code        string `json:"code" validate:"required"`
+	NewPassword string `json:"newPassword" validate:"required"`
+}
