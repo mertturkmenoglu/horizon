@@ -79,6 +79,25 @@ services:
     ports:
       - "3001:3000"
 
+  inbucket:
+    container_name: inbucket
+    ports:
+      - 10000:9000
+      - 2500:2500
+      - 1100:1100
+    image: inbucket/inbucket
+
+  asynqmon:
+    image: hibiken/asynqmon
+    networks:
+      - redisnet
+    ports:
+      - "8080:8080"
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - redis
+
 networks:
   redisnet:
   searchnet:
