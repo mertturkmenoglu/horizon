@@ -23,6 +23,7 @@ import (
 	"horizon/internal/upload"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/pterm/pterm"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
@@ -141,6 +142,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	aggregationsRoutes := api.Group("/aggregations")
 	{
+		aggregationsRoutes.Use(middleware.RateLimiterWithConfig(middlewares.GetRateLimiterConfig()))
 		aggregationsRoutes.GET("/home", m.Aggregations.HandlerGetHomeAggregations)
 	}
 

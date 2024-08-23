@@ -18,7 +18,7 @@ func InitGlobalMiddlewares(e *echo.Echo) {
 	}
 
 	e.Use(middleware.Recover())
-	e.Use(middleware.RateLimiterWithConfig(middlewares.GetRateLimiterConfig()))
+
 
 	if viper.GetString(config.ENV) == "dev" {
 		e.IPExtractor = echo.ExtractIPDirect()
