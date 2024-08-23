@@ -144,3 +144,13 @@ export type Pagination = {
   hasPrevious: boolean;
   hasNext: boolean;
 };
+
+export type GetMyListsResponseDtoItem = {
+  id: string;
+  title: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GetMyListsResponseDto = GetMyListsResponseDtoItem[];
