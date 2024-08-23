@@ -130,3 +130,29 @@ CREATE TABLE IF NOT EXISTS sessions (
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   expires_at TIMESTAMPTZ NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  hservice_id TEXT NOT NULL,
+  rating SMALLINT NOT NULL,
+  comment TEXT NOT NULL,
+  media JSONB,
+  like_count INT NOT NULL DEFAULT 0,
+  dislike_count INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TYPE ReviewVoteType AS ENUM (
+  'LIKE',
+  'DISLIKE'
+);
+
+CREATE TABLE IF NOT EXISTS reviews_votes (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  review_id TEXT NOT NULL,
+  vote_type ReviewVoteType NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

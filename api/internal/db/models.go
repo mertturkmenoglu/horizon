@@ -62,6 +62,48 @@ func (ns NullPriceunit) Value() (driver.Value, error) {
 	return string(ns.Priceunit), nil
 }
 
+type Reviewvotetype string
+
+const (
+	ReviewvotetypeLIKE    Reviewvotetype = "LIKE"
+	ReviewvotetypeDISLIKE Reviewvotetype = "DISLIKE"
+)
+
+func (e *Reviewvotetype) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Reviewvotetype(s)
+	case string:
+		*e = Reviewvotetype(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Reviewvotetype: %T", src)
+	}
+	return nil
+}
+
+type NullReviewvotetype struct {
+	Reviewvotetype Reviewvotetype
+	Valid          bool // Valid is true if Reviewvotetype is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullReviewvotetype) Scan(value interface{}) error {
+	if value == nil {
+		ns.Reviewvotetype, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Reviewvotetype.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullReviewvotetype) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Reviewvotetype), nil
+}
+
 type Worktimespan string
 
 const (
@@ -175,6 +217,27 @@ type ListItem struct {
 	ListID     string
 	HserviceID string
 	ItemOrder  int32
+}
+
+type Review struct {
+	ID           string
+	UserID       string
+	HserviceID   string
+	Rating       int16
+	Comment      string
+	Media        []byte
+	LikeCount    int32
+	DislikeCount int32
+	CreatedAt    pgtype.Timestamptz
+	UpdatedAt    pgtype.Timestamptz
+}
+
+type ReviewsVote struct {
+	ID        string
+	UserID    string
+	ReviewID  string
+	VoteType  Reviewvotetype
+	CreatedAt pgtype.Timestamptz
 }
 
 type Session struct {
