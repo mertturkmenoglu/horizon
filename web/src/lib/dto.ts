@@ -117,3 +117,13 @@ export type HServiceMetadataDto = {
   isFavorite: boolean;
   isBookmarked: boolean;
 };
+
+export type SendForgotPasswordEmailRequestDto = {
+  email: string;
+};
+
+export type ResetPasswordRequestDto = {
+  email: string;
+  code: string;
+  newPassword: string;
+};
