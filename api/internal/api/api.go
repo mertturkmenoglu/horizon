@@ -11,6 +11,7 @@ import (
 	"horizon/internal/api/hservices"
 	"horizon/internal/api/lists"
 	"horizon/internal/api/notifications"
+	"horizon/internal/api/reviews"
 	"horizon/internal/api/uploads"
 	"horizon/internal/api/users"
 	"horizon/internal/cache"
@@ -57,6 +58,7 @@ type Modules struct {
 	Favorites     *favorites.Module
 	Lists         *lists.Module
 	Notifications *notifications.Module
+	Reviews       *reviews.Module
 }
 
 // New returns a new Service instance.
@@ -102,6 +104,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		Favorites:     favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
 		Lists:         lists.New(s.Db, s.Flake),
 		Notifications: notifications.New(),
+		Reviews:       reviews.New(s.Db, s.Flake, s.Logger, s.Cache),
 	}
 
 	api := e.Group("/api")
@@ -190,6 +193,17 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		notificationsRoutes.POST("/unread/:id", m.Notifications.HandlerUnreadOne, middlewares.IsAuth)
 		notificationsRoutes.DELETE("/", m.Notifications.HandlerDeleteAll, middlewares.IsAuth)
 		notificationsRoutes.DELETE("/read", m.Notifications.HandlerDeleteRead, middlewares.IsAuth)
+	}
+
+	reviewsRoutes := api.Group("/reviews")
+	{
+		reviewsRoutes.GET("/hservice/:id", m.Reviews.HandlerGetReviewsByHserviceId, middlewares.WithAuth)
+		reviewsRoutes.GET("/user/:username", m.Reviews.HandlerGetReviewsByUsername, middlewares.WithAuth)
+		reviewsRoutes.GET("/:id", m.Reviews.HandlerGetReviewById, middlewares.WithAuth)
+		reviewsRoutes.POST("/", m.Reviews.HandlerCreateReview, middlewares.IsAuth, middlewares.ParseBody[reviews.CreateReviewRequestDto])
+		reviewsRoutes.DELETE("/:id", m.Reviews.HandlerDeleteReview, middlewares.IsAuth)
+		reviewsRoutes.POST("/:id/vote", m.Reviews.HandlerCreateReviewVote, middlewares.IsAuth)
+		reviewsRoutes.DELETE("/:id/vote", m.Reviews.HandlerDeleteReviewVote, middlewares.IsAuth)
 	}
 
 	return e
