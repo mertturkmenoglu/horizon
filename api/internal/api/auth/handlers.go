@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -73,8 +74,25 @@ func (s *Module) HandlerGoogleCallback(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
+	sessionId := uuid.New().String()
+	createdAt := time.Now()
+	expiresAt := createdAt.Add(time.Hour * 24 * 7)
+
+	_, err = s.Db.Queries.CreateSession(context.Background(), db.CreateSessionParams{
+		ID:          sessionId,
+		UserID:      authId,
+		SessionData: pgtype.Text{},
+		CreatedAt:   pgtype.Timestamptz{Time: createdAt, Valid: true},
+		ExpiresAt:   pgtype.Timestamptz{Time: expiresAt, Valid: true},
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
 	sess.Options = getAuthSessionOptions()
 	sess.Values["user_id"] = authId
+	sess.Values["session_id"] = sessionId
 	sess.Save(c.Request(), c.Response())
 	redirectUrl := viper.GetString(config.GOOGLE_REDIRECT)
 
@@ -154,9 +172,26 @@ func (s *Module) HandlerCredentialsLogin(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
+	sessionId := uuid.New().String()
+	createdAt := time.Now()
+	expiresAt := createdAt.Add(time.Hour * 24 * 7)
+
+	_, err = s.Db.Queries.CreateSession(context.Background(), db.CreateSessionParams{
+		ID:          sessionId,
+		UserID:      user.ID,
+		SessionData: pgtype.Text{},
+		CreatedAt:   pgtype.Timestamptz{Time: createdAt, Valid: true},
+		ExpiresAt:   pgtype.Timestamptz{Time: expiresAt, Valid: true},
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
 	sess.Options = getAuthSessionOptions()
 
 	sess.Values["user_id"] = user.ID
+	sess.Values["session_id"] = sessionId
 	sess.Save(c.Request(), c.Response())
 
 	return c.NoContent(http.StatusOK)
