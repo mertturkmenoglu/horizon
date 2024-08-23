@@ -65,3 +65,28 @@ WHERE user_id = $1;
 -- name: GetListItemCount :one
 SELECT COUNT(*) FROM list_items
 WHERE list_id = $1;
+
+-- name: GetListItemById :one
+SELECT id, list_id, item_order FROM list_items
+WHERE id = $1 AND list_id = $2;
+
+-- name: UpdateListItemOrderWithIndexRangeDecr :exec
+UPDATE list_items
+SET item_order = item_order - 1
+WHERE
+  list_id = $1 AND
+  item_order > $2 AND
+  item_order <= $3;
+
+-- name: UpdateListItemOrder :exec
+UPDATE list_items
+SET item_order = $2
+WHERE id = $1;
+
+-- name: UpdateListItemOrderWithIndexRangeIncr :exec
+UPDATE list_items
+SET item_order = item_order + 1
+WHERE
+  list_id = $1 AND
+  item_order >= $2 AND
+  item_order <= $3;

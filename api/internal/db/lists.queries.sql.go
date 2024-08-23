@@ -152,6 +152,29 @@ func (q *Queries) GetListById(ctx context.Context, id string) (GetListByIdRow, e
 	return i, err
 }
 
+const getListItemById = `-- name: GetListItemById :one
+SELECT id, list_id, item_order FROM list_items
+WHERE id = $1 AND list_id = $2
+`
+
+type GetListItemByIdParams struct {
+	ID     string
+	ListID string
+}
+
+type GetListItemByIdRow struct {
+	ID        string
+	ListID    string
+	ItemOrder int32
+}
+
+func (q *Queries) GetListItemById(ctx context.Context, arg GetListItemByIdParams) (GetListItemByIdRow, error) {
+	row := q.db.QueryRow(ctx, getListItemById, arg.ID, arg.ListID)
+	var i GetListItemByIdRow
+	err := row.Scan(&i.ID, &i.ListID, &i.ItemOrder)
+	return i, err
+}
+
 const getListItemCount = `-- name: GetListItemCount :one
 SELECT COUNT(*) FROM list_items
 WHERE list_id = $1
@@ -371,4 +394,60 @@ func (q *Queries) GetUsersLists(ctx context.Context, userID string) ([]GetUsersL
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateListItemOrder = `-- name: UpdateListItemOrder :exec
+UPDATE list_items
+SET item_order = $2
+WHERE id = $1
+`
+
+type UpdateListItemOrderParams struct {
+	ID        string
+	ItemOrder int32
+}
+
+func (q *Queries) UpdateListItemOrder(ctx context.Context, arg UpdateListItemOrderParams) error {
+	_, err := q.db.Exec(ctx, updateListItemOrder, arg.ID, arg.ItemOrder)
+	return err
+}
+
+const updateListItemOrderWithIndexRangeDecr = `-- name: UpdateListItemOrderWithIndexRangeDecr :exec
+UPDATE list_items
+SET item_order = item_order - 1
+WHERE
+  list_id = $1 AND
+  item_order > $2 AND
+  item_order <= $3
+`
+
+type UpdateListItemOrderWithIndexRangeDecrParams struct {
+	ListID      string
+	ItemOrder   int32
+	ItemOrder_2 int32
+}
+
+func (q *Queries) UpdateListItemOrderWithIndexRangeDecr(ctx context.Context, arg UpdateListItemOrderWithIndexRangeDecrParams) error {
+	_, err := q.db.Exec(ctx, updateListItemOrderWithIndexRangeDecr, arg.ListID, arg.ItemOrder, arg.ItemOrder_2)
+	return err
+}
+
+const updateListItemOrderWithIndexRangeIncr = `-- name: UpdateListItemOrderWithIndexRangeIncr :exec
+UPDATE list_items
+SET item_order = item_order + 1
+WHERE
+  list_id = $1 AND
+  item_order >= $2 AND
+  item_order <= $3
+`
+
+type UpdateListItemOrderWithIndexRangeIncrParams struct {
+	ListID      string
+	ItemOrder   int32
+	ItemOrder_2 int32
+}
+
+func (q *Queries) UpdateListItemOrderWithIndexRangeIncr(ctx context.Context, arg UpdateListItemOrderWithIndexRangeIncrParams) error {
+	_, err := q.db.Exec(ctx, updateListItemOrderWithIndexRangeIncr, arg.ListID, arg.ItemOrder, arg.ItemOrder_2)
+	return err
 }
