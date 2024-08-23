@@ -1,21 +1,35 @@
 package middlewares
 
 import (
+	"horizon/config"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/spf13/viper"
+	"golang.org/x/time/rate"
 )
 
 func GetRateLimiterConfig() middleware.RateLimiterConfig {
+	env := viper.GetString(config.ENV)
+	isProd := strings.Contains(env, "prod")
+	var r float64 = 100
+	var burst int = 50
+
+	if !isProd {
+		r = 1_000_000
+		burst = 100_000
+	}
+
 	return middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
 		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
 			middleware.RateLimiterMemoryStoreConfig{
-				Rate:      1,
-				Burst:     30,
-				ExpiresIn: 3 * time.Minute,
+				Rate:      rate.Limit(r),
+				Burst:     burst,
+				ExpiresIn: 1 * time.Minute,
 			},
 		),
 		IdentifierExtractor: func(context echo.Context) (string, error) {
