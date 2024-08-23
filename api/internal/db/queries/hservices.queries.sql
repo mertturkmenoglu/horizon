@@ -105,3 +105,8 @@ LIMIT $3;
 -- name: CountHServicesByUsername :one
 SELECT COUNT(*) FROM hservices
 WHERE user_id = (SELECT id FROM users WHERE users.username = $1 LIMIT 1);
+
+-- name: GetRandomHServices :many
+SELECT id FROM hservices
+ORDER BY RANDOM()
+LIMIT $1;

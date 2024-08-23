@@ -630,6 +630,32 @@ func (q *Queries) GetPopularHServices(ctx context.Context) ([]GetPopularHService
 	return items, nil
 }
 
+const getRandomHServices = `-- name: GetRandomHServices :many
+SELECT id FROM hservices
+ORDER BY RANDOM()
+LIMIT $1
+`
+
+func (q *Queries) GetRandomHServices(ctx context.Context, limit int32) ([]string, error) {
+	rows, err := q.db.Query(ctx, getRandomHServices, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listHServices = `-- name: ListHServices :many
 SELECT hservices.id, hservices.user_id, hservices.title, hservices.slug, hservices.description, hservices.category, hservices.price, hservices.price_unit, hservices.price_timespan, hservices.is_online, hservices.url, hservices.location, hservices.delivery_time, hservices.delivery_timespan, hservices.total_points, hservices.total_votes, hservices.media, hservices.created_at, hservices.updated_at, users.id, users.email, users.username, users.full_name, users.password_hash, users.google_id, users.is_email_verified, users.is_active, users.role, users.password_reset_token, users.password_reset_expires, users.login_attempts, users.lockout_until, users.gender, users.profile_image, users.last_login, users.created_at, users.updated_at FROM hservices
 JOIN users ON users.id = hservices.user_id
