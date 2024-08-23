@@ -322,3 +322,19 @@ func (q *Queries) UpdateUserIsEmailVerified(ctx context.Context, id string) erro
 	_, err := q.db.Exec(ctx, updateUserIsEmailVerified, id)
 	return err
 }
+
+const updateUserPassword = `-- name: UpdateUserPassword :exec
+UPDATE users
+  SET password_hash = $2
+WHERE id = $1
+`
+
+type UpdateUserPasswordParams struct {
+	ID           string
+	PasswordHash pgtype.Text
+}
+
+func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
+	_, err := q.db.Exec(ctx, updateUserPassword, arg.ID, arg.PasswordHash)
+	return err
+}

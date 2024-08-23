@@ -75,3 +75,8 @@ LIMIT 1;
 UPDATE users
   SET is_email_verified = true
 WHERE id = $1;
+
+-- name: UpdateUserPassword :exec
+UPDATE users
+  SET password_hash = $2
+WHERE id = $1;
