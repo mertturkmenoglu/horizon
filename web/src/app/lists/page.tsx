@@ -21,10 +21,6 @@ export default function Page() {
     queryFn: () => getLists(),
   });
 
-  if (query.isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <div className="flex w-full items-center justify-between">
@@ -42,6 +38,7 @@ export default function Page() {
       </div>
       <hr className="my-2" />
       <div className="mt-8">
+        {query.isLoading && <Loading />}
         {query.data && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {query.data.map((list) => (
@@ -57,6 +54,7 @@ export default function Page() {
               <AppMessage
                 emptyMessage="You don't have any lists."
                 showBackButton={false}
+                className="col-span-full"
               />
             )}
           </div>
