@@ -96,7 +96,7 @@ func mapGetListByIdResultToDto(list db.GetListByIdRow, listItems []db.GetListIte
 		Title:     list.List.Title,
 		UserID:    list.List.UserID,
 		CreatedAt: list.List.CreatedAt.Time,
-		UpdateAt:  list.List.UpdatedAt.Time,
+		UpdatedAt: list.List.UpdatedAt.Time,
 		User: UserDto{
 			ID:           list.List.UserID,
 			Username:     list.User.Username,
@@ -105,6 +105,7 @@ func mapGetListByIdResultToDto(list db.GetListByIdRow, listItems []db.GetListIte
 			ProfileImage: profileImage,
 			CreatedAt:    list.User.CreatedAt.Time,
 		},
+		Items: make([]ItemDto, 0),
 	}
 
 	for _, item := range listItems {
