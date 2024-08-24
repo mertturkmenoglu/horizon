@@ -197,7 +197,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	reviewsRoutes := api.Group("/reviews")
 	{
-		reviewsRoutes.GET("/hservice/:id", m.Reviews.HandlerGetReviewsByHserviceId, middlewares.WithAuth)
+		reviewsRoutes.GET("/hservice/:id", m.Reviews.HandlerGetReviewsByHServiceId, middlewares.WithAuth)
 		reviewsRoutes.GET("/user/:username", m.Reviews.HandlerGetReviewsByUsername, middlewares.WithAuth)
 		reviewsRoutes.GET("/:id", m.Reviews.HandlerGetReviewById, middlewares.WithAuth)
 		reviewsRoutes.POST("/", m.Reviews.HandlerCreateReview, middlewares.IsAuth, middlewares.ParseBody[reviews.CreateReviewRequestDto])
