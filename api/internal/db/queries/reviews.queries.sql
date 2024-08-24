@@ -52,3 +52,21 @@ WHERE hservice_id = $1;
 -- name: CountReviewsByUsername :one
 SELECT COUNT(*) FROM reviews
 WHERE user_id = (SELECT id FROM users WHERE username = $1);
+
+-- name: CreateReview :one
+INSERT INTO reviews (
+  id,
+  user_id,
+  hservice_id,
+  rating,
+  comment,
+  media
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6
+)
+RETURNING *;

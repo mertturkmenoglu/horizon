@@ -33,6 +33,59 @@ func (q *Queries) CountReviewsByUsername(ctx context.Context, username string) (
 	return count, err
 }
 
+const createReview = `-- name: CreateReview :one
+INSERT INTO reviews (
+  id,
+  user_id,
+  hservice_id,
+  rating,
+  comment,
+  media
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6
+)
+RETURNING id, user_id, hservice_id, rating, comment, media, like_count, dislike_count, created_at, updated_at
+`
+
+type CreateReviewParams struct {
+	ID         string
+	UserID     string
+	HserviceID string
+	Rating     int16
+	Comment    string
+	Media      []byte
+}
+
+func (q *Queries) CreateReview(ctx context.Context, arg CreateReviewParams) (Review, error) {
+	row := q.db.QueryRow(ctx, createReview,
+		arg.ID,
+		arg.UserID,
+		arg.HserviceID,
+		arg.Rating,
+		arg.Comment,
+		arg.Media,
+	)
+	var i Review
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.HserviceID,
+		&i.Rating,
+		&i.Comment,
+		&i.Media,
+		&i.LikeCount,
+		&i.DislikeCount,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const createReviewVote = `-- name: CreateReviewVote :one
 INSERT INTO reviews_votes (
   id,
