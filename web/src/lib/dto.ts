@@ -154,3 +154,7 @@ export type GetMyListsResponseDtoItem = {
 };
 
 export type GetMyListsResponseDto = GetMyListsResponseDtoItem[];
+
+export type CreateListRequestDto = {
+  title: string;
+};
