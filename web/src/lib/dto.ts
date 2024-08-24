@@ -158,3 +158,21 @@ export type GetMyListsResponseDto = GetMyListsResponseDtoItem[];
 export type CreateListRequestDto = {
   title: string;
 };
+
+export type GetListByIdResponseDto = {
+  id: string;
+  title: string;
+  userId: string;
+  user: UserDto;
+  items: ListItemDto[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListItemDto = {
+  id: string;
+  listId: string;
+  hserviceId: string;
+  hservice: HServiceResponseDto;
+  itemOrder: number;
+};
