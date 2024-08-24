@@ -1,4 +1,7 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
+import { formatBytes } from '@/lib/file-utils';
 import * as collapsible from '@zag-js/collapsible';
 import * as fileUpload from '@zag-js/file-upload';
 import { PropTypes } from '@zag-js/react';
@@ -51,23 +54,32 @@ export default function Dnd({ capi, fapi }: Props) {
               {...fapi.getItemGroupProps()}
               className="mt-4 grid grid-cols-2 place-content-center gap-4"
             >
-              {fapi.acceptedFiles.map((file) => (
+              {fapi.acceptedFiles.map((file, i) => (
                 <li
                   key={file.name}
                   {...fapi.getItemProps({ file })}
-                  className="flex w-full items-center justify-center gap-2"
                 >
-                  <Preview file={file} />
+                  <div className="flex w-full items-center gap-2 rounded-lg px-4 py-2 hover:bg-sky-500/10">
+                    <Preview file={file} />
 
-                  <Button
-                    {...fapi.getItemDeleteTriggerProps({
-                      file,
-                    })}
-                    variant="ghost"
-                    size="icon"
-                  >
-                    <X className="size-4" />
-                  </Button>
+                    <div className="ml-2 flex flex-col items-start">
+                      <div className="text-sm font-semibold">{file.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {formatBytes(file.size)}
+                      </div>
+                    </div>
+
+                    <Button
+                      {...fapi.getItemDeleteTriggerProps({
+                        file,
+                      })}
+                      className="ml-auto size-6 p-0 hover:bg-red-500 hover:text-white"
+                      variant="ghost"
+                      size="sm"
+                    >
+                      <X className="size-3" />
+                    </Button>
+                  </div>
                 </li>
               ))}
             </ul>

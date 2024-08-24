@@ -19,10 +19,12 @@ export default function Preview({ file }: Props) {
   }
 
   return (
-    <img
-      src={src}
-      alt={file.name}
-      className="size-20 rounded object-cover"
-    />
+    <div>
+      <img
+        src={src}
+        alt={file.name}
+        className="size-20 rounded object-cover"
+      />
+    </div>
   );
 }
