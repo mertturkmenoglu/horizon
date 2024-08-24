@@ -47,7 +47,7 @@ type GetListByIdResponseDto struct {
 	User      UserDto   `json:"user"`
 	Items     []ItemDto `json:"items"`
 	CreatedAt time.Time `json:"createdAt"`
-	UpdateAt  time.Time `json:"updateAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type ItemDto struct {
