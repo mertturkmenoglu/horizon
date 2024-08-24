@@ -128,6 +128,9 @@ importers:
       sonner:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      swapy:
+        specifier: ^0.1.1
+        version: 0.1.1
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -2435,6 +2438,9 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  swapy@0.1.1:
+    resolution: {integrity: sha512-iurSCHQnTgw3Jk663AFx9ZAcu5mFCUJvDBpN2aUn1U6Ec8zo8vlqtXDGLg7GH50zx5SdBf28DepKZMhw3TS1dw==}
 
   tailwind-merge@2.5.2:
     resolution: {integrity: sha512-kjEBm+pvD+6eAwzJL2Bi+02/9LFLal1Gs61+QB7HvTfQQ0aXwC5LGT8PEt1gS0CWKktKe6ysPTAy3cBC5MeiIg==}
@@ -5092,6 +5098,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  swapy@0.1.1: {}
 
   tailwind-merge@2.5.2: {}
 
