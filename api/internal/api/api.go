@@ -102,7 +102,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		Health:        health.New(),
 		Bookmarks:     bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
 		Favorites:     favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
-		Lists:         lists.New(s.Db, s.Flake),
+		Lists:         lists.New(s.Db, s.Flake, s.Logger),
 		Notifications: notifications.New(),
 		Reviews:       reviews.New(s.Db, s.Flake, s.Logger, s.Cache),
 	}
