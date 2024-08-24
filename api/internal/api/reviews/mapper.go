@@ -140,3 +140,26 @@ func mapGetReviewByIdToDto(v db.GetReviewByIdRow) (ReviewItemDto, error) {
 
 	return dto, err
 }
+
+func mapCreateReviewToDto(v db.Review) (CreateReviewResponseDto, error) {
+	var media map[string]any
+
+	err := json.Unmarshal(v.Media, &media)
+
+	if err != nil {
+		return CreateReviewResponseDto{}, err
+	}
+
+	return CreateReviewResponseDto{
+		ID:           v.ID,
+		UserID:       v.UserID,
+		HServiceID:   v.HserviceID,
+		Rating:       v.Rating,
+		Comment:      v.Comment,
+		Media:        media,
+		LikeCount:    v.LikeCount,
+		DislikeCount: v.DislikeCount,
+		CreatedAt:    v.CreatedAt.Time,
+		UpdatedAt:    v.UpdatedAt.Time,
+	}, nil
+}

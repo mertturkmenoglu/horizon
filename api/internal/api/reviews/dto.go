@@ -57,8 +57,25 @@ type HServiceDto struct {
 }
 
 type CreateReviewRequestDto struct {
+	HServiceID string `json:"hserviceId" validate:"required,min=1,max=64"`
+	Rating     int16  `json:"rating" validate:"required,min=1,max=5"`
+	Comment    string `json:"comment" validate:"required,min=1,max=512"`
+	Media      string `json:"media"`
 }
 
 type CreateReviewVoteRequestDto struct {
 	VoteType string `json:"voteType" validate:"required"`
+}
+
+type CreateReviewResponseDto struct {
+	ID           string    `json:"id"`
+	UserID       string    `json:"userId"`
+	HServiceID   string    `json:"hserviceId"`
+	Rating       int16     `json:"rating"`
+	Comment      string    `json:"comment"`
+	Media        Media     `json:"media"`
+	LikeCount    int32     `json:"likeCount"`
+	DislikeCount int32     `json:"dislikeCount"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }

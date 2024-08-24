@@ -148,7 +148,31 @@ func (s *Module) HandlerGetReviewById(c echo.Context) error {
 }
 
 func (s *Module) HandlerCreateReview(c echo.Context) error {
-	return echo.ErrNotImplemented
+	userId := c.Get("user_id").(string)
+	dto := c.Get("body").(CreateReviewRequestDto)
+
+	dbResult, err := s.Db.Queries.CreateReview(context.Background(), db.CreateReviewParams{
+		ID:         h.GenerateId(s.Flake),
+		UserID:     userId,
+		HserviceID: dto.HServiceID,
+		Rating:     dto.Rating,
+		Comment:    dto.Comment,
+		Media:      []byte(dto.Media),
+	})
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	res, err := mapCreateReviewToDto(dbResult)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusCreated, h.Response[CreateReviewResponseDto]{
+		Data: res,
+	})
 }
 
 func (s *Module) HandlerDeleteReview(c echo.Context) error {
