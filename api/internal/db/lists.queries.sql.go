@@ -300,6 +300,7 @@ func (q *Queries) GetListItemsInfo(ctx context.Context, arg GetListItemsInfoPara
 const getMyLists = `-- name: GetMyLists :many
 SELECT id, title, user_id, created_at, updated_at FROM lists
 WHERE user_id = $1
+ORDER BY created_at DESC
 `
 
 func (q *Queries) GetMyLists(ctx context.Context, userID string) ([]List, error) {

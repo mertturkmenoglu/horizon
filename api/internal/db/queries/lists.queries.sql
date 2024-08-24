@@ -1,7 +1,8 @@
 
 -- name: GetMyLists :many
 SELECT * FROM lists
-WHERE user_id = $1;
+WHERE user_id = $1
+ORDER BY created_at DESC;
 
 -- name: GetUsersLists :many
 SELECT sqlc.embed(lists), sqlc.embed(users) FROM lists
