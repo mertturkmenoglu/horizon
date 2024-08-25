@@ -1,24 +1,34 @@
-CREATE TYPE PriceUnit AS ENUM(
-  'USD',
-  'EUR',
-  'JPY',
-  'GBP',
-  'AUD',
-  'CAD',
-  'CHF',
-  'INR',
-  'BRL',
-  'CZK',
-  'TRY'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'priceunit') THEN
+    CREATE TYPE PriceUnit AS ENUM(
+      'USD',
+      'EUR',
+      'JPY',
+      'GBP',
+      'AUD',
+      'CAD',
+      'CHF',
+      'INR',
+      'BRL',
+      'CZK',
+      'TRY'
+    );
+  END IF;
+END $$;
 
-CREATE TYPE WorkTimespan AS ENUM(
-  'HOURLY',
-  'DAILY',
-  'WEEKLY',
-  'MONTHLY',
-  'YEARLY'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'worktimespan') THEN
+    CREATE TYPE WorkTimespan AS ENUM(
+      'HOURLY',
+      'DAILY',
+      'WEEKLY',
+      'MONTHLY',
+      'YEARLY'
+    );
+  END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS hservices (
   id TEXT PRIMARY KEY,
@@ -56,6 +66,6 @@ CREATE INDEX idx_hservices_title ON hservices(title);
 CREATE INDEX idx_hservices_category ON hservices(category);
 
 -- Trigger to update the updated_at field automatically
-CREATE TRIGGER update_hservices_timestamp BEFORE
+CREATE OR REPLACE TRIGGER update_hservices_timestamp BEFORE
 UPDATE
   ON hservices FOR EACH ROW EXECUTE FUNCTION update_timestamp();
