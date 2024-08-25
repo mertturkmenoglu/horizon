@@ -31,24 +31,29 @@ var schemas = []*tsapi.CollectionSchema{
 				Type: "string",
 			},
 			{
-				Name: "category",
-				Type: "int32",
+				Name:  "category",
+				Type:  "int32",
+				Facet: pointer.True(),
 			},
 			{
-				Name: "price",
-				Type: "float",
+				Name:  "price",
+				Type:  "float",
+				Facet: pointer.True(),
 			},
 			{
-				Name: "priceUnit",
-				Type: "string",
+				Name:  "priceUnit",
+				Type:  "string",
+				Facet: pointer.True(),
 			},
 			{
-				Name: "priceTimespan",
-				Type: "string",
+				Name:  "priceTimespan",
+				Type:  "string",
+				Facet: pointer.True(),
 			},
 			{
-				Name: "isOnline",
-				Type: "bool",
+				Name:  "isOnline",
+				Type:  "bool",
+				Facet: pointer.True(),
 			},
 			{
 				Name:     "url",
@@ -60,12 +65,14 @@ var schemas = []*tsapi.CollectionSchema{
 				Type: "string",
 			},
 			{
-				Name: "deliveryTime",
-				Type: "int32",
+				Name:  "deliveryTime",
+				Type:  "int32",
+				Facet: pointer.True(),
 			},
 			{
-				Name: "deliveryTimespan",
-				Type: "string",
+				Name:  "deliveryTimespan",
+				Type:  "string",
+				Facet: pointer.True(),
 			},
 			{
 				Name: "media",
