@@ -26,6 +26,6 @@ CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 
 CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
 
-CREATE TRIGGER update_users_timestamp BEFORE
+CREATE OR REPLACE TRIGGER update_users_timestamp BEFORE
 UPDATE
   ON users FOR EACH ROW EXECUTE FUNCTION update_timestamp();
