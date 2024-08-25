@@ -38,7 +38,7 @@ export default async function Header({ className, ...props }: Props) {
 
       {isSignedIn && (
         <div className="flex items-center gap-2">
-          <SignedInLinks />
+          <SignedInLinks city={null} />
           <Menu auth={auth} />
         </div>
       )}
