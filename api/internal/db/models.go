@@ -149,6 +149,13 @@ func (ns NullWorktimespan) Value() (driver.Value, error) {
 	return string(ns.Worktimespan), nil
 }
 
+type Admin struct {
+	UserID    string
+	CreatedBy pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
+
 type Bookmark struct {
 	ID         pgtype.UUID
 	UserID     string

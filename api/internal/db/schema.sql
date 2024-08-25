@@ -156,3 +156,10 @@ CREATE TABLE IF NOT EXISTS reviews_votes (
   vote_type ReviewVoteType NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS admins (
+  user_id TEXT PRIMARY KEY,
+  created_by TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
