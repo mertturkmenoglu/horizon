@@ -163,3 +163,30 @@ CREATE TABLE IF NOT EXISTS admins (
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+CREATE TYPE ReportTargetType AS ENUM (
+  'hservice',
+  'user',
+  'list',
+  'review'
+);
+
+CREATE TYPE ReportStatus AS ENUM (
+  'pending',
+  'in_progress',
+  'done'
+);
+
+CREATE TABLE IF NOT EXISTS reports (
+  id TEXT PRIMARY KEY,
+  reporter_id TEXT NOT NULL,
+  target_id TEXT NOT NULL,
+  target_type ReportTargetType NOT NULL,
+  reason VARCHAR(128) NOT NULL,
+  comment VARCHAR(512),
+  report_status ReportStatus NOT NULL DEFAULT 'pending',
+  assignee_id TEXT,
+  assignee_comment TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);

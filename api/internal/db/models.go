@@ -62,6 +62,93 @@ func (ns NullPriceunit) Value() (driver.Value, error) {
 	return string(ns.Priceunit), nil
 }
 
+type Reportstatus string
+
+const (
+	ReportstatusPending    Reportstatus = "pending"
+	ReportstatusInProgress Reportstatus = "in_progress"
+	ReportstatusDone       Reportstatus = "done"
+)
+
+func (e *Reportstatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Reportstatus(s)
+	case string:
+		*e = Reportstatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Reportstatus: %T", src)
+	}
+	return nil
+}
+
+type NullReportstatus struct {
+	Reportstatus Reportstatus
+	Valid        bool // Valid is true if Reportstatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullReportstatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.Reportstatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Reportstatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullReportstatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Reportstatus), nil
+}
+
+type Reporttargettype string
+
+const (
+	ReporttargettypeHservice Reporttargettype = "hservice"
+	ReporttargettypeUser     Reporttargettype = "user"
+	ReporttargettypeList     Reporttargettype = "list"
+	ReporttargettypeReview   Reporttargettype = "review"
+)
+
+func (e *Reporttargettype) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Reporttargettype(s)
+	case string:
+		*e = Reporttargettype(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Reporttargettype: %T", src)
+	}
+	return nil
+}
+
+type NullReporttargettype struct {
+	Reporttargettype Reporttargettype
+	Valid            bool // Valid is true if Reporttargettype is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullReporttargettype) Scan(value interface{}) error {
+	if value == nil {
+		ns.Reporttargettype, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Reporttargettype.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullReporttargettype) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Reporttargettype), nil
+}
+
 type Reviewvotetype string
 
 const (
@@ -224,6 +311,20 @@ type ListItem struct {
 	ListID     string
 	HserviceID string
 	ItemOrder  int32
+}
+
+type Report struct {
+	ID              string
+	ReporterID      string
+	TargetID        string
+	TargetType      Reporttargettype
+	Reason          string
+	Comment         pgtype.Text
+	ReportStatus    Reportstatus
+	AssigneeID      pgtype.Text
+	AssigneeComment pgtype.Text
+	CreatedAt       pgtype.Timestamptz
+	UpdatedAt       pgtype.Timestamptz
 }
 
 type Review struct {
