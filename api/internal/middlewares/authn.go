@@ -15,15 +15,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var dbClient *db.Db = nil
-
-func GetDb() *db.Db {
-	if dbClient == nil {
-		dbClient = db.NewDb()
-	}
-	return dbClient
-}
-
 var (
 	errInvalidState   = errors.New("invalid session state")
 	errInvalidSession = errors.New("invalid session")
@@ -53,7 +44,7 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			})
 		}
 
-		s, err := GetDb().Queries.GetSessionById(context.Background(), sessionId)
+		s, err := getDb().Queries.GetSessionById(context.Background(), sessionId)
 
 		if err != nil {
 			cookies.DeleteSessionCookie(c)
@@ -109,7 +100,7 @@ func WithAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return next(c)
 		}
 
-		s, err := GetDb().Queries.GetSessionById(context.Background(), sessionId)
+		s, err := getDb().Queries.GetSessionById(context.Background(), sessionId)
 		ok = err == nil && s.Session.UserID == userId && s.Session.ExpiresAt.Time.After(time.Now())
 
 		if !ok {
