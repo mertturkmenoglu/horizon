@@ -38,6 +38,6 @@ CREATE INDEX IF NOT EXISTS idx_list_items_list ON list_items(list_id);
 CREATE INDEX IF NOT EXISTS idx_list_items_hservice ON list_items(hservice_id);
 
 -- Trigger to update the updated_at field automatically
-CREATE TRIGGER update_lists_timestamp BEFORE
+CREATE OR REPLACE TRIGGER update_lists_timestamp BEFORE
 UPDATE
   ON lists FOR EACH ROW EXECUTE FUNCTION update_timestamp();

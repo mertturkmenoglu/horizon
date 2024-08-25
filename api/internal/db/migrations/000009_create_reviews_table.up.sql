@@ -27,14 +27,19 @@ CREATE INDEX IF NOT EXISTS idx_reviews_user ON reviews(user_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_hservice ON reviews(hservice_id);
 
 -- Triggers
-CREATE TRIGGER update_reviews_timestamp 
+CREATE OR REPLACE TRIGGER update_reviews_timestamp 
 BEFORE UPDATE ON reviews 
 FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 
-CREATE TYPE ReviewVoteType AS ENUM (
-  'LIKE',
-  'DISLIKE'
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'reviewvotetype') THEN
+    CREATE TYPE ReviewVoteType AS ENUM (
+      'LIKE',
+      'DISLIKE'
+    );
+  END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS reviews_votes (
   id TEXT PRIMARY KEY,
@@ -79,7 +84,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_reviews_counts_trigger
+CREATE OR REPLACE TRIGGER update_reviews_counts_trigger
   AFTER INSERT OR DELETE ON reviews_votes
   FOR EACH ROW
 EXECUTE PROCEDURE update_reviews_counts();
