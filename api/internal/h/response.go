@@ -2,7 +2,14 @@
 // a JSON response from a handler.
 package h
 
-import "horizon/internal/pagination"
+import (
+	"errors"
+	"horizon/internal/pagination"
+	"net/http"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/labstack/echo/v4"
+)
 
 // Utility type to wrap arbitrary JSON responses
 type Response[T any] struct {
@@ -28,4 +35,18 @@ type AnyResponse map[string]interface{}
 // An ErrResponse is used to return an error message in a HTTP response.
 type ErrResponse struct {
 	Message string `json:"message"`
+}
+
+func HandleDbErr(c echo.Context, err error) error {
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return c.JSON(http.StatusNotFound, ErrResponse{
+				Message: "not found",
+			})
+		}
+
+		return echo.ErrInternalServerError
+	}
+
+	return nil
 }
