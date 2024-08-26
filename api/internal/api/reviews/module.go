@@ -9,17 +9,43 @@ import (
 )
 
 type Module struct {
-	Db     *db.Db
-	Logger *pterm.Logger
-	Flake  *sonyflake.Sonyflake
-	Cache  *cache.Cache
+	Handlers *handlers
+}
+
+type handlers struct {
+	service *service
+	logger  *pterm.Logger
+	flake   *sonyflake.Sonyflake
+	cache   *cache.Cache
+}
+
+type service struct {
+	repository *repository
+}
+
+type repository struct {
+	db    *db.Db
+	flake *sonyflake.Sonyflake
 }
 
 func New(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, cache *cache.Cache) *Module {
+	repository := repository{
+		db:    db,
+		flake: flake,
+	}
+
+	service := service{
+		repository: &repository,
+	}
+
+	handlers := &handlers{
+		service: &service,
+		flake:   flake,
+		logger:  logger,
+		cache:   cache,
+	}
+
 	return &Module{
-		Db:     db,
-		Logger: logger,
-		Flake:  flake,
-		Cache:  cache,
+		Handlers: handlers,
 	}
 }
