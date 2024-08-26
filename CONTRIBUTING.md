@@ -20,17 +20,12 @@ To get an overview of the project, read the [README](README.md) file. You will f
 
 First, you must read the [README](README.md) file in the root directory. It will help you understand what you need to do for getting started with the project.
 
-Then, you can navigate to apps folder. `apps` folder includes 3 different projects:
-
-- api
-- mobile
-- web
+Then, you can navigate to `api` or `web` folder.
 
 As you can understand from their names:
 
 - `api`: Includes Go API server and related modules.
-- `mobile`: A React Native + Expo mobile application project.
-- `web`: Vite + React web frontend project.
+- `web`: Next.js web frontend project.
 
 Each folder includes a README file that will guide you how to setup that project and run. You can follow from there.
 
