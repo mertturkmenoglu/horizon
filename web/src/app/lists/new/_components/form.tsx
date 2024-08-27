@@ -12,10 +12,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+const minTitleLength = 5;
+const redirectTimeout = 3000;
+
 const schema = z.object({
   title: z
     .string()
-    .min(5, { message: 'Minimum 5 characters' })
+    .min(minTitleLength, { message: 'Minimum 5 characters' })
     .max(128, { message: 'Maximum 128 characters' }),
 });
 
@@ -42,7 +45,7 @@ export default function NewListForm() {
       toast.success('Created new list. Redirecting...');
       setTimeout(() => {
         window.location.href = '/lists';
-      }, 2000);
+      }, redirectTimeout);
     },
     onError: () => {
       toast.error('Failed to create list');

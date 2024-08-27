@@ -1,7 +1,7 @@
 import BackLink from '@/components/blocks/back-link';
 import { PropsWithChildren } from 'react';
 
-export default function Layout({ children }: PropsWithChildren) {
+export default function Layout({ children }: Readonly<PropsWithChildren>) {
   return (
     <div>
       <div className="flex flex-col justify-start">
