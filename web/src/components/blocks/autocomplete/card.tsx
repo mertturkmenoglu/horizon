@@ -14,7 +14,13 @@ type Props = {
   };
 };
 
-export default function Card({ name, image, id, categoryName, user }: Props) {
+export default function Card({
+  name,
+  image,
+  id,
+  categoryName,
+  user,
+}: Readonly<Props>) {
   return (
     <div className="p-4 hover:bg-muted">
       <Link

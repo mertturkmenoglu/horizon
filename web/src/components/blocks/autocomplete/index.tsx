@@ -10,7 +10,7 @@ import { getCategoryTitle } from '@/lib/categories';
 import Link from 'next/link';
 import Card from './card';
 
-export function Autocomplete(props: UseAutocompleteProps) {
+export function Autocomplete(props: Readonly<UseAutocompleteProps>) {
   const { indices, currentRefinement } = useAutocomplete(props);
   const hits = indices[0].hits;
 
