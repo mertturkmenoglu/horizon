@@ -5,13 +5,15 @@ import (
 	"testing"
 )
 
+const errValidationsFmtStr = "Expected %v, got %v"
+
 func TestEmptyStringShouldBeInvalidUsername(t *testing.T) {
 	input := ""
 	expected := false
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -28,7 +30,7 @@ func TestLessThan4CharsShouldBeInvalidUsername(t *testing.T) {
 		actual := isValidUsername(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -39,7 +41,7 @@ func TestStringJohnDoeShouldBeValidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -49,7 +51,7 @@ func TestStringJohn123DoeShouldBeValidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -60,7 +62,7 @@ func TestLongerThan32CharsShouldBeInvalidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -70,7 +72,7 @@ func TestStringContainingSpaceCharShouldBeInvalidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -80,7 +82,7 @@ func TestStringContainingUnicodeCharShouldBeInvalidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -100,7 +102,7 @@ func TestOnlyNumberStringShouldBeInvalidUsername(t *testing.T) {
 		actual := isValidUsername(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -112,7 +114,7 @@ func TestOnlyUnderscoresStringShouldBeInvalidUsername(t *testing.T) {
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -122,7 +124,7 @@ func TestStringContainsConsecutiveUnderscoresShouldBeInvalidUsername(t *testing.
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -132,7 +134,7 @@ func TestStringContainsNotConsecutiveButMultipleUnderscoresShouldBeValidUsername
 	actual := isValidUsername(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -155,7 +157,7 @@ func TestIsNumberRuneShouldReturnTrue(t *testing.T) {
 		actual := isNumberRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -171,7 +173,7 @@ func TestIsNumberRuneShouldReturnFalse(t *testing.T) {
 		actual := isNumberRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -211,7 +213,7 @@ func TestIsLetterRuneShouldReturnTrue(t *testing.T) {
 		actual := isLetterRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -236,7 +238,7 @@ func TestIsLetterRuneShouldReturnFalse(t *testing.T) {
 		actual := isLetterRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -247,7 +249,7 @@ func TestIsUnderscoreRuneShouldReturnTrue(t *testing.T) {
 	actual := isUnderscoreRune(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -257,7 +259,7 @@ func TestIsUnderscoreRuneShouldReturnFalse(t *testing.T) {
 	actual := isUnderscoreRune(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -276,7 +278,7 @@ func TestIsAllowedRuneShouldReturnTrue(t *testing.T) {
 		actual := isAllowedRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -327,7 +329,7 @@ func TestIsAllowedRuneShouldReturnFalse(t *testing.T) {
 		actual := isAllowedRune(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -348,7 +350,7 @@ func TestIsOnlyNumberStringShouldReturnTrue(t *testing.T) {
 		actual := isOnlyNumberString(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -368,7 +370,7 @@ func TestIsOnlyNumberStringShouldReturnFalse(t *testing.T) {
 		actual := isOnlyNumberString(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -380,7 +382,7 @@ func TestIsOnlyUnderscoresStringShouldReturnTrue(t *testing.T) {
 	actual := isOnlyUnderscoresString(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -399,7 +401,7 @@ func TestIsOnlyUnderscoresStringShouldReturnFalse(t *testing.T) {
 		actual := isOnlyUnderscoresString(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }

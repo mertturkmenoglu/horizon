@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"context"
-	"encoding/base64"
 	"fmt"
 	"horizon/config"
 	"horizon/internal/db"
@@ -14,22 +12,19 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
-	"golang.org/x/oauth2"
 )
 
-func (s *Module) HandlerGoogle(c echo.Context) error {
-	googleConfig := getGoogleOAuth2Config()
-	state, err := generateStateString()
+func (s *handlers) HandlerGoogle(c echo.Context) error {
+	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	sess, err := session.Get(SESSION_NAME, c)
+	state, url, err := s.service.getOAuthStateAndRedirectUrl()
 
 	if err != nil {
 		return echo.ErrInternalServerError
@@ -39,60 +34,46 @@ func (s *Module) HandlerGoogle(c echo.Context) error {
 
 	sess.Save(c.Request(), c.Response())
 
-	url := googleConfig.AuthCodeURL(state, oauth2.ApprovalForce)
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
-func (s *Module) HandlerGoogleCallback(c echo.Context) error {
+func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	token, err := getOAuthToken(sess, c.QueryParam("state"), c.QueryParam("code"))
+	token, err := s.service.getOAuthToken(sess, c.QueryParam("state"), c.QueryParam("code"))
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	delete(sess.Values, "state")
 	sess.Save(c.Request(), c.Response())
 
-	userInfo, err := fetchGoogleUser(token)
+	userInfo, err := s.service.fetchGoogleUser(token)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	authId, err := getOrCreateAuthId(s, userInfo)
+	userId, err := s.service.getOrCreateUserId(userInfo)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	sessionId := uuid.New().String()
-	createdAt := time.Now()
-	expiresAt := createdAt.Add(time.Hour * 24 * 7)
-
-	_, err = s.Db.Queries.CreateSession(context.Background(), db.CreateSessionParams{
-		ID:          sessionId,
-		UserID:      authId,
-		SessionData: pgtype.Text{},
-		CreatedAt:   pgtype.Timestamptz{Time: createdAt, Valid: true},
-		ExpiresAt:   pgtype.Timestamptz{Time: expiresAt, Valid: true},
-	})
+	err = s.service.createSession(sessionId, userId)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	sess.Options = getAuthSessionOptions()
-	sess.Values["user_id"] = authId
+	sess.Values["user_id"] = userId
 	sess.Values["session_id"] = sessionId
 	sess.Save(c.Request(), c.Response())
 	redirectUrl := viper.GetString(config.GOOGLE_REDIRECT)
@@ -100,36 +81,16 @@ func (s *Module) HandlerGoogleCallback(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
-func (s *Module) HandlerGetMe(c echo.Context) error {
-	userId := c.Get("user_id").(string)
-
-	me, err := s.Db.Queries.GetMe(context.Background(), userId)
-
-	if err != nil {
-		s.Logger.WithCaller(true).Debug("GetMe query failed", s.Logger.Args("err", err.Error()))
-		return echo.ErrInternalServerError
-	}
+func (s *handlers) HandlerGetMe(c echo.Context) error {
+	user := c.Get("user").(db.User)
+	res := mapGetMeResponseToDto(user)
 
 	return c.JSON(http.StatusOK, h.Response[GetMeResponseDto]{
-		Data: GetMeResponseDto{
-			ID:              me.ID,
-			Email:           me.Email,
-			Username:        me.Username,
-			FullName:        me.FullName,
-			GoogleID:        &me.GoogleID.String,
-			IsEmailVerified: me.IsEmailVerified,
-			IsActive:        me.IsActive,
-			Role:            me.Role,
-			Gender:          &me.Gender.String,
-			ProfileImage:    &me.ProfileImage.String,
-			LastLogin:       me.LastLogin.Time,
-			CreatedAt:       me.CreatedAt.Time,
-			UpdatedAt:       me.UpdatedAt.Time,
-		},
+		Data: res,
 	})
 }
 
-func (s *Module) HandlerLogout(c echo.Context) error {
+func (s *handlers) HandlerLogout(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
 	if err != nil {
@@ -138,21 +99,21 @@ func (s *Module) HandlerLogout(c echo.Context) error {
 
 	delete(sess.Values, "user_id")
 	sess.Save(c.Request(), c.Response())
-
-	cookie := new(http.Cookie)
-	cookie.Name = SESSION_NAME
-	cookie.Value = ""
-	cookie.Path = "/"
-	cookie.Expires = time.Unix(0, 0)
-	cookie.MaxAge = -1
+	cookie := s.service.resetCookie()
 	c.SetCookie(cookie)
 
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *Module) HandlerCredentialsLogin(c echo.Context) error {
+func (s *handlers) HandlerCredentialsLogin(c echo.Context) error {
+	sess, err := session.Get(SESSION_NAME, c)
+
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
 	body := c.Get("body").(LoginRequestDto)
-	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+	user, err := s.service.getUserByEmail(body.Email)
 	var hashed = ""
 
 	if err == nil {
@@ -162,139 +123,77 @@ func (s *Module) HandlerCredentialsLogin(c echo.Context) error {
 	matched, err := hash.Verify(body.Password, hashed)
 
 	if !matched || err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidEmailOrPassword.Error(),
-		})
-	}
-
-	sess, err := session.Get(SESSION_NAME, c)
-
-	if err != nil {
-		return echo.ErrInternalServerError
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidEmailOrPassword.Error())
 	}
 
 	sessionId := uuid.New().String()
-	createdAt := time.Now()
-	expiresAt := createdAt.Add(time.Hour * 24 * 7)
-
-	_, err = s.Db.Queries.CreateSession(context.Background(), db.CreateSessionParams{
-		ID:          sessionId,
-		UserID:      user.ID,
-		SessionData: pgtype.Text{},
-		CreatedAt:   pgtype.Timestamptz{Time: createdAt, Valid: true},
-		ExpiresAt:   pgtype.Timestamptz{Time: expiresAt, Valid: true},
-	})
+	err = s.service.createSession(sessionId, user.ID)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	sess.Options = getAuthSessionOptions()
-
 	sess.Values["user_id"] = user.ID
 	sess.Values["session_id"] = sessionId
 	sess.Save(c.Request(), c.Response())
 
 	return c.NoContent(http.StatusOK)
-
 }
 
-func (s *Module) HandlerCredentialsRegister(c echo.Context) error {
+func (s *handlers) HandlerCredentialsRegister(c echo.Context) error {
 	body := c.Get("body").(RegisterRequestDto)
+	err := s.service.checkIfEmailOrUsernameIsTaken(body.Email, body.Username)
 
-	// Check if email is taken
-	dbAuth, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
-
-	if err == nil && dbAuth.Email != "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrEmailTaken.Error(),
-		})
-	}
-
-	// Check if username is taken
-	dbUser, err := s.Db.Queries.GetUserByUsername(context.Background(), body.Username)
-
-	if err == nil && dbUser.Username != "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrUsernameTaken.Error(),
-		})
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	// Check username characters
 	ok := isValidUsername(body.Username)
 
 	if !ok {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrUsernameChars.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errUsernameChars.Error())
 	}
 
-	// Hash password
-	hashed, err := hash.Hash(body.Password)
+	_, err = s.service.createUserFromCredentialsInfo(body)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-			Message: ErrHash.Error(),
-		})
+		return echo.NewHTTPError(http.StatusInternalServerError, "cannot create user")
 	}
 
-	// Create user
-	saved, err := s.Db.Queries.CreateUser(context.Background(), db.CreateUserParams{
-		ID:              h.GenerateId(s.Flake),
-		Email:           body.Email,
-		FullName:        body.FullName,
-		Username:        body.Username,
-		ProfileImage:    pgtype.Text{},
-		PasswordHash:    pgtype.Text{String: hashed, Valid: true},
-		GoogleID:        pgtype.Text{},
-		IsEmailVerified: false,
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-			Message: "cannot create user",
-		})
-	}
-
-	s.Tasks.CreateAndEnqueue(tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
+	s.tasks.CreateAndEnqueue(tasks.TypeWelcomeEmail, tasks.WelcomeEmailPayload{
 		Email: body.Email,
 		Name:  body.FullName,
 	})
 
-	return c.JSON(http.StatusCreated, h.AnyResponse{
-		"data": saved.ID,
-	})
+	return c.NoContent(http.StatusCreated)
 }
 
-func (s *Module) HandlerSendVerificationEmail(c echo.Context) error {
+func (s *handlers) HandlerSendVerificationEmail(c echo.Context) error {
 	body := c.Get("body").(SendVerificationEmailRequestDto)
-	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+	user, err := s.service.getUserByEmail(body.Email)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidEmail.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidEmail.Error())
 	}
 
 	if user.IsEmailVerified {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrEmailAlreadyVerified.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errEmailAlreadyVerified.Error())
 	}
 
-	codeBytes, err := random.GenerateBytes(32)
-	code := base64.URLEncoding.EncodeToString(codeBytes)
+	code, err := random.GenerateSixDigitsCode()
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	key := fmt.Sprintf("verify-email:%s", code)
-	s.Cache.Set(key, body.Email, time.Minute*15)
+	s.cache.Set(key, body.Email, time.Minute*15)
 
-	url := fmt.Sprintf("%s/api/auth/verify-email/verify?code=%s", viper.GetString(config.API_URL), code)
+	url := s.service.getEmailVerifyUrl(code)
 
-	_, err = s.Tasks.CreateAndEnqueue(tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
+	_, err = s.tasks.CreateAndEnqueue(tasks.TypeVerifyEmailEmail, tasks.VerifyEmailEmailPayload{
 		Email: body.Email,
 		Url:   url,
 	})
@@ -306,42 +205,36 @@ func (s *Module) HandlerSendVerificationEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func (s *Module) HandlerVerifyEmail(c echo.Context) error {
+func (s *handlers) HandlerVerifyEmail(c echo.Context) error {
 	code := c.QueryParam("code")
 
 	if code == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrMalformedOrMissingVerifyCode.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errMalformedOrMissingVerifyCode.Error())
 	}
 
 	key := fmt.Sprintf("verify-email:%s", code)
 
-	if !s.Cache.Has(key) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidOrExpiredVerifyCode.Error(),
-		})
+	if !s.cache.Has(key) {
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidOrExpiredVerifyCode.Error())
 	}
 
-	email, err := s.Cache.Get(key)
+	email, err := s.cache.Get(key)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	user, err := s.Db.Queries.GetUserByEmail(context.Background(), email)
+	user, err := s.service.getUserByEmail(email)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	if user.IsEmailVerified {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrEmailAlreadyVerified.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errEmailAlreadyVerified.Error())
 	}
 
-	err = s.Db.Queries.UpdateUserIsEmailVerified(context.Background(), user.ID)
+	err = s.service.verifyUserEmail(user.ID)
 
 	if err != nil {
 		return echo.ErrInternalServerError
@@ -350,25 +243,24 @@ func (s *Module) HandlerVerifyEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func (s *Module) HandlerSendForgotPasswordEmail(c echo.Context) error {
+func (s *handlers) HandlerSendForgotPasswordEmail(c echo.Context) error {
 	body := c.Get("body").(SendForgotPasswordEmailRequestDto)
-	_, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+	_, err := s.service.getUserByEmail(body.Email)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	codeBytes, err := random.GenerateBytes(6)
-	code := base64.URLEncoding.EncodeToString(codeBytes)
+	code, err := random.GenerateSixDigitsCode()
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
 	key := fmt.Sprintf("forgot-password:%s", code)
-	s.Cache.Set(key, body.Email, time.Minute*15)
+	s.cache.Set(key, body.Email, time.Minute*15)
 
-	_, err = s.Tasks.CreateAndEnqueue(tasks.TypeForgotPasswordEmail, tasks.ForgotPasswordEmailPayload{
+	_, err = s.tasks.CreateAndEnqueue(tasks.TypeForgotPasswordEmail, tasks.ForgotPasswordEmailPayload{
 		Email: body.Email,
 		Code:  code,
 	})
@@ -380,49 +272,32 @@ func (s *Module) HandlerSendForgotPasswordEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func (s *Module) HandlerResetPassword(c echo.Context) error {
+func (s *handlers) HandlerResetPassword(c echo.Context) error {
 	body := c.Get("body").(ResetPasswordRequestDto)
-	user, err := s.Db.Queries.GetUserByEmail(context.Background(), body.Email)
+	user, err := s.service.getUserByEmail(body.Email)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidEmail.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidEmail.Error())
 	}
 
 	key := fmt.Sprintf("forgot-password:%s", body.Code)
-	cacheVal, err := s.Cache.Get(key)
+	cacheVal, err := s.cache.Get(key)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrPasswordResetCodeExpiredOrInvalid.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errPasswordResetCodeExpiredOrInvalid.Error())
 	}
 
 	if cacheVal != body.Email {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrPasswordResetCodeExpiredOrInvalid.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errPasswordResetCodeExpiredOrInvalid.Error())
 	}
 
-	hashed, err := hash.Hash(body.NewPassword)
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-			Message: ErrHash.Error(),
-		})
-	}
-
-	err = s.Db.Queries.UpdateUserPassword(context.Background(), db.UpdateUserPasswordParams{
-		ID:           user.ID,
-		PasswordHash: pgtype.Text{String: hashed, Valid: true},
-	})
+	err = s.service.updateUserPassword(user.ID, body.NewPassword)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	err = s.Cache.Del(key)
+	err = s.cache.Del(key)
 
 	if err != nil {
 		return echo.ErrInternalServerError

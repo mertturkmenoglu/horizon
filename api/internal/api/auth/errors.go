@@ -3,13 +3,13 @@ package auth
 import "errors"
 
 var (
+	// errPasswordDontMatch                 = errors.New("current password doesn't match")
+	// errPasswordTooWeak                   = errors.New("password is too weak")
+	// errPrevLinkNotExpired                = errors.New("previous link hasn't expired")
+	// errInvalidCode                       = errors.New("invalid code")
+	// errPrevCodeNotExpired                = errors.New("previous code hasn't expired")
 	errInvalidEmailOrPassword            = errors.New("invalid email or password")
-	errPasswordDontMatch                 = errors.New("current password doesn't match")
-	errPasswordTooWeak                   = errors.New("password is too weak")
 	errHash                              = errors.New("cannot hash")
-	errPrevLinkNotExpired                = errors.New("previous link hasn't expired")
-	errInvalidCode                       = errors.New("invalid code")
-	errPrevCodeNotExpired                = errors.New("previous code hasn't expired")
 	errUsernameChars                     = errors.New("username must include only alphanumeric characters or underscore")
 	errEmailTaken                        = errors.New("email has already been taken")
 	errUsernameTaken                     = errors.New("username has already been taken")

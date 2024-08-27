@@ -2,13 +2,15 @@ package auth
 
 import "testing"
 
+const errFmtStr = "Expected %v, got %v"
+
 func TestEmptyStringShouldReturnEmptyCLeanEmailLocalPart(t *testing.T) {
 	input := ""
 	expected := ""
 	actual := cleanEmailLocalPart(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -27,7 +29,7 @@ func TestStringWithInvalidCharactersShouldReturnEmptyCLeanEmailLocalPart(t *test
 		actual := cleanEmailLocalPart(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -46,8 +48,7 @@ func TestStringWithValidCharactersShouldReturnItselfAsCleanEmailLocalPart(t *tes
 		actual := cleanEmailLocalPart(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
-
