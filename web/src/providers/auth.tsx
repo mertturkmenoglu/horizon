@@ -3,7 +3,7 @@
 import api from '@/lib/api';
 import { Auth } from '@/lib/auth';
 import { useQuery } from '@tanstack/react-query';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
 type AuthContextState = {
   isLoading: boolean;
@@ -15,7 +15,9 @@ export const AuthContext = React.createContext<AuthContextState>({
   user: null,
 });
 
-export default function AuthContextProvider({ children }: PropsWithChildren) {
+export default function AuthContextProvider({
+  children,
+}: Readonly<PropsWithChildren>) {
   const query = useQuery({
     queryKey: ['auth-me'],
     queryFn: async () => {
@@ -25,14 +27,13 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
     retry: false,
   });
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isLoading: query.isLoading,
-        user: query.data || null,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const v = useMemo(
+    () => ({
+      isLoading: query.isLoading,
+      user: query.data || null,
+    }),
+    [query.data, query.isLoading]
   );
+
+  return <AuthContext.Provider value={v}>{children}</AuthContext.Provider>;
 }
