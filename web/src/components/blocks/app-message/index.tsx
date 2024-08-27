@@ -21,7 +21,7 @@ export default function AppMessage({
   emptyMessage,
   showBackButton = true,
   imageClassName,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <div
       className={clsx(
