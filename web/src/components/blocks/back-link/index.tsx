@@ -9,7 +9,11 @@ type Props = {
   text?: string;
 };
 
-export default function BackLink({ href, className, text = 'Go back' }: Props) {
+export default function BackLink({
+  href,
+  className,
+  text = 'Go back',
+}: Readonly<Props>) {
   return (
     <Link
       href={href}
