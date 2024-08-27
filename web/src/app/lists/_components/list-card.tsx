@@ -11,7 +11,7 @@ type Props = {
   list: GetMyListsResponseDtoItem;
 };
 
-export default function ListCard({ list }: Props) {
+export default function ListCard({ list }: Readonly<Props>) {
   return (
     <Card
       key={list.id}
