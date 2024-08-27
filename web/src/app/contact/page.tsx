@@ -13,6 +13,8 @@ import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+const maxMessageLength = 3000;
+
 const schema = z.object({
   fullName: z
     .string()
@@ -34,7 +36,7 @@ const schema = z.object({
   message: z
     .string()
     .min(1, { message: 'Required' })
-    .max(3000, { message: 'Too long' }),
+    .max(maxMessageLength, { message: 'Too long' }),
 });
 
 export type FormInput = z.infer<typeof schema>;
