@@ -18,7 +18,6 @@ export function useSearchClient() {
       query_by: 'title',
     },
   });
-  const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-  return searchClient;
+  return typesenseInstantsearchAdapter.searchClient;
 }
