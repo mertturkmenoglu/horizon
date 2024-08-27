@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-export default function InspirationBanner({ className }: Props) {
+export default function InspirationBanner({ className }: Readonly<Props>) {
   return (
     <div className={cn('relative hidden sm:block', className)}>
       <img
