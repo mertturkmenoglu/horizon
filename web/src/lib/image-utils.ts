@@ -6,8 +6,8 @@ export function getPreview(f: File): Promise<string> {
         res(event.target.result as string);
       }
     };
-    reader.onerror = (err) => {
-      rej(err);
+    reader.onerror = () => {
+      rej(new Error('Failed to get image preview'));
     };
     reader.readAsDataURL(f);
   });
@@ -21,9 +21,7 @@ export async function getDims(
     try {
       const dim = await getImageDims(f);
       dims.push(dim);
-    } catch (e) {
-      console.error('Failed to get image dimensions', e);
-    }
+    } catch (e) {}
   }
   return dims;
 }
@@ -36,8 +34,8 @@ export function getImageDims(
     img.onload = () => {
       res({ width: img.width, height: img.height });
     };
-    img.onerror = (err) => {
-      rej(err);
+    img.onerror = () => {
+      rej(new Error('Failed to get image dimensions'));
     };
     img.src = URL.createObjectURL(f);
   });
@@ -60,8 +58,8 @@ export function mapImagesToMedia(
 ): CreateMediaDto[] {
   return urls.map((url, i) => {
     return {
-      type: 'image',
       url,
+      type: 'image',
       thumbnail: url,
       alt: files[i].name,
       caption: files[i].name,
