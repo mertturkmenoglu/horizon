@@ -16,7 +16,7 @@ export default function ActionBanner({
   message,
   imgClassName,
   lefty = true,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <div
       className={cn(
