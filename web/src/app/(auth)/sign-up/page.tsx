@@ -7,20 +7,22 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import api from '@/lib/api';
+import api, { status } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthLink from '../_components/auth-link';
 import GoogleAuth from '../_components/google-auth';
 
+const minFullNameLength = 3;
+
 const FormSchema = z.object({
   fullName: z
     .string()
-    .min(3, { message: 'At least 3 characters' })
+    .min(minFullNameLength, { message: 'At least 3 characters' })
     .max(128, { message: 'Value is too long' }),
   username: z
     .string()
@@ -50,10 +52,14 @@ export default function Page() {
       json: data,
     });
 
-    if (res.status === 201) {
+    if (res.status === status.Created) {
       window.location.href = '/sign-in';
     }
   };
+
+  const toggleShowPassword = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
 
   return (
     <Card className="container mx-auto my-32 flex max-w-md flex-col py-8">
@@ -121,7 +127,7 @@ export default function Page() {
             variant="ghost"
             size="icon"
             className="absolute right-0 top-0"
-            onClick={() => setShowPassword((prev) => !prev)}
+            onClick={toggleShowPassword}
             type="button"
           >
             {showPassword ? (
