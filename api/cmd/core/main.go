@@ -33,13 +33,16 @@ func main() {
 	go a.Tasks.Run()
 	defer a.Tasks.Close()
 
-	customCounter := prometheus.NewCounter( // create new counter metric. This is replacement for `prometheus.Metric` struct
+	// create new counter metric. This is replacement for `prometheus.Metric` struct
+	customCounter := prometheus.NewCounter(
 		prometheus.CounterOpts{
 			Name: "custom_requests_total",
 			Help: "How many HTTP requests processed, partitioned by status code and HTTP method.",
 		},
 	)
-	if err := prometheus.Register(customCounter); err != nil { // register your new counter metric with default metrics registry
+
+	// register your new counter metric with default metrics registry
+	if err := prometheus.Register(customCounter); err != nil {
 		log.Fatal(err)
 	}
 
