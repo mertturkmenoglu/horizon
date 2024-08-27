@@ -3,7 +3,7 @@ package middlewares
 import (
 	"context"
 	"errors"
-	"horizon/internal/api/auth"
+
 	"horizon/internal/cookies"
 	"horizon/internal/db"
 	"horizon/internal/h"
@@ -14,6 +14,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
+
+const SESSION_NAME = "__horizon_auth"
 
 var (
 	errInvalidState   = errors.New("invalid session state")
@@ -26,7 +28,7 @@ var (
 // If the user is not authenticated, it throws an HTTP 401 StatusUnauthorized error.
 func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		sess, err := session.Get(auth.SESSION_NAME, c)
+		sess, err := session.Get(SESSION_NAME, c)
 
 		if err != nil {
 			return c.JSON(http.StatusUnauthorized, h.ErrResponse{
@@ -86,7 +88,7 @@ func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
 // If the user is not authenticated, it sets the user_id to an empty string.
 func WithAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		sess, err := session.Get(auth.SESSION_NAME, c)
+		sess, err := session.Get(SESSION_NAME, c)
 
 		if err != nil {
 			setContextValuesEmpty(c)
