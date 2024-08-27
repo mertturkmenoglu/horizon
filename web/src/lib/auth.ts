@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import api from './api';
+import api, { status } from './api';
 import { GetMeResponseDto } from './dto';
 
 export type Auth = {
@@ -24,12 +24,11 @@ export const getAuth = cache(async (): Promise<Auth | null> => {
       },
     });
 
-    if (res.status !== 200) {
+    if (res.status !== status.OK) {
       return null;
     }
 
-    const body = await res.json<Auth>();
-    return body;
+    return await res.json<Auth>();
   } catch (e) {
     return null;
   }
