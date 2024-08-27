@@ -15,7 +15,7 @@ type Props = {
   className?: string;
 };
 
-export default function FeaturesCarousel({ className }: Props) {
+export default function FeaturesCarousel({ className }: Readonly<Props>) {
   return (
     <Carousel className={cn('w-full rounded-md', className)}>
       <CarouselContent>
@@ -30,6 +30,7 @@ export default function FeaturesCarousel({ className }: Props) {
                       'aspect-[3] h-full rounded-md object-cover opacity-70'
                     )}
                     role="presentation"
+                    alt=""
                   />
                   <div className="absolute bottom-2 left-2 rounded-md px-8 py-4 md:bottom-8 md:left-16">
                     <div className="text-sm font-bold text-white md:text-base">

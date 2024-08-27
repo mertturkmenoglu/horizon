@@ -17,17 +17,23 @@ type Props = {
   className?: string;
 };
 
-export default function CategoryNavigation({ className }: Props) {
+export default function CategoryNavigation({ className }: Readonly<Props>) {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const category = useMemo(() => {
-    return categories.at(index)!;
+    return categories.at(index) ?? categories[0];
   }, [index]);
 
   const img = data.find((v) => v.category === category.category)?.img ?? null;
+  const image = (() => {
+    if (img === null) {
+      return '';
+    }
+    return img + '?q=80&w=768&auto=format&fit=crop';
+  })();
 
   return (
-    <div
+    <button
       onMouseEnter={() => {
         timeout = setTimeout(() => {
           if (timeout !== null) {
@@ -89,7 +95,7 @@ export default function CategoryNavigation({ className }: Props) {
       >
         <div className="relative col-span-5 bg-red-500 lg:col-span-2">
           <img
-            src={img ? img + '?q=80&w=768&auto=format&fit=crop' : ''}
+            src={image}
             className="h-full w-auto rounded object-cover lg:aspect-[2] lg:h-auto lg:w-full"
             alt=""
             loading="eager"
@@ -118,6 +124,6 @@ export default function CategoryNavigation({ className }: Props) {
           ))}
         </div>
       </div>
-    </div>
+    </button>
   );
 }

@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SearchIcon } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { UseSearchBoxProps, useSearchBox } from 'react-instantsearch';
 
 type Props = {
@@ -18,17 +18,26 @@ export default function CustomSearchBox({
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function setQuery(newQuery: string) {
-    setInputValue(newQuery);
-    if (isSearchOnType) {
-      refine(newQuery);
-    }
-  }
+  const setQuery = useCallback(
+    (newQuery: string) => {
+      setInputValue(newQuery);
+      if (isSearchOnType) {
+        refine(newQuery);
+      }
+    },
+    [isSearchOnType, refine]
+  );
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.currentTarget.value);
+    },
+    [setQuery]
+  );
 
   return (
     <div>
       <form
-        action=""
         role="search"
         className="relative flex gap-2 sm:gap-4 lg:gap-8"
         noValidate
@@ -69,9 +78,7 @@ export default function CustomSearchBox({
           maxLength={512}
           type="search"
           value={inputValue}
-          onChange={(e) => {
-            setQuery(e.currentTarget.value);
-          }}
+          onChange={onChange}
           className="h-10 rounded-full"
         />
 

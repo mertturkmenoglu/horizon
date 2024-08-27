@@ -12,7 +12,6 @@ export type Props = React.ComponentPropsWithoutRef<'li'> & {
 
 export default function NavItem({
   href,
-  category,
   text,
   icon: Icon,
   ...props
