@@ -50,8 +50,8 @@ export default async function Page() {
                 <span className="font-bold">
                   a. Providing and Improving Services
                 </span>
-                : We use the collected information to deliver, maintain, and
-                enhance the features and functionality of the Service.
+                {/* */}: We use the collected information to deliver, maintain,
+                and enhance the features and functionality of the Service.
               </li>
               <li>
                 <span className="font-bold">b. Communication</span>: Your
@@ -110,9 +110,9 @@ export default async function Page() {
           </li>
           <li>
             <span className="font-bold">7. Changes to this Privacy Policy</span>
-            : We reserve the right to update or modify this Privacy Policy at
-            any time. You will be notified of any significant changes via email
-            or through the app.
+            {/*  */}: We reserve the right to update or modify this Privacy
+            Policy at any time. You will be notified of any significant changes
+            via email or through the app.
           </li>
           <li>
             <span className="font-bold">8. Contact Information</span>: If you
