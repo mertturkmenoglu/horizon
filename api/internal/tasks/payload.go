@@ -1,7 +1,8 @@
 package tasks
 
 type Payload interface {
-	ForgotPasswordEmailPayload | WelcomeEmailPayload | NewLoginAlertEmailPayload | PasswordResetEmailPayload | VerifyEmailEmailPayload
+	ForgotPasswordEmailPayload | WelcomeEmailPayload | NewLoginAlertEmailPayload |
+		PasswordResetEmailPayload | VerifyEmailEmailPayload
 }
 
 type (
