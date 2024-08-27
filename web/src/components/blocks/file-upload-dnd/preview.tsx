@@ -5,7 +5,7 @@ type Props = {
   file: File;
 };
 
-export default function Preview({ file }: Props) {
+export default function Preview({ file }: Readonly<Props>) {
   const [src, setSrc] = useState<string | null>(null);
 
   useEffect(() => {

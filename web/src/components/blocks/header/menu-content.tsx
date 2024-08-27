@@ -15,7 +15,7 @@ type Props = {
   username: string;
 };
 
-export default function MenuContent({ fullName, username }: Props) {
+export default function MenuContent({ fullName, username }: Readonly<Props>) {
   return (
     <DropdownMenuContent
       className="w-56"

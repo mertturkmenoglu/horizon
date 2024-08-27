@@ -13,7 +13,7 @@ type Props = {
   fapi: fileUpload.Api<PropTypes>;
 };
 
-export default function Dnd({ capi, fapi }: Props) {
+export default function Dnd({ capi, fapi }: Readonly<Props>) {
   return (
     <div className="flex flex-col items-center">
       <div
@@ -54,7 +54,7 @@ export default function Dnd({ capi, fapi }: Props) {
               {...fapi.getItemGroupProps()}
               className="mt-4 grid grid-cols-2 place-content-center gap-4"
             >
-              {fapi.acceptedFiles.map((file, i) => (
+              {fapi.acceptedFiles.map((file) => (
                 <li
                   key={file.name}
                   {...fapi.getItemProps({ file })}

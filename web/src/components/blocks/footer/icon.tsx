@@ -7,7 +7,7 @@ type Props = {
   alt: string;
 };
 
-export default function SocialIcon({ href, icon: Icon, alt }: Props) {
+export default function SocialIcon({ href, icon: Icon, alt }: Readonly<Props>) {
   return (
     <li>
       <Link href={href}>

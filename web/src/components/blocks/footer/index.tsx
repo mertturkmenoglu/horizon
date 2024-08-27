@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-export default function Footer({ className }: Props) {
+export default function Footer({ className }: Readonly<Props>) {
   return (
     <footer
       className={cn('container flex flex-col items-center py-8', className)}

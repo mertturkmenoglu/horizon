@@ -13,7 +13,7 @@ type Props = {
   city: string | null;
 };
 
-export default function SignedInLinks({ city }: Props) {
+export default function SignedInLinks({ city }: Readonly<Props>) {
   return (
     <div className="flex items-center gap-2">
       <TooltipProvider delayDuration={300}>

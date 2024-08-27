@@ -1,7 +1,7 @@
 'use client';
 
 import { Rating } from '@/components/ui/rating';
-import { useId } from 'react';
+import { useCallback, useId } from 'react';
 
 type Props = {
   rating: number;
@@ -13,7 +13,7 @@ export default function FormattedRating({
   rating,
   votes,
   starsClassName,
-}: Props) {
+}: Readonly<Props>) {
   const id = useId();
   const fmt = new Intl.NumberFormat('en-US', {
     style: 'decimal',
@@ -22,12 +22,13 @@ export default function FormattedRating({
   });
 
   const formattedRating = fmt.format(votes);
+  const onChange = useCallback(() => {}, []);
 
   return (
     <div className="flex items-center space-x-2">
       <Rating
         id={id}
-        onChange={() => {}}
+        onChange={onChange}
         defaultValue={rating}
         disabled={true}
         starsClassName={starsClassName}
@@ -39,4 +40,3 @@ export default function FormattedRating({
     </div>
   );
 }
-3

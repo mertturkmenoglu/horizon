@@ -9,7 +9,7 @@ import SignedInLinks from './signed-in';
 
 type Props = React.HTMLAttributes<HTMLElement>;
 
-export default async function Header({ className, ...props }: Props) {
+export default async function Header({ className, ...props }: Readonly<Props>) {
   const auth = await getAuth();
   const isSignedIn = auth !== null;
 

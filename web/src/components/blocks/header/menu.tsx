@@ -13,7 +13,7 @@ type Props = {
   auth: Auth;
 };
 
-export default function Menu({ auth }: Props) {
+export default function Menu({ auth }: Readonly<Props>) {
   return (
     <div>
       <DropdownMenu>
