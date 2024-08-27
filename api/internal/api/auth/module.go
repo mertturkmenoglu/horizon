@@ -10,19 +10,45 @@ import (
 )
 
 type Module struct {
-	Db     *db.Db
-	Flake  *sonyflake.Sonyflake
-	Logger *pterm.Logger
-	Tasks  *tasks.Tasks
-	Cache  *cache.Cache
+	Handlers *handlers
 }
 
-func New(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, tasks *tasks.Tasks, cache *cache.Cache) *Module {
+type handlers struct {
+	service *service
+	logger  *pterm.Logger
+	flake   *sonyflake.Sonyflake
+	cache   *cache.Cache
+	tasks   *tasks.Tasks
+}
+
+type service struct {
+	repository *repository
+}
+
+type repository struct {
+	db    *db.Db
+	flake *sonyflake.Sonyflake
+}
+
+func New(db *db.Db, flake *sonyflake.Sonyflake, logger *pterm.Logger, cache *cache.Cache, tasks *tasks.Tasks) *Module {
+	repository := repository{
+		db:    db,
+		flake: flake,
+	}
+
+	service := service{
+		repository: &repository,
+	}
+
+	handlers := &handlers{
+		service: &service,
+		flake:   flake,
+		logger:  logger,
+		cache:   cache,
+		tasks:   tasks,
+	}
+
 	return &Module{
-		Db:     db,
-		Flake:  flake,
-		Logger: logger,
-		Tasks:  tasks,
-		Cache:  cache,
+		Handlers: handlers,
 	}
 }
