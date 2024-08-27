@@ -56,8 +56,6 @@ func readAndInsertCountries(database *db.Db) (int, int) {
 			continue
 		}
 
-		// log.Printf("Processing record #%d\n", i)
-
 		id, err := strconv.ParseInt(record[0], 10, 32)
 
 		if err != nil {
@@ -190,8 +188,6 @@ func readAndInsertStates(database *db.Db) (int, int) {
 			log.Printf("Error processing record #%d - Database insert: %s\n", i, err.Error())
 			continue
 		}
-
-		// log.Printf("Successfully inserted record #%d\n", i)
 
 		successfullInserts++
 	}
