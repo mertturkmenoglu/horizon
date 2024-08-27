@@ -2,13 +2,15 @@ package random
 
 import "testing"
 
+const errFmtStr = "Expected %v, got %v"
+
 func TestRandStringRunesShouldReturnEmptyStringForZeroLength(t *testing.T) {
 	input := 0
 	expected := ""
 	actual := GenerateLetterString(input)
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -29,7 +31,7 @@ func TestRandStringRunesShouldReturnCorrectLengthStringForNonZeroLength(t *testi
 		actual := len(GenerateLetterString(i))
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -46,7 +48,7 @@ func TestRandomBytesShouldReturnCorrectLength(t *testing.T) {
 		actual := len(byteArr)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
