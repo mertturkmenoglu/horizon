@@ -22,7 +22,7 @@ type Props = {
   };
 };
 
-export default function Hit({ hit }: Props) {
+export default function Hit({ hit }: Readonly<Props>) {
   return (
     <Card
       id={hit.id}

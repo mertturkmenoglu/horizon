@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useCallback } from 'react';
 import { useHitsPerPage } from 'react-instantsearch';
 
 export default function HitsPerPage() {
@@ -21,13 +22,18 @@ export default function HitsPerPage() {
   });
 
   const { value: currentValue } =
-    items.find(({ isRefined }) => isRefined)! || {};
+    items.find(({ isRefined }) => isRefined) || {};
+
+  const onValueChange = useCallback(
+    (v: string) => {
+      refine(+v);
+    },
+    [refine]
+  );
 
   return (
     <Select
-      onValueChange={(v) => {
-        refine(+v);
-      }}
+      onValueChange={onValueChange}
       value={String(currentValue)}
     >
       <SelectTrigger className="w-[180px]">
