@@ -3,9 +3,11 @@ import http from "k6/http";
 
 export const options = {
   // Key configurations for breakpoint in this section
-  executor: "ramping-arrival-rate", //Assure load increase if the system slows
+  // Assure load increase if the system slows
+  executor: "ramping-arrival-rate",
   stages: [
-    { duration: "10m", target: 20000 }, // just slowly ramp-up to a HUGE load
+    // just slowly ramp-up to a HUGE load
+    { duration: "10m", target: 20000 },
   ],
 };
 
