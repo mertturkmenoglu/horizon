@@ -283,18 +283,17 @@ export default async function MessagesList() {
 }
 
 function MessagesListItem({
-  id,
   name,
   lastMessage,
   lastMessageTime,
   unreadMessages,
-}: {
+}: Readonly<{
   id: number;
   name: string;
   lastMessage: string;
   lastMessageTime: string;
   unreadMessages: number;
-}) {
+}>) {
   return (
     <div className="flex items-start gap-2">
       {/* user image */}
