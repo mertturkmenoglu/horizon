@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-export default function SignedOutCta({ className }: Props) {
+export default function SignedOutCta({ className }: Readonly<Props>) {
   return (
     <div className={cn('mx-auto my-24 max-w-5xl', className)}>
       <h2 className="scroll-m-20 text-3xl font-medium tracking-tight lg:text-4xl">

@@ -7,7 +7,7 @@ type Props = {
   fullName: string;
 };
 
-export default function SignedInCta({ className, fullName }: Props) {
+export default function SignedInCta({ className, fullName }: Readonly<Props>) {
   return (
     <div className={cn('', className)}>
       <h2 className="mt-8 text-4xl font-bold">Hey {fullName}</h2>
