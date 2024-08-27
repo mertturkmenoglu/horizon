@@ -28,7 +28,7 @@ export function formatDeliveryTimespan(
   timespan: string,
   deliveryTime?: number
 ) {
-  let str = '';
+  let str;
 
   if (timespan === 'HOURLY') {
     str = 'Hour';
@@ -40,6 +40,8 @@ export function formatDeliveryTimespan(
     str = 'Month';
   } else if (timespan === 'YEARLY') {
     str = 'Year';
+  } else {
+    str = '';
   }
 
   if (deliveryTime === undefined) {
