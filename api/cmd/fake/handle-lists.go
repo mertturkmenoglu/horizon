@@ -13,7 +13,9 @@ func handleLists(count int) error {
 	ctx := context.Background()
 	d := GetDb()
 
-	userId, err := pterm.DefaultInteractiveTextInput.Show("We need a user id. Enter a valid user ID that is in your database")
+	userId, err := pterm.DefaultInteractiveTextInput.Show(
+		"We need a user id. Enter a valid user ID that is in your database",
+	)
 
 	if err != nil {
 		return err

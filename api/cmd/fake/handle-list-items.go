@@ -13,13 +13,17 @@ func handleListItems(count int) error {
 	ctx := context.Background()
 	d := GetDb()
 
-	userId, err := pterm.DefaultInteractiveTextInput.Show("We need a user id. Enter a valid user ID that is in your database")
+	userId, err := pterm.DefaultInteractiveTextInput.Show(
+		"We need a user id. Enter a valid user ID that is in your database",
+	)
 
 	if err != nil {
 		return err
 	}
 
-	listId, err := pterm.DefaultInteractiveTextInput.Show("We need a list id. Enter a valid list ID that is in your database")
+	listId, err := pterm.DefaultInteractiveTextInput.Show(
+		"We need a list id. Enter a valid list ID that is in your database",
+	)
 
 	if err != nil {
 		return err
