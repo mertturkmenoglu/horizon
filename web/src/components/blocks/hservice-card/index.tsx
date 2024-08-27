@@ -11,7 +11,10 @@ export default function HServiceCard({ hservice, className, ...props }: Props) {
   const image = hservice.media.data[0];
 
   const rating = (() => {
-    if (hservice.totalVotes === 0) return 0;
+    if (hservice.totalVotes === 0) {
+      return 0;
+    }
+
     return hservice.totalPoints / hservice.totalVotes;
   })();
 

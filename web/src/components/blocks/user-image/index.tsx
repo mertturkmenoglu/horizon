@@ -18,7 +18,7 @@ export default function UserImage({
   fallbackClassName,
   src,
   initials = '',
-}: Props) {
+}: Readonly<Props>) {
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {

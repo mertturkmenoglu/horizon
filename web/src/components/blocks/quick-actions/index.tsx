@@ -18,7 +18,7 @@ type Props = {
   className?: string;
 };
 
-export default function QuickActions({ className }: Props) {
+export default function QuickActions({ className }: Readonly<Props>) {
   return (
     <div
       className={cn(

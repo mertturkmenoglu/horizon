@@ -14,7 +14,7 @@ export default function QuickActionCard({
   icon: Icon,
   href,
   className,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <Link
       href={href}

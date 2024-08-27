@@ -14,7 +14,7 @@ export default function VerticalBanner({
   imageClassName,
   alt,
   content,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <div
       className={cn('mx-auto flex max-w-4xl flex-col items-center', className)}

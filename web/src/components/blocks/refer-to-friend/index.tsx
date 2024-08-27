@@ -6,7 +6,7 @@ type Props = {
   className?: string;
 };
 
-export default function ReferToFriend({ className }: Props) {
+export default function ReferToFriend({ className }: Readonly<Props>) {
   return (
     <div
       className={cn(

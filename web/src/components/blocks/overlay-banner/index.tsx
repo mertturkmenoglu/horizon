@@ -14,7 +14,7 @@ export default function OverlayBanner({
   alt,
   message,
   imgClassName,
-}: Props) {
+}: Readonly<Props>) {
   return (
     <div
       className={cn(
