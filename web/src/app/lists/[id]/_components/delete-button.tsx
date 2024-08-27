@@ -3,13 +3,16 @@
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
   listId: string;
 };
 
-export default function DeleteButton({ listId }: Props) {
+const redirectTimeout = 3000;
+
+export default function DeleteButton({ listId }: Readonly<Props>) {
   const qc = useQueryClient();
 
   const mutation = useMutation({
@@ -25,17 +28,22 @@ export default function DeleteButton({ listId }: Props) {
       toast.success('List deleted successfully. Redirecting...');
       setTimeout(() => {
         window.location.href = '/lists';
-      }, 2000);
+      }, redirectTimeout);
     },
     onError: () => {
       toast.error('Failed to delete list');
     },
   });
+
+  const onDeleteClick = useCallback(() => {
+    mutation.mutate(listId);
+  }, [listId, mutation]);
+
   return (
     <Button
       type="submit"
       variant="destructive"
-      onClick={() => mutation.mutate(listId)}
+      onClick={onDeleteClick}
     >
       Delete
     </Button>

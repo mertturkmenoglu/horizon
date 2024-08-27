@@ -9,7 +9,7 @@ type Props = {
   items: ListItemDto[];
 };
 
-export default function Items({ items }: Props) {
+export default function Items({ items }: Readonly<Props>) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {items.map((item) => (

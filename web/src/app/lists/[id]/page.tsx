@@ -39,7 +39,7 @@ async function getList(id: string) {
   return res.data;
 }
 
-export default async function Page({ params: { id } }: Props) {
+export default async function Page({ params: { id } }: Readonly<Props>) {
   const list = await getList(id);
   const user = await getAuth();
   const belongsToCurrentUser = list.userId === user?.data.id;
