@@ -23,6 +23,8 @@ func Authz(key authz.AuthzAct) echo.MiddlewareFunc {
 					status = http.StatusNotFound
 				} else if errors.Is(err, echo.ErrForbidden) {
 					status = http.StatusForbidden
+				} else {
+					status = http.StatusInternalServerError
 				}
 
 				statusText := http.StatusText(status)
