@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-export default function AuthLink({ href, text, className }: Props) {
+export default function AuthLink({ href, text, className }: Readonly<Props>) {
   return (
     <Button
       asChild
