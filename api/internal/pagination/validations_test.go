@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+const errValidationsFmtStr = "Expected %v, got %v"
+
 func TestNonPositivePageNumbersShouldReturnFalse(t *testing.T) {
 	inputs := []int{-1, 0}
 
@@ -13,7 +15,7 @@ func TestNonPositivePageNumbersShouldReturnFalse(t *testing.T) {
 		actual := isValidPage(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -25,7 +27,7 @@ func TestPositivePageNumberShouldReturnTrue(t *testing.T) {
 		actual := isValidPage(int(v))
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -38,7 +40,7 @@ func TestNonPositiveSizeNumberShouldReturnFalse(t *testing.T) {
 		actual := isValidSize(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -49,7 +51,7 @@ func TestSizeNumberGreaterThan100ShouldReturnFalse(t *testing.T) {
 	actual := isValidSize(int(v))
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errValidationsFmtStr, expected, actual)
 	}
 }
 
@@ -61,7 +63,7 @@ func TestSizeNumberInRangeAndDivisibleBy25ShouldReturnTrue(t *testing.T) {
 		actual := isValidSize(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -74,7 +76,7 @@ func TestSizeNumberInRangeAndDivisibleBy10ShouldReturnTrue(t *testing.T) {
 		actual := isValidSize(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -89,7 +91,7 @@ func TestSizeNumberInRangeAndNotDivisibleByEither25Or10ShouldReturnFalse(t *test
 		actual := isValidSize(i)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }

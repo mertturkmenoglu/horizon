@@ -164,12 +164,14 @@ var getPaginationTestCases = []getPaginationTestCase{
 	},
 }
 
+const errPaginationFmtStr = "Expected %v, got %v"
+
 func TestGetPaginationWithValidParamsShouldReturnCorrectPagination(t *testing.T) {
 	for _, testCase := range getPaginationTestCases {
 		actual := GetPagination(testCase.params, testCase.totalRecords)
 
 		if actual != testCase.expected {
-			t.Errorf("Expected %v, got %v", testCase.expected, actual)
+			t.Errorf(errPaginationFmtStr, testCase.expected, actual)
 		}
 	}
 }
@@ -255,7 +257,7 @@ func TestGetParamsFromValuesWithValidValuesShouldReturnCorrectParams(t *testing.
 		}
 
 		if actual != testCase.expected {
-			t.Errorf("Expected %v, got %v", testCase.expected, actual)
+			t.Errorf(errPaginationFmtStr, testCase.expected, actual)
 		}
 	}
 }
@@ -323,7 +325,7 @@ func TestGetParamsFromValuesWithInvalidValuesShouldReturnErrror(t *testing.T) {
 		}
 
 		if !errors.Is(actualErr, testCase.expected) {
-			t.Errorf("Expected %v, got %v", testCase.expected, actual)
+			t.Errorf(errPaginationFmtStr, testCase.expected, actual)
 		}
 	}
 }
