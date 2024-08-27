@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import InputInfo from '@/components/ui/input-info';
 import { Label } from '@/components/ui/label';
-import api from '@/lib/api';
+import api, { status } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -38,7 +38,7 @@ export default function Page() {
       },
     });
 
-    if (res.status == 200 || res.status == 204) {
+    if (res.status === status.OK || res.status === status.NoContent) {
       window.sessionStorage.setItem('forgot-password-email', data.email);
       router.push('/forgot-password/reset');
     }

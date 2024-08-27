@@ -6,16 +6,19 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
-import api from '@/lib/api';
+import api, { status } from '@/lib/api';
 import { ResetPasswordRequestDto } from '@/lib/dto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import AuthLink from '../../_components/auth-link';
+
+const minPasswordLength = 6;
+const redirectTimeout = 3000;
 
 const FormSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email(),
@@ -25,7 +28,9 @@ const FormSchema = z.object({
     .max(16, { message: 'Invalid code' }),
   newPassword: z
     .string()
-    .min(6, { message: 'Password should be longer than 6 characters' })
+    .min(minPasswordLength, {
+      message: 'Password should be longer than 6 characters',
+    })
     .max(64, { message: 'Too long' }),
 });
 
@@ -51,17 +56,21 @@ export default function Page() {
       json: dto,
     });
 
-    if (res.status == 200 || res.status == 204) {
+    if (res.status === status.OK || res.status === status.NoContent) {
       toast.success(
         'Your password has been reset successfully. Redirecting...'
       );
       setTimeout(() => {
         window.location.href = '/sign-in';
-      }, 3000);
+      }, redirectTimeout);
     } else {
       toast.error('Something went wrong. Cannot reset your password.');
     }
   };
+
+  const toggleShowPassword = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
 
   return (
     <Card className="container mx-auto my-32 flex max-w-md flex-col py-8">
@@ -119,7 +128,7 @@ export default function Page() {
             variant="ghost"
             size="icon"
             className="absolute right-0 top-0"
-            onClick={() => setShowPassword((prev) => !prev)}
+            onClick={toggleShowPassword}
             type="button"
           >
             {showPassword ? (
