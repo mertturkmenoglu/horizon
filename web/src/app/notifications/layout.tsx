@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
@@ -11,7 +10,9 @@ import { SettingsIcon } from 'lucide-react';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
-export default async function Layout({ children }: PropsWithChildren) {
+export default async function Layout({
+  children,
+}: Readonly<PropsWithChildren>) {
   return (
     <div className="container my-16 grid grid-cols-12 gap-4">
       <div className="col-span-4">
@@ -42,8 +43,6 @@ export default async function Layout({ children }: PropsWithChildren) {
                   </TooltipProvider>
                 </div>
               </div>
-
-              
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-2">
