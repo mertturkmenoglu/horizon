@@ -12,7 +12,7 @@ type Props = {
   bookmark: BookmarksResponseItemDto;
 };
 
-export default function BookmarkCard({ bookmark: { hservice } }: Props) {
+export default function BookmarkCard({ bookmark: { hservice } }: Readonly<Props>) {
   return (
     <Card className="group flex min-h-60 flex-col md:flex-row">
       <img

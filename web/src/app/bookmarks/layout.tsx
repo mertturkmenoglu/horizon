@@ -3,7 +3,7 @@ import { getAuth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
-export default async function Layout({ children }: PropsWithChildren) {
+export default async function Layout({ children }: Readonly<PropsWithChildren>) {
   const auth = await getAuth();
   const isSignedIn = auth !== null;
 

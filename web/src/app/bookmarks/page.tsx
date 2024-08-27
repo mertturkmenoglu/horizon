@@ -7,15 +7,14 @@ import api from '@/lib/api';
 import { BookmarksResponseItemDto, Pagination } from '@/lib/dto';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import BookmarkCard from './_components/bookmark-card';
 
 async function getBookmarks(page: number) {
-  const res = await api.get(`bookmarks/?page=${page}`).json<{
+  return api.get(`bookmarks/?page=${page}`).json<{
     data: BookmarksResponseItemDto[];
     pagination: Pagination;
   }>();
-  return res;
 }
 
 export default function Page() {
@@ -28,6 +27,22 @@ export default function Page() {
   });
 
   const isEmpty = query.data?.pages[0]?.data.length === 0;
+
+  const loadMoreBtnText = useMemo(() => {
+    if (query.isFetchingNextPage) {
+      return 'Loading more...';
+    }
+
+    if (query.hasNextPage) {
+      return 'Load More';
+    }
+
+    return 'Nothing more to load';
+  }, [query.hasNextPage, query.isFetchingNextPage]);
+
+  const onLoadMoreClick = useCallback(() => {
+    query.fetchNextPage();
+  }, [query]);
 
   if (query.isLoading) {
     return (
@@ -61,7 +76,7 @@ export default function Page() {
       {query.data && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {query.data.pages.map((page, i) => (
-            <React.Fragment key={i}>
+            <React.Fragment key={i + 1}>
               {page.data.map((bookmark) => (
                 <Link
                   href={`/services/${bookmark.hserviceId}`}
@@ -78,14 +93,10 @@ export default function Page() {
       {query.hasNextPage && (
         <div className="mt-4 flex justify-center">
           <Button
-            onClick={() => query.fetchNextPage()}
+            onClick={onLoadMoreClick}
             disabled={!query.hasNextPage || query.isFetchingNextPage}
           >
-            {query.isFetchingNextPage
-              ? 'Loading more...'
-              : query.hasNextPage
-                ? 'Load More'
-                : 'Nothing more to load'}
+            {loadMoreBtnText}
           </Button>
         </div>
       )}
