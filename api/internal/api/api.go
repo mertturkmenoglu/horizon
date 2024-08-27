@@ -94,7 +94,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 	e := echo.New()
 
 	m := Modules{
-		Auth:          auth.New(s.Db, s.Flake, s.Logger, s.Tasks, s.Cache),
+		Auth:          auth.New(s.Db, s.Flake, s.Logger, s.Cache, s.Tasks),
 		Uploads:       uploads.New(s.Upload),
 		HServices:     hservices.New(s.Db, s.Flake, s.Logger),
 		Users:         users.New(s.Db, s.Flake, s.Logger),
@@ -111,19 +111,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	api.Use(middlewares.GetSessionMiddleware())
 
-	authRoutes := api.Group("/auth")
-	{
-		authRoutes.GET("/google", m.Auth.HandlerGoogle)
-		authRoutes.GET("/google/callback", m.Auth.HandlerGoogleCallback)
-		authRoutes.GET("/me", m.Auth.HandlerGetMe, middlewares.IsAuth)
-		authRoutes.POST("/logout", m.Auth.HandlerLogout)
-		authRoutes.POST("/credentials/login", m.Auth.HandlerCredentialsLogin, middlewares.ParseBody[auth.LoginRequestDto])
-		authRoutes.POST("/credentials/register", m.Auth.HandlerCredentialsRegister, middlewares.ParseBody[auth.RegisterRequestDto])
-		authRoutes.POST("/verify-email/send", m.Auth.HandlerSendVerificationEmail, middlewares.ParseBody[auth.SendVerificationEmailRequestDto])
-		authRoutes.GET("/verify-email/verify", m.Auth.HandlerVerifyEmail)
-		authRoutes.POST("/forgot-password/send", m.Auth.HandlerSendForgotPasswordEmail, middlewares.ParseBody[auth.SendForgotPasswordEmailRequestDto])
-		authRoutes.POST("/forgot-password/reset", m.Auth.HandlerResetPassword, middlewares.ParseBody[auth.ResetPasswordRequestDto])
-	}
+	m.Auth.RegisterRoutes(api)
 
 	uploadsRoutes := api.Group("/uploads")
 	{
@@ -132,7 +120,8 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	hservicesRoutes := api.Group("/hservices")
 	{
-		hservicesRoutes.POST("/", m.HServices.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
+		hservicesRoutes.POST("/",
+			m.HServices.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
 		hservicesRoutes.GET("/", m.HServices.HandlerGetMyHServices, middlewares.IsAuth)
 		hservicesRoutes.GET("/:id", m.HServices.HandlerGetHServiceById, middlewares.WithAuth)
 		hservicesRoutes.GET("/user/:username", m.HServices.HandlerGetHServicesByUsername)
@@ -156,7 +145,8 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	bookmarksRoutes := api.Group("/bookmarks")
 	{
-		bookmarksRoutes.POST("/", m.Bookmarks.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
+		bookmarksRoutes.POST("/",
+			m.Bookmarks.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
 		bookmarksRoutes.DELETE("/:hservice_id", m.Bookmarks.HandlerDeleteBookmark, middlewares.IsAuth)
 		bookmarksRoutes.GET("/", m.Bookmarks.HandlerGetBookmarks, middlewares.IsAuth)
 		bookmarksRoutes.GET("/:hservice_id", m.Bookmarks.HandlerGetIsBookmarked, middlewares.IsAuth)
@@ -164,7 +154,8 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	favoritesRoutes := api.Group("/favorites")
 	{
-		favoritesRoutes.POST("/", m.Favorites.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
+		favoritesRoutes.POST("/",
+			m.Favorites.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
 		favoritesRoutes.DELETE("/:hservice_id", m.Favorites.HandlerDeleteFavorite, middlewares.IsAuth)
 		favoritesRoutes.GET("/", m.Favorites.HandlerGetFavorites, middlewares.IsAuth)
 		favoritesRoutes.GET("/:hservice_id", m.Favorites.HandlerGetIsFavorite, middlewares.IsAuth)
@@ -177,8 +168,10 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		listsRoutes.GET("/user/:username", m.Lists.HandlerGetUsersLists)
 		listsRoutes.GET("/info/:hservice_id", m.Lists.HandlerGetItemListInfo, middlewares.IsAuth)
 		listsRoutes.GET("/:id", m.Lists.HandlerGetListById)
-		listsRoutes.POST("/", m.Lists.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
-		listsRoutes.POST("/:id/items", m.Lists.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
+		listsRoutes.POST("/",
+			m.Lists.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
+		listsRoutes.POST("/:id/items",
+			m.Lists.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
 		listsRoutes.DELETE("/:id", m.Lists.HandlerDeleteList, middlewares.IsAuth)
 		listsRoutes.DELETE("/:id/items/:itemId", m.Lists.HandlerDeleteListItem, middlewares.IsAuth)
 	}
