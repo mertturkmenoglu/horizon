@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import { useCallback } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { ReportInput } from '../page';
 import { reasons } from './data';
@@ -23,14 +24,20 @@ import { useReportForm } from './use-report-form';
 
 type Props = ReportInput;
 
-export default function ReportForm(props: Props) {
+export default function ReportForm(props: Readonly<Props>) {
   const form = useReportForm(props);
   const mutation = useCreateReport();
 
   const onSubmit: SubmitHandler<FormInput> = (data) => {
-    console.log('inside on submit');
     mutation.mutate(data);
   };
+
+  const onReasonChange = useCallback(
+    (v: string) => {
+      form.setValue('reason', v);
+    },
+    [form]
+  );
 
   return (
     <form
@@ -65,7 +72,7 @@ export default function ReportForm(props: Props) {
         <Label htmlFor="reason">Reason</Label>
         <Select
           value={form.getValues('reason')}
-          onValueChange={(v) => form.setValue('reason', v)}
+          onValueChange={onReasonChange}
         >
           <SelectTrigger id="reason">
             <SelectValue placeholder="Select a reason" />
