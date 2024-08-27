@@ -2,8 +2,10 @@ import HServiceCard from '@/components/blocks/hservice-card';
 import { HServiceResponseDto } from '@/lib/dto';
 import Link from 'next/link';
 
+type DataKey = 'new' | 'popular' | 'featured' | 'favorites';
+
 type Props = {
-  dataKey: 'new' | 'popular' | 'featured' | 'favorites';
+  dataKey: DataKey;
   data: HServiceResponseDto[];
 };
 
@@ -17,12 +19,16 @@ function getTitle(type: Props['dataKey']) {
       return 'Featured Locations';
     case 'favorites':
       return 'Favorite Locations';
+    default:
+      return '';
   }
 }
 
-export default async function HServicesGrid({ dataKey: key, data }: Props) {
+const maxItems = 6;
+
+export default async function HServicesGrid({ dataKey: key, data }: Readonly<Props>) {
   const title = getTitle(key);
-  const sliced = data.slice(0, 6);
+  const sliced = data.slice(0, maxItems);
   const isEmpty = sliced.length === 0;
 
   return (
