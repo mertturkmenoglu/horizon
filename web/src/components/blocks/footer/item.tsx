@@ -5,7 +5,7 @@ type Props = {
   text: string;
 };
 
-export default function Item({ href, text }: Props) {
+export default function Item({ href, text }: Readonly<Props>) {
   return (
     <li>
       <Link
