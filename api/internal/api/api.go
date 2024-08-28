@@ -138,14 +138,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		healthRoutes.GET("/", m.Health.HandlerGetHealth)
 	}
 
-	bookmarksRoutes := api.Group("/bookmarks")
-	{
-		bookmarksRoutes.POST("/",
-			m.Bookmarks.HandlerCreateBookmark, middlewares.IsAuth, middlewares.ParseBody[bookmarks.CreateBookmarkRequestDto])
-		bookmarksRoutes.DELETE("/:hservice_id", m.Bookmarks.HandlerDeleteBookmark, middlewares.IsAuth)
-		bookmarksRoutes.GET("/", m.Bookmarks.HandlerGetBookmarks, middlewares.IsAuth)
-		bookmarksRoutes.GET("/:hservice_id", m.Bookmarks.HandlerGetIsBookmarked, middlewares.IsAuth)
-	}
+	m.Bookmarks.RegisterRoutes(api)
 
 	favoritesRoutes := api.Group("/favorites")
 	{
