@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const errUtilsFmtStr = "Expected %v, got %v"
+
 func TestGetFileExtensionFromMimeTypeShouldReturnCorrectValues(t *testing.T) {
 	inputs := []struct {
 		mimeType string
@@ -23,7 +25,7 @@ func TestGetFileExtensionFromMimeTypeShouldReturnCorrectValues(t *testing.T) {
 		actual := getFileExtensionFromMimeType(input.mimeType)
 
 		if actual != input.expected {
-			t.Errorf("Expected %v, got %v", input.expected, actual)
+			t.Errorf(errUtilsFmtStr, input.expected, actual)
 		}
 	}
 }
@@ -44,7 +46,7 @@ func TestGetFileExtensionFromMimeTypeShouldReturnEmptyStringForInvalidMimeTypes(
 		actual := getFileExtensionFromMimeType(mimeType)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errUtilsFmtStr, expected, actual)
 		}
 	}
 }
@@ -65,7 +67,7 @@ func TestConstructFilenameShouldReturnCorrectFilename(t *testing.T) {
 		actual := constructFilename(input.key, input.fileExt)
 
 		if actual != input.expected {
-			t.Errorf("Expected %v, got %v", input.expected, actual)
+			t.Errorf(errUtilsFmtStr, input.expected, actual)
 		}
 	}
 }
@@ -78,7 +80,7 @@ func TestConstructFilenameShouldReturnCorrectFilenameForRandomizedTestCases(t *t
 		actual := constructFilename(key, fileExt)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errUtilsFmtStr, expected, actual)
 		}
 	}
 }

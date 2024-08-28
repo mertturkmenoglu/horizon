@@ -6,6 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const errValidationsFmtStr = "Expected %v, got %v"
+
 func TestIsAllowedUploadTypeShouldReturnTrueForValidUploadTypes(t *testing.T) {
 	inputs := allowedUploadTypes
 
@@ -14,7 +16,7 @@ func TestIsAllowedUploadTypeShouldReturnTrueForValidUploadTypes(t *testing.T) {
 		actual := isAllowedUploadType(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -31,7 +33,7 @@ func TestIsAllowedUploadTypeShouldReturnFalseForInvalidUploadTypes(t *testing.T)
 		actual := isAllowedUploadType(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -44,7 +46,7 @@ func TestIsAllowedMimeTypeShouldReturnTrueForValidMimeTypes(t *testing.T) {
 		actual := isAllowedMimeType(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -61,7 +63,7 @@ func TestIsAllowedMimeTypeShouldReturnFalseForInvalidMimeTypes(t *testing.T) {
 		actual := isAllowedMimeType(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -72,7 +74,7 @@ func TestIsAllowedCountShouldReturnTrueForValidCounts(t *testing.T) {
 		actual := isAllowedCount(i)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }
@@ -85,7 +87,7 @@ func TestIsAllowedCountShouldReturnFalseForInvalidCounts(t *testing.T) {
 		actual := isAllowedCount(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errValidationsFmtStr, expected, actual)
 		}
 	}
 }

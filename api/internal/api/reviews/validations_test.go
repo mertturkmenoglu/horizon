@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+const errFmtStr = "Expected %v, got %v"
+
 func TestValidateReviewVoteTypeShouldReturnCorrectReviewVoteTypeGivenLike(t *testing.T) {
 	expected := db.ReviewvotetypeLIKE
 	actual, err := validateReviewVoteType("LIKE")
@@ -15,7 +17,7 @@ func TestValidateReviewVoteTypeShouldReturnCorrectReviewVoteTypeGivenLike(t *tes
 	}
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -28,7 +30,7 @@ func TestValidateReviewVoteTypeShouldReturnCorrectReviewVoteTypeGivenDislike(t *
 	}
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -40,6 +42,6 @@ func TestValidateReviewVoteTypeShouldReturnErrVoteTypeInvalidGivenInvalidVoteTyp
 	}
 
 	if !errors.Is(err, errVoteTypeInvalid) {
-		t.Errorf("Expected %v, got %v", errVoteTypeInvalid, err)
+		t.Errorf(errFmtStr, errVoteTypeInvalid, err)
 	}
 }
