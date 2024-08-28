@@ -102,8 +102,8 @@ export type GetUserProfileByUsernameResponseDto = {
 };
 
 export type GetNewUploadUrlResponseDto = {
-  Key: string;
-  Url: string;
+  key: string;
+  url: string;
 };
 
 export type GetHomeAggregationsResponseDto = {

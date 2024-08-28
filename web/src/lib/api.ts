@@ -18,7 +18,7 @@ export async function uploadImages(
     const res = await api
       .get(`uploads/new-url?type=${type}&count=1&mime=${file.type}`)
       .json<{ data: GetNewUploadUrlResponseDto[] }>();
-    const url = res.data[0].Url;
+    const url = res.data[0].url;
 
     try {
       const r = await fetch(url, {
