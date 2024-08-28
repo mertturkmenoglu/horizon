@@ -14,7 +14,15 @@ func getDsnFromEnv() string {
 	dbName := viper.GetString(config.DB_NAME)
 	dbPort := viper.GetInt(config.DB_PORT)
 	dbTimezone := viper.GetString(config.DB_TIMEZONE)
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=%s", dbHost, dbUser, dbPassword, dbName, dbPort, dbTimezone)
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=%s",
+		dbHost,
+		dbUser,
+		dbPassword,
+		dbName,
+		dbPort,
+		dbTimezone,
+	)
 
 	return dsn
 }
