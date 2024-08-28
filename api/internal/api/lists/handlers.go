@@ -1,10 +1,7 @@
 package lists
 
 import (
-	"context"
 	"errors"
-	"fmt"
-	"horizon/internal/db"
 	"horizon/internal/h"
 	"net/http"
 
@@ -12,127 +9,74 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Module) HandlerGetMyLists(c echo.Context) error {
+func (s *handlers) GetMyLists(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 
-	dbResult, err := s.Db.Queries.GetMyLists(context.Background(), userId)
+	res, err := s.service.getMyLists(userId)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
-
-	res := mapGetMyListsResultToDto(dbResult)
 
 	return c.JSON(http.StatusOK, h.Response[GetMyListsResponseDto]{
 		Data: res,
 	})
 }
 
-func (s *Module) HandlerGetUsersLists(c echo.Context) error {
+func (s *handlers) GetUsersLists(c echo.Context) error {
 	username := c.Param("username")
 
 	if username == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "username is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errUsernameRequired.Error())
 	}
 
-	dbResult, err := s.Db.Queries.GetUsersLists(context.Background(), username)
+	res, err := s.service.getUsersLists(username)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
-
-	res := mapGetUsersListsResultToDto(dbResult)
 
 	return c.JSON(http.StatusOK, h.Response[GetUsersListsResponseDto]{
 		Data: res,
 	})
 }
 
-func (s *Module) HandlerGetItemListInfo(c echo.Context) error {
+func (s *handlers) GetItemListInfo(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
 	if hserviceId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "hservice_id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errHServiceIdRequired.Error())
 	}
 
-	dbMyLists, err := s.Db.Queries.GetMyLists(context.Background(), userId)
-
-	if err != nil {
-		if !errors.Is(err, pgx.ErrNoRows) {
-			return echo.ErrInternalServerError
-		}
-
-		return c.JSON(http.StatusOK, h.Response[GetItemListInfoResponseDto]{
-			Data: []GetItemListInfoResponseDtoItem{},
-		})
-	}
-
-	dbListItems, err := s.Db.Queries.GetListItemsInfo(context.Background(), db.GetListItemsInfoParams{
-		UserID:     userId,
-		HserviceID: hserviceId,
-	})
-
-	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
-		return echo.ErrInternalServerError
-	}
-
-	res := mapGetItemListInfoResultToDto(dbMyLists, dbListItems)
-
-	return c.JSON(http.StatusOK, h.Response[GetItemListInfoResponseDto]{
-		Data: res,
-	})
-}
-
-func (s *Module) HandlerGetListById(c echo.Context) error {
-	id := c.Param("id")
-
-	if id == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
-		})
-	}
-
-	dbList, err := s.Db.Queries.GetListById(context.Background(), id)
+	res, err := s.service.getItemListInfo(userId, hserviceId)
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
+			return c.JSON(http.StatusOK, h.Response[GetItemListInfoResponseDto]{
+				Data: []GetItemListInfoResponseDtoItem{},
 			})
 		}
 
 		return echo.ErrInternalServerError
 	}
 
-	dbListItems, err := s.Db.Queries.GetListItemsByListId(context.Background(), id)
+	return c.JSON(http.StatusOK, h.Response[GetItemListInfoResponseDto]{
+		Data: res,
+	})
+}
 
-	if err != nil {
-		if !errors.Is(err, pgx.ErrNoRows) {
-			return echo.ErrInternalServerError
-		}
+func (s *handlers) GetListById(c echo.Context) error {
+	id := c.Param("id")
+
+	if id == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, errIdRequired.Error())
 	}
 
-	res, err := mapGetListByIdResultToDto(dbList, dbListItems)
+	res, err := s.service.getListById(id)
 
 	if err != nil {
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
 
 	return c.JSON(http.StatusOK, h.Response[GetListByIdResponseDto]{
@@ -140,78 +84,56 @@ func (s *Module) HandlerGetListById(c echo.Context) error {
 	})
 }
 
-func (s *Module) HandlerCreateList(c echo.Context) error {
+func (s *handlers) CreateList(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateListRequestDto)
 
-	dbListCount, _ := s.Db.Queries.GetUserListCount(context.Background(), userId)
+	ok := s.service.checkIfUserIsAllowedToCreateList(userId)
 
-	if !isUserAllowedToCreateList(int(dbListCount)) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: fmt.Sprintf("You can only have up to %d lists", MaxListPerUser),
-		})
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, errMaxListReached.Error())
 	}
 
-	dbResult, err := s.Db.Queries.CreateList(context.Background(), db.CreateListParams{
-		ID:     h.GenerateId(s.Flake),
-		UserID: userId,
-		Title:  dto.Title,
-	})
+	res, err := s.service.createList(userId, dto)
 
 	if err != nil {
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
-
-	res := mapCreateListResultToDto(dbResult)
 
 	return c.JSON(http.StatusCreated, h.Response[CreateListResponseDto]{
 		Data: res,
 	})
 }
 
-func (s *Module) HandlerCreateListItem(c echo.Context) error {
+func (s *handlers) CreateListItem(c echo.Context) error {
 	dto := c.Get("body").(CreateListItemRequestDto)
 
-	dbListItemCount, _ := s.Db.Queries.GetListItemCount(context.Background(), dto.ListId)
+	ok := s.service.checkIfUserIsAllowedToCreateListItem(dto.ListId)
 
-	if !isUserAllowedToCreateListItem(int(dbListItemCount)) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: fmt.Sprintf("You can only have up to %d items in a list", MaxListItemCount),
-		})
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, errMaxListItemReached.Error())
 	}
 
-	dbResult, err := s.Db.Queries.CreateListItem(context.Background(), db.CreateListItemParams{
-		ID:         h.GenerateId(s.Flake),
-		ListID:     dto.ListId,
-		HserviceID: dto.HserviceId,
-		ItemOrder:  int32(dto.ItemOrder),
-	})
+	res, err := s.service.createListItem(dto)
 
 	if err != nil {
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
-
-	res := mapCreateListItemResultToDto(dbResult)
 
 	return c.JSON(http.StatusCreated, h.Response[CreateListItemResponseDto]{
 		Data: res,
 	})
 }
 
-func (s *Module) HandlerDeleteList(c echo.Context) error {
+func (s *handlers) DeleteList(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 
 	if id == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errIdRequired.Error())
 	}
 
-	err := s.Db.Queries.DeleteListById(context.Background(), db.DeleteListByIdParams{
-		ID:     id,
-		UserID: userId,
-	})
+	err := s.service.deleteList(userId, id)
 
 	if err != nil {
 		return echo.ErrBadRequest
@@ -220,142 +142,61 @@ func (s *Module) HandlerDeleteList(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *Module) HandlerDeleteListItem(c echo.Context) error {
+func (s *handlers) DeleteListItem(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	id := c.Param("id")
 
 	if id == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errIdRequired.Error())
 	}
 
-	err := s.Db.Queries.DeleteListItemById(context.Background(), db.DeleteListItemByIdParams{
-		ID:     id,
-		UserID: userId,
-	})
+	err := s.service.deleteListItem(userId, id)
 
 	if err != nil {
-		return echo.ErrBadRequest
+		return h.HandleDbErr(c, err)
 	}
 
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *Module) HandlerMoveListItemAfter(c echo.Context) error {
+func (s *handlers) MoveListItemAfter(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	listId := c.Param("list_id")
 	itemId := c.Param("item_id")
 	afterItemId := c.Param("after_item_id")
 
-	if listId == "" || itemId == "" || afterItemId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "list_id, item_id, and after_item_id are required",
-		})
+	err := s.service.checkMoveListItemParams(listId, itemId, afterItemId)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	list, err := s.Db.Queries.GetListById(context.Background(), listId)
+	list, err := s.service.getListById(listId)
 
 	if err != nil {
 		return echo.ErrBadRequest
 	}
 
-	if list.List.UserID != userId {
-		return c.JSON(http.StatusForbidden, h.ErrResponse{
-			Message: "you are not authorized to move this list item",
-		})
+	if list.UserID != userId {
+		return echo.NewHTTPError(http.StatusForbidden, errUnauthorizedMoveListItem.Error())
 	}
 
-	listItem, err := s.Db.Queries.GetListItemById(context.Background(), db.GetListItemByIdParams{
-		ID:     itemId,
-		ListID: listId,
-	})
+	listItem, err := s.service.getListItemById(itemId, listId)
 
 	if err != nil {
 		return echo.ErrBadRequest
 	}
 
-	afterItem, err := s.Db.Queries.GetListItemById(context.Background(), db.GetListItemByIdParams{
-		ID:     afterItemId,
-		ListID: listId,
-	})
+	afterItem, err := s.service.getListItemById(afterItemId, listId)
 
 	if err != nil {
 		return echo.ErrBadRequest
 	}
 
-	if listItem.ItemOrder < afterItem.ItemOrder {
-		ctx := context.Background()
-		tx, err := s.Db.Pool.Begin(ctx)
+	err = s.service.moveListItemAfter(listId, listItem, afterItem)
 
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		defer tx.Rollback(ctx)
-
-		qtx := s.Db.Queries.WithTx(tx)
-
-		err = qtx.UpdateListItemOrderWithIndexRangeDecr(ctx, db.UpdateListItemOrderWithIndexRangeDecrParams{
-			ListID:      listId,
-			ItemOrder:   listItem.ItemOrder + 1,
-			ItemOrder_2: afterItem.ItemOrder,
-		})
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		err = qtx.UpdateListItemOrder(ctx, db.UpdateListItemOrderParams{
-			ID:        itemId,
-			ItemOrder: afterItem.ItemOrder,
-		})
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		err = tx.Commit(ctx)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-	} else {
-		ctx := context.Background()
-		tx, err := s.Db.Pool.Begin(ctx)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		defer tx.Rollback(ctx)
-
-		qtx := s.Db.Queries.WithTx(tx)
-
-		err = qtx.UpdateListItemOrderWithIndexRangeIncr(ctx, db.UpdateListItemOrderWithIndexRangeIncrParams{
-			ListID:      listId,
-			ItemOrder:   afterItem.ItemOrder + 1,
-			ItemOrder_2: listItem.ItemOrder - 1,
-		})
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		err = qtx.UpdateListItemOrder(ctx, db.UpdateListItemOrderParams{
-			ID:        itemId,
-			ItemOrder: afterItem.ItemOrder + 1,
-		})
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		err = tx.Commit(ctx)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
+	if err != nil {
+		return echo.ErrInternalServerError
 	}
 
 	return c.NoContent(http.StatusNoContent)

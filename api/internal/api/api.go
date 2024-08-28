@@ -130,19 +130,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	m.Favorites.RegisterRoutes(api)
 
-	listsRoutes := api.Group("/lists")
-	{
-		listsRoutes.GET("/", m.Lists.HandlerGetMyLists, middlewares.IsAuth)
-		listsRoutes.GET("/user/:username", m.Lists.HandlerGetUsersLists)
-		listsRoutes.GET("/info/:hservice_id", m.Lists.HandlerGetItemListInfo, middlewares.IsAuth)
-		listsRoutes.GET("/:id", m.Lists.HandlerGetListById)
-		listsRoutes.POST("/",
-			m.Lists.HandlerCreateList, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListRequestDto])
-		listsRoutes.POST("/:id/items",
-			m.Lists.HandlerCreateListItem, middlewares.IsAuth, middlewares.ParseBody[lists.CreateListItemRequestDto])
-		listsRoutes.DELETE("/:id", m.Lists.HandlerDeleteList, middlewares.IsAuth)
-		listsRoutes.DELETE("/:id/items/:itemId", m.Lists.HandlerDeleteListItem, middlewares.IsAuth)
-	}
+	m.Lists.RegisterRoutes(api)
 
 	m.Notifications.RegisterRoutes(api)
 
