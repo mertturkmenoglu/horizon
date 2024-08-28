@@ -4,7 +4,10 @@ import (
 	"horizon/internal/pagination"
 )
 
-func (s *service) getHServiceReviews(id string, params pagination.Params) (*GetReviewsByHServiceIdResponseDto, *pagination.Pagination, error) {
+func (s *service) getHServiceReviews(
+	id string,
+	params pagination.Params,
+) (*GetReviewsByHServiceIdResponseDto, *pagination.Pagination, error) {
 	dbResult, err := s.repository.getReviewsByHServiceId(id, params)
 
 	if err != nil {
@@ -28,7 +31,10 @@ func (s *service) getHServiceReviews(id string, params pagination.Params) (*GetR
 	return &res, &paginationData, nil
 }
 
-func (s *service) getUserReviews(username string, params pagination.Params) (*GetReviewsByUsernameResponseDto, *pagination.Pagination, error) {
+func (s *service) getUserReviews(
+	username string,
+	params pagination.Params,
+) (*GetReviewsByUsernameResponseDto, *pagination.Pagination, error) {
 	dbResult, err := s.repository.getReviewsByUsername(username, params)
 
 	if err != nil {
