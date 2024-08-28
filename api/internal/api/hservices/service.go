@@ -55,7 +55,7 @@ func (s *service) getMyHServices(
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res := make([]HServiceWithoutUserResponseDto, 0)
 
@@ -116,7 +116,7 @@ func (s *service) getHServicesByUsername(
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res := make([]HServiceResponseDto, 0)
 

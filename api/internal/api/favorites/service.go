@@ -37,7 +37,7 @@ func (s *service) getUserFavorites(
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res := make([]FavoritesResponseDto, 0)
 
@@ -74,7 +74,7 @@ func (s *service) getFavoritesByUsername(
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res := make([]FavoritesResponseDto, 0)
 

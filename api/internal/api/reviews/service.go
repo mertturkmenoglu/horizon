@@ -17,7 +17,7 @@ func (s *service) getHServiceReviews(id string, params pagination.Params) (*GetR
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res, err := mapGetReviewsByHServiceIdToDto(dbResult)
 
@@ -41,7 +41,7 @@ func (s *service) getUserReviews(username string, params pagination.Params) (*Ge
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res, err := mapGetReviewsByUsernameToDto(dbResult)
 

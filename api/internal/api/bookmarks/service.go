@@ -39,7 +39,7 @@ func (s *service) getBookmarks(
 		return nil, nil, err
 	}
 
-	paginationData := pagination.GetPagination(params, count)
+	paginationData := pagination.Compute(params, count)
 
 	res := make([]BookmarksResponseDto, 0)
 

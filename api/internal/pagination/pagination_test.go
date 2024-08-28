@@ -168,7 +168,7 @@ const errPaginationFmtStr = "Expected %v, got %v"
 
 func TestGetPaginationWithValidParamsShouldReturnCorrectPagination(t *testing.T) {
 	for _, testCase := range getPaginationTestCases {
-		actual := GetPagination(testCase.params, testCase.totalRecords)
+		actual := Compute(testCase.params, testCase.totalRecords)
 
 		if actual != testCase.expected {
 			t.Errorf(errPaginationFmtStr, testCase.expected, actual)

@@ -46,7 +46,7 @@ func getParamsFromValues(page, size string) (Params, error) {
 	return params, nil
 }
 
-func GetPagination(params Params, totalRecords int64) Pagination {
+func Compute(params Params, totalRecords int64) Pagination {
 	modulo := totalRecords % int64(params.PageSize)
 	var carry int64 = 0
 
