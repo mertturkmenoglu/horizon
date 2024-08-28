@@ -27,7 +27,7 @@ var (
 
 // Produces argon2 hash of the given string s.
 func Hash(s string) (string, error) {
-	salt, err := random.GenerateBytes(saltLength)
+	salt, err := random.Bytes(saltLength)
 
 	if err != nil {
 		return "", err

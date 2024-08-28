@@ -17,7 +17,7 @@ var (
 
 func TestShouldHashAndVerifyRandomPassword(t *testing.T) {
 	expected := true
-	randomPassword := random.GenerateLetterString(10)
+	randomPassword := random.FromLetters(10)
 	hashed, err := Hash(randomPassword)
 
 	if err != nil {

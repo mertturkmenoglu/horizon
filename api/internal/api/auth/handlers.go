@@ -182,7 +182,7 @@ func (s *handlers) HandlerSendVerificationEmail(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, errEmailAlreadyVerified.Error())
 	}
 
-	code, err := random.GenerateSixDigitsCode()
+	code, err := random.DigitsString(6)
 
 	if err != nil {
 		return echo.ErrInternalServerError
@@ -251,7 +251,7 @@ func (s *handlers) HandlerSendForgotPasswordEmail(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	code, err := random.GenerateSixDigitsCode()
+	code, err := random.DigitsString(6)
 
 	if err != nil {
 		return echo.ErrInternalServerError

@@ -43,7 +43,7 @@ func generateUsernameFromEmail(db *db.Db, email string) (string, error) {
 		base = validLocalPart[0:24]
 	}
 
-	newStr := base + random.GenerateLetterString(8)
+	newStr := base + random.FromLetters(8)
 
 	if !isValidUsername(newStr) {
 		// Username is not valid

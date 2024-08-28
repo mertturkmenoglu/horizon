@@ -93,7 +93,7 @@ func (s *service) getGoogleOAuth2Config() *oauth2.Config {
 // It generates a random string of 16 bytes.
 // It then encodes it to base64 URL encoding.
 func (s *service) generateStateString() (string, error) {
-	bytes, err := random.GenerateBytes(16)
+	bytes, err := random.Bytes(16)
 
 	if err != nil {
 		return "", err
