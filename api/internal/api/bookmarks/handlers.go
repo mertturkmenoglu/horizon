@@ -1,54 +1,36 @@
 package bookmarks
 
 import (
-	"context"
-	"errors"
-	"horizon/internal/db"
 	"horizon/internal/h"
 	"horizon/internal/pagination"
 	"net/http"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Module) HandlerCreateBookmark(c echo.Context) error {
+func (s *handlers) HandlerCreateBookmark(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateBookmarkRequestDto)
-
-	dbResult, err := s.Db.Queries.CreateBookmark(context.Background(), db.CreateBookmarkParams{
-		UserID:     userId,
-		HserviceID: dto.HServiceId,
-	})
+	res, err := s.service.createBookmark(userId, dto)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	id, _ := dbResult.ID.Value()
-	idstr, _ := id.(string)
-
 	return c.JSON(http.StatusCreated, h.Response[CreateBookmarkResponseDto]{
-		Data: CreateBookmarkResponseDto{
-			ID: idstr,
-		},
+		Data: res,
 	})
 }
 
-func (s *Module) HandlerDeleteBookmark(c echo.Context) error {
+func (s *handlers) HandlerDeleteBookmark(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
 	if hserviceId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "hservice_id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errHServiceIdRequired.Error())
 	}
 
-	err := s.Db.Queries.DeleteBookmarkByHServiceId(context.Background(), db.DeleteBookmarkByHServiceIdParams{
-		UserID:     userId,
-		HserviceID: hserviceId,
-	})
+	err := s.service.deleteBookmark(userId, hserviceId)
 
 	if err != nil {
 		return echo.ErrBadRequest
@@ -57,85 +39,38 @@ func (s *Module) HandlerDeleteBookmark(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *Module) HandlerGetBookmarks(c echo.Context) error {
+func (s *handlers) HandlerGetBookmarks(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	bookmarks, err := s.Db.Queries.GetBookmarksByUserId(context.Background(), db.GetBookmarksByUserIdParams{
-		UserID: userId,
-		Offset: int32(params.Offset),
-		Limit:  int32(params.PageSize),
-	})
+	res, pagination, err := s.service.getBookmarks(userId, params)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	count, err := s.Db.Queries.CountUserBookmarks(context.Background(), userId)
-
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	paginationData := pagination.GetPagination(params, count)
-
-	res := make([]BookmarksResponseDto, 0)
-
-	for _, bookmark := range bookmarks {
-		dto, err := mapBookmarkToBookmarkDto(bookmark)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		res = append(res, dto)
+		return h.HandleDbErr(c, err)
 	}
 
 	return c.JSON(http.StatusOK, h.PaginatedResponse[[]BookmarksResponseDto]{
 		Data:       res,
-		Pagination: paginationData,
+		Pagination: *pagination,
 	})
 
 }
 
-func (s *Module) HandlerGetIsBookmarked(c echo.Context) error {
+func (s *handlers) HandlerGetIsBookmarked(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
 	if hserviceId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "hservice_id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errHServiceIdRequired.Error())
 	}
 
-	_, err := s.Db.Queries.IsBookmarked(context.Background(), db.IsBookmarkedParams{
-		HserviceID: hserviceId,
-		UserID:     userId,
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusOK, h.Response[bool]{
-			Data: false,
-		})
-	}
+	res := s.service.getIsBookmarked(userId, hserviceId)
 
 	return c.JSON(http.StatusOK, h.Response[bool]{
-		Data: true,
+		Data: res,
 	})
 }
