@@ -12,6 +12,7 @@ var (
 	hardcodedHash     = "$argon2id$v=19$m=65536,t=3,p=2$gB7Jqq8pm5Ldk+upwF7b7g$V9wByXDW6wTId0NE1adVFDTHNRfnQTdODK0O+jdIUh8"
 	hardcodedHashPart = "V9wByXDW6wTId0NE1adVFDTHNRfnQTdODK0O+jdIUh8"
 	hardcodedSaltPart = "gB7Jqq8pm5Ldk+upwF7b7g"
+	errFmtStr         = "Expected %v, got %v"
 )
 
 func TestShouldHashAndVerifyRandomPassword(t *testing.T) {
@@ -30,7 +31,7 @@ func TestShouldHashAndVerifyRandomPassword(t *testing.T) {
 	}
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -43,7 +44,7 @@ func TestShouldVerifyHardcodedPasswordAndHash(t *testing.T) {
 	}
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -56,7 +57,7 @@ func TestShouldDecodeSaltOfHardcodedHash(t *testing.T) {
 	}
 
 	if !bytes.Equal(expected, actual) {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }
 
@@ -69,6 +70,6 @@ func TestShouldDecodeHashOfHardcodedHash(t *testing.T) {
 	}
 
 	if !bytes.Equal(expected, actual) {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }

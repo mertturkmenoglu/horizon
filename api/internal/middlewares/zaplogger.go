@@ -20,21 +20,6 @@ func ZapLogger() echo.MiddlewareFunc {
 		LogRequestID: true,
 		LogUserAgent: true,
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			// api.App.Logger.Info("request",
-			// 	zap.String("method", v.Method),
-			// 	zap.String("uri", v.URI),
-			// 	zap.Int("status", v.Status),
-			// 	zap.Error(v.Error),
-			// 	zap.Int64("latency milli", v.Latency.Milliseconds()),
-			// 	zap.String("protocol", v.Protocol),
-			// 	zap.String("ip", v.RemoteIP),
-			// 	zap.String("host", v.Host),
-			// 	zap.String("uri path", v.URIPath),
-			// 	zap.String("route path", v.RoutePath),
-			// 	zap.String("requestId", v.RequestID),
-			// 	zap.String("ua", v.UserAgent),
-			// )
-
 			return nil
 		},
 	})
