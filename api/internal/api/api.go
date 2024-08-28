@@ -165,17 +165,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		listsRoutes.DELETE("/:id/items/:itemId", m.Lists.HandlerDeleteListItem, middlewares.IsAuth)
 	}
 
-	notificationsRoutes := api.Group("/notifications")
-	{
-		notificationsRoutes.GET("/", m.Notifications.HandlerGetAll, middlewares.IsAuth)
-		notificationsRoutes.GET("/unread", m.Notifications.HandlerGetUnread, middlewares.IsAuth)
-		notificationsRoutes.POST("/read", m.Notifications.HandlerReadAll, middlewares.IsAuth)
-		notificationsRoutes.POST("/read/:id", m.Notifications.HandlerReadOne, middlewares.IsAuth)
-		notificationsRoutes.POST("/unread", m.Notifications.HandlerUnreadAll, middlewares.IsAuth)
-		notificationsRoutes.POST("/unread/:id", m.Notifications.HandlerUnreadOne, middlewares.IsAuth)
-		notificationsRoutes.DELETE("/", m.Notifications.HandlerDeleteAll, middlewares.IsAuth)
-		notificationsRoutes.DELETE("/read", m.Notifications.HandlerDeleteRead, middlewares.IsAuth)
-	}
+	m.Notifications.RegisterRoutes(api)
 
 	m.Reviews.RegisterRoutes(api)
 

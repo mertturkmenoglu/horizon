@@ -7,49 +7,49 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (m *Module) HandlerGetAll(c echo.Context) error {
+func (s *handlers) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerGetUnread(c echo.Context) error {
+func (s *handlers) GetUnread(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerReadAll(c echo.Context) error {
+func (s *handlers) ReadAll(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerReadOne(c echo.Context) error {
+func (s *handlers) ReadOne(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerUnreadAll(c echo.Context) error {
+func (s *handlers) UnreadAll(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerUnreadOne(c echo.Context) error {
+func (s *handlers) UnreadOne(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerDeleteAll(c echo.Context) error {
+func (s *handlers) DeleteAll(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
 }
 
-func (m *Module) HandlerDeleteRead(c echo.Context) error {
+func (s *handlers) DeleteRead(c echo.Context) error {
 	return c.JSON(http.StatusNotImplemented, h.ErrResponse{
 		Message: "not implemented",
 	})
