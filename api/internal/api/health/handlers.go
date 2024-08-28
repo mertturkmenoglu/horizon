@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Module) HandlerGetHealth(c echo.Context) error {
+func (h *handlers) getHealth(c echo.Context) error {
 	return c.JSON(http.StatusOK, GetHealthResponseDto{
 		Message: "OK",
 	})

@@ -1,7 +1,16 @@
 package health
 
-type Module struct{}
+type Module struct {
+	handlers *handlers
+}
+
+type handlers struct {
+}
 
 func New() *Module {
-	return &Module{}
+	handlers := &handlers{}
+
+	return &Module{
+		handlers: handlers,
+	}
 }
