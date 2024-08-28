@@ -30,6 +30,10 @@ import (
 	"go.uber.org/zap"
 )
 
+type IModule interface {
+	RegisterRoutes(e *echo.Group)
+}
+
 // Service struct is the main definition of all the different dependencies
 // that are needed to run the application.
 type Service struct {
@@ -133,10 +137,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	m.Aggregations.RegisterRoutes(api)
 
-	healthRoutes := api.Group("/health")
-	{
-		healthRoutes.GET("/", m.Health.HandlerGetHealth)
-	}
+	m.Health.RegisterRoutes(api)
 
 	m.Bookmarks.RegisterRoutes(api)
 
