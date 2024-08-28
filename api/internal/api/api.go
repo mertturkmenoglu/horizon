@@ -34,9 +34,9 @@ type IModule interface {
 	RegisterRoutes(e *echo.Group)
 }
 
-// Service struct is the main definition of all the different dependencies
+// Application struct is the main definition of all the different dependencies
 // that are needed to run the application.
-type Service struct {
+type Application struct {
 	Port       int
 	PortString string
 	Upload     *upload.Upload
@@ -50,23 +50,9 @@ type Service struct {
 	Tasks      *tasks.Tasks
 }
 
-type Modules struct {
-	Auth          *auth.Module
-	Uploads       *uploads.Module
-	HServices     *hservices.Module
-	Users         *users.Module
-	Aggregations  *aggregations.Module
-	Health        *health.Module
-	Bookmarks     *bookmarks.Module
-	Favorites     *favorites.Module
-	Lists         *lists.Module
-	Notifications *notifications.Module
-	Reviews       *reviews.Module
-}
-
 // New returns a new Service instance.
-func New() *Service {
-	apiObj := &Service{
+func New() *Application {
+	apiObj := &Application{
 		Upload:     upload.New(),
 		Flake:      nil,
 		ZapLogger:  logs.New(),
@@ -93,48 +79,30 @@ func New() *Service {
 }
 
 // RegisterRoutes registers all the routes for the application.
-func (s *Service) RegisterRoutes() *echo.Echo {
+func (s *Application) RegisterRoutes() *echo.Echo {
 	e := echo.New()
 
-	m := Modules{
-		Auth:          auth.New(s.Db, s.Flake, s.Logger, s.Cache, s.Tasks),
-		Uploads:       uploads.New(s.Upload),
-		HServices:     hservices.New(s.Db, s.Flake, s.Logger),
-		Users:         users.New(s.Db, s.Flake, s.Logger),
-		Aggregations:  aggregations.New(s.Db, s.Cache),
-		Health:        health.New(),
-		Bookmarks:     bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
-		Favorites:     favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
-		Lists:         lists.New(s.Db, s.Flake, s.Logger),
-		Notifications: notifications.New(),
-		Reviews:       reviews.New(s.Db, s.Flake, s.Logger, s.Cache),
+	modules := []IModule{
+		auth.New(s.Db, s.Flake, s.Logger, s.Cache, s.Tasks),
+		uploads.New(s.Upload),
+		hservices.New(s.Db, s.Flake, s.Logger),
+		users.New(s.Db, s.Flake, s.Logger),
+		aggregations.New(s.Db, s.Cache),
+		health.New(),
+		bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
+		favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
+		lists.New(s.Db, s.Flake, s.Logger),
+		notifications.New(),
+		reviews.New(s.Db, s.Flake, s.Logger, s.Cache),
 	}
 
 	api := e.Group("/api")
 
 	api.Use(middlewares.GetSessionMiddleware())
 
-	m.Auth.RegisterRoutes(api)
-
-	m.Uploads.RegisterRoutes(api)
-
-	m.HServices.RegisterRoutes(api)
-
-	m.Users.RegisterRoutes(api)
-
-	m.Aggregations.RegisterRoutes(api)
-
-	m.Health.RegisterRoutes(api)
-
-	m.Bookmarks.RegisterRoutes(api)
-
-	m.Favorites.RegisterRoutes(api)
-
-	m.Lists.RegisterRoutes(api)
-
-	m.Notifications.RegisterRoutes(api)
-
-	m.Reviews.RegisterRoutes(api)
+	for _, module := range modules {
+		module.RegisterRoutes(api)
+	}
 
 	return e
 }
