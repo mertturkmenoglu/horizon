@@ -127,10 +127,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		hservicesRoutes.GET("/user/:username", m.HServices.HandlerGetHServicesByUsername)
 	}
 
-	usersRoutes := api.Group("/users")
-	{
-		usersRoutes.GET("/:username", m.Users.HandlerGetUserProfileByUsername)
-	}
+	m.Users.RegisterRoutes(api)
 
 	m.Aggregations.RegisterRoutes(api)
 

@@ -1,39 +1,26 @@
 package users
 
 import (
-	"context"
-	"errors"
 	"horizon/internal/h"
 	"net/http"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Module) HandlerGetUserProfileByUsername(c echo.Context) error {
+func (s *handlers) GetUserProfileByUsername(c echo.Context) error {
 	username := c.Param("username")
 
 	if username == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "username is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errUsernameRequired.Error())
 	}
 
-	dbResult, err := s.Db.Queries.GetUserProfileByUsername(context.Background(), username)
+	res, err := s.service.getUserProfileByUsername(username)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		} else {
-			return echo.ErrInternalServerError
-		}
+		return h.HandleDbErr(c, err)
 	}
 
-	res := mapGetUserProfileByUsernameRowToDto(dbResult)
-
 	return c.JSON(http.StatusOK, h.Response[GetUserProfileByUsernameResponseDto]{
-		Data: res,
+		Data: *res,
 	})
 }
