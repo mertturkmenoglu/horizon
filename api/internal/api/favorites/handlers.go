@@ -1,54 +1,37 @@
 package favorites
 
 import (
-	"context"
-	"errors"
-	"horizon/internal/db"
 	"horizon/internal/h"
 	"horizon/internal/pagination"
 	"net/http"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Module) HandlerCreateFavorite(c echo.Context) error {
+func (s *handlers) CreateFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateFavoriteRequestDto)
 
-	dbResult, err := s.Db.Queries.CreateFavorite(context.Background(), db.CreateFavoriteParams{
-		UserID:     userId,
-		HserviceID: dto.HServiceId,
-	})
+	res, err := s.service.createFavorite(userId, dto)
 
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	id, _ := dbResult.ID.Value()
-	idstr, _ := id.(string)
-
 	return c.JSON(http.StatusCreated, h.Response[CreateFavoriteResponseDto]{
-		Data: CreateFavoriteResponseDto{
-			ID: idstr,
-		},
+		Data: res,
 	})
 }
 
-func (s *Module) HandlerDeleteFavorite(c echo.Context) error {
+func (s *handlers) DeleteFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
 	if hserviceId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "hservice_id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errHServiceIdRequired.Error())
 	}
 
-	err := s.Db.Queries.DeleteFavoriteByHServiceId(context.Background(), db.DeleteFavoriteByHServiceIdParams{
-		UserID:     userId,
-		HserviceID: hserviceId,
-	})
+	err := s.service.deleteFavorite(userId, hserviceId)
 
 	if err != nil {
 		return echo.ErrBadRequest
@@ -57,147 +40,61 @@ func (s *Module) HandlerDeleteFavorite(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (s *Module) HandlerGetFavorites(c echo.Context) error {
+func (s *handlers) GetFavorites(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	favorites, err := s.Db.Queries.GetFavoritesByUserId(context.Background(), db.GetFavoritesByUserIdParams{
-		UserID: userId,
-		Offset: int32(params.Offset),
-		Limit:  int32(params.PageSize),
-	})
+	res, pagination, err := s.service.getUserFavorites(userId, params)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	count, err := s.Db.Queries.CountUserFavorites(context.Background(), userId)
-
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	paginationData := pagination.GetPagination(params, count)
-
-	res := make([]FavoritesResponseDto, 0)
-
-	for _, favorite := range favorites {
-		dto, err := mapFavoriteToFavoriteDto(favorite)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		res = append(res, dto)
+		return h.HandleDbErr(c, err)
 	}
 
 	return c.JSON(http.StatusOK, h.PaginatedResponse[[]FavoritesResponseDto]{
 		Data:       res,
-		Pagination: paginationData,
+		Pagination: *pagination,
 	})
-
 }
 
-func (s *Module) HandlerGetIsFavorite(c echo.Context) error {
+func (s *handlers) GetIsFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
 
 	if hserviceId == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "hservice_id is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errHServiceIdRequired.Error())
 	}
 
-	_, err := s.Db.Queries.IsFavorite(context.Background(), db.IsFavoriteParams{
-		HserviceID: hserviceId,
-		UserID:     userId,
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusOK, h.Response[bool]{
-			Data: false,
-		})
-	}
+	res := s.service.isFavorite(userId, hserviceId)
 
 	return c.JSON(http.StatusOK, h.Response[bool]{
-		Data: true,
+		Data: res,
 	})
 }
 
-func (s *Module) HandlerGetFavoritesByUsername(c echo.Context) error {
+func (s *handlers) GetFavoritesByUsername(c echo.Context) error {
 	username := c.Param("username")
 	params, err := pagination.GetParamsFromContext(c)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: err.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	if username == "" {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: "username is required",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errUsernameRequired.Error())
 	}
 
-	favorites, err := s.Db.Queries.GetFavoritesByUsername(context.Background(), db.GetFavoritesByUsernameParams{
-		Username: username,
-		Offset:   int32(params.Offset),
-		Limit:    int32(params.PageSize),
-	})
+	res, pagination, err := s.service.getFavoritesByUsername(username, params)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	count, err := s.Db.Queries.CountUserFavoritesByUsername(context.Background(), username)
-
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return c.JSON(http.StatusNotFound, h.ErrResponse{
-				Message: "not found",
-			})
-		}
-		return echo.ErrInternalServerError
-	}
-
-	paginationData := pagination.GetPagination(params, count)
-
-	res := make([]FavoritesResponseDto, 0)
-
-	for _, favorite := range favorites {
-		dto, err := mapFavoriteToFavoriteDtoByUsername(favorite)
-
-		if err != nil {
-			return echo.ErrInternalServerError
-		}
-
-		res = append(res, dto)
+		return h.HandleDbErr(c, err)
 	}
 
 	return c.JSON(http.StatusOK, h.PaginatedResponse[[]FavoritesResponseDto]{
 		Data:       res,
-		Pagination: paginationData,
+		Pagination: *pagination,
 	})
 }

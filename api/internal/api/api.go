@@ -135,15 +135,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	m.Bookmarks.RegisterRoutes(api)
 
-	favoritesRoutes := api.Group("/favorites")
-	{
-		favoritesRoutes.POST("/",
-			m.Favorites.HandlerCreateFavorite, middlewares.IsAuth, middlewares.ParseBody[favorites.CreateFavoriteRequestDto])
-		favoritesRoutes.DELETE("/:hservice_id", m.Favorites.HandlerDeleteFavorite, middlewares.IsAuth)
-		favoritesRoutes.GET("/", m.Favorites.HandlerGetFavorites, middlewares.IsAuth)
-		favoritesRoutes.GET("/:hservice_id", m.Favorites.HandlerGetIsFavorite, middlewares.IsAuth)
-		favoritesRoutes.GET("/username/:username", m.Favorites.HandlerGetFavoritesByUsername)
-	}
+	m.Favorites.RegisterRoutes(api)
 
 	listsRoutes := api.Group("/lists")
 	{
