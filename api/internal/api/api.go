@@ -24,7 +24,6 @@ import (
 	"horizon/internal/upload"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/pterm/pterm"
 	"github.com/sony/sonyflake"
 	"github.com/spf13/viper"
@@ -98,7 +97,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		Uploads:       uploads.New(s.Upload),
 		HServices:     hservices.New(s.Db, s.Flake, s.Logger),
 		Users:         users.New(s.Db, s.Flake, s.Logger),
-		Aggregations:  aggregations.New(s.Db, s.Logger, s.Cache),
+		Aggregations:  aggregations.New(s.Db, s.Cache),
 		Health:        health.New(),
 		Bookmarks:     bookmarks.New(s.Db, s.Flake, s.Cache, s.Logger),
 		Favorites:     favorites.New(s.Db, s.Flake, s.Logger, s.Cache),
@@ -132,11 +131,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 		usersRoutes.GET("/:username", m.Users.HandlerGetUserProfileByUsername)
 	}
 
-	aggregationsRoutes := api.Group("/aggregations")
-	{
-		aggregationsRoutes.Use(middleware.RateLimiterWithConfig(middlewares.GetRateLimiterConfig()))
-		aggregationsRoutes.GET("/home", m.Aggregations.HandlerGetHomeAggregations)
-	}
+	m.Aggregations.RegisterRoutes(api)
 
 	healthRoutes := api.Group("/health")
 	{
