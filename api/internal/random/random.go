@@ -5,21 +5,32 @@ import (
 	"fmt"
 	"math/big"
 	randv1 "math/rand"
+	"strconv"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 // Generates a unique string from the allowed runes.
-func GenerateLetterString(n int) string {
+// Generated string will have a length of n.
+func FromLetters(n int) string {
+	if n < 1 {
+		return ""
+	}
+
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letterRunes[randv1.Intn(len(letterRunes))]
 	}
+
 	return string(b)
 }
 
 // Generate n random bytes
-func GenerateBytes(n uint32) ([]byte, error) {
+func Bytes(n uint32) ([]byte, error) {
+	if n < 1 {
+		return nil, ErrInvalidBytesCount
+	}
+
 	arr := make([]byte, n)
 	_, err := rand.Read(arr)
 
@@ -30,14 +41,21 @@ func GenerateBytes(n uint32) ([]byte, error) {
 	return arr, nil
 }
 
-// Generate 6 digits random string code
-func GenerateSixDigitsCode() (string, error) {
-	n, err := rand.Int(rand.Reader, big.NewInt(999999))
+// Generate a string with n digits
+func DigitsString(n int) (string, error) {
+	if n < 1 || n > 8 {
+		return "", ErrInvalidDigitsCount
+	}
+
+	max := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(n)), nil)
+	num, err := rand.Int(rand.Reader, max)
 
 	if err != nil {
 		return "", err
 	}
 
-	s := fmt.Sprintf("%06d", n)
+	fmtStr := "%0" + strconv.Itoa(n) + "d"
+	s := fmt.Sprintf(fmtStr, num)
+
 	return s, nil
 }
