@@ -116,10 +116,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	m.Auth.RegisterRoutes(api)
 
-	uploadsRoutes := api.Group("/uploads")
-	{
-		uploadsRoutes.GET("/new-url", m.Uploads.HandlerGetNewUrl, middlewares.IsAuth)
-	}
+	m.Uploads.RegisterRoutes(api)
 
 	hservicesRoutes := api.Group("/hservices")
 	{

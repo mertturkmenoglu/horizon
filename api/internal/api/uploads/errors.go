@@ -3,9 +3,9 @@ package uploads
 import "errors"
 
 var (
-	ErrInvalidBucketType    = errors.New("type is invalid")
-	ErrInvalidCount         = errors.New("count is invalid")
-	ErrCountValue           = errors.New("count must be between 1 and 4")
-	ErrInvalidMimeType      = errors.New("mime type is not allowed")
-	ErrPresignedUrlCreation = errors.New("cannot create presigned url")
+	errInvalidBucketType    = errors.New("type is invalid")
+	errInvalidCount         = errors.New("count is invalid")
+	errCountValue           = errors.New("count must be between 1 and 4")
+	errInvalidMimeType      = errors.New("mime type is not allowed")
+	errPresignedUrlCreation = errors.New("cannot create presigned url")
 )

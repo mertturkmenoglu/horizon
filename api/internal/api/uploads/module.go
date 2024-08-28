@@ -3,11 +3,27 @@ package uploads
 import "horizon/internal/upload"
 
 type Module struct {
-	Upload *upload.Upload
+	handlers *handlers
+}
+
+type handlers struct {
+	service *service
+}
+
+type service struct {
+	upload *upload.Upload
 }
 
 func New(upload *upload.Upload) *Module {
+	service := service{
+		upload: upload,
+	}
+
+	handlers := &handlers{
+		service: &service,
+	}
+
 	return &Module{
-		Upload: upload,
+		handlers: handlers,
 	}
 }

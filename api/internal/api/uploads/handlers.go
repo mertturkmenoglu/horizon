@@ -1,19 +1,14 @@
 package uploads
 
 import (
-	"context"
-	"horizon/config"
 	"horizon/internal/h"
 	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/spf13/viper"
 )
 
-func (s *Module) HandlerGetNewUrl(c echo.Context) error {
+func (s *handlers) GetNewUrl(c echo.Context) error {
 	// Get bucket name (type), how many files to be uploaded(count),
 	// and mime type from the query params
 	qType := c.QueryParam("type")
@@ -22,59 +17,29 @@ func (s *Module) HandlerGetNewUrl(c echo.Context) error {
 
 	// Check if the type is allowed
 	if !isAllowedUploadType(qType) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidBucketType.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidBucketType.Error())
 	}
 
-	count, err := strconv.ParseInt(qCount, 10, 32)
+	count, err := strconv.Atoi(qCount)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidCount.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidCount.Error())
 	}
 
 	// Check if the count is allowed
 	if !isAllowedCount(int(count)) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrCountValue.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errCountValue.Error())
 	}
 
 	// Check if the mime type is allowed
 	if !isAllowedMimeType(qMime) {
-		return c.JSON(http.StatusBadRequest, h.ErrResponse{
-			Message: ErrInvalidMimeType.Error(),
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, errInvalidMimeType.Error())
 	}
 
-	data := make([]UploadObj, count)
+	data, err := s.service.getPresignedUrls(qType, count, qMime)
 
-	// get the presigned url for each file
-	for i := 0; i < int(count); i++ {
-		key := uuid.New()
-		fileExtension := getFileExtensionFromMimeType(qMime)
-
-		// Filename is random uuid + file extension
-		filename := constructFilename(key.String(), fileExtension)
-
-		// Expiration time for the presigned url
-		exp := time.Duration(viper.GetInt(config.UPLOAD_PRESIGNED_URL_EXP_MIN)) * time.Minute
-
-		// Get the presigned url for the file
-		u, err := s.Upload.Client.PresignedPutObject(context.Background(), qType, filename, exp)
-
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, h.ErrResponse{
-				Message: ErrPresignedUrlCreation.Error(),
-			})
-		}
-
-		data[i] = UploadObj{
-			Url: u.String(),
-			Key: key.String(),
-		}
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errPresignedUrlCreation.Error())
 	}
 
 	return c.JSON(http.StatusCreated, h.Response[[]UploadObj]{
