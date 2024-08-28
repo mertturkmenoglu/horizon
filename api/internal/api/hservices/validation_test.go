@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+const errFmtStr = "Expected %v, got %v"
+
 func TestAllValidTimespanStringsShouldReturnTrue(t *testing.T) {
 	inputs := ValidTimespans
 
@@ -13,7 +15,7 @@ func TestAllValidTimespanStringsShouldReturnTrue(t *testing.T) {
 		actual := isValidTimespan(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -32,7 +34,7 @@ func TestInvalidTimespanStringsShouldReturnFalse(t *testing.T) {
 		actual := isValidTimespan(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -45,7 +47,7 @@ func TestValidPriceUnitStringsShouldReturnTrue(t *testing.T) {
 		actual := isValidPriceUnit(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -83,7 +85,7 @@ func TestInvalidPriceUnitStringsShouldReturnFalse(t *testing.T) {
 		actual := isValidPriceUnit(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -116,7 +118,7 @@ func TestInvalidMediaStringsShouldReturnFalse(t *testing.T) {
 		actual := isValidMedia(input)
 
 		if actual != expected {
-			t.Errorf("Expected %v, got %v", expected, actual)
+			t.Errorf(errFmtStr, expected, actual)
 		}
 	}
 }
@@ -144,6 +146,6 @@ func TestValidMediaShouldRetunTrue(t *testing.T) {
 	actual := isValidMedia(string(str))
 
 	if actual != expected {
-		t.Errorf("Expected %v, got %v", expected, actual)
+		t.Errorf(errFmtStr, expected, actual)
 	}
 }

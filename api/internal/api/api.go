@@ -118,14 +118,7 @@ func (s *Service) RegisterRoutes() *echo.Echo {
 
 	m.Uploads.RegisterRoutes(api)
 
-	hservicesRoutes := api.Group("/hservices")
-	{
-		hservicesRoutes.POST("/",
-			m.HServices.HandlerCreateHService, middlewares.IsAuth, middlewares.ParseBody[hservices.CreateHServiceRequestDto])
-		hservicesRoutes.GET("/", m.HServices.HandlerGetMyHServices, middlewares.IsAuth)
-		hservicesRoutes.GET("/:id", m.HServices.HandlerGetHServiceById, middlewares.WithAuth)
-		hservicesRoutes.GET("/user/:username", m.HServices.HandlerGetHServicesByUsername)
-	}
+	m.HServices.RegisterRoutes(api)
 
 	m.Users.RegisterRoutes(api)
 
