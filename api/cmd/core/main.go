@@ -33,6 +33,10 @@ import (
 // @license.url	https://mit-license.org/
 // @host			localhost:5000
 // @BasePath		/api
+// @securityDefinitions.apikey	CookieAuth
+// @in							cookie
+// @name						__horizon_auth
+// @description			Cookie based session authentication
 func main() {
 	config.Bootstrap()
 
