@@ -1,5 +1,110 @@
 basePath: /api
 definitions:
+  aggregations.GetHomeAggregationsResponseDto:
+    description: Response for home aggregations
+    properties:
+      favorites:
+        items:
+          $ref: '#/definitions/aggregations.HServiceResponseDto'
+        type: array
+      featured:
+        items:
+          $ref: '#/definitions/aggregations.HServiceResponseDto'
+        type: array
+      new:
+        items:
+          $ref: '#/definitions/aggregations.HServiceResponseDto'
+        type: array
+      popular:
+        items:
+          $ref: '#/definitions/aggregations.HServiceResponseDto'
+        type: array
+    type: object
+  aggregations.HServiceResponseDto:
+    description: Basic service information with user information
+    properties:
+      category:
+        example: 1
+        type: integer
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      deliveryTime:
+        example: 1
+        type: integer
+      deliveryTimespan:
+        example: HOURLY
+        type: string
+      description:
+        example: Example service description
+        type: string
+      id:
+        example: "7234882566245847040"
+        type: string
+      isOnline:
+        example: true
+        type: boolean
+      location:
+        example: Example Location
+        type: string
+      media:
+        additionalProperties: {}
+        type: object
+      price:
+        example: 10
+        type: number
+      priceTimespan:
+        example: HOURLY
+        type: string
+      priceUnit:
+        example: USD
+        type: string
+      slug:
+        example: example-service
+        type: string
+      title:
+        example: Example Service
+        type: string
+      totalPoints:
+        example: 50
+        type: integer
+      totalVotes:
+        example: 10
+        type: integer
+      updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      url:
+        example: https://example.com
+        type: string
+      user:
+        $ref: '#/definitions/aggregations.UserResponseDto'
+      userId:
+        example: "528696135489945615"
+        type: string
+    type: object
+  aggregations.UserResponseDto:
+    description: Basic user information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      gender:
+        example: male
+        type: string
+      id:
+        example: "528696135489945615"
+        type: string
+      profileImage:
+        example: https://example.com/image.jpg
+        type: string
+      username:
+        example: johndoe
+        type: string
+    type: object
   health.GetHealthResponseDto:
     description: Generic response dto
     properties:
@@ -20,6 +125,24 @@ info:
   title: Horizon API
   version: "1.0"
 paths:
+  /aggregations/home:
+    get:
+      consumes:
+      - application/json
+      description: An endpoint to fetch multiple homepage queries
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/aggregations.GetHomeAggregationsResponseDto'
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: An endpoint to fetch multiple homepage queries
+      tags:
+      - aggregations
   /health/:
     get:
       consumes:

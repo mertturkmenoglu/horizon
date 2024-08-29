@@ -24,6 +24,33 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/aggregations/home": {
+            "get": {
+                "description": "An endpoint to fetch multiple homepage queries",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aggregations"
+                ],
+                "summary": "An endpoint to fetch multiple homepage queries",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/aggregations.GetHomeAggregationsResponseDto"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/health/": {
             "get": {
                 "description": "An endpoint to be used by load balancers to check the health of the service.",
@@ -49,6 +76,151 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "aggregations.GetHomeAggregationsResponseDto": {
+            "description": "Response for home aggregations",
+            "type": "object",
+            "properties": {
+                "favorites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
+                    }
+                },
+                "featured": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
+                    }
+                },
+                "new": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
+                    }
+                },
+                "popular": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
+                    }
+                }
+            }
+        },
+        "aggregations.HServiceResponseDto": {
+            "description": "Basic service information with user information",
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "deliveryTime": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "deliveryTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Example service description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7234882566245847040"
+                },
+                "isOnline": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "location": {
+                    "type": "string",
+                    "example": "Example Location"
+                },
+                "media": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "price": {
+                    "type": "number",
+                    "example": 10
+                },
+                "priceTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "priceUnit": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "example-service"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example Service"
+                },
+                "totalPoints": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "totalVotes": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com"
+                },
+                "user": {
+                    "$ref": "#/definitions/aggregations.UserResponseDto"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "aggregations.UserResponseDto": {
+            "description": "Basic user information",
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                },
+                "profileImage": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "johndoe"
+                }
+            }
+        },
         "health.GetHealthResponseDto": {
             "description": "Generic response dto",
             "type": "object",
