@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"horizon/config"
 	"horizon/internal/api"
 	"horizon/internal/db"
@@ -15,22 +16,23 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
 
+	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
 	_ "horizon/swaggerdocs"
 )
 
-//	@title			Horizon API
-//	@version		1.0
-//	@description	Horizon backend services
-//	@termsOfService	http://localhost:3000/terms
-//	@contact.name	Mert Turkmenoglu
-//	@contact.url	https://mertturkmenoglu.com
-//	@contact.email	gethorizonapp@gmail.com
-//	@license.name	MIT
-//	@license.url	https://mit-license.org/
-//	@host			localhost:5000
-//	@BasePath		/api
+// @title			Horizon API
+// @version		1.0
+// @description	Horizon backend services
+// @termsOfService	http://localhost:3000/terms
+// @contact.name	Mert Turkmenoglu
+// @contact.url	https://mertturkmenoglu.com
+// @contact.email	gethorizonapp@gmail.com
+// @license.name	MIT
+// @license.url	https://mit-license.org/
+// @host			localhost:5000
+// @BasePath		/api
 func main() {
 	config.Bootstrap()
 
@@ -38,6 +40,22 @@ func main() {
 	e := a.RegisterRoutes()
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	e.GET("/scalar", func(c echo.Context) error {
+		htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
+			SpecURL: "./swaggerdocs/swagger.json",
+			CustomOptions: scalar.CustomOptions{
+				PageTitle: "Scalar Docs",
+			},
+			DarkMode: true,
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
+		return c.HTML(http.StatusOK, htmlContent)
+	})
 
 	api.InitGlobalMiddlewares(e)
 
