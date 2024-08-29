@@ -8,6 +8,7 @@
 - sqlc: https://sqlc.dev/
 - go migration: https://github.com/golang-migrate/migrate
 - air: https://github.com/air-verse/air
+- swag: https://github.com/swaggo/swag
 
 ## Steps
 
@@ -27,3 +28,4 @@ Follow these steps in this specific order:
 - Read `read-location.md` file.
 - Read `fake.md` file.
 - Read `search-sync.md` file.
+- Read `swagger.md` file.
