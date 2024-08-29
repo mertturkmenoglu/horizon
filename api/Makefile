@@ -36,9 +36,15 @@ sqlc-generate:
 search-sync:
 	@go run cmd/search-sync/main.go
 
+gen-swagger:
+	@swag init --parseInternal --parseDependency --dir ./cmd/core,./internal/api --output ./swaggerdocs
+
+fmt-swagger:
+	@swag fmt --dir ./cmd/core,./internal/api
+
 create-migration:
 	@read -p "Give migration a name: " migrationname; \
 	migrate create -ext sql -dir internal/db/migrations -seq $$migrationname; \
 	echo "Created migration with name $$migrationname. Update sql files."
 
-.PHONY: all build run clean watch read-location generate-fake-data sqlc-generate create-migration
+.PHONY: all build run clean watch read-location generate-fake-data sqlc-generate create-migration gen-swagger fmt-swagger
