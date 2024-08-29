@@ -18,7 +18,12 @@ import {
 import api from '@/lib/api';
 import { getAuth } from '@/lib/auth';
 import { GetListByIdResponseDto } from '@/lib/dto';
-import { EllipsisVertical, FlagIcon, TrashIcon } from 'lucide-react';
+import {
+  EllipsisVertical,
+  FlagIcon,
+  PencilIcon,
+  TrashIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import DeleteButton from './_components/delete-button';
 import Items from './_components/items';
@@ -46,12 +51,27 @@ export default async function Page({ params: { id } }: Readonly<Props>) {
 
   return (
     <div>
-      <div className="flex items-end justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex flex-col justify-start">
           <BackLink href="/lists" />
-          <h2 className="text-2xl font-semibold tracking-tight">
-            {list.title}
-          </h2>
+          <div className="group flex items-center gap-2">
+            <h2 className="line-clamp-1 text-2xl font-semibold tracking-tight">
+              {list.title}
+            </h2>
+            <Link href={`/lists/${id}/edit`}>
+              <Button
+                className="flex justify-start"
+                variant="link"
+                size="sm"
+                asChild
+              >
+                <div>
+                  <PencilIcon className="mr-2 size-4" />
+                  Edit
+                </div>
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <Dialog>
@@ -72,19 +92,21 @@ export default async function Page({ params: { id } }: Readonly<Props>) {
               className="mr-4 w-32 space-y-2 p-2"
               align="end"
             >
-              <DropdownMenuItem className="cursor-pointer p-0">
-                <Button
-                  className="flex w-full justify-start hover:no-underline"
-                  variant="link"
-                  size="sm"
-                  asChild
-                >
-                  <Link href={`/report?id=${id}&type=list`}>
-                    <FlagIcon className="mr-2 size-4" />
-                    Report
-                  </Link>
-                </Button>
-              </DropdownMenuItem>
+              {!belongsToCurrentUser && (
+                <DropdownMenuItem className="cursor-pointer p-0">
+                  <Button
+                    className="flex w-full justify-start hover:no-underline"
+                    variant="link"
+                    size="sm"
+                    asChild
+                  >
+                    <Link href={`/report?id=${id}&type=list`}>
+                      <FlagIcon className="mr-2 size-4" />
+                      Report
+                    </Link>
+                  </Button>
+                </DropdownMenuItem>
+              )}
               {belongsToCurrentUser && (
                 <DialogTrigger asChild>
                   <DropdownMenuItem className="cursor-pointer p-0">
