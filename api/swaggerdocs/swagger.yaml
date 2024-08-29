@@ -229,15 +229,118 @@ definitions:
     required:
     - email
     type: object
+  bookmarks.BookmarksResponseDto:
+    properties:
+      createdAt:
+        type: string
+      hservice:
+        $ref: '#/definitions/bookmarks.HServiceDto'
+      hserviceId:
+        type: string
+      id:
+        type: string
+      userId:
+        type: string
+    type: object
+  bookmarks.CreateBookmarkRequestDto:
+    properties:
+      hserviceId:
+        maxLength: 64
+        minLength: 1
+        type: string
+    required:
+    - hserviceId
+    type: object
+  bookmarks.CreateBookmarkResponseDto:
+    properties:
+      id:
+        type: string
+    type: object
+  bookmarks.HServiceDto:
+    properties:
+      category:
+        type: integer
+      createdAt:
+        type: string
+      deliveryTime:
+        type: integer
+      deliveryTimespan:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      isOnline:
+        type: boolean
+      location:
+        type: string
+      media:
+        additionalProperties: {}
+        type: object
+      price:
+        type: number
+      priceTimespan:
+        type: string
+      priceUnit:
+        type: string
+      slug:
+        type: string
+      title:
+        type: string
+      totalPoints:
+        type: integer
+      totalVotes:
+        type: integer
+      updatedAt:
+        type: string
+      url:
+        type: string
+      userId:
+        type: string
+    type: object
   echo.HTTPError:
     properties:
       message: {}
+    type: object
+  h.PaginatedResponse-array_bookmarks_BookmarksResponseDto:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/bookmarks.BookmarksResponseDto'
+        type: array
+      pagination:
+        $ref: '#/definitions/pagination.Pagination'
+    type: object
+  h.Response-bookmarks_CreateBookmarkResponseDto:
+    properties:
+      data:
+        $ref: '#/definitions/bookmarks.CreateBookmarkResponseDto'
+    type: object
+  h.Response-bool:
+    properties:
+      data:
+        type: boolean
     type: object
   health.GetHealthResponseDto:
     description: GetHealthResponseDto
     properties:
       message:
         type: string
+    type: object
+  pagination.Pagination:
+    properties:
+      hasNext:
+        type: boolean
+      hasPrevious:
+        type: boolean
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      totalPages:
+        type: integer
+      totalRecords:
+        type: integer
     type: object
 host: localhost:5000
 info:
@@ -506,6 +609,119 @@ paths:
       summary: Verify email
       tags:
       - Auth
+  /bookmarks:
+    get:
+      consumes:
+      - application/json
+      description: Gets all bookmarks for the current user
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.PaginatedResponse-array_bookmarks_BookmarksResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Get bookmarks
+      tags:
+      - Bookmarks
+    post:
+      consumes:
+      - application/json
+      description: Creates a new bookmark with the given HService ID for the current
+        user
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/bookmarks.CreateBookmarkRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-bookmarks_CreateBookmarkResponseDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Create a new bookmark
+      tags:
+      - Bookmarks
+  /bookmarks/{hservice_id}:
+    delete:
+      description: Deletes a bookmark with the given HService ID for the current user
+      parameters:
+      - description: HService ID
+        in: path
+        name: hservice_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Delete a bookmark
+      tags:
+      - Bookmarks
+    get:
+      consumes:
+      - application/json
+      description: Checks if a bookmark exists for the current user
+      parameters:
+      - description: HService ID
+        in: path
+        name: hservice_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-bool'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Check if a bookmark exists
+      tags:
+      - Bookmarks
   /health/:
     get:
       consumes:
@@ -522,4 +738,10 @@ paths:
       summary: Health Check
       tags:
       - Health
+securityDefinitions:
+  CookieAuth:
+    description: Cookie based session authentication
+    in: cookie
+    name: __horizon_auth
+    type: apiKey
 swagger: "2.0"
