@@ -1,0 +1,56 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Horizon backend services",
+        "title": "Horizon API",
+        "termsOfService": "http://localhost:3000/terms",
+        "contact": {
+            "name": "Mert Turkmenoglu",
+            "url": "https://mertturkmenoglu.com",
+            "email": "gethorizonapp@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://mit-license.org/"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "paths": {
+        "/health/": {
+            "get": {
+                "description": "An endpoint to be used by load balancers to check the health of the service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Returns ok message",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/health.GetHealthResponseDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "health.GetHealthResponseDto": {
+            "description": "Generic response dto",
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

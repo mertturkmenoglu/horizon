@@ -1,0 +1,39 @@
+basePath: /api
+definitions:
+  health.GetHealthResponseDto:
+    description: Generic response dto
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: gethorizonapp@gmail.com
+    name: Mert Turkmenoglu
+    url: https://mertturkmenoglu.com
+  description: Horizon backend services
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  termsOfService: http://localhost:3000/terms
+  title: Horizon API
+  version: "1.0"
+paths:
+  /health/:
+    get:
+      consumes:
+      - application/json
+      description: An endpoint to be used by load balancers to check the health of
+        the service.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/health.GetHealthResponseDto'
+      summary: Returns ok message
+      tags:
+      - health
+swagger: "2.0"
