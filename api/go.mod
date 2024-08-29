@@ -3,6 +3,7 @@ module horizon
 go 1.22.5
 
 require (
+	github.com/MarceloPetrucio/go-scalar-api-reference v0.0.0-20240521013641-ce5d2efe0e06
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.3.0
