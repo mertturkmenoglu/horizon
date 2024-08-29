@@ -34,12 +34,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "aggregations"
+                    "Aggregations"
                 ],
-                "summary": "An endpoint to fetch multiple homepage queries",
+                "summary": "Fetch multiple homepage entities in a single request",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Successful request",
                         "schema": {
                             "$ref": "#/definitions/aggregations.GetHomeAggregationsResponseDto"
                         }
@@ -61,17 +61,72 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "summary": "Login with email and password",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequestDto"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     },
                     "400": {
-                        "description": "ErrInvalidEmailOrPassword",
-                        "schema": {}
+                        "description": "Invalid email or password",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/credentials/register": {
+            "post": {
+                "description": "Registers a new user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register with email and password",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Invalid email or username",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     }
                 }
             }
@@ -92,7 +147,9 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     }
                 }
             }
@@ -113,11 +170,15 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     }
                 }
             }
@@ -138,11 +199,15 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     }
                 }
             }
@@ -169,7 +234,49 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify-email/send": {
+            "post": {
+                "description": "Sends a verification email to the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send verification email",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.SendVerificationEmailRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid email or email already verified",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
                     }
                 }
             }
@@ -349,6 +456,7 @@ const docTemplate = `{
             "properties": {
                 "createdAt": {
                     "type": "string",
+                    "format": "date-time",
                     "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "email": {
@@ -393,12 +501,88 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string",
+                    "format": "date-time",
                     "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "username": {
                     "type": "string",
                     "example": "johndoe"
                 }
+            }
+        },
+        "auth.LoginRequestDto": {
+            "description": "Login request dto",
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 128,
+                    "minLength": 6,
+                    "example": "password123"
+                }
+            }
+        },
+        "auth.RegisterRequestDto": {
+            "type": "object",
+            "required": [
+                "email",
+                "fullName",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 3,
+                    "example": "johndoe@example.com"
+                },
+                "fullName": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 3,
+                    "example": "John Doe"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 128,
+                    "minLength": 6,
+                    "example": "password123"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 4,
+                    "example": "johndoe"
+                }
+            }
+        },
+        "auth.SendVerificationEmailRequestDto": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                }
+            }
+        },
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
             }
         },
         "health.GetHealthResponseDto": {
