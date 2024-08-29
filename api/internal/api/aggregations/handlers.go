@@ -7,6 +7,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetHomeAggregations godoc
+//
+//	@Summary		An endpoint to fetch multiple homepage queries
+//	@Description	An endpoint to fetch multiple homepage queries
+//	@Tags			aggregations
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{object}	GetHomeAggregationsResponseDto
+//	@Failure		500		{object}	error
+//	@Router			/aggregations/home [get]
 func (s *handlers) HandlerGetHomeAggregations(c echo.Context) error {
 	cacheRes, err := s.service.checkCacheHomeAggregations()
 
