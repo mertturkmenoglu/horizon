@@ -15,19 +15,19 @@ type RegisterRequestDto struct {
 }
 
 type GetMeResponseDto struct {
-	ID              string    `json:"id"`
-	Email           string    `json:"email"`
-	Username        string    `json:"username"`
-	FullName        string    `json:"fullName"`
-	GoogleID        *string   `json:"googleId"`
-	IsEmailVerified bool      `json:"isEmailVerified"`
-	IsActive        bool      `json:"isActive"`
-	Role            string    `json:"role"`
-	Gender          *string   `json:"gender"`
-	ProfileImage    *string   `json:"profileImage"`
-	LastLogin       time.Time `json:"lastLogin"`
-	CreatedAt       time.Time `json:"createdAt"`
-	UpdatedAt       time.Time `json:"updatedAt"`
+	ID              string    `json:"id" example:"528696135489945615"`
+	Email           string    `json:"email" example:"johndoe@example.com"`
+	Username        string    `json:"username" example:"johndoe"`
+	FullName        string    `json:"fullName" example:"John Doe"`
+	GoogleID        *string   `json:"googleId" example:"10887502189381205719451"`
+	IsEmailVerified bool      `json:"isEmailVerified" example:"true"`
+	IsActive        bool      `json:"isActive" example:"true"`
+	Role            string    `json:"role" example:"user"`
+	Gender          *string   `json:"gender" example:"male"`
+	ProfileImage    *string   `json:"profileImage" example:"https://example.com/image.jpg"`
+	LastLogin       time.Time `json:"lastLogin" example:"2024-08-26T10:24:13.508676+03:00"`
+	CreatedAt       time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00"`
+	UpdatedAt       time.Time `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00"`
 }
 
 type SendVerificationEmailRequestDto struct {

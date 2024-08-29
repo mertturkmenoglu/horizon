@@ -17,6 +17,15 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Login With Google godoc
+//
+//	@Summary		Login with Google OAuth2
+//	@Description	Login with Google OAuth2
+//	@Tags			Auth
+//	@Accept			json
+//	@Success		307
+//	@Failure		500	{object}	error
+//	@Router			/auth/google [get]
 func (s *handlers) HandlerGoogle(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
@@ -37,6 +46,16 @@ func (s *handlers) HandlerGoogle(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
+// Google Callback godoc
+//
+//	@Summary		Google OAuth2 callback
+//	@Description	Google OAuth2 callback
+//	@Tags			Auth
+//	@Accept			json
+//	@Success		307
+//	@Failure		400						{object}	error
+//	@Failure		500						{object}	error
+//	@Router			/auth/google/callback	[get]
 func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
@@ -81,6 +100,16 @@ func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 	return c.Redirect(http.StatusTemporaryRedirect, redirectUrl)
 }
 
+// Get Me godoc
+//
+//	@Summary		Gets the current user
+//	@Description	Gets the currently authenticated user or returns an error
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Success		200 {object}	GetMeResponseDto
+//	@Failure		401	{object}	error
+//	@Router			/auth/me [get]
 func (s *handlers) HandlerGetMe(c echo.Context) error {
 	user := c.Get("user").(db.User)
 	res := mapGetMeResponseToDto(user)
@@ -90,6 +119,16 @@ func (s *handlers) HandlerGetMe(c echo.Context) error {
 	})
 }
 
+// Logout godoc
+//
+//	@Summary		Logs out the current user
+//	@Description	Logs out the current user
+//	@Tags			Auth
+//	@Accept			json
+//	@Success		204
+//	@Failure		401	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/auth/logout [post]
 func (s *handlers) HandlerLogout(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
