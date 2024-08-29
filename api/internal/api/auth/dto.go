@@ -2,16 +2,19 @@ package auth
 
 import "time"
 
+// LoginRequestDto godoc
+//
+// @Description Login request dto
 type LoginRequestDto struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email    string `json:"email" validate:"required,email" example:"johndoe@example.com"`
+	Password string `json:"password" validate:"required" example:"password123" minLength:"6" maxLength:"128" format:"password"`
 }
 
 type RegisterRequestDto struct {
-	FullName string `json:"fullName" validate:"required,min=3,max=128"`
-	Email    string `json:"email" validate:"required,email,max=128"`
-	Username string `json:"username" validate:"required,min=4,max=32"`
-	Password string `json:"password" validate:"required,min=6,max=128"`
+	FullName string `json:"fullName" validate:"required,min=3,max=128" example:"John Doe" minLength:"3" maxLength:"128"`
+	Email    string `json:"email" validate:"required,email,max=128" example:"johndoe@example.com" minLength:"3" maxLength:"128"`
+	Username string `json:"username" validate:"required,min=4,max=32" example:"johndoe" minLength:"4" maxLength:"32"`
+	Password string `json:"password" validate:"required,min=6,max=128" example:"password123" minLength:"6" maxLength:"128" format:"password"`
 }
 
 type GetMeResponseDto struct {
@@ -26,22 +29,22 @@ type GetMeResponseDto struct {
 	Gender          *string   `json:"gender" example:"male"`
 	ProfileImage    *string   `json:"profileImage" example:"https://example.com/image.jpg"`
 	LastLogin       time.Time `json:"lastLogin" example:"2024-08-26T10:24:13.508676+03:00"`
-	CreatedAt       time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00"`
-	UpdatedAt       time.Time `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00"`
+	CreatedAt       time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" format:"date-time"`
+	UpdatedAt       time.Time `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00" format:"date-time"`
 }
 
 type SendVerificationEmailRequestDto struct {
-	Email string `json:"email" validate:"required,email"`
+	Email string `json:"email" validate:"required,email" example:"johndoe@example.com"`
 }
 
 type SendForgotPasswordEmailRequestDto struct {
-	Email string `json:"email" validate:"required,email"`
+	Email string `json:"email" validate:"required,email" example:"johndoe@example.com"`
 }
 
 type ResetPasswordRequestDto struct {
-	Email       string `json:"email" validate:"required,email"`
-	Code        string `json:"code" validate:"required"`
-	NewPassword string `json:"newPassword" validate:"required"`
+	Email       string `json:"email" validate:"required,email" example:"johndoe@example.com"`
+	Code        string `json:"code" validate:"required" example:"123456"`
+	NewPassword string `json:"newPassword" validate:"required,min=6,max=128" example:"password123" minLength:"6" maxLength:"128" format:"password"`
 }
 
 type googleUser struct {

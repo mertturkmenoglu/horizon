@@ -24,7 +24,7 @@ import (
 //	@Tags			Auth
 //	@Accept			json
 //	@Success		307
-//	@Failure		500	{object}	error
+//	@Failure		500	{object}	echo.HTTPError
 //	@Router			/auth/google [get]
 func (s *handlers) HandlerGoogle(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
@@ -53,8 +53,8 @@ func (s *handlers) HandlerGoogle(c echo.Context) error {
 //	@Tags			Auth
 //	@Accept			json
 //	@Success		307
-//	@Failure		400						{object}	error
-//	@Failure		500						{object}	error
+//	@Failure		400						{object}	echo.HTTPError
+//	@Failure		500						{object}	echo.HTTPError
 //	@Router			/auth/google/callback	[get]
 func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
@@ -108,7 +108,7 @@ func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	GetMeResponseDto
-//	@Failure		401	{object}	error
+//	@Failure		401	{object}	echo.HTTPError
 //	@Router			/auth/me [get]
 func (s *handlers) HandlerGetMe(c echo.Context) error {
 	user := c.Get("user").(db.User)
@@ -126,8 +126,8 @@ func (s *handlers) HandlerGetMe(c echo.Context) error {
 //	@Tags			Auth
 //	@Accept			json
 //	@Success		204
-//	@Failure		401	{object}	error
-//	@Failure		500	{object}	error
+//	@Failure		401	{object}	echo.HTTPError
+//	@Failure		500	{object}	echo.HTTPError
 //	@Router			/auth/logout [post]
 func (s *handlers) HandlerLogout(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
@@ -150,9 +150,10 @@ func (s *handlers) HandlerLogout(c echo.Context) error {
 //	@Description	Logs in the user with email and password
 //	@Tags			Auth
 //	@Accept			json
+//	@Param			body	body	LoginRequestDto	true	"Request body"
 //	@Success		200
-//	@Failure		400	{object}	error	"Invalid email or password"
-//	@Failure		500	{object}	error "Internal Server Error"
+//	@Failure		400	{object}	echo.HTTPError	"Invalid email or password"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
 //	@Router			/auth/credentials/login [post]
 func (s *handlers) HandlerCredentialsLogin(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
@@ -190,6 +191,17 @@ func (s *handlers) HandlerCredentialsLogin(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// Credentials Register godoc
+//
+//	@Summary		Register with email and password
+//	@Description	Registers a new user with email and password
+//	@Tags			Auth
+//	@Accept			json
+//	@Param			body	body	RegisterRequestDto	true	"Request body"
+//	@Success		201
+//	@Failure		400	{object}	echo.HTTPError	"Invalid email or username"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/auth/credentials/register [post]
 func (s *handlers) HandlerCredentialsRegister(c echo.Context) error {
 	body := c.Get("body").(RegisterRequestDto)
 	err := s.service.checkIfEmailOrUsernameIsTaken(body.Email, body.Username)
@@ -219,6 +231,17 @@ func (s *handlers) HandlerCredentialsRegister(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
+// Send Verification Email godoc
+//
+//	@Summary		Send verification email
+//	@Description	Sends a verification email to the user
+//	@Tags			Auth
+//	@Accept			json
+//	@Param			body	body	SendVerificationEmailRequestDto	true	"Request body"
+//	@Success		200
+//	@Failure		400	{object}	echo.HTTPError	"Invalid email or email already verified"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/auth/verify-email/send [post]
 func (s *handlers) HandlerSendVerificationEmail(c echo.Context) error {
 	body := c.Get("body").(SendVerificationEmailRequestDto)
 	user, err := s.service.getUserByEmail(body.Email)

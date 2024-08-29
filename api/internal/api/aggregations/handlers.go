@@ -14,8 +14,8 @@ import (
 //	@Tags			Aggregations
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	GetHomeAggregationsResponseDto "Successful request"
-//	@Failure		500	{object}	error "Internal Server Error"
+//	@Success		200	{object}	GetHomeAggregationsResponseDto	"Successful request"
+//	@Failure		500	{object}	error							"Internal Server Error"
 //	@Router			/aggregations/home [get]
 func (s *handlers) HandlerGetHomeAggregations(c echo.Context) error {
 	cacheRes, err := s.service.checkCacheHomeAggregations()
