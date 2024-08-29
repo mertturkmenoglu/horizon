@@ -107,7 +107,7 @@ func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Success		200 {object}	GetMeResponseDto
+//	@Success		200	{object}	GetMeResponseDto
 //	@Failure		401	{object}	error
 //	@Router			/auth/me [get]
 func (s *handlers) HandlerGetMe(c echo.Context) error {
@@ -144,6 +144,16 @@ func (s *handlers) HandlerLogout(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
+// Credentials Login godoc
+//
+//	@Summary		Login with email and password
+//	@Description	Logs in the user with email and password
+//	@Tags			Auth
+//	@Accept			json
+//	@Success		200
+//	@Failure		400	{object}	error	"Invalid email or password"
+//	@Failure		500	{object}	error "Internal Server Error"
+//	@Router			/auth/credentials/login [post]
 func (s *handlers) HandlerCredentialsLogin(c echo.Context) error {
 	sess, err := session.Get(SESSION_NAME, c)
 
