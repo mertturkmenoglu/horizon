@@ -51,6 +51,104 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/google": {
+            "get": {
+                "description": "Login with Google OAuth2",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login with Google OAuth2",
+                "responses": {
+                    "307": {
+                        "description": "Temporary Redirect"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/auth/google/callback": {
+            "get": {
+                "description": "Google OAuth2 callback",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Google OAuth2 callback",
+                "responses": {
+                    "307": {
+                        "description": "Temporary Redirect"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "description": "Logs out the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logs out the current user",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "description": "Gets the currently authenticated user or returns an error",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Gets the current user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.GetMeResponseDto"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/health/": {
             "get": {
                 "description": "An endpoint to be used by load balancers to check the health of the service.",
@@ -214,6 +312,63 @@ const docTemplate = `{
                 "profileImage": {
                     "type": "string",
                     "example": "https://example.com/image.jpg"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "johndoe"
+                }
+            }
+        },
+        "auth.GetMeResponseDto": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                },
+                "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "googleId": {
+                    "type": "string",
+                    "example": "10887502189381205719451"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                },
+                "isActive": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "isEmailVerified": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "lastLogin": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "profileImage": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "role": {
+                    "type": "string",
+                    "example": "user"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "username": {
                     "type": "string",
