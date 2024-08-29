@@ -452,3 +452,20 @@ func (q *Queries) UpdateListItemOrderWithIndexRangeIncr(ctx context.Context, arg
 	_, err := q.db.Exec(ctx, updateListItemOrderWithIndexRangeIncr, arg.ListID, arg.ItemOrder, arg.ItemOrder_2)
 	return err
 }
+
+const updateListTitle = `-- name: UpdateListTitle :exec
+UPDATE lists
+SET title = $2
+WHERE id = $1 AND user_id = $3
+`
+
+type UpdateListTitleParams struct {
+	ID     string
+	Title  string
+	UserID string
+}
+
+func (q *Queries) UpdateListTitle(ctx context.Context, arg UpdateListTitleParams) error {
+	_, err := q.db.Exec(ctx, updateListTitle, arg.ID, arg.Title, arg.UserID)
+	return err
+}

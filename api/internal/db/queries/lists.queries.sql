@@ -91,3 +91,8 @@ WHERE
   list_id = $1 AND
   item_order >= $2 AND
   item_order <= $3;
+
+-- name: UpdateListTitle :exec
+UPDATE lists
+SET title = $2
+WHERE id = $1 AND user_id = $3;
