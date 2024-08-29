@@ -185,6 +185,23 @@ paths:
       summary: An endpoint to fetch multiple homepage queries
       tags:
       - aggregations
+  /auth/credentials/login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in the user with email and password
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: ErrInvalidEmailOrPassword
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Login with email and password
+      tags:
+      - Auth
   /auth/google:
     get:
       consumes:

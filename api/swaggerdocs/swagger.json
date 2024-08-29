@@ -45,6 +45,31 @@
                 }
             }
         },
+        "/auth/credentials/login": {
+            "post": {
+                "description": "Logs in the user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login with email and password",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "ErrInvalidEmailOrPassword",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/auth/google": {
             "get": {
                 "description": "Login with Google OAuth2",
