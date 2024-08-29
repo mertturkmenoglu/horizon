@@ -194,6 +194,33 @@ definitions:
     - password
     - username
     type: object
+  auth.ResetPasswordRequestDto:
+    properties:
+      code:
+        example: "123456"
+        type: string
+      email:
+        example: johndoe@example.com
+        type: string
+      newPassword:
+        example: password123
+        format: password
+        maxLength: 128
+        minLength: 6
+        type: string
+    required:
+    - code
+    - email
+    - newPassword
+    type: object
+  auth.SendForgotPasswordEmailRequestDto:
+    properties:
+      email:
+        example: johndoe@example.com
+        type: string
+    required:
+    - email
+    type: object
   auth.SendVerificationEmailRequestDto:
     properties:
       email:
@@ -296,6 +323,66 @@ paths:
       summary: Register with email and password
       tags:
       - Auth
+  /auth/forgot-password/reset:
+    post:
+      consumes:
+      - application/json
+      description: Resets the password of the user
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.ResetPasswordRequestDto'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid email or code
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Reset password
+      tags:
+      - Auth
+  /auth/forgot-password/send:
+    post:
+      consumes:
+      - application/json
+      description: Sends a forgot password email to the user
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SendForgotPasswordEmailRequestDto'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid email
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Send forgot password email
+      tags:
+      - Auth
   /auth/google:
     get:
       consumes:
@@ -392,6 +479,31 @@ paths:
           schema:
             $ref: '#/definitions/echo.HTTPError'
       summary: Send verification email
+      tags:
+      - Auth
+  /auth/verify-email/verify:
+    get:
+      consumes:
+      - application/json
+      description: Verifies the email of the user
+      parameters:
+      - description: Verification code
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid or expired verification code
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Verify email
       tags:
       - Auth
   /health/:

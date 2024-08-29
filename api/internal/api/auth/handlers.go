@@ -277,6 +277,17 @@ func (s *handlers) HandlerSendVerificationEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// Verify Email godoc
+//
+//	@Summary		Verify email
+//	@Description	Verifies the email of the user
+//	@Tags			Auth
+//	@Accept			json
+//	@Param			code	query	string	true	"Verification code"
+//	@Success		200
+//	@Failure		400	{object}	echo.HTTPError	"Invalid or expired verification code"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/auth/verify-email/verify [get]
 func (s *handlers) HandlerVerifyEmail(c echo.Context) error {
 	code := c.QueryParam("code")
 
@@ -315,12 +326,24 @@ func (s *handlers) HandlerVerifyEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// Send Forgot Password Email godoc
+//
+//	@Summary		Send forgot password email
+//	@Description	Sends a forgot password email to the user
+//	@Tags			Auth
+//	@Accept			json
+//	@Param			body	body	SendForgotPasswordEmailRequestDto	true	"Request body"
+//	@Success		200
+//	@Failure		400	{object}	echo.HTTPError	"Invalid email"
+//	@Failure		404	{object}	echo.HTTPError	"User not found"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/auth/forgot-password/send [post]
 func (s *handlers) HandlerSendForgotPasswordEmail(c echo.Context) error {
 	body := c.Get("body").(SendForgotPasswordEmailRequestDto)
 	_, err := s.service.getUserByEmail(body.Email)
 
 	if err != nil {
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
 
 	code, err := random.DigitsString(6)
@@ -344,6 +367,18 @@ func (s *handlers) HandlerSendForgotPasswordEmail(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+// Reset Password godoc
+//
+//	@Summary		Reset password
+//	@Description	Resets the password of the user
+//	@Tags			Auth
+//	@Accept			json
+//	@Param			body	body	ResetPasswordRequestDto	true	"Request body"
+//	@Success		200
+//	@Failure		400	{object}	echo.HTTPError	"Invalid email or code"
+//	@Failure		404	{object}	echo.HTTPError	"User not found"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/auth/forgot-password/reset [post]
 func (s *handlers) HandlerResetPassword(c echo.Context) error {
 	body := c.Get("body").(ResetPasswordRequestDto)
 	user, err := s.service.getUserByEmail(body.Email)
@@ -366,7 +401,7 @@ func (s *handlers) HandlerResetPassword(c echo.Context) error {
 	err = s.service.updateUserPassword(user.ID, body.NewPassword)
 
 	if err != nil {
-		return echo.ErrInternalServerError
+		return h.HandleDbErr(c, err)
 	}
 
 	err = s.cache.Del(key)
