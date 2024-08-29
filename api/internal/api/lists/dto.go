@@ -105,3 +105,7 @@ type CreateListItemResponseDto struct {
 	HserviceId string `json:"hserviceId"`
 	ItemOrder  int    `json:"itemOrder"`
 }
+
+type UpdateListRequestDto struct {
+	Title string `json:"title" validate:"required,min=5,max=128"`
+}

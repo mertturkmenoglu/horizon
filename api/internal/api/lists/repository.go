@@ -154,3 +154,11 @@ func (r *repository) moveListItemAfter(listId string, itemId string, listItemOrd
 
 	return nil
 }
+
+func (r *repository) updateListTitle(id string, userId string, title string) error {
+	return r.db.Queries.UpdateListTitle(context.Background(), db.UpdateListTitleParams{
+		ID:     id,
+		UserID: userId,
+		Title:  title,
+	})
+}

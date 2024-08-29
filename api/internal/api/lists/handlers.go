@@ -201,3 +201,21 @@ func (s *handlers) MoveListItemAfter(c echo.Context) error {
 
 	return c.NoContent(http.StatusNoContent)
 }
+
+func (s *handlers) UpdateList(c echo.Context) error {
+	userId := c.Get("user_id").(string)
+	id := c.Param("id")
+	dto := c.Get("body").(UpdateListRequestDto)
+
+	if id == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, errIdRequired.Error())
+	}
+
+	err := s.service.updateListTitle(id, userId, dto.Title)
+
+	if err != nil {
+		return echo.ErrBadRequest
+	}
+
+	return c.NoContent(http.StatusNoContent)
+}

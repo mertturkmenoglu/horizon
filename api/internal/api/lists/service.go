@@ -169,3 +169,7 @@ func (s *service) moveListItemAfter(
 		return s.repository.moveListItemAfter(listId, listItem.ID, listItem.ItemOrder, afterItem.ItemOrder)
 	}
 }
+
+func (s *service) updateListTitle(id string, userId string, title string) error {
+	return s.repository.updateListTitle(id, userId, title)
+}

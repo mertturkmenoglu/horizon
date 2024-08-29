@@ -20,6 +20,7 @@ func (m *Module) RegisterRoutes(e *echo.Group) {
 			middlewares.IsAuth,
 			middlewares.ParseBody[CreateListItemRequestDto],
 		)
+		routes.PATCH("/:id", m.handlers.UpdateList, middlewares.IsAuth, middlewares.ParseBody[UpdateListRequestDto])
 		routes.DELETE("/:id", m.handlers.DeleteList, middlewares.IsAuth)
 		routes.DELETE("/:id/items/:itemId", m.handlers.DeleteListItem, middlewares.IsAuth)
 	}
