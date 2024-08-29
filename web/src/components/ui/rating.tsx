@@ -19,7 +19,7 @@ export function Rating({
   id,
   disabled,
   starsClassName,
-}: Props) {
+}: Readonly<Props>) {
   const [state, send] = useMachine(
     rating.machine({
       id,
