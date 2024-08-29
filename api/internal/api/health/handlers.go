@@ -8,9 +8,9 @@ import (
 
 // GetHealth godoc
 //
-//	@Summary		Returns ok message
+//	@Summary		Health Check
 //	@Description	An endpoint to be used by load balancers to check the health of the service.
-//	@Tags			health
+//	@Tags			Health
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	GetHealthResponseDto

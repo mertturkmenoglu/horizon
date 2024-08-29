@@ -421,9 +421,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "health"
+                    "Health"
                 ],
-                "summary": "Returns ok message",
+                "summary": "Health Check",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -753,7 +753,7 @@ const docTemplate = `{
             }
         },
         "health.GetHealthResponseDto": {
-            "description": "Generic response dto",
+            "description": "GetHealthResponseDto",
             "type": "object",
             "properties": {
                 "message": {

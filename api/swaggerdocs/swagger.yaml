@@ -234,7 +234,7 @@ definitions:
       message: {}
     type: object
   health.GetHealthResponseDto:
-    description: Generic response dto
+    description: GetHealthResponseDto
     properties:
       message:
         type: string
@@ -519,7 +519,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/health.GetHealthResponseDto'
-      summary: Returns ok message
+      summary: Health Check
       tags:
-      - health
+      - Health
 swagger: "2.0"

@@ -2,7 +2,7 @@ package health
 
 // GetHealthResponseDto godoc
 //
-// @Description	Generic response dto
+// @Description	GetHealthResponseDto
 type GetHealthResponseDto struct {
 	Message string `json:"message"`
 }
