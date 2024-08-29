@@ -14,13 +14,30 @@ import (
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "horizon/swaggerdocs"
 )
 
+//	@title			Horizon API
+//	@version		1.0
+//	@description	Horizon backend services
+//	@termsOfService	http://localhost:3000/terms
+//	@contact.name	Mert Turkmenoglu
+//	@contact.url	https://mertturkmenoglu.com
+//	@contact.email	gethorizonapp@gmail.com
+//	@license.name	MIT
+//	@license.url	https://mit-license.org/
+//	@host			localhost:5000
+//	@BasePath		/api
 func main() {
 	config.Bootstrap()
 
 	a := api.New()
 	e := a.RegisterRoutes()
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	api.InitGlobalMiddlewares(e)
 
