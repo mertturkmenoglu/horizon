@@ -8,6 +8,21 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Get New Upload URL godoc
+//
+//	@Summary		Get new upload URL
+//	@Description	Gets a new upload URL for the given type
+//	@Tags			Uploads
+//	@Accept			json
+//	@Produce		json
+//	@Param			type	query	string	true	"Type of upload"
+//	@Param			count	query	int	true	"Number of files to be uploaded" minimum(1) maximum(5)
+//	@Param			mime	query	string	true	"Mime type of the files to be uploaded"
+//	@Success		200	{object}	h.Response[[]UploadObj]	"Successful request"
+//	@Failure		400	{object}	echo.HTTPError	"Bad Request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Router			/uploads/new-url [get]
 func (s *handlers) GetNewUrl(c echo.Context) error {
 	// Get bucket name (type), how many files to be uploaded(count),
 	// and mime type from the query params
