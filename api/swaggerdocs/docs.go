@@ -706,11 +706,6 @@ const docTemplate = `{
         },
         "/favorites/username/{username}": {
             "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
                 "description": "Gets all favorites for the current user",
                 "consumes": [
                     "application/json"
@@ -752,12 +747,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/echo.HTTPError"
-                        }
-                    },
-                    "401": {
-                        "description": "Authentication failed",
                         "schema": {
                             "$ref": "#/definitions/echo.HTTPError"
                         }
@@ -882,6 +871,239 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/health.GetHealthResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/hservices": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Gets all hservices for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HServices"
+                ],
+                "summary": "Get my hservices",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Creates a new hservice with the given title for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HServices"
+                ],
+                "summary": "Create a new hservice",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hservices.CreateHServiceRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.Response-hservices_HServiceWithoutUserResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/hservices/user/{username}": {
+            "get": {
+                "description": "Gets all hservices for the given username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HServices"
+                ],
+                "summary": "Get hservices by username",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.PaginatedResponse-array_hservices_HServiceResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/hservices/{id}": {
+            "get": {
+                "description": "Gets a hservice with the given ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "HServices"
+                ],
+                "summary": "Get hservice by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "HService ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
                         }
                     }
                 }
@@ -1469,6 +1691,17 @@ const docTemplate = `{
                 }
             }
         },
+        "h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/hservices.HServiceResponseDto"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/hservices.HServiceMetadataDto"
+                }
+            }
+        },
         "h.PaginatedResponse-array_bookmarks_BookmarksResponseDto": {
             "type": "object",
             "properties": {
@@ -1490,6 +1723,34 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/favorites.FavoritesResponseDto"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/pagination.Pagination"
+                }
+            }
+        },
+        "h.PaginatedResponse-array_hservices_HServiceResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/hservices.HServiceResponseDto"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/pagination.Pagination"
+                }
+            }
+        },
+        "h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/hservices.HServiceWithoutUserResponseDto"
                     }
                 },
                 "pagination": {
@@ -1521,12 +1782,307 @@ const docTemplate = `{
                 }
             }
         },
+        "h.Response-hservices_HServiceWithoutUserResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/hservices.HServiceWithoutUserResponseDto"
+                }
+            }
+        },
         "health.GetHealthResponseDto": {
             "description": "GetHealthResponseDto",
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "hservices.CreateHServiceRequestDto": {
+            "description": "CreateHServiceRequestDto",
+            "type": "object",
+            "required": [
+                "category",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "isOnline",
+                "location",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "title"
+            ],
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "maximum": 32,
+                    "minimum": 1,
+                    "example": 1
+                },
+                "deliveryTime": {
+                    "type": "integer",
+                    "maximum": 32,
+                    "minimum": 1,
+                    "example": 1
+                },
+                "deliveryTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 4096,
+                    "minLength": 5,
+                    "example": "Example service description"
+                },
+                "isOnline": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "location": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "example": "Example Location"
+                },
+                "media": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "maximum": 10000,
+                    "minimum": 1,
+                    "example": 10
+                },
+                "priceTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "priceUnit": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 5,
+                    "example": "Example Service"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com"
+                }
+            }
+        },
+        "hservices.HServiceMetadataDto": {
+            "description": "HServiceMetadataDto",
+            "type": "object",
+            "properties": {
+                "isBookmarked": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "isFavorite": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "hservices.HServiceResponseDto": {
+            "description": "Basic service information with user information",
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "deliveryTime": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "deliveryTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Example service description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7234882566245847040"
+                },
+                "isOnline": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "location": {
+                    "type": "string",
+                    "example": "Example Location"
+                },
+                "media": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "price": {
+                    "type": "number"
+                },
+                "priceTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "priceUnit": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "example-service"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example Service"
+                },
+                "totalPoints": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "totalVotes": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com"
+                },
+                "user": {
+                    "$ref": "#/definitions/hservices.UserResponseDto"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "hservices.HServiceWithoutUserResponseDto": {
+            "description": "Basic service information without user information",
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "deliveryTime": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "deliveryTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Example service description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7234882566245847040"
+                },
+                "isOnline": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "location": {
+                    "type": "string",
+                    "example": "Example Location"
+                },
+                "media": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "price": {
+                    "type": "number",
+                    "example": 10
+                },
+                "priceTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "priceUnit": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "example-service"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example Service"
+                },
+                "totalPoints": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "totalVotes": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "hservices.UserResponseDto": {
+            "description": "Basic user information",
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                },
+                "profileImage": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "johndoe"
                 }
             }
         },
