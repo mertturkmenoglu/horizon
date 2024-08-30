@@ -1,26 +1,6 @@
 basePath: /api
 definitions:
-  aggregations.GetHomeAggregationsResponseDto:
-    description: Response for home aggregations
-    properties:
-      favorites:
-        items:
-          $ref: '#/definitions/aggregations.HServiceResponseDto'
-        type: array
-      featured:
-        items:
-          $ref: '#/definitions/aggregations.HServiceResponseDto'
-        type: array
-      new:
-        items:
-          $ref: '#/definitions/aggregations.HServiceResponseDto'
-        type: array
-      popular:
-        items:
-          $ref: '#/definitions/aggregations.HServiceResponseDto'
-        type: array
-    type: object
-  aggregations.HServiceResponseDto:
+  AggregationsHServiceResponseDto:
     description: Basic service information with user information
     properties:
       category:
@@ -78,12 +58,32 @@ definitions:
         example: https://example.com
         type: string
       user:
-        $ref: '#/definitions/aggregations.UserResponseDto'
+        $ref: '#/definitions/AggregationsUserResponseDto'
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - user
+    - userId
     type: object
-  aggregations.UserResponseDto:
+  AggregationsUserResponseDto:
     description: Basic user information
     properties:
       createdAt:
@@ -104,8 +104,13 @@ definitions:
       username:
         example: johndoe
         type: string
+    required:
+    - createdAt
+    - fullName
+    - id
+    - username
     type: object
-  auth.GetMeResponseDto:
+  AuthGetMeResponseDto:
     properties:
       createdAt:
         example: "2024-08-26T10:24:13.508676+03:00"
@@ -148,8 +153,19 @@ definitions:
       username:
         example: johndoe
         type: string
+    required:
+    - createdAt
+    - email
+    - fullName
+    - id
+    - isActive
+    - isEmailVerified
+    - lastLogin
+    - role
+    - updatedAt
+    - username
     type: object
-  auth.LoginRequestDto:
+  AuthLoginRequestDto:
     description: Login request dto
     properties:
       email:
@@ -165,7 +181,7 @@ definitions:
     - email
     - password
     type: object
-  auth.RegisterRequestDto:
+  AuthRegisterRequestDto:
     properties:
       email:
         example: johndoe@example.com
@@ -194,7 +210,7 @@ definitions:
     - password
     - username
     type: object
-  auth.ResetPasswordRequestDto:
+  AuthResetPasswordRequestDto:
     properties:
       code:
         example: "123456"
@@ -213,7 +229,7 @@ definitions:
     - email
     - newPassword
     type: object
-  auth.SendForgotPasswordEmailRequestDto:
+  AuthSendForgotPasswordEmailRequestDto:
     properties:
       email:
         example: johndoe@example.com
@@ -221,7 +237,7 @@ definitions:
     required:
     - email
     type: object
-  auth.SendVerificationEmailRequestDto:
+  AuthSendVerificationEmailRequestDto:
     properties:
       email:
         example: johndoe@example.com
@@ -229,14 +245,14 @@ definitions:
     required:
     - email
     type: object
-  bookmarks.BookmarksResponseDto:
+  BookmarksBookmarksResponseDto:
     description: Basic bookmark information
     properties:
       createdAt:
         example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       hservice:
-        $ref: '#/definitions/bookmarks.HServiceDto'
+        $ref: '#/definitions/BookmarksHServiceDto'
       hserviceId:
         example: "7235190573525635072"
         type: string
@@ -246,8 +262,14 @@ definitions:
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - createdAt
+    - hservice
+    - hserviceId
+    - id
+    - userId
     type: object
-  bookmarks.CreateBookmarkRequestDto:
+  BookmarksCreateBookmarkRequestDto:
     description: CreateBookmarkRequestDto
     properties:
       hserviceId:
@@ -258,14 +280,16 @@ definitions:
     required:
     - hserviceId
     type: object
-  bookmarks.CreateBookmarkResponseDto:
+  BookmarksCreateBookmarkResponseDto:
     description: CreateBookmarkResponseDto
     properties:
       id:
         example: "7235190573525635072"
         type: string
+    required:
+    - id
     type: object
-  bookmarks.HServiceDto:
+  BookmarksHServiceDto:
     description: Basic service information without user information
     properties:
       category:
@@ -325,12 +349,27 @@ definitions:
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - userId
     type: object
-  echo.HTTPError:
-    properties:
-      message: {}
-    type: object
-  favorites.CreateFavoriteRequestDto:
+  FavoritesCreateFavoriteRequestDto:
     description: CreateFavoriteRequestDto
     properties:
       hserviceId:
@@ -341,21 +380,23 @@ definitions:
     required:
     - hserviceId
     type: object
-  favorites.CreateFavoriteResponseDto:
+  FavoritesCreateFavoriteResponseDto:
     description: CreateFavoriteResponseDto
     properties:
       id:
         example: "7235190573525635072"
         type: string
+    required:
+    - id
     type: object
-  favorites.FavoritesResponseDto:
+  FavoritesFavoritesResponseDto:
     description: Basic favorite information
     properties:
       createdAt:
         example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       hservice:
-        $ref: '#/definitions/favorites.HServiceDto'
+        $ref: '#/definitions/FavoritesHServiceDto'
       hserviceId:
         example: "7235190573525635072"
         type: string
@@ -365,8 +406,14 @@ definitions:
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - createdAt
+    - hservice
+    - hserviceId
+    - id
+    - userId
     type: object
-  favorites.HServiceDto:
+  FavoritesHServiceDto:
     description: Basic service information without user information
     properties:
       category:
@@ -426,84 +473,78 @@ definitions:
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - userId
     type: object
-  h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto:
+  GetHomeAggregationsResponseDto:
+    description: Response for home aggregations
     properties:
-      data:
-        $ref: '#/definitions/hservices.HServiceResponseDto'
-      metadata:
-        $ref: '#/definitions/hservices.HServiceMetadataDto'
-    type: object
-  h.PaginatedResponse-array_bookmarks_BookmarksResponseDto:
-    properties:
-      data:
+      favorites:
         items:
-          $ref: '#/definitions/bookmarks.BookmarksResponseDto'
+          $ref: '#/definitions/AggregationsHServiceResponseDto'
         type: array
+      featured:
+        items:
+          $ref: '#/definitions/AggregationsHServiceResponseDto'
+        type: array
+      new:
+        items:
+          $ref: '#/definitions/AggregationsHServiceResponseDto'
+        type: array
+      popular:
+        items:
+          $ref: '#/definitions/AggregationsHServiceResponseDto'
+        type: array
+    required:
+    - favorites
+    - featured
+    - new
+    - popular
+    type: object
+  HMR:
+    description: Metadata Response
+    properties:
+      data: {}
+      metadata: {}
+    required:
+    - data
+    - metadata
+    type: object
+  HPR:
+    description: Paginated Response
+    properties:
+      data: {}
       pagination:
         $ref: '#/definitions/pagination.Pagination'
+    required:
+    - data
+    - pagination
     type: object
-  h.PaginatedResponse-array_favorites_FavoritesResponseDto:
+  HR:
+    description: Response
     properties:
-      data:
-        items:
-          $ref: '#/definitions/favorites.FavoritesResponseDto'
-        type: array
-      pagination:
-        $ref: '#/definitions/pagination.Pagination'
+      data: {}
+    required:
+    - data
     type: object
-  h.PaginatedResponse-array_hservices_HServiceResponseDto:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/hservices.HServiceResponseDto'
-        type: array
-      pagination:
-        $ref: '#/definitions/pagination.Pagination'
-    type: object
-  h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/hservices.HServiceWithoutUserResponseDto'
-        type: array
-      pagination:
-        $ref: '#/definitions/pagination.Pagination'
-    type: object
-  h.Response-array_uploads_UploadObj:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/uploads.UploadObj'
-        type: array
-    type: object
-  h.Response-bookmarks_CreateBookmarkResponseDto:
-    properties:
-      data:
-        $ref: '#/definitions/bookmarks.CreateBookmarkResponseDto'
-    type: object
-  h.Response-bool:
-    properties:
-      data:
-        type: boolean
-    type: object
-  h.Response-favorites_CreateFavoriteResponseDto:
-    properties:
-      data:
-        $ref: '#/definitions/favorites.CreateFavoriteResponseDto'
-    type: object
-  h.Response-hservices_HServiceWithoutUserResponseDto:
-    properties:
-      data:
-        $ref: '#/definitions/hservices.HServiceWithoutUserResponseDto'
-    type: object
-  health.GetHealthResponseDto:
-    description: GetHealthResponseDto
-    properties:
-      message:
-        type: string
-    type: object
-  hservices.CreateHServiceRequestDto:
+  HServicesCreateHServiceRequestDto:
     description: CreateHServiceRequestDto
     properties:
       category:
@@ -560,12 +601,13 @@ definitions:
     - description
     - isOnline
     - location
+    - media
     - price
     - priceTimespan
     - priceUnit
     - title
     type: object
-  hservices.HServiceMetadataDto:
+  HServicesHServiceMetadataDto:
     description: HServiceMetadataDto
     properties:
       isBookmarked:
@@ -574,8 +616,11 @@ definitions:
       isFavorite:
         example: true
         type: boolean
+    required:
+    - isBookmarked
+    - isFavorite
     type: object
-  hservices.HServiceResponseDto:
+  HServicesHServiceResponseDto:
     description: Basic service information with user information
     properties:
       category:
@@ -606,6 +651,7 @@ definitions:
         additionalProperties: {}
         type: object
       price:
+        example: 10
         type: number
       priceTimespan:
         example: HOURLY
@@ -632,12 +678,32 @@ definitions:
         example: https://example.com
         type: string
       user:
-        $ref: '#/definitions/hservices.UserResponseDto'
+        $ref: '#/definitions/HServicesUserResponseDto'
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - user
+    - userId
     type: object
-  hservices.HServiceWithoutUserResponseDto:
+  HServicesHServiceWithoutUserResponseDto:
     description: Basic service information without user information
     properties:
       category:
@@ -697,8 +763,27 @@ definitions:
       userId:
         example: "528696135489945615"
         type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - userId
     type: object
-  hservices.UserResponseDto:
+  HServicesUserResponseDto:
     description: Basic user information
     properties:
       createdAt:
@@ -719,6 +804,36 @@ definitions:
       username:
         example: johndoe
         type: string
+    required:
+    - createdAt
+    - fullName
+    - id
+    - username
+    type: object
+  HealthGetHealthResponseDto:
+    description: GetHealthResponseDto
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
+  UploadsUploadObj:
+    description: UploadObj
+    properties:
+      key:
+        example: a690dd36-6a90-465f-81d5-bf0a03be084c
+        type: string
+      url:
+        example: https://example.com/image.jpg
+        type: string
+    required:
+    - key
+    - url
+    type: object
+  echo.HTTPError:
+    properties:
+      message: {}
     type: object
   pagination.Pagination:
     properties:
@@ -734,16 +849,6 @@ definitions:
         type: integer
       totalRecords:
         type: integer
-    type: object
-  uploads.UploadObj:
-    description: UploadObj
-    properties:
-      key:
-        example: a690dd36-6a90-465f-81d5-bf0a03be084c
-        type: string
-      url:
-        example: https://example.com/image.jpg
-        type: string
     type: object
 host: localhost:5000
 info:
@@ -770,7 +875,12 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/aggregations.GetHomeAggregationsResponseDto'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetHomeAggregationsResponseDto'
+              type: object
         "500":
           description: Internal Server Error
           schema: {}
@@ -788,7 +898,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.LoginRequestDto'
+          $ref: '#/definitions/AuthLoginRequestDto'
       responses:
         "200":
           description: OK
@@ -814,7 +924,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.RegisterRequestDto'
+          $ref: '#/definitions/AuthRegisterRequestDto'
       responses:
         "201":
           description: Created
@@ -840,7 +950,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.ResetPasswordRequestDto'
+          $ref: '#/definitions/AuthResetPasswordRequestDto'
       responses:
         "200":
           description: OK
@@ -870,7 +980,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.SendForgotPasswordEmailRequestDto'
+          $ref: '#/definitions/AuthSendForgotPasswordEmailRequestDto'
       responses:
         "200":
           description: OK
@@ -953,7 +1063,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.GetMeResponseDto'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/AuthGetMeResponseDto'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -972,7 +1087,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.SendVerificationEmailRequestDto'
+          $ref: '#/definitions/AuthSendVerificationEmailRequestDto'
       responses:
         "200":
           description: OK
@@ -1032,7 +1147,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.PaginatedResponse-array_bookmarks_BookmarksResponseDto'
+            allOf:
+            - $ref: '#/definitions/HPR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/BookmarksBookmarksResponseDto'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1061,14 +1183,19 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/bookmarks.CreateBookmarkRequestDto'
+          $ref: '#/definitions/BookmarksCreateBookmarkRequestDto'
       produces:
       - application/json
       responses:
         "201":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-bookmarks_CreateBookmarkResponseDto'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/BookmarksCreateBookmarkResponseDto'
+              type: object
         "500":
           description: Internal Server Error
           schema:
@@ -1115,7 +1242,12 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-bool'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  type: boolean
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1145,7 +1277,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto'
+            allOf:
+            - $ref: '#/definitions/HPR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FavoritesFavoritesResponseDto'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1178,14 +1317,19 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/favorites.CreateFavoriteRequestDto'
+          $ref: '#/definitions/FavoritesCreateFavoriteRequestDto'
       produces:
       - application/json
       responses:
         "201":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-favorites_CreateFavoriteResponseDto'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/FavoritesCreateFavoriteResponseDto'
+              type: object
         "401":
           description: Authentication failed
           schema:
@@ -1240,7 +1384,12 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-bool'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  type: boolean
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1279,7 +1428,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto'
+            allOf:
+            - $ref: '#/definitions/HPR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/FavoritesFavoritesResponseDto'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1307,7 +1463,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/health.GetHealthResponseDto'
+            $ref: '#/definitions/HealthGetHealthResponseDto'
       summary: Health Check
       tags:
       - Health
@@ -1331,7 +1487,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto'
+            allOf:
+            - $ref: '#/definitions/HPR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/HServicesHServiceWithoutUserResponseDto'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1363,14 +1526,19 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/hservices.CreateHServiceRequestDto'
+          $ref: '#/definitions/HServicesCreateHServiceRequestDto'
       produces:
       - application/json
       responses:
         "201":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-hservices_HServiceWithoutUserResponseDto'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/HServicesHServiceWithoutUserResponseDto'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1405,7 +1573,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto'
+            allOf:
+            - $ref: '#/definitions/HMR'
+            - properties:
+                data:
+                  $ref: '#/definitions/HServicesHServiceResponseDto'
+                meta:
+                  $ref: '#/definitions/HServicesHServiceMetadataDto'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1446,7 +1621,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.PaginatedResponse-array_hservices_HServiceResponseDto'
+            allOf:
+            - $ref: '#/definitions/HPR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/HServicesHServiceResponseDto'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -1491,7 +1673,14 @@ paths:
         "200":
           description: Successful request
           schema:
-            $ref: '#/definitions/h.Response-array_uploads_UploadObj'
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/UploadsUploadObj'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:

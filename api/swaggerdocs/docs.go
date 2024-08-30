@@ -41,7 +41,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/aggregations.GetHomeAggregationsResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetHomeAggregationsResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -68,7 +80,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginRequestDto"
+                            "$ref": "#/definitions/AuthLoginRequestDto"
                         }
                     }
                 ],
@@ -108,7 +120,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterRequestDto"
+                            "$ref": "#/definitions/AuthRegisterRequestDto"
                         }
                     }
                 ],
@@ -148,7 +160,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.ResetPasswordRequestDto"
+                            "$ref": "#/definitions/AuthResetPasswordRequestDto"
                         }
                     }
                 ],
@@ -194,7 +206,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.SendForgotPasswordEmailRequestDto"
+                            "$ref": "#/definitions/AuthSendForgotPasswordEmailRequestDto"
                         }
                     }
                 ],
@@ -321,7 +333,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.GetMeResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/AuthGetMeResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -350,7 +374,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.SendVerificationEmailRequestDto"
+                            "$ref": "#/definitions/AuthSendVerificationEmailRequestDto"
                         }
                     }
                 ],
@@ -447,7 +471,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.PaginatedResponse-array_bookmarks_BookmarksResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HPR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/BookmarksBookmarksResponseDto"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -494,7 +533,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/bookmarks.CreateBookmarkRequestDto"
+                            "$ref": "#/definitions/BookmarksCreateBookmarkRequestDto"
                         }
                     }
                 ],
@@ -502,7 +541,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-bookmarks_CreateBookmarkResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/BookmarksCreateBookmarkResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -545,7 +596,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-bool"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -625,7 +688,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HPR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/FavoritesFavoritesResponseDto"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -678,7 +756,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/favorites.CreateFavoriteRequestDto"
+                            "$ref": "#/definitions/FavoritesCreateFavoriteRequestDto"
                         }
                     }
                 ],
@@ -686,7 +764,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-favorites_CreateFavoriteResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/FavoritesCreateFavoriteResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -742,7 +832,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HPR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/FavoritesFavoritesResponseDto"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -797,7 +902,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-bool"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -870,7 +987,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/health.GetHealthResponseDto"
+                            "$ref": "#/definitions/HealthGetHealthResponseDto"
                         }
                     }
                 }
@@ -912,7 +1029,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HPR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/HServicesHServiceWithoutUserResponseDto"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -965,7 +1097,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/hservices.CreateHServiceRequestDto"
+                            "$ref": "#/definitions/HServicesCreateHServiceRequestDto"
                         }
                     }
                 ],
@@ -973,7 +1105,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-hservices_HServiceWithoutUserResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/HServicesHServiceWithoutUserResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1035,7 +1179,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.PaginatedResponse-array_hservices_HServiceResponseDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HPR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/HServicesHServiceResponseDto"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1085,7 +1244,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HMR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/HServicesHServiceResponseDto"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/definitions/HServicesHServiceMetadataDto"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1151,7 +1325,22 @@ const docTemplate = `{
                     "200": {
                         "description": "Successful request",
                         "schema": {
-                            "$ref": "#/definitions/h.Response-array_uploads_UploadObj"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/UploadsUploadObj"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -1177,39 +1366,30 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "aggregations.GetHomeAggregationsResponseDto": {
-            "description": "Response for home aggregations",
-            "type": "object",
-            "properties": {
-                "favorites": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
-                    }
-                },
-                "featured": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
-                    }
-                },
-                "new": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
-                    }
-                },
-                "popular": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/aggregations.HServiceResponseDto"
-                    }
-                }
-            }
-        },
-        "aggregations.HServiceResponseDto": {
+        "AggregationsHServiceResponseDto": {
             "description": "Basic service information with user information",
             "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "user",
+                "userId"
+            ],
             "properties": {
                 "category": {
                     "type": "integer",
@@ -1284,7 +1464,7 @@ const docTemplate = `{
                     "example": "https://example.com"
                 },
                 "user": {
-                    "$ref": "#/definitions/aggregations.UserResponseDto"
+                    "$ref": "#/definitions/AggregationsUserResponseDto"
                 },
                 "userId": {
                     "type": "string",
@@ -1292,9 +1472,15 @@ const docTemplate = `{
                 }
             }
         },
-        "aggregations.UserResponseDto": {
+        "AggregationsUserResponseDto": {
             "description": "Basic user information",
             "type": "object",
+            "required": [
+                "createdAt",
+                "fullName",
+                "id",
+                "username"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string",
@@ -1322,8 +1508,20 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.GetMeResponseDto": {
+        "AuthGetMeResponseDto": {
             "type": "object",
+            "required": [
+                "createdAt",
+                "email",
+                "fullName",
+                "id",
+                "isActive",
+                "isEmailVerified",
+                "lastLogin",
+                "role",
+                "updatedAt",
+                "username"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string",
@@ -1381,7 +1579,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.LoginRequestDto": {
+        "AuthLoginRequestDto": {
             "description": "Login request dto",
             "type": "object",
             "required": [
@@ -1402,7 +1600,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.RegisterRequestDto": {
+        "AuthRegisterRequestDto": {
             "type": "object",
             "required": [
                 "email",
@@ -1438,7 +1636,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.ResetPasswordRequestDto": {
+        "AuthResetPasswordRequestDto": {
             "type": "object",
             "required": [
                 "code",
@@ -1463,7 +1661,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SendForgotPasswordEmailRequestDto": {
+        "AuthSendForgotPasswordEmailRequestDto": {
             "type": "object",
             "required": [
                 "email"
@@ -1475,7 +1673,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SendVerificationEmailRequestDto": {
+        "AuthSendVerificationEmailRequestDto": {
             "type": "object",
             "required": [
                 "email"
@@ -1487,16 +1685,23 @@ const docTemplate = `{
                 }
             }
         },
-        "bookmarks.BookmarksResponseDto": {
+        "BookmarksBookmarksResponseDto": {
             "description": "Basic bookmark information",
             "type": "object",
+            "required": [
+                "createdAt",
+                "hservice",
+                "hserviceId",
+                "id",
+                "userId"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string",
                     "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "hservice": {
-                    "$ref": "#/definitions/bookmarks.HServiceDto"
+                    "$ref": "#/definitions/BookmarksHServiceDto"
                 },
                 "hserviceId": {
                     "type": "string",
@@ -1512,7 +1717,7 @@ const docTemplate = `{
                 }
             }
         },
-        "bookmarks.CreateBookmarkRequestDto": {
+        "BookmarksCreateBookmarkRequestDto": {
             "description": "CreateBookmarkRequestDto",
             "type": "object",
             "required": [
@@ -1527,9 +1732,12 @@ const docTemplate = `{
                 }
             }
         },
-        "bookmarks.CreateBookmarkResponseDto": {
+        "BookmarksCreateBookmarkResponseDto": {
             "description": "CreateBookmarkResponseDto",
             "type": "object",
+            "required": [
+                "id"
+            ],
             "properties": {
                 "id": {
                     "type": "string",
@@ -1537,9 +1745,29 @@ const docTemplate = `{
                 }
             }
         },
-        "bookmarks.HServiceDto": {
+        "BookmarksHServiceDto": {
             "description": "Basic service information without user information",
             "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "userId"
+            ],
             "properties": {
                 "category": {
                     "type": "integer",
@@ -1619,13 +1847,7 @@ const docTemplate = `{
                 }
             }
         },
-        "echo.HTTPError": {
-            "type": "object",
-            "properties": {
-                "message": {}
-            }
-        },
-        "favorites.CreateFavoriteRequestDto": {
+        "FavoritesCreateFavoriteRequestDto": {
             "description": "CreateFavoriteRequestDto",
             "type": "object",
             "required": [
@@ -1640,9 +1862,12 @@ const docTemplate = `{
                 }
             }
         },
-        "favorites.CreateFavoriteResponseDto": {
+        "FavoritesCreateFavoriteResponseDto": {
             "description": "CreateFavoriteResponseDto",
             "type": "object",
+            "required": [
+                "id"
+            ],
             "properties": {
                 "id": {
                     "type": "string",
@@ -1650,16 +1875,23 @@ const docTemplate = `{
                 }
             }
         },
-        "favorites.FavoritesResponseDto": {
+        "FavoritesFavoritesResponseDto": {
             "description": "Basic favorite information",
             "type": "object",
+            "required": [
+                "createdAt",
+                "hservice",
+                "hserviceId",
+                "id",
+                "userId"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string",
                     "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "hservice": {
-                    "$ref": "#/definitions/favorites.HServiceDto"
+                    "$ref": "#/definitions/FavoritesHServiceDto"
                 },
                 "hserviceId": {
                     "type": "string",
@@ -1675,9 +1907,29 @@ const docTemplate = `{
                 }
             }
         },
-        "favorites.HServiceDto": {
+        "FavoritesHServiceDto": {
             "description": "Basic service information without user information",
             "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "userId"
+            ],
             "properties": {
                 "category": {
                     "type": "integer",
@@ -1757,126 +2009,79 @@ const docTemplate = `{
                 }
             }
         },
-        "h.MetadataResponse-hservices_HServiceResponseDto-hservices_HServiceMetadataDto": {
+        "GetHomeAggregationsResponseDto": {
+            "description": "Response for home aggregations",
             "type": "object",
+            "required": [
+                "favorites",
+                "featured",
+                "new",
+                "popular"
+            ],
             "properties": {
-                "data": {
-                    "$ref": "#/definitions/hservices.HServiceResponseDto"
+                "favorites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AggregationsHServiceResponseDto"
+                    }
                 },
-                "metadata": {
-                    "$ref": "#/definitions/hservices.HServiceMetadataDto"
+                "featured": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AggregationsHServiceResponseDto"
+                    }
+                },
+                "new": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AggregationsHServiceResponseDto"
+                    }
+                },
+                "popular": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AggregationsHServiceResponseDto"
+                    }
                 }
             }
         },
-        "h.PaginatedResponse-array_bookmarks_BookmarksResponseDto": {
+        "HMR": {
+            "description": "Metadata Response",
             "type": "object",
+            "required": [
+                "data",
+                "metadata"
+            ],
             "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/bookmarks.BookmarksResponseDto"
-                    }
-                },
+                "data": {},
+                "metadata": {}
+            }
+        },
+        "HPR": {
+            "description": "Paginated Response",
+            "type": "object",
+            "required": [
+                "data",
+                "pagination"
+            ],
+            "properties": {
+                "data": {},
                 "pagination": {
                     "$ref": "#/definitions/pagination.Pagination"
                 }
             }
         },
-        "h.PaginatedResponse-array_favorites_FavoritesResponseDto": {
+        "HR": {
+            "description": "Response",
             "type": "object",
+            "required": [
+                "data"
+            ],
             "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/favorites.FavoritesResponseDto"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/pagination.Pagination"
-                }
+                "data": {}
             }
         },
-        "h.PaginatedResponse-array_hservices_HServiceResponseDto": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/hservices.HServiceResponseDto"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/pagination.Pagination"
-                }
-            }
-        },
-        "h.PaginatedResponse-array_hservices_HServiceWithoutUserResponseDto": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/hservices.HServiceWithoutUserResponseDto"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/pagination.Pagination"
-                }
-            }
-        },
-        "h.Response-array_uploads_UploadObj": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/uploads.UploadObj"
-                    }
-                }
-            }
-        },
-        "h.Response-bookmarks_CreateBookmarkResponseDto": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/bookmarks.CreateBookmarkResponseDto"
-                }
-            }
-        },
-        "h.Response-bool": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "h.Response-favorites_CreateFavoriteResponseDto": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/favorites.CreateFavoriteResponseDto"
-                }
-            }
-        },
-        "h.Response-hservices_HServiceWithoutUserResponseDto": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/hservices.HServiceWithoutUserResponseDto"
-                }
-            }
-        },
-        "health.GetHealthResponseDto": {
-            "description": "GetHealthResponseDto",
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "hservices.CreateHServiceRequestDto": {
+        "HServicesCreateHServiceRequestDto": {
             "description": "CreateHServiceRequestDto",
             "type": "object",
             "required": [
@@ -1886,6 +2091,7 @@ const docTemplate = `{
                 "description",
                 "isOnline",
                 "location",
+                "media",
                 "price",
                 "priceTimespan",
                 "priceUnit",
@@ -1953,9 +2159,13 @@ const docTemplate = `{
                 }
             }
         },
-        "hservices.HServiceMetadataDto": {
+        "HServicesHServiceMetadataDto": {
             "description": "HServiceMetadataDto",
             "type": "object",
+            "required": [
+                "isBookmarked",
+                "isFavorite"
+            ],
             "properties": {
                 "isBookmarked": {
                     "type": "boolean",
@@ -1967,9 +2177,30 @@ const docTemplate = `{
                 }
             }
         },
-        "hservices.HServiceResponseDto": {
+        "HServicesHServiceResponseDto": {
             "description": "Basic service information with user information",
             "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "user",
+                "userId"
+            ],
             "properties": {
                 "category": {
                     "type": "integer",
@@ -2008,7 +2239,8 @@ const docTemplate = `{
                     "additionalProperties": {}
                 },
                 "price": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 10
                 },
                 "priceTimespan": {
                     "type": "string",
@@ -2043,7 +2275,7 @@ const docTemplate = `{
                     "example": "https://example.com"
                 },
                 "user": {
-                    "$ref": "#/definitions/hservices.UserResponseDto"
+                    "$ref": "#/definitions/HServicesUserResponseDto"
                 },
                 "userId": {
                     "type": "string",
@@ -2051,9 +2283,29 @@ const docTemplate = `{
                 }
             }
         },
-        "hservices.HServiceWithoutUserResponseDto": {
+        "HServicesHServiceWithoutUserResponseDto": {
             "description": "Basic service information without user information",
             "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "userId"
+            ],
             "properties": {
                 "category": {
                     "type": "integer",
@@ -2133,9 +2385,15 @@ const docTemplate = `{
                 }
             }
         },
-        "hservices.UserResponseDto": {
+        "HServicesUserResponseDto": {
             "description": "Basic user information",
             "type": "object",
+            "required": [
+                "createdAt",
+                "fullName",
+                "id",
+                "username"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string",
@@ -2163,6 +2421,42 @@ const docTemplate = `{
                 }
             }
         },
+        "HealthGetHealthResponseDto": {
+            "description": "GetHealthResponseDto",
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "UploadsUploadObj": {
+            "description": "UploadObj",
+            "type": "object",
+            "required": [
+                "key",
+                "url"
+            ],
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "example": "a690dd36-6a90-465f-81d5-bf0a03be084c"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                }
+            }
+        },
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
+        },
         "pagination.Pagination": {
             "type": "object",
             "properties": {
@@ -2183,20 +2477,6 @@ const docTemplate = `{
                 },
                 "totalRecords": {
                     "type": "integer"
-                }
-            }
-        },
-        "uploads.UploadObj": {
-            "description": "UploadObj",
-            "type": "object",
-            "properties": {
-                "key": {
-                    "type": "string",
-                    "example": "a690dd36-6a90-465f-81d5-bf0a03be084c"
-                },
-                "url": {
-                    "type": "string",
-                    "example": "https://example.com/image.jpg"
                 }
             }
         }
