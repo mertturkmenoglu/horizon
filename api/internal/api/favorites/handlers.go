@@ -42,7 +42,7 @@ func (s *handlers) CreateFavorite(c echo.Context) error {
 //	@Description	Deletes a favorite with the given HService ID for the current user
 //	@Tags			Favorites
 //	@Param			hservice_id	path	string	true	"HService ID"
-//	@Success		204	{object}	h.Response[bool]	"Successful request"
+//	@Success		204
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Security		CookieAuth
