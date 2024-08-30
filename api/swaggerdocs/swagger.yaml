@@ -230,21 +230,28 @@ definitions:
     - email
     type: object
   bookmarks.BookmarksResponseDto:
+    description: Basic bookmark information
     properties:
       createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       hservice:
         $ref: '#/definitions/bookmarks.HServiceDto'
       hserviceId:
+        example: "7235190573525635072"
         type: string
       id:
+        example: "7235190573525635072"
         type: string
       userId:
+        example: "528696135489945615"
         type: string
     type: object
   bookmarks.CreateBookmarkRequestDto:
+    description: CreateBookmarkRequestDto
     properties:
       hserviceId:
+        example: "7235190573525635072"
         maxLength: 64
         minLength: 1
         type: string
@@ -252,50 +259,71 @@ definitions:
     - hserviceId
     type: object
   bookmarks.CreateBookmarkResponseDto:
+    description: CreateBookmarkResponseDto
     properties:
       id:
+        example: "7235190573525635072"
         type: string
     type: object
   bookmarks.HServiceDto:
+    description: Basic service information without user information
     properties:
       category:
+        example: 1
         type: integer
       createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       deliveryTime:
+        example: 1
         type: integer
       deliveryTimespan:
+        example: HOURLY
         type: string
       description:
+        example: Example service description
         type: string
       id:
+        example: "7235190573525635072"
         type: string
       isOnline:
+        example: true
         type: boolean
       location:
+        example: Example Location
         type: string
       media:
         additionalProperties: {}
         type: object
       price:
+        example: 10
         type: number
       priceTimespan:
+        example: HOURLY
         type: string
       priceUnit:
+        example: USD
         type: string
       slug:
+        example: example-service
         type: string
       title:
+        example: Example Service
         type: string
       totalPoints:
+        example: 50
         type: integer
       totalVotes:
+        example: 10
         type: integer
       updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       url:
+        example: https://example.com
         type: string
       userId:
+        example: "528696135489945615"
         type: string
     type: object
   echo.HTTPError:
@@ -303,8 +331,10 @@ definitions:
       message: {}
     type: object
   favorites.CreateFavoriteRequestDto:
+    description: CreateFavoriteRequestDto
     properties:
       hserviceId:
+        example: "7235190573525635072"
         maxLength: 64
         minLength: 1
         type: string
@@ -312,63 +342,89 @@ definitions:
     - hserviceId
     type: object
   favorites.CreateFavoriteResponseDto:
+    description: CreateFavoriteResponseDto
     properties:
       id:
+        example: "7235190573525635072"
         type: string
     type: object
   favorites.FavoritesResponseDto:
+    description: Basic favorite information
     properties:
       createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       hservice:
         $ref: '#/definitions/favorites.HServiceDto'
       hserviceId:
+        example: "7235190573525635072"
         type: string
       id:
+        example: "7235190573525635072"
         type: string
       userId:
+        example: "528696135489945615"
         type: string
     type: object
   favorites.HServiceDto:
+    description: Basic service information without user information
     properties:
       category:
+        example: 1
         type: integer
       createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       deliveryTime:
+        example: 1
         type: integer
       deliveryTimespan:
+        example: HOURLY
         type: string
       description:
+        example: Example service description
         type: string
       id:
+        example: "7235190573525635072"
         type: string
       isOnline:
+        example: true
         type: boolean
       location:
+        example: Example Location
         type: string
       media:
         additionalProperties: {}
         type: object
       price:
+        example: 10
         type: number
       priceTimespan:
+        example: HOURLY
         type: string
       priceUnit:
+        example: USD
         type: string
       slug:
+        example: example-service
         type: string
       title:
+        example: Example Service
         type: string
       totalPoints:
+        example: 50
         type: integer
       totalVotes:
+        example: 10
         type: integer
       updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
         type: string
       url:
+        example: https://example.com
         type: string
       userId:
+        example: "528696135489945615"
         type: string
     type: object
   h.PaginatedResponse-array_bookmarks_BookmarksResponseDto:
@@ -890,9 +946,7 @@ paths:
         type: string
       responses:
         "204":
-          description: Successful request
-          schema:
-            $ref: '#/definitions/h.Response-bool'
+          description: No Content
         "400":
           description: Bad Request
           schema:

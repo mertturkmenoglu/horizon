@@ -841,10 +841,7 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "Successful request",
-                        "schema": {
-                            "$ref": "#/definitions/h.Response-bool"
-                        }
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1197,26 +1194,32 @@
             }
         },
         "bookmarks.BookmarksResponseDto": {
+            "description": "Basic bookmark information",
             "type": "object",
             "properties": {
                 "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "hservice": {
                     "$ref": "#/definitions/bookmarks.HServiceDto"
                 },
                 "hserviceId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "userId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528696135489945615"
                 }
             }
         },
         "bookmarks.CreateBookmarkRequestDto": {
+            "description": "CreateBookmarkRequestDto",
             "type": "object",
             "required": [
                 "hserviceId"
@@ -1225,78 +1228,100 @@
                 "hserviceId": {
                     "type": "string",
                     "maxLength": 64,
-                    "minLength": 1
+                    "minLength": 1,
+                    "example": "7235190573525635072"
                 }
             }
         },
         "bookmarks.CreateBookmarkResponseDto": {
+            "description": "CreateBookmarkResponseDto",
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 }
             }
         },
         "bookmarks.HServiceDto": {
+            "description": "Basic service information without user information",
             "type": "object",
             "properties": {
                 "category": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "deliveryTime": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "deliveryTimespan": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "HOURLY"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example service description"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "isOnline": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "location": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example Location"
                 },
                 "media": {
                     "type": "object",
                     "additionalProperties": {}
                 },
                 "price": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 10
                 },
                 "priceTimespan": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "HOURLY"
                 },
                 "priceUnit": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "USD"
                 },
                 "slug": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "example-service"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example Service"
                 },
                 "totalPoints": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 50
                 },
                 "totalVotes": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 },
                 "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com"
                 },
                 "userId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528696135489945615"
                 }
             }
         },
@@ -1307,6 +1332,7 @@
             }
         },
         "favorites.CreateFavoriteRequestDto": {
+            "description": "CreateFavoriteRequestDto",
             "type": "object",
             "required": [
                 "hserviceId"
@@ -1315,98 +1341,125 @@
                 "hserviceId": {
                     "type": "string",
                     "maxLength": 64,
-                    "minLength": 1
+                    "minLength": 1,
+                    "example": "7235190573525635072"
                 }
             }
         },
         "favorites.CreateFavoriteResponseDto": {
+            "description": "CreateFavoriteResponseDto",
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 }
             }
         },
         "favorites.FavoritesResponseDto": {
+            "description": "Basic favorite information",
             "type": "object",
             "properties": {
                 "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "hservice": {
                     "$ref": "#/definitions/favorites.HServiceDto"
                 },
                 "hserviceId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "userId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528696135489945615"
                 }
             }
         },
         "favorites.HServiceDto": {
+            "description": "Basic service information without user information",
             "type": "object",
             "properties": {
                 "category": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "deliveryTime": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "deliveryTimespan": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "HOURLY"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example service description"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "7235190573525635072"
                 },
                 "isOnline": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "location": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example Location"
                 },
                 "media": {
                     "type": "object",
                     "additionalProperties": {}
                 },
                 "price": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 10
                 },
                 "priceTimespan": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "HOURLY"
                 },
                 "priceUnit": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "USD"
                 },
                 "slug": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "example-service"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Example Service"
                 },
                 "totalPoints": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 50
                 },
                 "totalVotes": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 },
                 "updatedAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com"
                 },
                 "userId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528696135489945615"
                 }
             }
         },
