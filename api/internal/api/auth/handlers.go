@@ -107,14 +107,14 @@ func (s *handlers) HandlerGoogleCallback(c echo.Context) error {
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	GetMeResponseDto
+//	@Success		200	{object}	h.R{data=GetMeResponseDto}
 //	@Failure		401	{object}	echo.HTTPError
 //	@Router			/auth/me [get]
 func (s *handlers) HandlerGetMe(c echo.Context) error {
 	user := c.Get("user").(db.User)
 	res := mapGetMeResponseToDto(user)
 
-	return c.JSON(http.StatusOK, h.Response[GetMeResponseDto]{
+	return c.JSON(http.StatusOK, h.R{
 		Data: res,
 	})
 }

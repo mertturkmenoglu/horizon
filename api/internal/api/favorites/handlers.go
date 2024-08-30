@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			body	body	CreateFavoriteRequestDto	true	"Request body"
-//	@Success		201	{object}	h.Response[CreateFavoriteResponseDto]	"Successful request"
+//	@Success		201	{object}	h.R{data=CreateFavoriteResponseDto}	"Successful request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
 //	@Security		CookieAuth
@@ -31,7 +31,7 @@ func (s *handlers) CreateFavorite(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusCreated, h.Response[CreateFavoriteResponseDto]{
+	return c.JSON(http.StatusCreated, h.R{
 		Data: res,
 	})
 }
@@ -73,7 +73,7 @@ func (s *handlers) DeleteFavorite(c echo.Context) error {
 //	@Produce		json
 //	@Param			page	query	int	false	"Page number"
 //	@Param			pageSize	query	int	false	"Page size"
-//	@Success		200	{object}	h.PaginatedResponse[[]FavoritesResponseDto]	"Successful request"
+//	@Success		200	{object}	h.PR{data=[]FavoritesResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
@@ -94,7 +94,7 @@ func (s *handlers) GetFavorites(c echo.Context) error {
 		return h.HandleDbErr(c, err)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]FavoritesResponseDto]{
+	return c.JSON(http.StatusOK, h.PR{
 		Data:       res,
 		Pagination: *pagination,
 	})
@@ -108,7 +108,7 @@ func (s *handlers) GetFavorites(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			hservice_id	path	string	true	"HService ID"
-//	@Success		200	{object}	h.Response[bool]	"Successful request"
+//	@Success		200	{object}	h.R{data=bool}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Security		CookieAuth
@@ -123,7 +123,7 @@ func (s *handlers) GetIsFavorite(c echo.Context) error {
 
 	res := s.service.isFavorite(userId, hserviceId)
 
-	return c.JSON(http.StatusOK, h.Response[bool]{
+	return c.JSON(http.StatusOK, h.R{
 		Data: res,
 	})
 }
@@ -138,7 +138,7 @@ func (s *handlers) GetIsFavorite(c echo.Context) error {
 //	@Param			username	path	string	true	"Username"
 //	@Param			page	query	int	false	"Page number"
 //	@Param			pageSize	query	int	false	"Page size"
-//	@Success		200	{object}	h.PaginatedResponse[[]FavoritesResponseDto]	"Successful request"
+//	@Success		200	{object}	h.PR{data=[]FavoritesResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
@@ -161,7 +161,7 @@ func (s *handlers) GetFavoritesByUsername(c echo.Context) error {
 		return h.HandleDbErr(c, err)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]FavoritesResponseDto]{
+	return c.JSON(http.StatusOK, h.PR{
 		Data:       res,
 		Pagination: *pagination,
 	})

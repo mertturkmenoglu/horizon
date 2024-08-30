@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			body	body	CreateHServiceRequestDto	true	"Request body"
-//	@Success		201	{object}	h.Response[HServiceWithoutUserResponseDto]	"Successful request"
+//	@Success		201	{object}	h.R{data=HServiceWithoutUserResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
@@ -38,7 +38,7 @@ func (s *handlers) CreateHService(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusOK, h.Response[HServiceWithoutUserResponseDto]{
+	return c.JSON(http.StatusOK, h.R{
 		Data: *res,
 	})
 }
@@ -52,7 +52,7 @@ func (s *handlers) CreateHService(c echo.Context) error {
 //	@Produce		json
 //	@Param			page	query	int	false	"Page number"
 //	@Param			pageSize	query	int	false	"Page size"
-//	@Success		200	{object}	h.PaginatedResponse[[]HServiceWithoutUserResponseDto]	"Successful request"
+//	@Success		200	{object}	h.PR{data=[]HServiceWithoutUserResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
@@ -73,7 +73,7 @@ func (s *handlers) GetMyHServices(c echo.Context) error {
 		return h.HandleDbErr(c, err)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]HServiceWithoutUserResponseDto]{
+	return c.JSON(http.StatusOK, h.PR{
 		Data:       res,
 		Pagination: *pagination,
 	})
@@ -87,7 +87,7 @@ func (s *handlers) GetMyHServices(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path	string	true	"HService ID"
-//	@Success		200	{object}	h.MetadataResponse[HServiceResponseDto, HServiceMetadataDto]	"Successful request"
+//	@Success		200	{object}	h.MR{data=HServiceResponseDto,meta=HServiceMetadataDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
@@ -108,7 +108,7 @@ func (s *handlers) GetHServiceById(c echo.Context) error {
 
 	meta := s.service.getHServiceMetadata(id, userId)
 
-	return c.JSON(http.StatusOK, h.MetadataResponse[HServiceResponseDto, HServiceMetadataDto]{
+	return c.JSON(http.StatusOK, h.MR{
 		Data: res,
 		Meta: meta,
 	})
@@ -124,7 +124,7 @@ func (s *handlers) GetHServiceById(c echo.Context) error {
 //	@Param			username	path	string	true	"Username"
 //	@Param			page	query	int	false	"Page number"
 //	@Param			pageSize	query	int	false	"Page size"
-//	@Success		200	{object}	h.PaginatedResponse[[]HServiceResponseDto]	"Successful request"
+//	@Success		200	{object}	h.PR{data=[]HServiceResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
@@ -147,7 +147,7 @@ func (s *handlers) GetHServicesByUsername(c echo.Context) error {
 		return h.HandleDbErr(c, err)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]HServiceResponseDto]{
+	return c.JSON(http.StatusOK, h.PR{
 		Data:       res,
 		Pagination: *pagination,
 	})

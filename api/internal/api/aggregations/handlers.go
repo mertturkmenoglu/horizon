@@ -14,14 +14,14 @@ import (
 //	@Tags			Aggregations
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	GetHomeAggregationsResponseDto	"Successful request"
+//	@Success		200	{object}	h.R{data=GetHomeAggregationsResponseDto}	"Successful request"
 //	@Failure		500	{object}	error							"Internal Server Error"
 //	@Router			/aggregations/home [get]
 func (s *handlers) HandlerGetHomeAggregations(c echo.Context) error {
 	cacheRes, err := s.service.checkCacheHomeAggregations()
 
 	if err == nil {
-		return c.JSON(http.StatusOK, h.Response[GetHomeAggregationsResponseDto]{
+		return c.JSON(http.StatusOK, h.R{
 			Data: *cacheRes,
 		})
 	}
@@ -38,7 +38,7 @@ func (s *handlers) HandlerGetHomeAggregations(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusOK, h.Response[GetHomeAggregationsResponseDto]{
+	return c.JSON(http.StatusOK, h.R{
 		Data: *res,
 	})
 }

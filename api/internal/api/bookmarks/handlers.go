@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			body	body	CreateBookmarkRequestDto	true	"Request body"
-//	@Success		201	{object}	h.Response[CreateBookmarkResponseDto]	"Successful request"
+//	@Success		201	{object}	h.R{data=CreateBookmarkResponseDto}	"Successful request"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
 //	@Security		CookieAuth
 //	@Router			/bookmarks [post]
@@ -29,7 +29,7 @@ func (s *handlers) HandlerCreateBookmark(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	return c.JSON(http.StatusCreated, h.Response[CreateBookmarkResponseDto]{
+	return c.JSON(http.StatusCreated, h.R{
 		Data: res,
 	})
 }
@@ -70,7 +70,7 @@ func (s *handlers) HandlerDeleteBookmark(c echo.Context) error {
 //	@Produce		json
 //	@Param			page	query	int	false	"Page number"
 //	@Param			pageSize	query	int	false	"Page size"
-//	@Success		200	{object}	h.PaginatedResponse[[]BookmarksResponseDto]	"Successful request"
+//	@Success		200	{object}	HPR{data=[]BookmarksResponseDto}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Failure		404 {object}	echo.HTTPError	"Not Found"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
@@ -90,7 +90,7 @@ func (s *handlers) HandlerGetBookmarks(c echo.Context) error {
 		return h.HandleDbErr(c, err)
 	}
 
-	return c.JSON(http.StatusOK, h.PaginatedResponse[[]BookmarksResponseDto]{
+	return c.JSON(http.StatusOK, h.PR{
 		Data:       res,
 		Pagination: *pagination,
 	})
@@ -104,7 +104,7 @@ func (s *handlers) HandlerGetBookmarks(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			hservice_id	path	string	true	"HService ID"
-//	@Success		200	{object}	h.Response[bool]	"Successful request"
+//	@Success		200	{object}	h.R{data=bool}	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
 //	@Security		CookieAuth
 //	@Router			/bookmarks/{hservice_id} [get]
@@ -118,7 +118,7 @@ func (s *handlers) HandlerGetIsBookmarked(c echo.Context) error {
 
 	res := s.service.getIsBookmarked(userId, hserviceId)
 
-	return c.JSON(http.StatusOK, h.Response[bool]{
+	return c.JSON(http.StatusOK, h.R{
 		Data: res,
 	})
 }
