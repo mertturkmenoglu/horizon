@@ -199,16 +199,25 @@ export type GetHomeAggregationsResponseDto = {
     popular: Array<AggregationsHServiceResponseDto>;
 };
 
+/**
+ * Metadata Response
+ */
 export type HMR = {
     data: unknown;
     metadata: unknown;
 };
 
+/**
+ * Paginated Response
+ */
 export type HPR = {
     data: unknown;
     pagination: pagination_Pagination;
 };
 
+/**
+ * Response
+ */
 export type HR = {
     data: unknown;
 };
@@ -314,11 +323,160 @@ export type HealthGetHealthResponseDto = {
 };
 
 /**
+ * CreateListItemRequestDto
+ */
+export type ListsCreateListItemRequestDto = {
+    hserviceId: string;
+    itemOrder: number;
+    listId: string;
+};
+
+/**
+ * CreateListItemResponseDto
+ */
+export type ListsCreateListItemResponseDto = {
+    hserviceId: string;
+    id: string;
+    itemOrder: number;
+    listId: string;
+};
+
+/**
+ * CreateListRequestDto
+ */
+export type ListsCreateListRequestDto = {
+    title: string;
+};
+
+export type ListsCreateListResponseDto = {
+    createdAt: string;
+    id: string;
+    title: string;
+    updatedAt: string;
+    userId: string;
+};
+
+/**
+ * Basic list information
+ */
+export type ListsGetItemListInfoResponseDtoItem = {
+    id: string;
+    includes: boolean;
+    title: string;
+};
+
+/**
+ * Basic list information
+ */
+export type ListsGetListByIdResponseDto = {
+    createdAt: string;
+    id: string;
+    items: Array<ListsItemDto>;
+    title: string;
+    updatedAt: string;
+    user: ListsUserDto;
+    userId: string;
+};
+
+/**
+ * Basic list information
+ */
+export type ListsGetMyListsResponseDtoItem = {
+    createdAt: string;
+    id: string;
+    title: string;
+    updateAt: string;
+    userId: string;
+};
+
+/**
+ * Basic list information
+ */
+export type ListsGetUsersListsResponseDtoItem = {
+    createdAt: string;
+    id: string;
+    title: string;
+    updateAt: string;
+    user: ListsUserDto;
+    userId: string;
+};
+
+/**
+ * Basic service information with user information
+ */
+export type ListsHServiceDto = {
+    category: number;
+    createdAt: string;
+    deliveryTime: number;
+    deliveryTimespan: string;
+    description: string;
+    id: string;
+    isOnline: boolean;
+    location: string;
+    media: {
+        [key: string]: unknown;
+    };
+    price: number;
+    priceTimespan: string;
+    priceUnit: string;
+    slug: string;
+    title: string;
+    totalPoints: number;
+    totalVotes: number;
+    updatedAt: string;
+    url?: string;
+    user: ListsUserDto;
+    userId: string;
+};
+
+/**
+ * Basic list item information
+ */
+export type ListsItemDto = {
+    hservice: ListsHServiceDto;
+    hserviceId: string;
+    id: string;
+    itemOrder: number;
+    listId: string;
+};
+
+/**
+ * UpdateListRequestDto
+ */
+export type ListsUpdateListRequestDto = {
+    title: string;
+};
+
+/**
+ * Basic user information
+ */
+export type ListsUserDto = {
+    createdAt: string;
+    fullName: string;
+    gender?: string;
+    id: string;
+    profileImage?: string;
+    username: string;
+};
+
+/**
  * UploadObj
  */
 export type UploadsUploadObj = {
     key: string;
     url: string;
+};
+
+/**
+ * Basic user information
+ */
+export type UsersGetUserProfileByUsernameResponseDto = {
+    createdAt: string;
+    fullName: string;
+    gender?: string;
+    id: string;
+    profileImage?: string;
+    username: string;
 };
 
 export type echo_HTTPError = {
@@ -640,6 +798,166 @@ export type GetHservicesByIdResponse = ((HMR & {
 
 export type GetHservicesByIdError = (echo_HTTPError);
 
+export type GetListsResponse = ((HR & {
+    /**
+     * Basic list information
+     */
+    data?: Array<ListsGetMyListsResponseDtoItem>;
+}));
+
+export type GetListsError = (echo_HTTPError);
+
+export type PostListsData = {
+    /**
+     * Request body
+     */
+    body: ListsCreateListRequestDto;
+};
+
+export type PostListsResponse = ((HR & {
+    data?: ListsCreateListResponseDto;
+}));
+
+export type PostListsError = (echo_HTTPError);
+
+export type GetListsInfoByHserviceIdData = {
+    path: {
+        /**
+         * HService ID
+         */
+        hservice_id: string;
+    };
+};
+
+export type GetListsInfoByHserviceIdResponse = ((HR & {
+    /**
+     * Basic list information
+     */
+    data?: Array<ListsGetItemListInfoResponseDtoItem>;
+}));
+
+export type GetListsInfoByHserviceIdError = (echo_HTTPError);
+
+export type GetListsUserByUsernameData = {
+    path: {
+        /**
+         * Username
+         */
+        username: string;
+    };
+};
+
+export type GetListsUserByUsernameResponse = ((HR & {
+    /**
+     * Basic list information
+     */
+    data?: Array<ListsGetUsersListsResponseDtoItem>;
+}));
+
+export type GetListsUserByUsernameError = (echo_HTTPError);
+
+export type GetListsByIdData = {
+    path: {
+        /**
+         * List ID
+         */
+        id: string;
+    };
+};
+
+export type GetListsByIdResponse = ((HR & {
+    data?: ListsGetListByIdResponseDto;
+}));
+
+export type GetListsByIdError = (echo_HTTPError);
+
+export type DeleteListsByIdData = {
+    path: {
+        /**
+         * List ID
+         */
+        id: string;
+    };
+};
+
+export type DeleteListsByIdResponse = (void);
+
+export type DeleteListsByIdError = (echo_HTTPError);
+
+export type PatchListsByIdData = {
+    /**
+     * Request body
+     */
+    body: ListsUpdateListRequestDto;
+    path: {
+        /**
+         * List ID
+         */
+        id: string;
+    };
+};
+
+export type PatchListsByIdResponse = (void);
+
+export type PatchListsByIdError = (echo_HTTPError);
+
+export type PostListsByIdItemsData = {
+    /**
+     * Request body
+     */
+    body: ListsCreateListItemRequestDto;
+    path: {
+        /**
+         * List ID
+         */
+        id: string;
+    };
+};
+
+export type PostListsByIdItemsResponse = ((HR & {
+    data?: ListsCreateListItemResponseDto;
+}));
+
+export type PostListsByIdItemsError = (echo_HTTPError);
+
+export type DeleteListsByIdItemsByItemIdData = {
+    path: {
+        /**
+         * List ID
+         */
+        id: string;
+        /**
+         * Item ID
+         */
+        itemId: string;
+    };
+};
+
+export type DeleteListsByIdItemsByItemIdResponse = (void);
+
+export type DeleteListsByIdItemsByItemIdError = (echo_HTTPError);
+
+export type PatchListsByListIdItemsByItemIdAfterByAfterItemIdData = {
+    path: {
+        /**
+         * After Item ID
+         */
+        after_item_id: string;
+        /**
+         * Item ID
+         */
+        item_id: string;
+        /**
+         * List ID
+         */
+        list_id: string;
+    };
+};
+
+export type PatchListsByListIdItemsByItemIdAfterByAfterItemIdResponse = (void);
+
+export type PatchListsByListIdItemsByItemIdAfterByAfterItemIdError = (echo_HTTPError);
+
 export type GetUploadsNewUrlData = {
     query: {
         /**
@@ -662,3 +980,18 @@ export type GetUploadsNewUrlResponse = ((HR & {
 }));
 
 export type GetUploadsNewUrlError = (echo_HTTPError);
+
+export type GetUsersByUsernameData = {
+    path: {
+        /**
+         * Username
+         */
+        username: string;
+    };
+};
+
+export type GetUsersByUsernameResponse = ((HR & {
+    data?: UsersGetUserProfileByUsernameResponseDto;
+}));
+
+export type GetUsersByUsernameError = (echo_HTTPError);
