@@ -1102,6 +1102,72 @@
                     }
                 }
             }
+        },
+        "/uploads/new-url": {
+            "get": {
+                "description": "Gets a new upload URL for the given type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Uploads"
+                ],
+                "summary": "Get new upload URL",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Type of upload",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 5,
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Number of files to be uploaded",
+                        "name": "count",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Mime type of the files to be uploaded",
+                        "name": "mime",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.Response-array_uploads_UploadObj"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1752,6 +1818,17 @@
                 }
             }
         },
+        "h.Response-array_uploads_UploadObj": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/uploads.UploadObj"
+                    }
+                }
+            }
+        },
         "h.Response-bookmarks_CreateBookmarkResponseDto": {
             "type": "object",
             "properties": {
@@ -2100,6 +2177,20 @@
                 },
                 "totalRecords": {
                     "type": "integer"
+                }
+            }
+        },
+        "uploads.UploadObj": {
+            "description": "UploadObj",
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "example": "a690dd36-6a90-465f-81d5-bf0a03be084c"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
                 }
             }
         }

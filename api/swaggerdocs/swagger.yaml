@@ -470,6 +470,13 @@ definitions:
       pagination:
         $ref: '#/definitions/pagination.Pagination'
     type: object
+  h.Response-array_uploads_UploadObj:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/uploads.UploadObj'
+        type: array
+    type: object
   h.Response-bookmarks_CreateBookmarkResponseDto:
     properties:
       data:
@@ -727,6 +734,16 @@ definitions:
         type: integer
       totalRecords:
         type: integer
+    type: object
+  uploads.UploadObj:
+    description: UploadObj
+    properties:
+      key:
+        example: a690dd36-6a90-465f-81d5-bf0a03be084c
+        type: string
+      url:
+        example: https://example.com/image.jpg
+        type: string
     type: object
 host: localhost:5000
 info:
@@ -1445,6 +1462,51 @@ paths:
       summary: Get hservices by username
       tags:
       - HServices
+  /uploads/new-url:
+    get:
+      consumes:
+      - application/json
+      description: Gets a new upload URL for the given type
+      parameters:
+      - description: Type of upload
+        in: query
+        name: type
+        required: true
+        type: string
+      - description: Number of files to be uploaded
+        in: query
+        maximum: 5
+        minimum: 1
+        name: count
+        required: true
+        type: integer
+      - description: Mime type of the files to be uploaded
+        in: query
+        name: mime
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-array_uploads_UploadObj'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Get new upload URL
+      tags:
+      - Uploads
 securityDefinitions:
   CookieAuth:
     description: Cookie based session authentication
