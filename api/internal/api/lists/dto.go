@@ -2,110 +2,139 @@ package lists
 
 import "time"
 
+// GetMyListsResponseDtoItem
+// @Description Basic list information
 type GetMyListsResponseDtoItem struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	UserID    string    `json:"userId"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdateAt  time.Time `json:"updateAt"`
-}
+	ID        string    `json:"id" example:"7235190573525635072" validate:"required"`
+	Title     string    `json:"title" example:"Example List" validate:"required"`
+	UserID    string    `json:"userId" example:"528696135489945615" validate:"required"`
+	CreatedAt time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+	UpdateAt  time.Time `json:"updateAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsGetMyListsResponseDtoItem
 
-type GetMyListsResponseDto []GetMyListsResponseDtoItem
+// GetMyListsResponseDto
+// @Description Basic list information
+type GetMyListsResponseDto []GetMyListsResponseDtoItem //@name ListsGetMyListsResponseDto
 
+// GetUsersListsResponseDtoItem
+// @Description Basic list information
 type GetUsersListsResponseDtoItem struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	UserID    string    `json:"userId"`
-	User      UserDto   `json:"user"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdateAt  time.Time `json:"updateAt"`
-}
+	ID        string    `json:"id" example:"7235190573525635072" validate:"required"`
+	Title     string    `json:"title" example:"Example List" validate:"required"`
+	UserID    string    `json:"userId" example:"528696135489945615" validate:"required"`
+	User      UserDto   `json:"user" validate:"required"`
+	CreatedAt time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+	UpdateAt  time.Time `json:"updateAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsGetUsersListsResponseDtoItem
 
-type GetUsersListsResponseDto []GetUsersListsResponseDtoItem
+// GetUsersListsResponseDto
+// @Description Basic list information
+type GetUsersListsResponseDto []GetUsersListsResponseDtoItem //@name ListsGetUsersListsResponseDto
 
+// UserDto
+// @Description Basic user information
 type UserDto struct {
-	ID           string    `json:"id"`
-	Username     string    `json:"username"`
-	FullName     string    `json:"fullName"`
-	Gender       *string   `json:"gender"`
-	ProfileImage *string   `json:"profileImage"`
-	CreatedAt    time.Time `json:"createdAt"`
-}
+	ID           string    `json:"id" example:"528696135489945615" validate:"required"`
+	Username     string    `json:"username" example:"johndoe" validate:"required"`
+	FullName     string    `json:"fullName" example:"John Doe" validate:"required"`
+	Gender       *string   `json:"gender" example:"male" validate:"optional"`
+	ProfileImage *string   `json:"profileImage" example:"https://example.com/image.jpg" validate:"optional"`
+	CreatedAt    time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsUserDto
 
+// GetItemListInfoResponseDtoItem
+// @Description Basic list information
 type GetItemListInfoResponseDtoItem struct {
-	ID       string `json:"id"`
-	Title    string `json:"title"`
-	Includes bool   `json:"includes"`
-}
+	ID       string `json:"id" example:"7235190573525635072" validate:"required"`
+	Title    string `json:"title" example:"Example List" validate:"required"`
+	Includes bool   `json:"includes" example:"true" validate:"required"`
+} //@name ListsGetItemListInfoResponseDtoItem
 
-type GetItemListInfoResponseDto []GetItemListInfoResponseDtoItem
+// GetItemListInfoResponseDto
+// @Description Basic list information
+type GetItemListInfoResponseDto []GetItemListInfoResponseDtoItem //@name ListsGetItemListInfoResponseDto
 
+// GetListByIdResponseDto
+// @Description Basic list information
 type GetListByIdResponseDto struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	UserID    string    `json:"userId"`
-	User      UserDto   `json:"user"`
-	Items     []ItemDto `json:"items"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-}
+	ID        string    `json:"id" example:"7235190573525635072" validate:"required"`
+	Title     string    `json:"title" example:"Example List" validate:"required"`
+	UserID    string    `json:"userId" example:"528696135489945615" validate:"required"`
+	User      UserDto   `json:"user" validate:"required"`
+	Items     []ItemDto `json:"items" validate:"required"`
+	CreatedAt time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+	UpdatedAt time.Time `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsGetListByIdResponseDto
 
+// ItemDto
+// @Description Basic list item information
 type ItemDto struct {
-	ID         string      `json:"id"`
-	ListId     string      `json:"listId"`
-	HServiceId string      `json:"hserviceId"`
-	HService   HServiceDto `json:"hservice"`
-	ItemOrder  int         `json:"itemOrder"`
-}
+	ID         string      `json:"id" example:"7235190573525635072" validate:"required"`
+	ListId     string      `json:"listId" example:"7235190573525635072" validate:"required"`
+	HServiceId string      `json:"hserviceId" example:"7235190573525635072" validate:"required"`
+	HService   HServiceDto `json:"hservice" validate:"required"`
+	ItemOrder  int         `json:"itemOrder" example:"1" validate:"required"`
+} //@name ListsItemDto
 
+// HServiceDto
+// @Description Basic service information with user information
 type HServiceDto struct {
-	ID               string         `json:"id"`
-	UserID           string         `json:"userId"`
-	User             UserDto        `json:"user"`
-	Title            string         `json:"title"`
-	Slug             string         `json:"slug"`
-	Description      string         `json:"description"`
-	Category         int32          `json:"category"`
-	Price            float64        `json:"price"`
-	PriceUnit        string         `json:"priceUnit"`
-	PriceTimespan    string         `json:"priceTimespan"`
-	IsOnline         bool           `json:"isOnline"`
-	Url              *string        `json:"url"`
-	Location         string         `json:"location"`
-	DeliveryTime     int32          `json:"deliveryTime"`
-	DeliveryTimespan string         `json:"deliveryTimespan"`
-	TotalPoints      int64          `json:"totalPoints"`
-	TotalVotes       int32          `json:"totalVotes"`
-	Media            map[string]any `json:"media"`
-	CreatedAt        time.Time      `json:"createdAt"`
-	UpdatedAt        time.Time      `json:"updatedAt"`
-}
+	ID               string         `json:"id" example:"7235190573525635072" validate:"required"`
+	UserID           string         `json:"userId" example:"528696135489945615" validate:"required"`
+	User             UserDto        `json:"user" validate:"required"`
+	Title            string         `json:"title" example:"Example Service" validate:"required"`
+	Slug             string         `json:"slug" example:"example-service" validate:"required"`
+	Description      string         `json:"description" example:"Example service description" validate:"required"`
+	Category         int32          `json:"category" example:"1" validate:"required"`
+	Price            float64        `json:"price" example:"10" validate:"required"`
+	PriceUnit        string         `json:"priceUnit" example:"USD" validate:"required"`
+	PriceTimespan    string         `json:"priceTimespan" example:"HOURLY" validate:"required"`
+	IsOnline         bool           `json:"isOnline" example:"true" validate:"required"`
+	Url              *string        `json:"url" example:"https://example.com" validate:"optional"`
+	Location         string         `json:"location" example:"Example Location" validate:"required"`
+	DeliveryTime     int32          `json:"deliveryTime" example:"1" validate:"required"`
+	DeliveryTimespan string         `json:"deliveryTimespan" example:"HOURLY" validate:"required"`
+	TotalPoints      int64          `json:"totalPoints" example:"50" validate:"required"`
+	TotalVotes       int32          `json:"totalVotes" example:"10" validate:"required"`
+	Media            map[string]any `json:"media" validate:"required"`
+	CreatedAt        time.Time      `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+	UpdatedAt        time.Time      `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsHServiceDto
 
+// CreateListRequestDto
+// @Description CreateListRequestDto
 type CreateListRequestDto struct {
 	Title string `json:"title" validate:"required,min=5,max=128"`
-}
+} //@name ListsCreateListRequestDto
 
+// CreateListResponseDto
 type CreateListResponseDto struct {
-	ID        string    `json:"id"`
-	Title     string    `json:"title"`
-	UserID    string    `json:"userId"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-}
+	ID        string    `json:"id" example:"7235190573525635072" validate:"required"`
+	Title     string    `json:"title" example:"Example List" validate:"required"`
+	UserID    string    `json:"userId" example:"528696135489945615" validate:"required"`
+	CreatedAt time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+	UpdatedAt time.Time `json:"updatedAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name ListsCreateListResponseDto
 
+// CreateListItemRequestDto
+// @Description CreateListItemRequestDto
 type CreateListItemRequestDto struct {
 	ListId     string `json:"listId" validate:"required,min=1,max=64"`
 	HserviceId string `json:"hserviceId" validate:"required,min=1,max=64"`
 	ItemOrder  int    `json:"itemOrder" validate:"required"`
-}
+} //@name ListsCreateListItemRequestDto
 
+// CreateListItemResponseDto
+// @Description CreateListItemResponseDto
 type CreateListItemResponseDto struct {
-	ID         string `json:"id"`
-	ListId     string `json:"listId"`
-	HserviceId string `json:"hserviceId"`
-	ItemOrder  int    `json:"itemOrder"`
-}
+	ID         string `json:"id" example:"7235190573525635072" validate:"required"`
+	ListId     string `json:"listId" example:"7235190573525635072" validate:"required"`
+	HserviceId string `json:"hserviceId" example:"7235190573525635072" validate:"required"`
+	ItemOrder  int    `json:"itemOrder" example:"1" validate:"required"`
+} //@name ListsCreateListItemResponseDto
 
+// UpdateListRequestDto
+// @Description UpdateListRequestDto
 type UpdateListRequestDto struct {
 	Title string `json:"title" validate:"required,min=5,max=128"`
-}
+} //@name ListsUpdateListRequestDto
