@@ -818,6 +818,326 @@ definitions:
     required:
     - message
     type: object
+  ListsCreateListItemRequestDto:
+    description: CreateListItemRequestDto
+    properties:
+      hserviceId:
+        maxLength: 64
+        minLength: 1
+        type: string
+      itemOrder:
+        type: integer
+      listId:
+        maxLength: 64
+        minLength: 1
+        type: string
+    required:
+    - hserviceId
+    - itemOrder
+    - listId
+    type: object
+  ListsCreateListItemResponseDto:
+    description: CreateListItemResponseDto
+    properties:
+      hserviceId:
+        example: "7235190573525635072"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      itemOrder:
+        example: 1
+        type: integer
+      listId:
+        example: "7235190573525635072"
+        type: string
+    required:
+    - hserviceId
+    - id
+    - itemOrder
+    - listId
+    type: object
+  ListsCreateListRequestDto:
+    description: CreateListRequestDto
+    properties:
+      title:
+        maxLength: 128
+        minLength: 5
+        type: string
+    required:
+    - title
+    type: object
+  ListsCreateListResponseDto:
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      title:
+        example: Example List
+        type: string
+      updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      userId:
+        example: "528696135489945615"
+        type: string
+    required:
+    - createdAt
+    - id
+    - title
+    - updatedAt
+    - userId
+    type: object
+  ListsGetItemListInfoResponseDtoItem:
+    description: Basic list information
+    properties:
+      id:
+        example: "7235190573525635072"
+        type: string
+      includes:
+        example: true
+        type: boolean
+      title:
+        example: Example List
+        type: string
+    required:
+    - id
+    - includes
+    - title
+    type: object
+  ListsGetListByIdResponseDto:
+    description: Basic list information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/ListsItemDto'
+        type: array
+      title:
+        example: Example List
+        type: string
+      updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      user:
+        $ref: '#/definitions/ListsUserDto'
+      userId:
+        example: "528696135489945615"
+        type: string
+    required:
+    - createdAt
+    - id
+    - items
+    - title
+    - updatedAt
+    - user
+    - userId
+    type: object
+  ListsGetMyListsResponseDtoItem:
+    description: Basic list information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      title:
+        example: Example List
+        type: string
+      updateAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      userId:
+        example: "528696135489945615"
+        type: string
+    required:
+    - createdAt
+    - id
+    - title
+    - updateAt
+    - userId
+    type: object
+  ListsGetUsersListsResponseDtoItem:
+    description: Basic list information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      title:
+        example: Example List
+        type: string
+      updateAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      user:
+        $ref: '#/definitions/ListsUserDto'
+      userId:
+        example: "528696135489945615"
+        type: string
+    required:
+    - createdAt
+    - id
+    - title
+    - updateAt
+    - user
+    - userId
+    type: object
+  ListsHServiceDto:
+    description: Basic service information with user information
+    properties:
+      category:
+        example: 1
+        type: integer
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      deliveryTime:
+        example: 1
+        type: integer
+      deliveryTimespan:
+        example: HOURLY
+        type: string
+      description:
+        example: Example service description
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      isOnline:
+        example: true
+        type: boolean
+      location:
+        example: Example Location
+        type: string
+      media:
+        additionalProperties: {}
+        type: object
+      price:
+        example: 10
+        type: number
+      priceTimespan:
+        example: HOURLY
+        type: string
+      priceUnit:
+        example: USD
+        type: string
+      slug:
+        example: example-service
+        type: string
+      title:
+        example: Example Service
+        type: string
+      totalPoints:
+        example: 50
+        type: integer
+      totalVotes:
+        example: 10
+        type: integer
+      updatedAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      url:
+        example: https://example.com
+        type: string
+      user:
+        $ref: '#/definitions/ListsUserDto'
+      userId:
+        example: "528696135489945615"
+        type: string
+    required:
+    - category
+    - createdAt
+    - deliveryTime
+    - deliveryTimespan
+    - description
+    - id
+    - isOnline
+    - location
+    - media
+    - price
+    - priceTimespan
+    - priceUnit
+    - slug
+    - title
+    - totalPoints
+    - totalVotes
+    - updatedAt
+    - user
+    - userId
+    type: object
+  ListsItemDto:
+    description: Basic list item information
+    properties:
+      hservice:
+        $ref: '#/definitions/ListsHServiceDto'
+      hserviceId:
+        example: "7235190573525635072"
+        type: string
+      id:
+        example: "7235190573525635072"
+        type: string
+      itemOrder:
+        example: 1
+        type: integer
+      listId:
+        example: "7235190573525635072"
+        type: string
+    required:
+    - hservice
+    - hserviceId
+    - id
+    - itemOrder
+    - listId
+    type: object
+  ListsUpdateListRequestDto:
+    description: UpdateListRequestDto
+    properties:
+      title:
+        maxLength: 128
+        minLength: 5
+        type: string
+    required:
+    - title
+    type: object
+  ListsUserDto:
+    description: Basic user information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      gender:
+        example: male
+        type: string
+      id:
+        example: "528696135489945615"
+        type: string
+      profileImage:
+        example: https://example.com/image.jpg
+        type: string
+      username:
+        example: johndoe
+        type: string
+    required:
+    - createdAt
+    - fullName
+    - id
+    - username
+    type: object
   UploadsUploadObj:
     description: UploadObj
     properties:
@@ -830,6 +1150,33 @@ definitions:
     required:
     - key
     - url
+    type: object
+  UsersGetUserProfileByUsernameResponseDto:
+    description: Basic user information
+    properties:
+      createdAt:
+        example: "2024-08-26T10:24:13.508676+03:00"
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      gender:
+        example: male
+        type: string
+      id:
+        example: "528696135489945615"
+        type: string
+      profileImage:
+        example: https://example.com/image.jpg
+        type: string
+      username:
+        example: johndoe
+        type: string
+    required:
+    - createdAt
+    - fullName
+    - id
+    - username
     type: object
   echo.HTTPError:
     properties:
@@ -1644,6 +1991,420 @@ paths:
       summary: Get hservices by username
       tags:
       - HServices
+  /lists:
+    get:
+      consumes:
+      - application/json
+      description: Gets all lists for the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  description: Basic list information
+                  items:
+                    $ref: '#/definitions/ListsGetMyListsResponseDtoItem'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Get my lists
+      tags:
+      - Lists
+    post:
+      consumes:
+      - application/json
+      description: Creates a new list with the given title for the current user
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ListsCreateListRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/ListsCreateListResponseDto'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Create a new list
+      tags:
+      - Lists
+  /lists/{id}:
+    delete:
+      description: Deletes a list with the given ID for the current user
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Delete a list
+      tags:
+      - Lists
+    get:
+      consumes:
+      - application/json
+      description: Gets a list by ID
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/ListsGetListByIdResponseDto'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Get list by ID
+      tags:
+      - Lists
+    patch:
+      description: Updates a list with the given ID for the current user
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ListsUpdateListRequestDto'
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Update a list
+      tags:
+      - Lists
+  /lists/{id}/items:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new list item with the given list ID for the current
+        user
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ListsCreateListItemRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/ListsCreateListItemResponseDto'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Create a new list item
+      tags:
+      - Lists
+  /lists/{id}/items/{itemId}:
+    delete:
+      description: Deletes a list item with the given ID for the current user
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: itemId
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Delete a list item
+      tags:
+      - Lists
+  /lists/{list_id}/items/{item_id}/after/{after_item_id}:
+    patch:
+      description: Moves a list item with the given ID after another item with the
+        given ID for the current user
+      parameters:
+      - description: List ID
+        in: path
+        name: list_id
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: item_id
+        required: true
+        type: string
+      - description: After Item ID
+        in: path
+        name: after_item_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Move a list item after another item
+      tags:
+      - Lists
+  /lists/info/{hservice_id}:
+    get:
+      consumes:
+      - application/json
+      description: Gets a list item information
+      parameters:
+      - description: HService ID
+        in: path
+        name: hservice_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  description: Basic list information
+                  items:
+                    $ref: '#/definitions/ListsGetItemListInfoResponseDtoItem'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Get list item information
+      tags:
+      - Lists
+  /lists/user/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Gets all lists for the given username
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  description: Basic list information
+                  items:
+                    $ref: '#/definitions/ListsGetUsersListsResponseDtoItem'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Get lists by username
+      tags:
+      - Lists
   /uploads/new-url:
     get:
       consumes:
@@ -1696,6 +2457,44 @@ paths:
       summary: Get new upload URL
       tags:
       - Uploads
+  /users/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Gets a user profile by username
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            allOf:
+            - $ref: '#/definitions/HR'
+            - properties:
+                data:
+                  $ref: '#/definitions/UsersGetUserProfileByUsernameResponseDto'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Get user profile by username
+      tags:
+      - Users
 securityDefinitions:
   CookieAuth:
     description: Cookie based session authentication

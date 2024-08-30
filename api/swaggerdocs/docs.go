@@ -1283,6 +1283,668 @@ const docTemplate = `{
                 }
             }
         },
+        "/lists": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Gets all lists for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Get my lists",
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "description": "Basic list information",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/ListsGetMyListsResponseDtoItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Creates a new list with the given title for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Create a new list",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ListsCreateListRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/ListsCreateListResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/info/{hservice_id}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Gets a list item information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Get list item information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "HService ID",
+                        "name": "hservice_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "description": "Basic list information",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/ListsGetItemListInfoResponseDtoItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/user/{username}": {
+            "get": {
+                "description": "Gets all lists for the given username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Get lists by username",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "description": "Basic list information",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/ListsGetUsersListsResponseDtoItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/{id}": {
+            "get": {
+                "description": "Gets a list by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Get list by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/ListsGetListByIdResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes a list with the given ID for the current user",
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Delete a list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates a list with the given ID for the current user",
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Update a list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ListsUpdateListRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/{id}/items": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Creates a new list item with the given list ID for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Create a new list item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ListsCreateListItemRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/ListsCreateListItemResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/{id}/items/{itemId}": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes a list item with the given ID for the current user",
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Delete a list item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Item ID",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/lists/{list_id}/items/{item_id}/after/{after_item_id}": {
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Moves a list item with the given ID after another item with the given ID for the current user",
+                "tags": [
+                    "Lists"
+                ],
+                "summary": "Move a list item after another item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Item ID",
+                        "name": "item_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "After Item ID",
+                        "name": "after_item_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/uploads/new-url": {
             "get": {
                 "description": "Gets a new upload URL for the given type",
@@ -1351,6 +2013,68 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{username}": {
+            "get": {
+                "description": "Gets a user profile by username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user profile by username",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/HR"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/UsersGetUserProfileByUsernameResponseDto"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/echo.HTTPError"
                         }
@@ -2433,6 +3157,429 @@ const docTemplate = `{
                 }
             }
         },
+        "ListsCreateListItemRequestDto": {
+            "description": "CreateListItemRequestDto",
+            "type": "object",
+            "required": [
+                "hserviceId",
+                "itemOrder",
+                "listId"
+            ],
+            "properties": {
+                "hserviceId": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                },
+                "itemOrder": {
+                    "type": "integer"
+                },
+                "listId": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                }
+            }
+        },
+        "ListsCreateListItemResponseDto": {
+            "description": "CreateListItemResponseDto",
+            "type": "object",
+            "required": [
+                "hserviceId",
+                "id",
+                "itemOrder",
+                "listId"
+            ],
+            "properties": {
+                "hserviceId": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "itemOrder": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "listId": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                }
+            }
+        },
+        "ListsCreateListRequestDto": {
+            "description": "CreateListRequestDto",
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 5
+                }
+            }
+        },
+        "ListsCreateListResponseDto": {
+            "type": "object",
+            "required": [
+                "createdAt",
+                "id",
+                "title",
+                "updatedAt",
+                "userId"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example List"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "ListsGetItemListInfoResponseDtoItem": {
+            "description": "Basic list information",
+            "type": "object",
+            "required": [
+                "id",
+                "includes",
+                "title"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "includes": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example List"
+                }
+            }
+        },
+        "ListsGetListByIdResponseDto": {
+            "description": "Basic list information",
+            "type": "object",
+            "required": [
+                "createdAt",
+                "id",
+                "items",
+                "title",
+                "updatedAt",
+                "user",
+                "userId"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ListsItemDto"
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example List"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "user": {
+                    "$ref": "#/definitions/ListsUserDto"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "ListsGetMyListsResponseDtoItem": {
+            "description": "Basic list information",
+            "type": "object",
+            "required": [
+                "createdAt",
+                "id",
+                "title",
+                "updateAt",
+                "userId"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example List"
+                },
+                "updateAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "ListsGetUsersListsResponseDtoItem": {
+            "description": "Basic list information",
+            "type": "object",
+            "required": [
+                "createdAt",
+                "id",
+                "title",
+                "updateAt",
+                "user",
+                "userId"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example List"
+                },
+                "updateAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "user": {
+                    "$ref": "#/definitions/ListsUserDto"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "ListsHServiceDto": {
+            "description": "Basic service information with user information",
+            "type": "object",
+            "required": [
+                "category",
+                "createdAt",
+                "deliveryTime",
+                "deliveryTimespan",
+                "description",
+                "id",
+                "isOnline",
+                "location",
+                "media",
+                "price",
+                "priceTimespan",
+                "priceUnit",
+                "slug",
+                "title",
+                "totalPoints",
+                "totalVotes",
+                "updatedAt",
+                "user",
+                "userId"
+            ],
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "deliveryTime": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "deliveryTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Example service description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "isOnline": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "location": {
+                    "type": "string",
+                    "example": "Example Location"
+                },
+                "media": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "price": {
+                    "type": "number",
+                    "example": 10
+                },
+                "priceTimespan": {
+                    "type": "string",
+                    "example": "HOURLY"
+                },
+                "priceUnit": {
+                    "type": "string",
+                    "example": "USD"
+                },
+                "slug": {
+                    "type": "string",
+                    "example": "example-service"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Example Service"
+                },
+                "totalPoints": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "totalVotes": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://example.com"
+                },
+                "user": {
+                    "$ref": "#/definitions/ListsUserDto"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                }
+            }
+        },
+        "ListsItemDto": {
+            "description": "Basic list item information",
+            "type": "object",
+            "required": [
+                "hservice",
+                "hserviceId",
+                "id",
+                "itemOrder",
+                "listId"
+            ],
+            "properties": {
+                "hservice": {
+                    "$ref": "#/definitions/ListsHServiceDto"
+                },
+                "hserviceId": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                },
+                "itemOrder": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "listId": {
+                    "type": "string",
+                    "example": "7235190573525635072"
+                }
+            }
+        },
+        "ListsUpdateListRequestDto": {
+            "description": "UpdateListRequestDto",
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 5
+                }
+            }
+        },
+        "ListsUserDto": {
+            "description": "Basic user information",
+            "type": "object",
+            "required": [
+                "createdAt",
+                "fullName",
+                "id",
+                "username"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                },
+                "profileImage": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "johndoe"
+                }
+            }
+        },
         "UploadsUploadObj": {
             "description": "UploadObj",
             "type": "object",
@@ -2448,6 +3595,42 @@ const docTemplate = `{
                 "url": {
                     "type": "string",
                     "example": "https://example.com/image.jpg"
+                }
+            }
+        },
+        "UsersGetUserProfileByUsernameResponseDto": {
+            "description": "Basic user information",
+            "type": "object",
+            "required": [
+                "createdAt",
+                "fullName",
+                "id",
+                "username"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-08-26T10:24:13.508676+03:00"
+                },
+                "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "528696135489945615"
+                },
+                "profileImage": {
+                    "type": "string",
+                    "example": "https://example.com/image.jpg"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "johndoe"
                 }
             }
         },
