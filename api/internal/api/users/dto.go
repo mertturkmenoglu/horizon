@@ -1,12 +1,16 @@
 package users
 
-import "github.com/jackc/pgx/v5/pgtype"
+import (
+	"time"
+)
 
+// GetUserProfileByUsernameResponseDto
+// @Description Basic user information
 type GetUserProfileByUsernameResponseDto struct {
-	ID           string             `json:"id"`
-	Username     string             `json:"username"`
-	FullName     string             `json:"fullName"`
-	Gender       pgtype.Text        `json:"gender"`
-	ProfileImage pgtype.Text        `json:"profileImage"`
-	CreatedAt    pgtype.Timestamptz `json:"createdAt"`
-}
+	ID           string    `json:"id" example:"528696135489945615" validate:"required"`
+	Username     string    `json:"username" example:"johndoe" validate:"required"`
+	FullName     string    `json:"fullName" example:"John Doe" validate:"required"`
+	Gender       *string   `json:"gender" example:"male" validate:"optional"`
+	ProfileImage *string   `json:"profileImage" example:"https://example.com/image.jpg" validate:"optional"`
+	CreatedAt    time.Time `json:"createdAt" example:"2024-08-26T10:24:13.508676+03:00" validate:"required"`
+} //@name UsersGetUserProfileByUsernameResponseDto
