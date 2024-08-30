@@ -140,10 +140,8 @@ func (s *handlers) GetIsFavorite(c echo.Context) error {
 //	@Param			pageSize	query	int	false	"Page size"
 //	@Success		200	{object}	h.PaginatedResponse[[]FavoritesResponseDto]	"Successful request"
 //	@Failure		400	{object}	echo.HTTPError	"Bad Request"
-//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
 //	@Failure		404	{object}	echo.HTTPError	"Not Found"
 //	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
-//	@Security		CookieAuth
 //	@Router			/favorites/username/{username} [get]
 func (s *handlers) GetFavoritesByUsername(c echo.Context) error {
 	username := c.Param("username")
