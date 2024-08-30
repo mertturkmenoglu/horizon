@@ -8,6 +8,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Create Favorite godoc
+//
+//	@Summary		Create a new favorite
+//	@Description	Creates a new favorite with the given HService ID for the current user
+//	@Tags			Favorites
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	CreateFavoriteRequestDto	true	"Request body"
+//	@Success		201	{object}	h.Response[CreateFavoriteResponseDto]	"Successful request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Security		CookieAuth
+//	@Router			/favorites [post]
 func (s *handlers) CreateFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	dto := c.Get("body").(CreateFavoriteRequestDto)
@@ -23,6 +36,17 @@ func (s *handlers) CreateFavorite(c echo.Context) error {
 	})
 }
 
+// Delete Favorite godoc
+//
+//	@Summary		Delete a favorite
+//	@Description	Deletes a favorite with the given HService ID for the current user
+//	@Tags			Favorites
+//	@Param			hservice_id	path	string	true	"HService ID"
+//	@Success		204	{object}	h.Response[bool]	"Successful request"
+//	@Failure		400	{object}	echo.HTTPError	"Bad Request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Security		CookieAuth
+//	@Router			/favorites/{hservice_id} [delete]
 func (s *handlers) DeleteFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
@@ -40,6 +64,22 @@ func (s *handlers) DeleteFavorite(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
+// Get Favorites godoc
+//
+//	@Summary		Get favorites
+//	@Description	Gets all favorites for the current user
+//	@Tags			Favorites
+//	@Accept			json
+//	@Produce		json
+//	@Param			page	query	int	false	"Page number"
+//	@Param			pageSize	query	int	false	"Page size"
+//	@Success		200	{object}	h.PaginatedResponse[[]FavoritesResponseDto]	"Successful request"
+//	@Failure		400	{object}	echo.HTTPError	"Bad Request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Failure		404	{object}	echo.HTTPError	"Not Found"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Security		CookieAuth
+//	@Router			/favorites [get]
 func (s *handlers) GetFavorites(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	params, err := pagination.GetParamsFromContext(c)
@@ -60,6 +100,19 @@ func (s *handlers) GetFavorites(c echo.Context) error {
 	})
 }
 
+// Check if Favorite Exists godoc
+//
+//	@Summary		Check if a favorite exists
+//	@Description	Checks if a favorite exists for the current user
+//	@Tags			Favorites
+//	@Accept			json
+//	@Produce		json
+//	@Param			hservice_id	path	string	true	"HService ID"
+//	@Success		200	{object}	h.Response[bool]	"Successful request"
+//	@Failure		400	{object}	echo.HTTPError	"Bad Request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Security		CookieAuth
+//	@Router			/favorites/{hservice_id} [get]
 func (s *handlers) GetIsFavorite(c echo.Context) error {
 	userId := c.Get("user_id").(string)
 	hserviceId := c.Param("hservice_id")
@@ -75,6 +128,23 @@ func (s *handlers) GetIsFavorite(c echo.Context) error {
 	})
 }
 
+// Get Favorites by Username godoc
+//
+//	@Summary		Get favorites by username
+//	@Description	Gets all favorites for the current user
+//	@Tags			Favorites
+//	@Accept			json
+//	@Produce		json
+//	@Param			username	path	string	true	"Username"
+//	@Param			page	query	int	false	"Page number"
+//	@Param			pageSize	query	int	false	"Page size"
+//	@Success		200	{object}	h.PaginatedResponse[[]FavoritesResponseDto]	"Successful request"
+//	@Failure		400	{object}	echo.HTTPError	"Bad Request"
+//	@Failure		401	{object}	echo.HTTPError	"Authentication failed"
+//	@Failure		404	{object}	echo.HTTPError	"Not Found"
+//	@Failure		500	{object}	echo.HTTPError	"Internal Server Error"
+//	@Security		CookieAuth
+//	@Router			/favorites/username/{username} [get]
 func (s *handlers) GetFavoritesByUsername(c echo.Context) error {
 	username := c.Param("username")
 	params, err := pagination.GetParamsFromContext(c)

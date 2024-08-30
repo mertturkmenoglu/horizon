@@ -302,11 +302,89 @@ definitions:
     properties:
       message: {}
     type: object
+  favorites.CreateFavoriteRequestDto:
+    properties:
+      hserviceId:
+        maxLength: 64
+        minLength: 1
+        type: string
+    required:
+    - hserviceId
+    type: object
+  favorites.CreateFavoriteResponseDto:
+    properties:
+      id:
+        type: string
+    type: object
+  favorites.FavoritesResponseDto:
+    properties:
+      createdAt:
+        type: string
+      hservice:
+        $ref: '#/definitions/favorites.HServiceDto'
+      hserviceId:
+        type: string
+      id:
+        type: string
+      userId:
+        type: string
+    type: object
+  favorites.HServiceDto:
+    properties:
+      category:
+        type: integer
+      createdAt:
+        type: string
+      deliveryTime:
+        type: integer
+      deliveryTimespan:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      isOnline:
+        type: boolean
+      location:
+        type: string
+      media:
+        additionalProperties: {}
+        type: object
+      price:
+        type: number
+      priceTimespan:
+        type: string
+      priceUnit:
+        type: string
+      slug:
+        type: string
+      title:
+        type: string
+      totalPoints:
+        type: integer
+      totalVotes:
+        type: integer
+      updatedAt:
+        type: string
+      url:
+        type: string
+      userId:
+        type: string
+    type: object
   h.PaginatedResponse-array_bookmarks_BookmarksResponseDto:
     properties:
       data:
         items:
           $ref: '#/definitions/bookmarks.BookmarksResponseDto'
+        type: array
+      pagination:
+        $ref: '#/definitions/pagination.Pagination'
+    type: object
+  h.PaginatedResponse-array_favorites_FavoritesResponseDto:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/favorites.FavoritesResponseDto'
         type: array
       pagination:
         $ref: '#/definitions/pagination.Pagination'
@@ -320,6 +398,11 @@ definitions:
     properties:
       data:
         type: boolean
+    type: object
+  h.Response-favorites_CreateFavoriteResponseDto:
+    properties:
+      data:
+        $ref: '#/definitions/favorites.CreateFavoriteResponseDto'
     type: object
   health.GetHealthResponseDto:
     description: GetHealthResponseDto
@@ -722,6 +805,184 @@ paths:
       summary: Check if a bookmark exists
       tags:
       - Bookmarks
+  /favorites:
+    get:
+      consumes:
+      - application/json
+      description: Gets all favorites for the current user
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Get favorites
+      tags:
+      - Favorites
+    post:
+      consumes:
+      - application/json
+      description: Creates a new favorite with the given HService ID for the current
+        user
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/favorites.CreateFavoriteRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-favorites_CreateFavoriteResponseDto'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Create a new favorite
+      tags:
+      - Favorites
+  /favorites/{hservice_id}:
+    delete:
+      description: Deletes a favorite with the given HService ID for the current user
+      parameters:
+      - description: HService ID
+        in: path
+        name: hservice_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-bool'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Delete a favorite
+      tags:
+      - Favorites
+    get:
+      consumes:
+      - application/json
+      description: Checks if a favorite exists for the current user
+      parameters:
+      - description: HService ID
+        in: path
+        name: hservice_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.Response-bool'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Check if a favorite exists
+      tags:
+      - Favorites
+  /favorites/username/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Gets all favorites for the current user
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful request
+          schema:
+            $ref: '#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "401":
+          description: Authentication failed
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      security:
+      - CookieAuth: []
+      summary: Get favorites by username
+      tags:
+      - Favorites
   /health/:
     get:
       consumes:

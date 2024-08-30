@@ -589,6 +589,284 @@ const docTemplate = `{
                 }
             }
         },
+        "/favorites": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Gets all favorites for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Get favorites",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Creates a new favorite with the given HService ID for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Create a new favorite",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/favorites.CreateFavoriteRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.Response-favorites_CreateFavoriteResponseDto"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites/username/{username}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Gets all favorites for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Get favorites by username",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.PaginatedResponse-array_favorites_FavoritesResponseDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites/{hservice_id}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Checks if a favorite exists for the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Check if a favorite exists",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "HService ID",
+                        "name": "hservice_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.Response-bool"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes a favorite with the given HService ID for the current user",
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Delete a favorite",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "HService ID",
+                        "name": "hservice_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful request",
+                        "schema": {
+                            "$ref": "#/definitions/h.Response-bool"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "401": {
+                        "description": "Authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/health/": {
             "get": {
                 "description": "An endpoint to be used by load balancers to check the health of the service.",
@@ -1034,6 +1312,110 @@ const docTemplate = `{
                 "message": {}
             }
         },
+        "favorites.CreateFavoriteRequestDto": {
+            "type": "object",
+            "required": [
+                "hserviceId"
+            ],
+            "properties": {
+                "hserviceId": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1
+                }
+            }
+        },
+        "favorites.CreateFavoriteResponseDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "favorites.FavoritesResponseDto": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "hservice": {
+                    "$ref": "#/definitions/favorites.HServiceDto"
+                },
+                "hserviceId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "favorites.HServiceDto": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deliveryTime": {
+                    "type": "integer"
+                },
+                "deliveryTimespan": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isOnline": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "media": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "price": {
+                    "type": "number"
+                },
+                "priceTimespan": {
+                    "type": "string"
+                },
+                "priceUnit": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "totalPoints": {
+                    "type": "integer"
+                },
+                "totalVotes": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
         "h.PaginatedResponse-array_bookmarks_BookmarksResponseDto": {
             "type": "object",
             "properties": {
@@ -1041,6 +1423,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/bookmarks.BookmarksResponseDto"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/pagination.Pagination"
+                }
+            }
+        },
+        "h.PaginatedResponse-array_favorites_FavoritesResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/favorites.FavoritesResponseDto"
                     }
                 },
                 "pagination": {
@@ -1061,6 +1457,14 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "type": "boolean"
+                }
+            }
+        },
+        "h.Response-favorites_CreateFavoriteResponseDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/favorites.CreateFavoriteResponseDto"
                 }
             }
         },
